@@ -18,6 +18,8 @@ public struct BattlePokemonStat
     public int SpeedChangeLevel;
     public int AccuracyrateLevel;
     public int EvasionrateLevel;
+    public int Level;
+    public bool Dead;
 }
 
 public class BattlePokemon : MonoBehaviour
@@ -28,6 +30,10 @@ public class BattlePokemon : MonoBehaviour
     private BaseAbility Ability;
     [SerializeField]
     private bool IsEnemy;
+    [SerializeField]
+    private EType Type1;
+    [SerializeField]
+    private EType Type2;
 
     private BattlePokemonStat PokemonStats;
 
@@ -63,6 +69,7 @@ public class BattlePokemon : MonoBehaviour
     public int GetSpeedChangeLevel() => PokemonStats.SpeedChangeLevel;
     public int GetAccuracyrateLevel() => PokemonStats.AccuracyrateLevel;
     public int GetEvasionrateLevel() => PokemonStats.EvasionrateLevel;
+    public int GetLevel() => PokemonStats.Level;
 
     public void ChangeStat(string StatName, int Level)
     {
@@ -95,5 +102,19 @@ public class BattlePokemon : MonoBehaviour
         {
             PokemonStats.EvasionrateLevel = Mathf.Min(Mathf.Max(-3, PokemonStats.EvasionrateLevel + Level), 3);
         }
+    }
+
+    public EType GetType1() { return Type1;}
+    public EType GetType2() { return Type2;}
+
+
+    public bool TakenDamage(int Damage)
+    {
+        PokemonStats.HP -= Damage;
+        if(PokemonStats.HP <= 0)
+        {
+            PokemonStats.Dead = true;
+        }
+        return PokemonStats.Dead;
     }
 }

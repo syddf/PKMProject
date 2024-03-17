@@ -10,16 +10,26 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private List<BattlePokemon> BattlePokemonList;
 
+    private List<BattlePokemon> DefeatedPokemonList;
+
     // Start is called before the first frame update
     void Start()
     {
         EventsList = new List<Event>();
         CurrentTimePoint = ETimePoint.None;
+        DefeatedPokemonList = new List<BattlePokemon>();
     }
 
-    public void AddSkillEvent(BaseSkill InSkill, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public void AddDefeatedPokemon(BattlePokemon InPokemon)
     {
-        EventsList.Add(new SkillEvent(InSkill, SourcePokemon, TargetPokemon));
+        DefeatedPokemonList.Add(InPokemon);
+    }
+    
+    public void AddSkillEvent(BattleSkill InSkill, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        List<BattlePokemon> TargetList = new List<BattlePokemon>();
+        TargetList.Add(TargetPokemon);
+        EventsList.Add(new SkillEvent(InSkill, SourcePokemon, TargetList));
     }
 
     public void AddSwitchEvent(BattlePokemon OutPokemon, BattlePokemon InPokemon)

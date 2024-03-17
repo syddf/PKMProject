@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EMasterSkill
+{
+    None,
+    Strong,
+    Agile
+}
+
 public enum ESkillClass
 {
     PhysicalMove,
@@ -11,6 +18,7 @@ public enum ESkillClass
 
 public enum EType
 {
+    None,
     Normal,
     Fight,
     Flying,
@@ -47,6 +55,12 @@ public class BaseSkill : MonoBehaviour
     protected string SkillName;
     [SerializeField]
     protected string SkillDescription;
-    [SerializeField]
-    protected BattlePokemon ReferencePokemon;
+    protected int MinCount;
+    protected int MaxCount;
+    public ESkillClass GetSkillClass() => SkillClass;
+    public int GetPower() => Power;
+    public int GetPP() => PP;
+    public int GetAccuracy() => Accuracy;
+    public int GetMinCount() => MinCount;
+    public int GetMaxCount() => MaxCount;
 }

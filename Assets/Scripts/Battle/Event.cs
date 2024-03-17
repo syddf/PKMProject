@@ -10,7 +10,16 @@ public enum ETimePoint
     UseSkill,
     PokemonOut,
     BeforeStatChange,
-    AfterStatChange
+    AfterStatChange,
+    BeforeActivateSkill,
+    BeforeGetSkillCount,
+    BeforeJudgeAccuracy,
+    BeforeSkillEffect,
+    BeforeTakenDamage,
+    AfterTakenDamage,
+    AfterSkillEffect,
+    BeforePokemonDefeated,
+    AfterPokemonDefeated,
 }
 
 public enum EEventResultType
@@ -32,7 +41,7 @@ public enum EventType
     TriggerAbility,
     TriggerTrainerSkill,
 
-    StatChange
+    StatChange,
 }
 
 public interface Event
