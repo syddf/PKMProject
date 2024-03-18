@@ -11,6 +11,9 @@ public class BattleManager : MonoBehaviour
     private List<BattlePokemon> BattlePokemonList;
 
     private List<BattlePokemon> DefeatedPokemonList;
+    
+    [SerializeField]
+    private BaseSkill TestSkill;
 
     // Start is called before the first frame update
     void Start()
@@ -92,6 +95,15 @@ public class BattleManager : MonoBehaviour
     public void Test()
     {
         BeginSingleBattle(BattlePokemonList[0], BattlePokemonList[1]);
+        ProcessEvents();
+    }
+
+    public void TestSkillFunc()
+    {
+        BattleSkill TestBattleSkill = new BattleSkill(TestSkill, EMasterSkill.None, BattlePokemonList[0]);
+        List<BattlePokemon> TargetPokemon = new List<BattlePokemon>();
+        TargetPokemon.Add(BattlePokemonList[1]);
+        EventsList.Add(new SkillEvent(TestBattleSkill, BattlePokemonList[0], TargetPokemon));
         ProcessEvents();
     }
 

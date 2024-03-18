@@ -13,6 +13,7 @@ public enum ETimePoint
     AfterStatChange,
     BeforeActivateSkill,
     BeforeGetSkillCount,
+    BeforeJudgeSkillIsEffective,
     BeforeJudgeAccuracy,
     BeforeSkillEffect,
     BeforeTakenDamage,
@@ -38,9 +39,7 @@ public enum EventType
     BattleStart,
     Switch,
     UseSkill,
-    TriggerAbility,
-    TriggerTrainerSkill,
-
+    PokemonDefeated,
     StatChange,
 }
 

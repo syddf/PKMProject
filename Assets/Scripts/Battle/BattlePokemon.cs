@@ -34,7 +34,8 @@ public class BattlePokemon : MonoBehaviour
     private EType Type1;
     [SerializeField]
     private EType Type2;
-
+    [SerializeField]
+    private BagPokemon ReferenceBasePokemon;
     private BattlePokemonStat PokemonStats;
 
     public BaseAbility GetAbility() => Ability;
@@ -116,5 +117,16 @@ public class BattlePokemon : MonoBehaviour
             PokemonStats.Dead = true;
         }
         return PokemonStats.Dead;
+    }
+
+    public void LoadBasePokemonStats()
+    {
+        PokemonStats.Atk = ReferenceBasePokemon.GetAtk();
+        PokemonStats.SAtk = ReferenceBasePokemon.GetSAtk();
+        PokemonStats.Def = ReferenceBasePokemon.GetDef();
+        PokemonStats.SDef = ReferenceBasePokemon.GetSDef();
+        PokemonStats.MaxHP = ReferenceBasePokemon.GetMaxHP();
+        PokemonStats.Speed = ReferenceBasePokemon.GetSpeed();
+        
     }
 }

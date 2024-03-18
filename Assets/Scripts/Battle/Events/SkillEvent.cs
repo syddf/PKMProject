@@ -21,14 +21,12 @@ public class SkillEvent : Event
     private BattlePokemon CurrentProcessTargetPokemon;
     private List<SkillEventMetaInfo> SkillMetas;
     private bool SkillForbidden;
-    public SkillEvent(BattleSkill InSkill, BattlePokemon InSourcePokemon, List<BattlePokemon> InTargetPokemon)
+    private List<List<SkillEventMetaInfo>> SkillMetasHistory;
+
+    private void ResetSkillMetas()
     {
-        Skill = InSkill;
-        SourcePokemon = InSourcePokemon;
-        TargetPokemon = InTargetPokemon;
-        CurrentProcessTargetPokemon = null;
-        SkillForbidden = false;
-        foreach(var TargetPokemon in InTargetPokemon)
+        SkillMetas = new List<SkillEventMetaInfo>();
+        foreach(var TargetPokemon in TargetPokemon)
         {
             SkillEventMetaInfo Result = new SkillEventMetaInfo();
             Result.Hit = false;
@@ -38,6 +36,16 @@ public class SkillEvent : Event
             Result.NoEffect = false;
             SkillMetas.Add(Result);
         }
+    }
+    public SkillEvent(BattleSkill InSkill, BattlePokemon InSourcePokemon, List<BattlePokemon> InTargetPokemon)
+    {
+        Skill = InSkill;
+        SourcePokemon = InSourcePokemon;
+        TargetPokemon = InTargetPokemon;
+        CurrentProcessTargetPokemon = null;
+        SkillForbidden = false;
+        SkillMetasHistory = new List<List<SkillEventMetaInfo>>();
+        ResetSkillMetas();
     }
 
     public void PlayAnimation()
@@ -101,28 +109,44 @@ public class SkillEvent : Event
 
     public void Process(BattleManager InManager)
     {
+        ResetSkillMetas();
         InManager.TranslateTimePoint(ETimePoint.BeforeActivateSkill, this);
         if(!SkillForbidden)
         {
+            EditorLog.DebugLog(SourcePokemon.GetName() + " Use Skill：" + Skill.GetSkillName());
             InManager.TranslateTimePoint(ETimePoint.BeforeGetSkillCount, this);
             int SkillCount = GetSkillCount();
             for(int SkillCountIndex = 0; SkillCountIndex < SkillCount; SkillCountIndex++)
             {
-                bool AllMissed = true;
+                bool ShouldActivateEffect = false;
                 for(int TargetIndex = 0; TargetIndex < SkillMetas.Count; TargetIndex++)
                 {
                     CurrentProcessTargetPokemon = SkillMetas[TargetIndex].ReferencePokemon;
-                    InManager.TranslateTimePoint(ETimePoint.BeforeJudgeAccuracy, this);
-                    // Judge ..
-                    bool Hit = JudgeAccuracy(SourcePokemon, CurrentProcessTargetPokemon);
-                    SkillMetas[TargetIndex].Hit = Hit;
-                    if(Hit)
+                    InManager.TranslateTimePoint(ETimePoint.BeforeJudgeSkillIsEffective, this);
+                    bool Effective = Skill.JudgeIsEffective(InManager, SourcePokemon, CurrentProcessTargetPokemon);
+                    if(!Effective)
                     {
-                        AllMissed = false;
+                        SkillMetas[TargetIndex].NoEffect = true;
                     }
                 }
-                if(!AllMissed)
+                for(int TargetIndex = 0; TargetIndex < SkillMetas.Count; TargetIndex++)
                 {
+                    if(!SkillMetas[TargetIndex].NoEffect)
+                    {
+                        CurrentProcessTargetPokemon = SkillMetas[TargetIndex].ReferencePokemon;
+                        InManager.TranslateTimePoint(ETimePoint.BeforeJudgeAccuracy, this);
+                        // Judge ..
+                        bool Hit = JudgeAccuracy(SourcePokemon, CurrentProcessTargetPokemon);
+                        SkillMetas[TargetIndex].Hit = Hit;
+                        if(Hit)
+                        {
+                            ShouldActivateEffect = true;
+                        }
+                    }
+                }
+                if(ShouldActivateEffect)
+                {
+                    EditorLog.DebugLog(SourcePokemon.GetName()  + " Activate Skill：" + Skill.GetSkillName());
                     for(int TargetIndex = 0; TargetIndex < SkillMetas.Count; TargetIndex++)
                     {
                         CurrentProcessTargetPokemon = SkillMetas[TargetIndex].ReferencePokemon;
@@ -131,6 +155,7 @@ public class SkillEvent : Event
                         {
                             if(SkillMetas[TargetIndex].Hit)
                             {
+                                EditorLog.DebugLog(SourcePokemon.GetName()  + " Skill：" + Skill.GetSkillName() + "Hit: " + CurrentProcessTargetPokemon.GetName() );
                                 if(Skill.IsDamageSkill())
                                 {
                                     SkillMetas[TargetIndex].Damage = Skill.DamagePhase(InManager, SourcePokemon, CurrentProcessTargetPokemon);
@@ -148,22 +173,24 @@ public class SkillEvent : Event
                         {
                             CurrentProcessTargetPokemon = SkillMetas[TargetIndex].ReferencePokemon;
                             InManager.TranslateTimePoint(ETimePoint.BeforeTakenDamage, this);
-                            EditorLog.DebugLog(CurrentProcessTargetPokemon.name + " Taken Damage:" + SkillMetas[TargetIndex].Damage);
-                            if(!CurrentProcessTargetPokemon.TakenDamage(SkillMetas[TargetIndex].Damage))
+                            EditorLog.DebugLog(CurrentProcessTargetPokemon.GetName()  + " Taken Damage:" + SkillMetas[TargetIndex].Damage);
+                            bool Dead = !CurrentProcessTargetPokemon.TakenDamage(SkillMetas[TargetIndex].Damage);
+                            Skill.AfterDamageEvent(InManager, SourcePokemon, CurrentProcessTargetPokemon);
+                            if(Dead)
                             {
-                                InManager.TranslateTimePoint(ETimePoint.BeforePokemonDefeated, this);
-                                EditorLog.DebugLog(CurrentProcessTargetPokemon.name + " Defeated.");
-                                InManager.AddDefeatedPokemon(CurrentProcessTargetPokemon);
-                                InManager.TranslateTimePoint(ETimePoint.AfterPokemonDefeated, this);
+                                PokemonDefeatedEvent defeatedEvent = new PokemonDefeatedEvent(CurrentProcessTargetPokemon, SourcePokemon, Skill);
+                                defeatedEvent.Process(InManager);
                             }                        
                             InManager.TranslateTimePoint(ETimePoint.AfterTakenDamage, this);
                         }
+                        Skill.AfterSkillEffectEvent(InManager, SourcePokemon, CurrentProcessTargetPokemon);
                     }
                 }
                 else
                 {
                     break;
                 }
+                SkillMetasHistory.Add(this.SkillMetas);
             }
         }
     }

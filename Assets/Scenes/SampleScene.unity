@@ -170,6 +170,9 @@ MonoBehaviour:
   Name: "\u6728\u5B88\u5BAB"
   Ability: {fileID: 1600194562}
   IsEnemy: 0
+  Type1: 12
+  Type2: 0
+  ReferenceBasePokemon: {fileID: 0}
 --- !u!1 &167421475
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,6 +205,7 @@ MonoBehaviour:
   BattlePokemonList:
   - {fileID: 39398607}
   - {fileID: 752678009}
+  TestSkill: {fileID: 963301799}
 --- !u!4 &167421477
 Transform:
   m_ObjectHideFlags: 0
@@ -220,6 +224,7 @@ Transform:
   - {fileID: 963301798}
   - {fileID: 1679765946}
   - {fileID: 1600194561}
+  - {fileID: 1889909707}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -514,6 +519,9 @@ MonoBehaviour:
   Name: "\u70BD\u7130\u5486\u5578\u864E"
   Ability: {fileID: 1785393441}
   IsEnemy: 1
+  Type1: 10
+  Type2: 17
+  ReferenceBasePokemon: {fileID: 0}
 --- !u!1 &856290365
 GameObject:
   m_ObjectHideFlags: 0
@@ -783,8 +791,9 @@ MonoBehaviour:
   SkillClass: 1
   SkillType: 11
   SkillName: "\u98DE\u53F6\u98CE\u66B4"
-  SkillDescription: "\u7528\u5C16\u5C16\u7684\u53F6\u7247\u5411\u5BF9\u624B\u5377\u8D77\u98CE\u66B4\u3002\u4F7F\u7528\u4E4B\u540E\u56E0\u4E3A\u53CD\u4F5C\u7528\u529B\u81EA\u5DF1\u7684\u7279\u653B\u4F1A\u5927\u5E45\u964D\u4F4E\u3002"
-  ReferencePokemon: {fileID: 39398607}
+  SkillDescription: "\u624B\u5377\u8D77\u98CE\u66B4\u3002\u4F7F\u7528\u4E4B\u540E\u56E0\u4E3A\u53CD\u4F5C\u7528\u529B\u81EA\u5DF1\u7684\u7279\u653B\u4F1A\u5927\u5E45\u964D\u4F4E\u3002\u7279\u653B\u4F1A\u5927\u5E45\u964D\u4F4E\u3002"
+  MinCount: 1
+  MaxCount: 1
 --- !u!1 &1059913335
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,7 +1177,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1664850963}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 167421476}
+        m_TargetAssemblyTypeName: BattleManager, Assembly-CSharp
+        m_MethodName: TestSkillFunc
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1664850963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1301,6 +1322,56 @@ MonoBehaviour:
   Name: "\u5A01\u5413"
   Description: "\u51FA\u573A\u65F6\u5A01\u5413\u5BF9\u624B\uFF0C\u8BA9\u5176\u9000\u7F29\uFF0C\u964D\u4F4E\u5BF9\u624B\u7684\u653B\u51FB\u3002"
   ReferencePokemon: {fileID: 752678009}
+--- !u!1 &1889909706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1889909707}
+  - component: {fileID: 1889909708}
+  m_Layer: 0
+  m_Name: BagPokemon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1889909707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889909706}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 455.6667, y: 280.66666, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 167421477}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1889909708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889909706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e5df41039e03647a25ef45a06add41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PkmDataCollections: {fileID: 11400000, guid: 28504c708565b374797ee6d513986c58, type: 2}
+  Name: Treecko
+  Level: 50
+  Nature: 0
+  IVs: 1f0000001f0000001f0000001f0000001f0000001f000000
+  BasePoints: 000000000000000000000000000000000000000000000000
 --- !u!1 &1934103122
 GameObject:
   m_ObjectHideFlags: 0

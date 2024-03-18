@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LeafStorm : BaseSkill
+public class LeafStorm : DamageSkill
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        StatChangeEvent defeatedEvent = new StatChangeEvent(SourcePokemon, "SAtk", 2);
+        defeatedEvent.Process(InManager);
     }
 }

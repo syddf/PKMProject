@@ -70,4 +70,20 @@ public class BattleSkill
     {
 
     }
+
+    public void AfterDamageEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        DamageSkill CastSkill = (DamageSkill)ReferenceBaseSkill;
+        CastSkill.AfterDamageEvent(InManager, SourcePokemon, TargetPokemon);
+    }
+    public void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        ReferenceBaseSkill.AfterSkillEffectEvent(InManager, SourcePokemon, TargetPokemon);
+    }
+    public virtual bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return true;
+    }
+
+    public string GetSkillName() { return ReferenceBaseSkill.GetSkillName(); }
 }

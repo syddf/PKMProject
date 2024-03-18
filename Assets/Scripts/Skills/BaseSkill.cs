@@ -55,7 +55,9 @@ public class BaseSkill : MonoBehaviour
     protected string SkillName;
     [SerializeField]
     protected string SkillDescription;
+    [SerializeField]
     protected int MinCount;
+    [SerializeField]
     protected int MaxCount;
     public ESkillClass GetSkillClass() => SkillClass;
     public int GetPower() => Power;
@@ -63,4 +65,16 @@ public class BaseSkill : MonoBehaviour
     public int GetAccuracy() => Accuracy;
     public int GetMinCount() => MinCount;
     public int GetMaxCount() => MaxCount;
+
+    public virtual void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+
+    }
+
+    public virtual bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return true;
+    }
+
+    public string GetSkillName() => SkillName;
 }
