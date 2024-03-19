@@ -48,9 +48,14 @@ public class DamageSkill : BaseSkill
         return SourcePokemon.GetType1() == this.SkillType || SourcePokemon.GetType2() == this.SkillType;        
     }
 
-    public virtual float GetSameTypePowerFactor(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public virtual double GetSameTypePowerFactor(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        return 1.5f;
+        return 1.5;
+    }
+
+    public virtual double GetTypeEffectiveFactor(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return typeEffectiveness[(int)this.SkillType, (int)TargetPokemon.GetType1()] * typeEffectiveness[(int)this.SkillType, (int)TargetPokemon.GetType2()];
     }
 
     public virtual int GetSourceAtk(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)

@@ -94,6 +94,8 @@ public class BattleManager : MonoBehaviour
 
     public void Test()
     {
+        BattlePokemonList[0].LoadBasePokemonStats();
+        BattlePokemonList[1].LoadBasePokemonStats();
         BeginSingleBattle(BattlePokemonList[0], BattlePokemonList[1]);
         ProcessEvents();
     }

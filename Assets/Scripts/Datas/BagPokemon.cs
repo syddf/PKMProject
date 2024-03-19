@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -70,6 +71,8 @@ public class BagPokemon : MonoBehaviour
     [SerializeField]
     private int Level;
     [SerializeField]
+    private int HP;
+    [SerializeField]
     private PokemonNature Nature;
     [SerializeField]
     private int[] IVs = new int[6]{ 0, 0, 0, 0, 0, 0};
@@ -81,16 +84,22 @@ public class BagPokemon : MonoBehaviour
         // HP
         if(Index == 0)
         {
-            int A = SpeciesStrength * 2 + IVs[0] + BasePoints[0] / 4;
-            float fA = (float)A * (float)Level / 100.0f + 10 + Level;
-            return (int)fA;
+            double A = SpeciesStrength * 2 + IVs[0] + (double)BasePoints[0] / 4;
+            double fA = A * (double)Level / 100 + 10 + Level;
+            return (int)Math.Floor(fA);
         }
         else
         {
-            int A = SpeciesStrength * 2 + IVs[Index] + BasePoints[Index] / 4;
-            float fA = ((float)A * (float)Level / 100.0f + 5.0f) * (float)NatureFactor[(int)Nature, Index - 1]; 
-            return (int)fA;
+            double A = SpeciesStrength * 2 + IVs[Index] + (double)BasePoints[Index] / 4;
+            double Top = (double)Math.Floor(((double)A * (double)Level / 100.0f + 5.0f));
+            double fA = Top * NatureFactor[(int)Nature, Index - 1]; 
+            return (int)Math.Floor(fA);
         }
+    }
+
+    public int GetLevel()
+    {
+        return Level;
     }
 
     public int GetAtk()
@@ -122,16 +131,39 @@ public class BagPokemon : MonoBehaviour
     {
         return CaclStatus(SourcePokemonData.HP, 0);
     }
+    public int GetHP()
+    {
+        return HP;
+    }
 
+    public EType GetType0()
+    {
+        if(SourcePokemonData.Type0 == "undefined")
+        {
+            return EType.None;
+        }
+        return (EType)Enum.Parse(typeof(EType), SourcePokemonData.Type0);
+    }
+
+    public EType GetType1()
+    {
+        if(SourcePokemonData.Type1 == "undefined")
+        {
+            return EType.None;
+        }
+        return (EType)Enum.Parse(typeof(EType), SourcePokemonData.Type1);
+    }
     public void Start()
     {
         SourcePokemonData = PkmDataCollections.GetPokemonData(Name);
-
-        Debug.Log("Atk" + GetAtk());
-        Debug.Log("Def" + GetDef());
-        Debug.Log("SAtk" + GetSAtk());
-        Debug.Log("SDef" + GetSDef());
-        Debug.Log("Speed" + GetSpeed());
-        Debug.Log("MaxHP" + GetMaxHP());
+        HP = GetMaxHP();
+        /*
+        Debug.Log(Name + "Atk" + GetAtk());
+        Debug.Log(Name + "Def" + GetDef());
+        Debug.Log(Name + "SAtk" + GetSAtk());
+        Debug.Log(Name + "SDef" + GetSDef());
+        Debug.Log(Name + "Speed" + GetSpeed());
+        Debug.Log(Name + "MaxHP" + GetMaxHP());
+        */
     }
 }

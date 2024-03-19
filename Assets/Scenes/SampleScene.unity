@@ -167,12 +167,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d23b07d22389ee749b3d7a33d71392db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: "\u6728\u5B88\u5BAB"
+  Name: "\u8725\u8734\u738B"
   Ability: {fileID: 1600194562}
   IsEnemy: 0
-  Type1: 12
+  Type1: 11
   Type2: 0
-  ReferenceBasePokemon: {fileID: 0}
+  ReferenceBasePokemon: {fileID: 1889909708}
 --- !u!1 &167421475
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,6 +225,7 @@ Transform:
   - {fileID: 1679765946}
   - {fileID: 1600194561}
   - {fileID: 1889909707}
+  - {fileID: 1450040771}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -519,9 +520,9 @@ MonoBehaviour:
   Name: "\u70BD\u7130\u5486\u5578\u864E"
   Ability: {fileID: 1785393441}
   IsEnemy: 1
-  Type1: 10
-  Type2: 17
-  ReferenceBasePokemon: {fileID: 0}
+  Type1: 9
+  Type2: 16
+  ReferenceBasePokemon: {fileID: 1450040772}
 --- !u!1 &856290365
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,6 +1032,57 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1450040770
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1450040771}
+  - component: {fileID: 1450040772}
+  m_Layer: 0
+  m_Name: Incineroar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1450040771
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450040770}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 455.6667, y: 280.66666, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 167421477}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1450040772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450040770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e5df41039e03647a25ef45a06add41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PkmDataCollections: {fileID: 11400000, guid: 28504c708565b374797ee6d513986c58, type: 2}
+  Name: Incineroar
+  Level: 50
+  HP: 0
+  Nature: 0
+  IVs: 1f0000001f0000001f0000001f0000001f0000001f000000
+  BasePoints: 000000000000000000000000000000000000000000000000
 --- !u!1 &1600194560
 GameObject:
   m_ObjectHideFlags: 0
@@ -1367,8 +1419,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PkmDataCollections: {fileID: 11400000, guid: 28504c708565b374797ee6d513986c58, type: 2}
-  Name: Treecko
+  Name: Sceptile
   Level: 50
+  HP: 0
   Nature: 0
   IVs: 1f0000001f0000001f0000001f0000001f0000001f000000
   BasePoints: 000000000000000000000000000000000000000000000000

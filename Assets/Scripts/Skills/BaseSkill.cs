@@ -19,7 +19,7 @@ public enum ESkillClass
 public enum EType
 {
     None,
-    Normal,
+    Normal = 0,
     Fight,
     Flying,
     Poison,

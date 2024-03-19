@@ -123,6 +123,10 @@ public class SkillEvent : Event
                 {
                     CurrentProcessTargetPokemon = SkillMetas[TargetIndex].ReferencePokemon;
                     InManager.TranslateTimePoint(ETimePoint.BeforeJudgeSkillIsEffective, this);
+                    if(SkillMetas[TargetIndex].ReferencePokemon.IsDead())
+                    {
+                        SkillMetas[TargetIndex].NoEffect = true;
+                    }
                     bool Effective = Skill.JudgeIsEffective(InManager, SourcePokemon, CurrentProcessTargetPokemon);
                     if(!Effective)
                     {
@@ -174,10 +178,11 @@ public class SkillEvent : Event
                             CurrentProcessTargetPokemon = SkillMetas[TargetIndex].ReferencePokemon;
                             InManager.TranslateTimePoint(ETimePoint.BeforeTakenDamage, this);
                             EditorLog.DebugLog(CurrentProcessTargetPokemon.GetName()  + " Taken Damage:" + SkillMetas[TargetIndex].Damage);
-                            bool Dead = !CurrentProcessTargetPokemon.TakenDamage(SkillMetas[TargetIndex].Damage);
+                            bool Dead = CurrentProcessTargetPokemon.TakenDamage(SkillMetas[TargetIndex].Damage);
                             Skill.AfterDamageEvent(InManager, SourcePokemon, CurrentProcessTargetPokemon);
                             if(Dead)
                             {
+                                EditorLog.DebugLog(CurrentProcessTargetPokemon.GetName()  + " Defeated!");                            
                                 PokemonDefeatedEvent defeatedEvent = new PokemonDefeatedEvent(CurrentProcessTargetPokemon, SourcePokemon, Skill);
                                 defeatedEvent.Process(InManager);
                             }                        

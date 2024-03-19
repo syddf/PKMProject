@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class BattleSkill
@@ -52,17 +53,24 @@ public class BattleSkill
     public int DamagePhase(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         DamageSkill CastSkill = (DamageSkill)ReferenceBaseSkill;
-        float Power = CastSkill.GetPower(InManager, SourcePokemon, TargetPokemon);
-        float Atk = CastSkill.GetSourceAtk(InManager, SourcePokemon, TargetPokemon);
-        float Def = CastSkill.GetTargetDef(InManager, SourcePokemon, TargetPokemon);
-        float Level = SourcePokemon.GetLevel();
-        float DamageWithOutFactor = ((2.0f * Level + 10.0f) / 250.0f) * (Atk / Def) * Power + 2;
-        float Factor = 1.0f;
+        double Power = CastSkill.GetPower(InManager, SourcePokemon, TargetPokemon);
+        double Atk = CastSkill.GetSourceAtk(InManager, SourcePokemon, TargetPokemon);
+        double Def = CastSkill.GetTargetDef(InManager, SourcePokemon, TargetPokemon);
+        double Level = SourcePokemon.GetLevel();
+        double DamageWithOutFactor = ((2.0 * Level + 10.0) / 250.0) * (Atk / Def) * Power + 2;
+        double Factor = 1.0;
         if(CastSkill.IsSameType(InManager, SourcePokemon, TargetPokemon))
         {
             Factor *= CastSkill.GetSameTypePowerFactor(InManager, SourcePokemon, TargetPokemon);
         }
-        int Damage = Mathf.FloorToInt(DamageWithOutFactor * Factor);
+        double TypeEffectiveFactor = CastSkill.GetTypeEffectiveFactor(InManager, SourcePokemon, TargetPokemon);
+        Factor *= TypeEffectiveFactor;
+
+        System.Random rnd = new System.Random();
+        double RandomFactor = (double)rnd.Next(85, 101) / 100.0;
+        Factor *= RandomFactor;
+
+        int Damage = (int)Math.Floor(DamageWithOutFactor * Factor);
         return Mathf.Max(1, Damage);
     }
 

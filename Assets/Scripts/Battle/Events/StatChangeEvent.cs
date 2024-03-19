@@ -40,9 +40,11 @@ public class StatChangeEvent : Event
             {
                 Factor = -1;
             }
-            TargetPokemon.ChangeStat(ChangedStatName, Factor * ChangedStatLevel);
+            if(TargetPokemon.ChangeStat(ChangedStatName, Factor * ChangedStatLevel))
+            {
+                InManager.TranslateTimePoint(ETimePoint.AfterStatChange, this);        
+            }
         }
-        InManager.TranslateTimePoint(ETimePoint.AfterStatChange, this);        
     }
 
     public EventType GetEventType()
