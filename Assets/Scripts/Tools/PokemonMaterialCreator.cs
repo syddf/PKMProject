@@ -83,6 +83,36 @@ public class CustomAssetContextMenu : Editor
         string objPath = AssetDatabase.GetAssetPath(Selection.activeObject);
         string currentDirectoryPath = System.IO.Path.GetDirectoryName(objPath);
 
+        Object fbxAsset = Selection.activeObject;
+        string fbxAssetPath = AssetDatabase.GetAssetPath(fbxAsset);
+        if (fbxAsset == null || !(fbxAsset is GameObject || fbxAsset is AnimationClip))
+        {
+            Debug.LogError("Please assign an FBX asset.");
+            return;
+        }
+        UnityEngine.Object[] objs = AssetDatabase.LoadAllAssetsAtPath(fbxAssetPath);
+        Directory.CreateDirectory(fbxAssetPath + "/../Mesh");
+        Directory.CreateDirectory(fbxAssetPath + "/../Animation");
+        for (var j = 1; j < objs.Length; j++)
+        {
+            string name = objs[j].name;
+            if (objs[j] is AnimationClip)
+            {
+                AnimationClip clip = new AnimationClip();
+                clip.name = name;
+                EditorUtility.CopySerialized(objs[j], clip);
+                int index = name.IndexOf('|');
+                name = name.Substring(index + 1);
+                AssetDatabase.CreateAsset(clip, fbxAssetPath + "/../Animation/" + name + ".asset");
+            }
+            else if(objs[j] is Mesh)
+            {
+                Mesh newMesh = Instantiate((Mesh)objs[j]);
+                AssetDatabase.CreateAsset(newMesh, fbxAssetPath + "/../Mesh/" + name + ".asset");
+            }
+        }
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
         string materialsDirectoryPath = currentDirectoryPath + "/Materials";
         string texturesDirectoryPath = currentDirectoryPath + "/Textures";
         if (!AssetDatabase.IsValidFolder(materialsDirectoryPath))
@@ -132,15 +162,22 @@ public class CustomAssetContextMenu : Editor
                             if (true)
                             {
                                 Material newMaterial = new Material(material);
-                                Shader newShader = Shader.Find("Custom/NewSurfaceShader");
+                                int dotIndex = material.name.IndexOf('.');
+                                string trueName = dotIndex != -1 ? material.name.Substring(0, dotIndex) : material.name;
+                                string originName = trueName;
+
+                                string lymTexS = FindTexturesContainingStrings(texturesDirectoryPath, trueName, "_lym");
+                                Texture lymTextureS = AssetDatabase.LoadAssetAtPath<Texture>(lymTexS);
+                                Shader newShader = Shader.Find("Shader Graphs/pokemon2");
+                                if (lymTextureS != null)
+                                {
+                                    //newShader = Shader.Find("Shader Graphs/pokemon2");
+                                }
                                 if (newShader != null)
                                 {
                                     newMaterial.shader = newShader;
                                 }
 
-                                int dotIndex = material.name.IndexOf('.');
-                                string trueName = dotIndex != -1 ? material.name.Substring(0, dotIndex) : material.name;
-                                string originName = trueName;
                                 if (trueName == "l_eye" || trueName == "r_eye")
                                 {
                                     trueName = "eye_";
@@ -220,8 +257,8 @@ public class CustomAssetContextMenu : Editor
                     }
                 }
                 renderer.sharedMaterials = materials;
+                
             }
-
 
             DeleteCamerasAndLightsInChildren(instantiatedObject.transform);
 
