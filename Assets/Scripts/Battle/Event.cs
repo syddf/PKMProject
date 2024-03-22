@@ -74,6 +74,50 @@ public class TimelineAnimation : EventAnimation
         return PlayFinished;
     }
 
+    public void SetSignalParameter(string TrackName, string SignalName, string ParamName, string Value)
+    {
+        TimelineAsset timeline = (TimelineAsset)Director.playableAsset;
+        foreach (var track in timeline.GetOutputTracks())
+        {
+            if (track is TrackWithParameterizedSignal Track)
+            {
+                if(Track.name == TrackName)
+                {
+                    var markers = Track.GetMarkers();
+                    foreach (var marker in markers)
+                    {
+                        if (marker is SignalWithParams signalWithParam)
+                        {
+                            if(signalWithParam.sigName == SignalName)
+                            {
+                                for(int ParamIndex = 0; ParamIndex < 16; ParamIndex++)
+                                {
+                                    if(signalWithParam.ParamsName[ParamIndex] == ParamName)
+                                    {
+                                        signalWithParam.ParamsValue[ParamIndex] = Value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void SetSignalReceiver(string TrackName, GameObject Obj)
+    {
+        TimelineAsset timeline = (TimelineAsset)Director.playableAsset;
+        foreach (var track in timeline.GetOutputTracks())
+        {
+            if (track is TrackWithParameterizedSignal Track)
+            {
+                if(Track.name == TrackName)
+                    Director.SetGenericBinding(Track, Obj);
+            }
+        }
+    }
+
     public void SetTrackObject(string TrackName, GameObject Obj)
     {
         TimelineAsset timeline = (TimelineAsset)Director.playableAsset;

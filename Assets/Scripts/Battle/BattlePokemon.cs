@@ -37,6 +37,8 @@ public class BattlePokemon : MonoBehaviour
     [SerializeField]
     private EType Type2;
     [SerializeField]
+    private GameObject PokemonModelObj;
+    [SerializeField]
     private BagPokemon ReferenceBasePokemon;
     private BattlePokemonStat PokemonStats;
     private static double[] StatLevelFactor = new double[13]{0.25, 0.29, 0.33, 0.40, 0.50, 0.67, 1.00, 1.50, 2.00, 2.50, 3.00, 3.50, 4.00};
@@ -211,8 +213,17 @@ public class BattlePokemon : MonoBehaviour
         return 0;
     }
 
+    public int GetIndexInPKDex()
+    {
+        return ReferenceBasePokemon.GetIndexInPKDex();
+    }
     public void Start()
     {
         LoadBasePokemonStats();
+    }
+
+    public GameObject GetPokemonModel()
+    {
+        return PokemonModelObj;
     }
 }

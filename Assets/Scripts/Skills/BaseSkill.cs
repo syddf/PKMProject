@@ -65,6 +65,7 @@ public class BaseSkill : MonoBehaviour
     public int GetAccuracy() => Accuracy;
     public int GetMinCount() => MinCount;
     public int GetMaxCount() => MaxCount;
+    public EType GetSkillType() => SkillType;
     public virtual void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
 

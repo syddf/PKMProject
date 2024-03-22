@@ -11,6 +11,9 @@ public class SkillButton : MonoBehaviour
     private Button UIButton;
     public TextMeshProUGUI SkillNameText;
     public TextMeshProUGUI PPText;
+    public GameObject PhysicalObj;
+    public GameObject SpecialObj;
+    public GameObject StatusObj;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +36,22 @@ public class SkillButton : MonoBehaviour
         int CurPP = ReferencePokemon.GetSkillPP(ReferenceSkill);
         int MaxPP = ReferenceSkill.GetPP();
         PPText.text = "" + CurPP + "/" + MaxPP;
+        PhysicalObj.SetActive(false);
+        SpecialObj.SetActive(false);
+        StatusObj.SetActive(false);
+        ESkillClass SkillClass = ReferenceSkill.GetSkillClass();
+        if(SkillClass == ESkillClass.PhysicalMove)
+        {
+            PhysicalObj.SetActive(true);
+        }
+        if(SkillClass == ESkillClass.SpecialMove)
+        {
+            SpecialObj.SetActive(true);
+        }
+        if(SkillClass == ESkillClass.StatusMove)
+        {
+            StatusObj.SetActive(true);
+        }
     }
 
     void ButtonClicked()

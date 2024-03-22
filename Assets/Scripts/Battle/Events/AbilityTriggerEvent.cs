@@ -39,6 +39,9 @@ public class AbilityTriggerEvent : EventAnimationPlayer, Event
             AbilityObj = GameObject.Find("Canvas/SingleBattleUI/AbilityStates/PlayerAbility");
         }
         TargetTimeline.SetTrackObject("StateObject", AbilityObj);
+        TargetTimeline.SetSignalReceiver("SignalObject", AbilityObj);
+        TargetTimeline.SetSignalParameter("SignalObject", "AbilityTriggerSignal", "AbilityName", SourceAbility.GetAbilityName());
+        TargetTimeline.SetSignalParameter("SignalObject", "AbilityTriggerSignal", "PokemonIndex", SourceAbility.GetReferencePokemon().GetIndexInPKDex().ToString());
         AddAnimation(TargetTimeline);
     }
 

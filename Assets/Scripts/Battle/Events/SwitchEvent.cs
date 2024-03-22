@@ -65,6 +65,8 @@ public class SingleBattleGameStartEvent : EventAnimationPlayer, Event
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
         TimelineAnimation TargetTimeline = new TimelineAnimation(Timelines.BattleStartAnimation);
+        TargetTimeline.SetTrackObject("Pokemon1", PlayerPokemon.GetPokemonModel());
+        TargetTimeline.SetTrackObject("Pokemon2", EnemyPokemon.GetPokemonModel());
         AddAnimation(TargetTimeline);
     }
 

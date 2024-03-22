@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class StatChangeEvent : EventAnimationPlayer, Event
 {
@@ -24,23 +25,65 @@ public class StatChangeEvent : EventAnimationPlayer, Event
         return true;
     }
 
+    public static string GetStatName(string Stat)
+    {
+        if(Stat == "Atk") return "攻击";
+        if(Stat == "Def") return "物防";
+        if(Stat == "SAtk") return "特攻";
+        if(Stat == "SDef") return "特防";
+        if(Stat == "Speed") return "速度";
+        if(Stat == "Accuracyrate") return "命中率";
+        if(Stat == "Evasionrate") return "闪避率";
+        if(Stat == "CT") return "集中要害率";
+        return "";
+    }
+
+    public static string GetChangeDescription(int val)
+    {
+        if(val == 1) return "提高了";
+        if(val == 2) return "大幅提高了";
+        if(val >= 3) return "巨幅提高了";
+        if(val == -1) return "降低了";
+        if(val == -2) return "大幅降低了";
+        if(val <= -3) return "巨幅降低了";        
+        return "";
+    }
+
+    public string GetMessageText()
+    {
+        string PokemonName = TargetPokemon.GetName();
+        string StatName = GetStatName(ChangedStatName);
+        string Description = GetChangeDescription(ChangedStatLevel);
+
+        return PokemonName + "的" + StatName + Description + "!";
+    }
+
     public override void InitAnimation()
     {
+        TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        PlayableDirector AnimDirector = Timelines.DebuffAnimation;
+        if(GetChangeLevel() > 0)
+        {
+            AnimDirector = Timelines.BuffAnimation;
+        }
+        AnimDirector.gameObject.transform.position = TargetPokemon.GetPokemonModel().transform.position;
+        TimelineAnimation TargetTimeline = new TimelineAnimation(AnimDirector);
+        AddAnimation(TargetTimeline);
 
+        PlayableDirector MessageDirector = Timelines.MessageAnimation;
+        TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+        MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", GetMessageText());
+        AddAnimation(MessageTimeline);
     }
 
     public void Process(BattleManager InManager)
     {
         InManager.TranslateTimePoint(ETimePoint.BeforeStatChange, this);
-        if(ShouldChange)
+        if(ShouldChange && GetChangeLevel() != 0)
         {
             InManager.AddAnimationEvent(this);
-            int Factor = 1;
-            if(ReverseChangeLevel)
-            {
-                Factor = -1;
-            }
-            if(TargetPokemon.ChangeStat(ChangedStatName, Factor * ChangedStatLevel))
+
+            if(TargetPokemon.ChangeStat(ChangedStatName, GetChangeLevel()))
             {
                 InManager.TranslateTimePoint(ETimePoint.AfterStatChange, this);        
             }

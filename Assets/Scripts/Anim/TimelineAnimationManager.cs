@@ -16,6 +16,9 @@ public class TimelineAnimationManager : MonoBehaviour
     }
     public PlayableDirector BattleStartAnimation;
     public PlayableDirector AbilityStateAnimation;
+    public PlayableDirector BuffAnimation;
+    public PlayableDirector DebuffAnimation;
+    public PlayableDirector MessageAnimation;
     public PlayableDirector[] Player1SkillAnimation = new PlayableDirector[4];
     public PlayableDirector[] Player2SkillAnimation = new PlayableDirector[4];
     public PlayableDirector[] Player3SkillAnimation = new PlayableDirector[4];
