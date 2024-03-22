@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwitchEvent : Event
+public class SwitchEvent : EventAnimationPlayer, Event
 {
     private BattlePokemon OutPokemon;
     private BattlePokemon InPokemon;
@@ -13,11 +13,6 @@ public class SwitchEvent : Event
         InPokemon = InInPokemon;
     }
 
-    public void PlayAnimation()
-    {
-
-    }
-
     public bool ShouldProcess(BattleManager InBattleManager)
     {
         return true;
@@ -25,7 +20,7 @@ public class SwitchEvent : Event
 
     public void Process(BattleManager InManager)
     {
-
+        InManager.AddAnimationEvent(this);
     }
 
     public EventType GetEventType()
@@ -44,7 +39,7 @@ public class SwitchEvent : Event
     }
 }
 
-public class SingleBattleGameStartEvent : Event
+public class SingleBattleGameStartEvent : EventAnimationPlayer, Event
 {
     private BattlePokemon PlayerPokemon;
     private BattlePokemon EnemyPokemon;
@@ -55,12 +50,6 @@ public class SingleBattleGameStartEvent : Event
         EnemyPokemon = InEnemyPokemon;
     }
 
-    public void PlayAnimation()
-    {
-        EditorLog.DebugLog("Play Enemy StepOut Animation.");
-        EditorLog.DebugLog("Play Player StepOut Animation.");        
-    }
-
     public bool ShouldProcess(BattleManager InBattleManager)
     {
         return true;
@@ -68,8 +57,15 @@ public class SingleBattleGameStartEvent : Event
 
     public void Process(BattleManager InManager)
     {
-        EditorLog.DebugLog("BattleStart");
+        InManager.AddAnimationEvent(this);
         InManager.TranslateTimePoint(ETimePoint.BattleStart, this);
+    }
+
+    public override void InitAnimation()
+    {
+        TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        TimelineAnimation TargetTimeline = new TimelineAnimation(Timelines.BattleStartAnimation);
+        AddAnimation(TargetTimeline);
     }
 
     public EventType GetEventType()

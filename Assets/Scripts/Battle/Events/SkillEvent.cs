@@ -13,7 +13,7 @@ public class SkillEventMetaInfo
     public bool NoEffect;
 }
 
-public class SkillEvent : Event
+public class SkillEvent : EventAnimationPlayer, Event
 {
     private BattleSkill Skill;
     private BattlePokemon SourcePokemon;
@@ -46,11 +46,6 @@ public class SkillEvent : Event
         SkillForbidden = false;
         SkillMetasHistory = new List<List<SkillEventMetaInfo>>();
         ResetSkillMetas();
-    }
-
-    public void PlayAnimation()
-    {
-
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)
@@ -119,6 +114,7 @@ public class SkillEvent : Event
             for(int SkillCountIndex = 0; SkillCountIndex < SkillCount; SkillCountIndex++)
             {
                 bool ShouldActivateEffect = false;
+                InManager.AddAnimationEvent(this);
                 for(int TargetIndex = 0; TargetIndex < SkillMetas.Count; TargetIndex++)
                 {
                     CurrentProcessTargetPokemon = SkillMetas[TargetIndex].ReferencePokemon;

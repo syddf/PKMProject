@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PokemonDefeatedEvent : Event
+public class PokemonDefeatedEvent : EventAnimationPlayer, Event
 {
     private BattlePokemon TargetPokemon;
     private BattlePokemon SourcePokemon;
@@ -14,12 +14,6 @@ public class PokemonDefeatedEvent : Event
         SourcePokemon = InSourcePokemon;
         SourceSkill = InSkill;
     }
-
-    public void PlayAnimation()
-    {
-
-    }
-
     public bool ShouldProcess(BattleManager InBattleManager)
     {
         return true;
@@ -28,6 +22,7 @@ public class PokemonDefeatedEvent : Event
     public void Process(BattleManager InManager)
     {
         InManager.TranslateTimePoint(ETimePoint.BeforePokemonDefeated, this);
+        InManager.AddAnimationEvent(this);
         EditorLog.DebugLog(TargetPokemon.name + " Defeated.");
         InManager.AddDefeatedPokemon(TargetPokemon);
         InManager.TranslateTimePoint(ETimePoint.AfterPokemonDefeated, this);      

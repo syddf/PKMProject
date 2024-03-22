@@ -75,7 +75,7 @@ public class BattlePokemon : MonoBehaviour
     public int GetEvasionrateLevel() => PokemonStats.EvasionrateLevel;
     public int GetLevel() => PokemonStats.Level;
     public int GetCTLevel() => PokemonStats.CTLevel;
-
+    public PokemonGender GetGender() { return ReferenceBasePokemon.GetGender();}
     public bool ChangeStat(string StatName, int Level)
     {
         int ChangeLevel = Level;
@@ -158,7 +158,10 @@ public class BattlePokemon : MonoBehaviour
     public EType GetType1() { return Type1;}
     public EType GetType2() { return Type2;}
 
-
+    [SerializeField]
+    private BaseSkill[] ReferenceSkill = new BaseSkill[4];
+    [SerializeField]
+    private int[] SkillPP = new int[4];
     public bool TakenDamage(int Damage)
     {
         PokemonStats.HP -= Damage;
@@ -187,5 +190,29 @@ public class BattlePokemon : MonoBehaviour
         
         Type1 = ReferenceBasePokemon.GetType0();
         Type2 = ReferenceBasePokemon.GetType1();
+    }
+
+    public BaseSkill[] GetReferenceSkill()
+    {
+        return ReferenceSkill;
+    } 
+    public int GetSkillPP(BaseSkill InSkill)
+    {
+        int Index = 0;
+        foreach(var Skill in ReferenceSkill)
+        {
+            if(Skill == InSkill)
+            {
+                return SkillPP[Index];
+            }
+            Index++;
+        }
+
+        return 0;
+    }
+
+    public void Start()
+    {
+        LoadBasePokemonStats();
     }
 }

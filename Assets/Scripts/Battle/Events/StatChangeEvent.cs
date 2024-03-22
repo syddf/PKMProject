@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StatChangeEvent : Event
+public class StatChangeEvent : EventAnimationPlayer, Event
 {
     private BattlePokemon TargetPokemon;
     private string ChangedStatName;
@@ -19,14 +19,14 @@ public class StatChangeEvent : Event
         ReverseChangeLevel = false;
     }
 
-    public void PlayAnimation()
-    {
-
-    }
-
     public bool ShouldProcess(BattleManager InBattleManager)
     {
         return true;
+    }
+
+    public override void InitAnimation()
+    {
+
     }
 
     public void Process(BattleManager InManager)
@@ -34,7 +34,7 @@ public class StatChangeEvent : Event
         InManager.TranslateTimePoint(ETimePoint.BeforeStatChange, this);
         if(ShouldChange)
         {
-            EditorLog.DebugLog(TargetPokemon.GetName() + "Stat Changed..");
+            InManager.AddAnimationEvent(this);
             int Factor = 1;
             if(ReverseChangeLevel)
             {

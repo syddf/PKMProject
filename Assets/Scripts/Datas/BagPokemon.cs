@@ -32,6 +32,12 @@ public enum PokemonNature
     Serious
 }
 
+public enum PokemonGender
+{
+    None,
+    Male,
+    Female
+}
 public class BagPokemon : MonoBehaviour
 {
     private static double[,] NatureFactor = new double[,] 
@@ -78,7 +84,13 @@ public class BagPokemon : MonoBehaviour
     private int[] IVs = new int[6]{ 0, 0, 0, 0, 0, 0};
     [SerializeField]
     private int[] BasePoints = new int[6]{ 0, 0, 0, 0, 0, 0};
+    [SerializeField]
+    PokemonGender Gender;
 
+    public PokemonGender GetGender()
+    {
+        return Gender;
+    }
     private int CaclStatus(int SpeciesStrength, int Index)
     {
         // HP
@@ -97,6 +109,10 @@ public class BagPokemon : MonoBehaviour
         }
     }
 
+    public string GetName()
+    {
+        return Name;
+    }
     public int GetLevel()
     {
         return Level;
@@ -153,7 +169,7 @@ public class BagPokemon : MonoBehaviour
         }
         return (EType)Enum.Parse(typeof(EType), SourcePokemonData.Type1);
     }
-    public void Start()
+    public void Awake() 
     {
         SourcePokemonData = PkmDataCollections.GetPokemonData(Name);
         HP = GetMaxHP();

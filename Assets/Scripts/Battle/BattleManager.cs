@@ -15,12 +15,63 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private BaseSkill TestSkill;
 
+    private List<EventAnimationPlayer> AnimationEventList = new List<EventAnimationPlayer>();
+
+    public BattleUI BattleUIManager;
+
+    private bool PlayingAnimation;
+    private int CurPlayingAnimationEvent;
     // Start is called before the first frame update
     void Start()
     {
         EventsList = new List<Event>();
         CurrentTimePoint = ETimePoint.None;
         DefeatedPokemonList = new List<BattlePokemon>();
+        PlayingAnimation = false;
+    }
+
+    void Update()
+    {
+        if(PlayingAnimation)
+        {
+            if(CurPlayingAnimationEvent >= AnimationEventList.Count || AnimationEventList.Count == 0)
+            {
+                PlayingAnimation = false;
+                return;
+            }
+ 
+            if(CurPlayingAnimationEvent == -1)
+            {
+                CurPlayingAnimationEvent = 0;
+                AnimationEventList[CurPlayingAnimationEvent].BeginPlay();
+            }
+            AnimationEventList[CurPlayingAnimationEvent].Play();
+            if(AnimationEventList[CurPlayingAnimationEvent].Finished())
+            {
+                CurPlayingAnimationEvent =  CurPlayingAnimationEvent + 1;
+                if(CurPlayingAnimationEvent >= AnimationEventList.Count)
+                {
+                    PlayingAnimation = false;
+                }
+                else
+                {
+                    AnimationEventList[CurPlayingAnimationEvent].BeginPlay();
+                }
+            }
+        }
+    }
+
+    public void AddAnimationEvent(EventAnimationPlayer InEvent)
+    {
+        AnimationEventList.Add(InEvent);
+    }
+
+    void UpdateUI()
+    {
+        BattleUIManager.UpdatePlayer1UI(BattlePokemonList[0]);
+        BattleUIManager.UpdateEnemy1UI(BattlePokemonList[1]);
+        BattleUIManager.SetCurrentBattlePokemon(BattlePokemonList[0]);
+        BattleUIManager.GenerateSkills();
     }
 
     public void AddDefeatedPokemon(BattlePokemon InPokemon)
@@ -49,15 +100,9 @@ public class BattleManager : MonoBehaviour
         foreach(var AbilityIter in AbilitiesToTrigger)
         {
             string name = AbilityIter.GetAbilityName();
-            EditorLog.DebugLog("Ability Trigger: " + name);
             List<Event> EventsToProcess = AbilityIter.Trigger(this, SourceEvent);
-            foreach(var AbilityEventIter in EventsToProcess)
-            {
-                if(AbilityEventIter.ShouldProcess(this))
-                {
-                    AbilityEventIter.Process(this);
-                }
-            }        
+            AbilityTriggerEvent AbilityEvent = new AbilityTriggerEvent(EventsToProcess, AbilityIter);
+            AbilityEvent.Process(this);
         }
     }
 
@@ -71,6 +116,8 @@ public class BattleManager : MonoBehaviour
             }
         }
         EventsList.Clear();
+        PlayingAnimation = true;
+        CurPlayingAnimationEvent = -1;
     }
 
     public void BeginSingleBattle(BattlePokemon PlayerPokemon, BattlePokemon EnemyPokemon)
@@ -96,6 +143,7 @@ public class BattleManager : MonoBehaviour
     {
         BattlePokemonList[0].LoadBasePokemonStats();
         BattlePokemonList[1].LoadBasePokemonStats();
+        UpdateUI();
         BeginSingleBattle(BattlePokemonList[0], BattlePokemonList[1]);
         ProcessEvents();
     }
