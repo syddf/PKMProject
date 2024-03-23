@@ -14,6 +14,7 @@ public class SkillButton : MonoBehaviour
     public GameObject PhysicalObj;
     public GameObject SpecialObj;
     public GameObject StatusObj;
+    public TypeUI TypeUI;
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +41,10 @@ public class SkillButton : MonoBehaviour
         SpecialObj.SetActive(false);
         StatusObj.SetActive(false);
         ESkillClass SkillClass = ReferenceSkill.GetSkillClass();
+
+        EType SkillType = ReferenceSkill.GetSkillType();
+        TypeUI.SetType(SkillType);
+        
         if(SkillClass == ESkillClass.PhysicalMove)
         {
             PhysicalObj.SetActive(true);
@@ -56,6 +61,6 @@ public class SkillButton : MonoBehaviour
 
     void ButtonClicked()
     {
-        
+        g_BattleManager.OnUseSkill(ReferenceSkill, ReferencePokemon);
     }
 }

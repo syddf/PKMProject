@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public enum EMasterSkill
 {
@@ -39,6 +40,14 @@ public enum EType
     Fairy
 }
 
+public enum ERange
+{
+    None,
+    Single,
+    AllWithoutTeammates,
+    AllWithTeammates
+}
+
 public class BaseSkill : MonoBehaviour
 {
     [SerializeField]
@@ -52,6 +61,8 @@ public class BaseSkill : MonoBehaviour
     [SerializeField]
     protected EType SkillType;
     [SerializeField]
+    protected ERange SkillRange;
+    [SerializeField]
     protected string SkillName;
     [SerializeField]
     protected string SkillDescription;
@@ -59,6 +70,8 @@ public class BaseSkill : MonoBehaviour
     protected int MinCount;
     [SerializeField]
     protected int MaxCount;
+    [SerializeField]
+    protected PlayableDirector SkillAnimation;
     public ESkillClass GetSkillClass() => SkillClass;
     public int GetPower() => Power;
     public int GetPP() => PP;
@@ -66,6 +79,8 @@ public class BaseSkill : MonoBehaviour
     public int GetMinCount() => MinCount;
     public int GetMaxCount() => MaxCount;
     public EType GetSkillType() => SkillType;
+    public ERange GetSkillRange() => SkillRange;
+    public PlayableDirector GetSkillAnimation() => SkillAnimation;
     public virtual void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
 

@@ -8,6 +8,10 @@ public class PokemonSpritesManager : MonoBehaviour
 {
     // Start is called before the first frame update
     public static Dictionary<int, Sprite> Sprites = new Dictionary<int, Sprite>();
+    public void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
     void Start()
     {
         Sprite[] sprites = Resources.LoadAll<Sprite>("UI/PokemonSprites");

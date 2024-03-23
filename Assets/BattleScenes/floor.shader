@@ -23,7 +23,7 @@ Shader "Custom/ToonGroundExam"
 	}
 		SubShader
 		{
-		Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+		Tags { "RenderType" = "Transparent"  }
 		Pass
 		{
 			Blend SrcAlpha OneMinusSrcAlpha

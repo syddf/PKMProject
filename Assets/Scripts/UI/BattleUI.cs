@@ -24,4 +24,13 @@ public class BattleUI : MonoBehaviour
     {
         BattleCommandUI.GenerateNewSkillGroup(CurrentPokemon);
     }
+
+    public void EnableCommandUI()
+    {
+        BattleCommandUI.In();
+    }
+    public void DisableCommandUI()
+    {
+        BattleCommandUI.Out();
+    }
 }

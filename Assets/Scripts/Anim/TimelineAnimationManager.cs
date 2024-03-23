@@ -4,7 +4,11 @@ using UnityEngine;
 using UnityEngine.Playables;
 
 public class TimelineAnimationManager : MonoBehaviour
-{
+{    
+    public void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
     private static GameObject GlobalTimelineAnimationManager;
     public static TimelineAnimationManager GetGlobalTimelineAnimationManager()
     {
@@ -19,16 +23,4 @@ public class TimelineAnimationManager : MonoBehaviour
     public PlayableDirector BuffAnimation;
     public PlayableDirector DebuffAnimation;
     public PlayableDirector MessageAnimation;
-    public PlayableDirector[] Player1SkillAnimation = new PlayableDirector[4];
-    public PlayableDirector[] Player2SkillAnimation = new PlayableDirector[4];
-    public PlayableDirector[] Player3SkillAnimation = new PlayableDirector[4];
-    public PlayableDirector[] Player4SkillAnimation = new PlayableDirector[4];
-    public PlayableDirector[] Player5SkillAnimation = new PlayableDirector[4];
-    public PlayableDirector[] Player6SkillAnimation = new PlayableDirector[4];
-    public PlayableDirector[] Enemy1SkillAnimation = new PlayableDirector[4];
-    public PlayableDirector[] Enemy2SkillAnimation = new PlayableDirector[4];
-    public PlayableDirector[] Enemy3SkillAnimation = new PlayableDirector[4];
-    public PlayableDirector[] Enemy4SkillAnimation = new PlayableDirector[4];
-    public PlayableDirector[] Enemy5SkillAnimation = new PlayableDirector[4];
-    public PlayableDirector[] Enemy6SkillAnimation = new PlayableDirector[4];
 }

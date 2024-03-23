@@ -19,6 +19,7 @@ public class MessageAnim : MonoBehaviour
     void OnEnable() 
     {
         ElapsedTime = 0;
+        TextObj.text = "";
         HideWhenMessageUI.SetActive(false);
     }
 

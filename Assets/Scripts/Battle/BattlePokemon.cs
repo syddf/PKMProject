@@ -192,6 +192,25 @@ public class BattlePokemon : MonoBehaviour
         
         Type1 = ReferenceBasePokemon.GetType0();
         Type2 = ReferenceBasePokemon.GetType1();
+
+        for(int Index = 0; Index < 4; Index++)
+        {
+            if(ReferenceSkill[Index] != null)
+            {
+                SkillPP[Index] = ReferenceSkill[Index].GetPP();
+            }
+        }
+    }
+
+    public void ReducePP(BattleSkill InSkill)
+    {
+        for(int Index = 0; Index < 4; Index++)
+        {
+            if(ReferenceSkill[Index] != null && InSkill.GetSkillName() == InSkill.GetSkillName())
+            {
+                SkillPP[Index] = SkillPP[Index] - 1;
+            }
+        }
     }
 
     public BaseSkill[] GetReferenceSkill()
@@ -225,5 +244,17 @@ public class BattlePokemon : MonoBehaviour
     public GameObject GetPokemonModel()
     {
         return PokemonModelObj;
+    }
+
+    public int GetBattleSkillIndex(BaseSkill InSkill)
+    {
+        for(int Index = 0; Index < 4; Index++)
+        {
+            if(InSkill == ReferenceSkill[Index])
+            {
+                return Index;
+            }
+        }
+        return -1;
     }
 }

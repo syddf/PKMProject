@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -58,11 +59,42 @@ public interface EventAnimation
     public void Begin();
     public void Play();
 }
+public class TimelineTrackSetCache
+{
+    public string TrackName;
+    public GameObject Obj;
+
+    public TimelineTrackSetCache(string InTrackName, GameObject InObj)
+    {
+        Obj = InObj;
+        TrackName = InTrackName;
+    }
+}
+
+public class TimelineTrackParameterCache
+{
+    public string TrackName;
+    public string SignalName;
+    public string ParamName;
+    public string Value;
+    public TimelineTrackParameterCache(string InTrackName, string InSignalName, string InParamName, string InValue)
+    {
+        TrackName = InTrackName;
+        SignalName = InSignalName;
+        ParamName = InParamName;
+        Value = InValue;
+    }
+}
 
 public class TimelineAnimation : EventAnimation
 {   
     private PlayableDirector Director;
     private bool PlayFinished;
+
+    private List<TimelineTrackParameterCache> ParamsCache = new List<TimelineTrackParameterCache>();
+    private List<TimelineTrackSetCache> SignalTrackSetCache = new List<TimelineTrackSetCache>();
+       private List<TimelineTrackSetCache> ActivationTrackSetCache = new List<TimelineTrackSetCache>();
+ 
     public TimelineAnimation(PlayableDirector InDirector)
     {
         Director = InDirector;
@@ -73,8 +105,17 @@ public class TimelineAnimation : EventAnimation
     {
         return PlayFinished;
     }
-
     public void SetSignalParameter(string TrackName, string SignalName, string ParamName, string Value)
+    {
+        ParamsCache.Add(new TimelineTrackParameterCache(TrackName, SignalName, ParamName, Value));
+    }
+
+    public void SetSignalReceiver(string TrackName, GameObject Obj)
+    {
+        SignalTrackSetCache.Add(new TimelineTrackSetCache(TrackName, Obj));
+    }
+
+    public void SetSignalParameterInner(string TrackName, string SignalName, string ParamName, string Value)
     {
         TimelineAsset timeline = (TimelineAsset)Director.playableAsset;
         foreach (var track in timeline.GetOutputTracks())
@@ -105,7 +146,7 @@ public class TimelineAnimation : EventAnimation
         }
     }
 
-    public void SetSignalReceiver(string TrackName, GameObject Obj)
+    public void SetSignalReceiverInner(string TrackName, GameObject Obj)
     {
         TimelineAsset timeline = (TimelineAsset)Director.playableAsset;
         foreach (var track in timeline.GetOutputTracks())
@@ -117,8 +158,11 @@ public class TimelineAnimation : EventAnimation
             }
         }
     }
-
     public void SetTrackObject(string TrackName, GameObject Obj)
+    {
+        ActivationTrackSetCache.Add(new TimelineTrackSetCache(TrackName, Obj));
+    }
+    public void SetTrackObjectInner(string TrackName, GameObject Obj)
     {
         TimelineAsset timeline = (TimelineAsset)Director.playableAsset;
         foreach (var track in timeline.GetOutputTracks())
@@ -132,7 +176,19 @@ public class TimelineAnimation : EventAnimation
     }
 
     public void Begin()
-    {
+    {        
+        foreach(var TrackIter in ActivationTrackSetCache)
+        {
+            SetTrackObjectInner(TrackIter.TrackName, TrackIter.Obj);
+        }
+        foreach(var TrackIter in SignalTrackSetCache)
+        {
+            SetSignalReceiverInner(TrackIter.TrackName, TrackIter.Obj);
+        }
+        foreach(var ParamIter in ParamsCache)
+        {
+            SetSignalParameterInner(ParamIter.TrackName, ParamIter.SignalName, ParamIter.ParamName, ParamIter.Value);
+        }
         Director.gameObject.SetActive(true);
         Director.Play();
         PlayFinished = false;

@@ -37,9 +37,10 @@ public class BattleManager : MonoBehaviour
             if(CurPlayingAnimationEvent >= AnimationEventList.Count || AnimationEventList.Count == 0)
             {
                 PlayingAnimation = false;
+                AnimationEventList.Clear();
                 return;
             }
- 
+            BattleUIManager.DisableCommandUI();
             if(CurPlayingAnimationEvent == -1)
             {
                 CurPlayingAnimationEvent = 0;
@@ -52,6 +53,9 @@ public class BattleManager : MonoBehaviour
                 if(CurPlayingAnimationEvent >= AnimationEventList.Count)
                 {
                     PlayingAnimation = false;
+                    AnimationEventList.Clear();
+                    UpdateUI();
+                    BattleUIManager.EnableCommandUI();
                 }
                 else
                 {
@@ -154,6 +158,20 @@ public class BattleManager : MonoBehaviour
         List<BattlePokemon> TargetPokemon = new List<BattlePokemon>();
         TargetPokemon.Add(BattlePokemonList[1]);
         EventsList.Add(new SkillEvent(TestBattleSkill, BattlePokemonList[0], TargetPokemon));
+        ProcessEvents();
+    }
+
+    public void OnUseSkill(BaseSkill InSkill, BattlePokemon InReferencePokemon)
+    {
+        // Currently Only Single Battle.
+        BattleSkill UseBattleSkill = new BattleSkill(InSkill, EMasterSkill.None, InReferencePokemon);
+        List<BattlePokemon> TargetPokemon = new List<BattlePokemon>();
+        if(InSkill.GetSkillRange() != ERange.None)
+        {
+            List<BattlePokemon> Opposites = GetOpppoitePokemon(UseBattleSkill.GetReferencePokemon());
+            TargetPokemon.Add(Opposites[0]);
+        }
+        EventsList.Add(new SkillEvent(UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetPokemon));
         ProcessEvents();
     }
 

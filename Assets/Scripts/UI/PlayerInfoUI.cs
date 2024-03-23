@@ -8,12 +8,13 @@ public class PlayerInfoUI : MonoBehaviour
 {
     public TextMeshProUGUI PokemonName;
     public TextMeshProUGUI LVText;
+    public DamageUIAnimation HPUI;
     public TextMeshProUGUI HPText;
     public GameObject Type1Obj;
     public GameObject Type2Obj;
     public GameObject Male;
     public GameObject Female;
-    
+    private BattlePokemon ReferencePokemon;
     public void UpdateUI(BattlePokemon InPokemon)
     {
         LVText.text = "Lv." + InPokemon.GetLevel();
@@ -44,5 +45,12 @@ public class PlayerInfoUI : MonoBehaviour
         {
             Female.SetActive(true);
         }
+        ReferencePokemon = InPokemon;
+        HPUI.SetPokemon(ReferencePokemon);
+    }
+
+    public void DamageUI(int Damage)
+    {
+        HPUI.NewDamage(Damage, ReferencePokemon);
     }
 }

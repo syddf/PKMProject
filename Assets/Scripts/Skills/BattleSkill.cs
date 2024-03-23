@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class BattleSkill
 {
@@ -21,6 +22,12 @@ public class BattleSkill
         MinCount = ReferenceBaseSkill.GetMinCount();
         MaxCount = ReferenceBaseSkill.GetMaxCount();
     }
+
+    public BattlePokemon GetReferencePokemon()
+    {
+        return ReferencePokemon;
+    }
+
     public int GetSkillAccuracy()
     {
         return ReferenceBaseSkill.GetAccuracy();
@@ -50,7 +57,7 @@ public class BattleSkill
         MinCount = InMinCount;
     }
 
-    public int DamagePhase(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public int DamagePhase(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, out double EffectiveFactor)
     {
         DamageSkill CastSkill = (DamageSkill)ReferenceBaseSkill;
         double Power = CastSkill.GetPower(InManager, SourcePokemon, TargetPokemon);
@@ -64,6 +71,7 @@ public class BattleSkill
             Factor *= CastSkill.GetSameTypePowerFactor(InManager, SourcePokemon, TargetPokemon);
         }
         double TypeEffectiveFactor = CastSkill.GetTypeEffectiveFactor(InManager, SourcePokemon, TargetPokemon);
+        EffectiveFactor = TypeEffectiveFactor;
         Factor *= TypeEffectiveFactor;
 
         System.Random rnd = new System.Random();
@@ -94,4 +102,6 @@ public class BattleSkill
     }
 
     public string GetSkillName() { return ReferenceBaseSkill.GetSkillName(); }
+    public ERange GetSkillRange() { return ReferenceBaseSkill.GetSkillRange();}
+    public PlayableDirector GetSkillAnimation(){ return ReferenceBaseSkill.GetSkillAnimation();}
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MessageReceiver : ParameterizedSignalReceiver
 {
+
     public override void Process(SignalWithParams InSignal)
     {
         string Text = InSignal.GetParamValue("MessageText");
