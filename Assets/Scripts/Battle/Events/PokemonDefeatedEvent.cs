@@ -19,6 +19,32 @@ public class PokemonDefeatedEvent : EventAnimationPlayer, Event
         return true;
     }
 
+    public override void InitAnimation()
+    {
+        TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        TimelineAnimation DefeatedTimeline = new TimelineAnimation(Timelines.DefeatedAnimation);
+
+        DefeatedTimeline.SetTrackObject("PokemonActivation", TargetPokemon.GetPokemonModel());
+        DefeatedTimeline.SetSignalReceiver("PokemonAnim", TargetPokemon.GetPokemonModel());
+        if(TargetPokemon.GetIsEnemy())
+        {
+            DefeatedTimeline.SetTrackObject("Laser", Timelines.DefeatedAnimation.gameObject.GetComponent<SubObjects>().SubObject2);
+        }
+        else
+        {
+            DefeatedTimeline.SetTrackObject("Laser", Timelines.DefeatedAnimation.gameObject.GetComponent<SubObjects>().SubObject1);
+        }
+        Timelines.DefeatedAnimation.gameObject.GetComponent<SubObjects>().SubObject3.
+        GetComponent<PositionWithObject>().target = TargetPokemon.GetPokemonModel().GetComponent<PokemonReceiver>().BodyTransform;
+
+        //TargetTimeline.SetSignalParameter("SignalObject", "AbilityTriggerSignal", "AbilityName", SourceAbility.GetAbilityName());
+        AddAnimation(DefeatedTimeline);
+
+        TimelineAnimation MessageTimeline = new TimelineAnimation(Timelines.MessageAnimation);
+        MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "被击败了!");
+        AddAnimation(MessageTimeline);
+    }
+
     public void Process(BattleManager InManager)
     {
         InManager.TranslateTimePoint(ETimePoint.BeforePokemonDefeated, this);

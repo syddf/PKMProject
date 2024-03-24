@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
+    [SerializeField]
+    private PokemonTrainer PlayerTrainer;
+    [SerializeField]
+    private PokemonTrainer EnemyTrainer;
     private List<Event> EventsList;
     private ETimePoint CurrentTimePoint;
 
@@ -34,7 +38,7 @@ public class BattleManager : MonoBehaviour
     {
         if(PlayingAnimation)
         {
-            if(CurPlayingAnimationEvent >= AnimationEventList.Count || AnimationEventList.Count == 0)
+            if(AnimationEventList.Count == 0)
             {
                 PlayingAnimation = false;
                 AnimationEventList.Clear();
@@ -55,7 +59,27 @@ public class BattleManager : MonoBehaviour
                     PlayingAnimation = false;
                     AnimationEventList.Clear();
                     UpdateUI();
-                    BattleUIManager.EnableCommandUI();
+                    if(DefeatedPokemonList.Count > 0)
+                    {
+                        // Currently Only SingleBattle
+                        if(DefeatedPokemonList.Count == 1 && DefeatedPokemonList[0].GetIsEnemy())
+                        {
+                            EnemyAI NewEnemyAI = new EnemyAI(null, this, EnemyTrainer);
+                            BattlePokemon EnemyNext = NewEnemyAI.GetNextPokemon(DefeatedPokemonList[0]);
+                            EventsList.Add(new SwitchWhenDefeatedEvent(
+                                DefeatedPokemonList[0], 
+                                EnemyNext, 
+                                null,
+                                null
+                                ));
+                            DefeatedPokemonList.Clear();
+                            ProcessEvents();
+                        }
+                    }
+                    else
+                    {
+                        BattleUIManager.EnableCommandUI();
+                    }
                 }
                 else
                 {
@@ -72,8 +96,8 @@ public class BattleManager : MonoBehaviour
 
     void UpdateUI()
     {
-        BattleUIManager.UpdatePlayer1UI(BattlePokemonList[0]);
-        BattleUIManager.UpdateEnemy1UI(BattlePokemonList[1]);
+        BattleUIManager.UpdatePlayer1UI(BattlePokemonList[0], PlayerTrainer);
+        BattleUIManager.UpdateEnemy1UI(BattlePokemonList[1], EnemyTrainer);
         BattleUIManager.SetCurrentBattlePokemon(BattlePokemonList[0]);
         BattleUIManager.GenerateSkills();
     }
@@ -166,12 +190,14 @@ public class BattleManager : MonoBehaviour
         // Currently Only Single Battle.
         BattleSkill UseBattleSkill = new BattleSkill(InSkill, EMasterSkill.None, InReferencePokemon);
         List<BattlePokemon> TargetPokemon = new List<BattlePokemon>();
+        List<BattlePokemon> Opposites = GetOpppoitePokemon(UseBattleSkill.GetReferencePokemon());
         if(InSkill.GetSkillRange() != ERange.None)
         {
-            List<BattlePokemon> Opposites = GetOpppoitePokemon(UseBattleSkill.GetReferencePokemon());
             TargetPokemon.Add(Opposites[0]);
         }
         EventsList.Add(new SkillEvent(UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetPokemon));
+        EnemyAI NewEnemyAI = new EnemyAI(Opposites[0], this, EnemyTrainer);
+        NewEnemyAI.GenerateEnemyEvent(EventsList);
         ProcessEvents();
     }
 
@@ -207,5 +233,14 @@ public class BattleManager : MonoBehaviour
         }
 
         return Result;
+    }
+
+    public void SetNewPlayerPokemon(BattlePokemon InPokemon)
+    {
+        BattlePokemonList[0] = InPokemon;
+    }
+    public void SetNewEnemyPokemon(BattlePokemon InPokemon)
+    {
+        BattlePokemonList[1] = InPokemon;
     }
 }

@@ -39,6 +39,92 @@ public class SwitchEvent : EventAnimationPlayer, Event
     }
 }
 
+public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
+{
+    private BattlePokemon EnemyDefeatedPokemon;
+    private BattlePokemon EnemyNewPokemon;
+    private BattlePokemon PlayerDefeatedPokemon;
+    private BattlePokemon PlayerNewPokemon;
+
+    public SwitchWhenDefeatedEvent(BattlePokemon InEnemyDefeatedPokemon, BattlePokemon InEnemyNewPokemon, BattlePokemon InPlayerDefeatedPokemon, BattlePokemon InPlayerNewPokemon)
+    {
+        EnemyDefeatedPokemon = InEnemyDefeatedPokemon;
+        EnemyNewPokemon = InEnemyNewPokemon;
+        PlayerDefeatedPokemon = InPlayerDefeatedPokemon;
+        PlayerNewPokemon = InPlayerNewPokemon;
+    }
+
+    public bool ShouldProcess(BattleManager InBattleManager)
+    {
+        return true;
+    }
+
+    public void Process(BattleManager InManager)
+    {
+        InManager.AddAnimationEvent(this);
+        if(PlayerNewPokemon != null)
+        {
+            InManager.SetNewPlayerPokemon(PlayerNewPokemon);
+        }
+        if(EnemyNewPokemon != null)
+        {
+            InManager.SetNewEnemyPokemon(EnemyNewPokemon);
+        }
+        InManager.TranslateTimePoint(ETimePoint.PokemonIn, this);
+    }
+
+    public override void InitAnimation()
+    {
+        TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        TimelineAnimation TargetTimeline = new TimelineAnimation(Timelines.SwitchWhenDefeatedAnimation);
+        SubObjects SubObj = Timelines.SwitchWhenDefeatedAnimation.gameObject.GetComponent<SubObjects>();
+        if(!PlayerNewPokemon)
+        {
+            TargetTimeline.SetTrackObject("Pokemon1", null);
+            TargetTimeline.SetTrackObject("MonsterBall1", null);
+            TargetTimeline.SetTrackObject("Explosion1", null);            
+        }
+        else
+        {
+            
+            TargetTimeline.SetTrackObject("Pokemon1", PlayerNewPokemon.GetPokemonModel());
+            TargetTimeline.SetTrackObject("MonsterBall1", SubObj.SubObject2);
+            TargetTimeline.SetTrackObject("Explosion1", SubObj.SubObject1);    
+            PlayerNewPokemon.GetPokemonModel().gameObject.transform.position = SubObj.SubObject5.transform.position;        
+        }
+
+        if(!EnemyNewPokemon)
+        {
+            TargetTimeline.SetTrackObject("Pokemon2", null);
+            TargetTimeline.SetTrackObject("MonsterBall2", null);
+            TargetTimeline.SetTrackObject("Explosion2", null);            
+        }
+        else
+        {
+            TargetTimeline.SetTrackObject("Pokemon2", EnemyNewPokemon.GetPokemonModel());
+            TargetTimeline.SetTrackObject("MonsterBall2", SubObj.SubObject4);
+            TargetTimeline.SetTrackObject("Explosion2", SubObj.SubObject3);            
+            EnemyNewPokemon.GetPokemonModel().gameObject.transform.position = SubObj.SubObject6.transform.position;        
+        }
+        AddAnimation(TargetTimeline);
+    }
+
+    public EventType GetEventType()
+    {
+        return EventType.SwitchAfterDefeated;
+    }
+
+    public BattlePokemon GetPlayerNewPokemon()
+    {
+        return PlayerNewPokemon;
+    }
+
+    public BattlePokemon GetEnemyNewPokemon()
+    {
+        return EnemyNewPokemon;
+    }
+}
+
 public class SingleBattleGameStartEvent : EventAnimationPlayer, Event
 {
     private BattlePokemon PlayerPokemon;

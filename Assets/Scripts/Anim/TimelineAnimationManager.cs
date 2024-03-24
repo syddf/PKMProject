@@ -23,4 +23,6 @@ public class TimelineAnimationManager : MonoBehaviour
     public PlayableDirector BuffAnimation;
     public PlayableDirector DebuffAnimation;
     public PlayableDirector MessageAnimation;
+    public PlayableDirector DefeatedAnimation;
+    public PlayableDirector SwitchWhenDefeatedAnimation;
 }

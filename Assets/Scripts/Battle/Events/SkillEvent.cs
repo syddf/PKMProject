@@ -53,7 +53,7 @@ public class SkillEvent : EventAnimationPlayer, Event
 
     public bool ShouldProcess(BattleManager InBattleManager)
     {
-        return true;
+        return !SourcePokemon.IsDead();
     }
 
     private float GetSourceItemAccuracy(BattlePokemon InSourcePokemon)

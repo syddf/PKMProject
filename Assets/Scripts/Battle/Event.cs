@@ -43,7 +43,8 @@ public enum EventType
     UseSkill,
     PokemonDefeated,
     StatChange,
-    AbilityTrigger
+    AbilityTrigger,
+    SwitchAfterDefeated
 }
 
 public interface Event

@@ -33,5 +33,21 @@ public class PokemonReceiver : ParameterizedSignalReceiver
         {
             AnimController.EndTakenDamage();
         }
+        if(NewState == "Dead")
+        {
+            AnimController.Defeated();
+        }
+        if(NewState == "EndDead")
+        {
+            AnimController.EndDefeated();
+        }
+        if(NewState == "ReturnToBall")
+        {
+            AnimController.ReturnToBall();
+        }
+        if(NewState == "Reset")
+        {
+            AnimController.Reset();
+        }
     }
 }

@@ -14,8 +14,12 @@ public class PlayerInfoUI : MonoBehaviour
     public GameObject Type2Obj;
     public GameObject Male;
     public GameObject Female;
+    public Image[] PkBallImages = new Image[6];
+    public Color DefeatedPokemonColor;
+    public Color NormalPokemonColor;
+    public Color NoPokemonColor;
     private BattlePokemon ReferencePokemon;
-    public void UpdateUI(BattlePokemon InPokemon)
+    public void UpdateUI(BattlePokemon InPokemon, PokemonTrainer InTrainer)
     {
         LVText.text = "Lv." + InPokemon.GetLevel();
         PokemonName.text = InPokemon.GetName();
@@ -47,6 +51,23 @@ public class PlayerInfoUI : MonoBehaviour
         }
         ReferencePokemon = InPokemon;
         HPUI.SetPokemon(ReferencePokemon);
+        HPUI.SetColor(InPokemon.GetHP());
+
+        for(int Index = 0; Index < 6; Index++)
+        {
+            if(InTrainer.BattlePokemons[Index] == null)
+            {
+                PkBallImages[Index].color = NoPokemonColor;
+            }
+            else if(InTrainer.BattlePokemons[Index].IsDead())
+            {
+                PkBallImages[Index].color = DefeatedPokemonColor;
+            }
+            else
+            {
+                PkBallImages[Index].color = NormalPokemonColor;
+            }
+        }
     }
 
     public void DamageUI(int Damage)

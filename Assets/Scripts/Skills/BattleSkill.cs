@@ -65,21 +65,24 @@ public class BattleSkill
         double Def = CastSkill.GetTargetDef(InManager, SourcePokemon, TargetPokemon);
         double Level = SourcePokemon.GetLevel();
         double DamageWithOutFactor = ((2.0 * Level + 10.0) / 250.0) * (Atk / Def) * Power + 2;
-        double Factor = 1.0;
-        if(CastSkill.IsSameType(InManager, SourcePokemon, TargetPokemon))
-        {
-            Factor *= CastSkill.GetSameTypePowerFactor(InManager, SourcePokemon, TargetPokemon);
-        }
-        double TypeEffectiveFactor = CastSkill.GetTypeEffectiveFactor(InManager, SourcePokemon, TargetPokemon);
-        EffectiveFactor = TypeEffectiveFactor;
-        Factor *= TypeEffectiveFactor;
+        double Damage = DamageWithOutFactor;
 
         System.Random rnd = new System.Random();
         double RandomFactor = (double)rnd.Next(85, 101) / 100.0;
-        Factor *= RandomFactor;
+        Damage = (int)Math.Floor(Damage * RandomFactor);
 
-        int Damage = (int)Math.Floor(DamageWithOutFactor * Factor);
-        return Mathf.Max(1, Damage);
+        if(CastSkill.IsSameType(InManager, SourcePokemon, TargetPokemon))
+        {
+            double SameTypeFactor = CastSkill.GetSameTypePowerFactor(InManager, SourcePokemon, TargetPokemon);
+            Damage = (int)Math.Floor(Damage * SameTypeFactor);
+        }
+        double TypeEffectiveFactor = CastSkill.GetTypeEffectiveFactor(InManager, SourcePokemon, TargetPokemon);
+        EffectiveFactor = TypeEffectiveFactor;
+        Damage = (int)Math.Floor(Damage * TypeEffectiveFactor);
+
+        int IntDamage = (int)Math.Floor(Damage);
+        IntDamage = Math.Min(IntDamage, TargetPokemon.GetHP());
+        return Mathf.Max(1, IntDamage);
     }
 
     public void ProcessStatusEffect(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)

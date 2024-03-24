@@ -12,13 +12,13 @@ public class BattleUI : MonoBehaviour
     {
         CurrentPokemon = InPokemon;
     }
-    public void UpdatePlayer1UI(BattlePokemon InPokemon)
+    public void UpdatePlayer1UI(BattlePokemon InPokemon, PokemonTrainer InTrainer)
     {
-        PlayerInfo1.UpdateUI(InPokemon);
+        PlayerInfo1.UpdateUI(InPokemon, InTrainer);
     }
-    public void UpdateEnemy1UI(BattlePokemon InPokemon)
+    public void UpdateEnemy1UI(BattlePokemon InPokemon, PokemonTrainer InTrainer)
     {
-        EnemyInfo1.UpdateUI(InPokemon);
+        EnemyInfo1.UpdateUI(InPokemon, InTrainer);
     }
     public void GenerateSkills()
     {
