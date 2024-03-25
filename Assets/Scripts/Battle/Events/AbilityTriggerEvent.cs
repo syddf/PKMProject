@@ -14,11 +14,13 @@ public class AbilityTriggerEvent : EventAnimationPlayer, Event
 
     public bool ShouldProcess(BattleManager InBattleManager)
     {
+        if(InBattleManager.GetBattleEnd() == true) return false;
         return true;
     }
 
     public void Process(BattleManager InManager)
     {
+        if(!ShouldProcess(InManager)) return;
         InManager.AddAnimationEvent(this);
         foreach(var NewEvent in NewEvents)
         {

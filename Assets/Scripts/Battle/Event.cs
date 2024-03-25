@@ -44,7 +44,8 @@ public enum EventType
     PokemonDefeated,
     StatChange,
     AbilityTrigger,
-    SwitchAfterDefeated
+    SwitchAfterDefeated,
+    BattleEnd
 }
 
 public interface Event

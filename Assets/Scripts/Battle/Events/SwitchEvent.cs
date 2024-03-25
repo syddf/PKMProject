@@ -15,11 +15,13 @@ public class SwitchEvent : EventAnimationPlayer, Event
 
     public bool ShouldProcess(BattleManager InBattleManager)
     {
+        if(InBattleManager.GetBattleEnd() == true) return false;
         return true;
     }
 
     public void Process(BattleManager InManager)
     {
+        if(!ShouldProcess(InManager)) return;
         InManager.AddAnimationEvent(this);
     }
 
@@ -56,11 +58,13 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
 
     public bool ShouldProcess(BattleManager InBattleManager)
     {
+        if(InBattleManager.GetBattleEnd() == true) return false;
         return true;
     }
 
     public void Process(BattleManager InManager)
     {
+        if(!ShouldProcess(InManager)) return;
         InManager.AddAnimationEvent(this);
         if(PlayerNewPokemon != null)
         {
@@ -138,11 +142,14 @@ public class SingleBattleGameStartEvent : EventAnimationPlayer, Event
 
     public bool ShouldProcess(BattleManager InBattleManager)
     {
+
+        if(InBattleManager.GetBattleEnd() == true) return false;
         return true;
     }
 
     public void Process(BattleManager InManager)
     {
+        if(!ShouldProcess(InManager)) return;
         InManager.AddAnimationEvent(this);
         InManager.TranslateTimePoint(ETimePoint.BattleStart, this);
     }

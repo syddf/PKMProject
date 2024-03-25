@@ -53,6 +53,7 @@ public class SkillEvent : EventAnimationPlayer, Event
 
     public bool ShouldProcess(BattleManager InBattleManager)
     {
+        if(InBattleManager.GetBattleEnd() == true) return false;
         return !SourcePokemon.IsDead();
     }
 
@@ -96,8 +97,9 @@ public class SkillEvent : EventAnimationPlayer, Event
             MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
             AddAnimation(MessageTimeline);
             
-            foreach(var SkillMetas in SkillMetasHistory)
+            for(int HitIndex = 0; HitIndex < SkillMetasHistory.Count; HitIndex++)
             {
+                var SkillMetas = SkillMetasHistory[HitIndex];
                 bool Hit = false;
                 if(SkillMetas.Count == 1)
                 {
@@ -150,7 +152,19 @@ public class SkillEvent : EventAnimationPlayer, Event
                     }
                     else
                     {
-
+                        if(HitIndex == 0)
+                        {
+                            TimelineAnimation MissMessage = new TimelineAnimation(MessageDirector);
+                            MissMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "没有命中目标!");
+                            AddAnimation(MissMessage); 
+                        }
+                        else
+                        {
+                            TimelineAnimation MissMessage = new TimelineAnimation(MessageDirector);
+                            MissMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "命中了" + HitIndex.ToString() + "次!");
+                            AddAnimation(MissMessage); 
+                        }
+                        break;
                     }
                 }
             }
@@ -186,6 +200,7 @@ public class SkillEvent : EventAnimationPlayer, Event
 
     public void Process(BattleManager InManager)
     {
+        if(!ShouldProcess(InManager)) return;
         ResetSkillMetas();
         InManager.TranslateTimePoint(ETimePoint.BeforeActivateSkill, this);
         if(!SkillForbidden)

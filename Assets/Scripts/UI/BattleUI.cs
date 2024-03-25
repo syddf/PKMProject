@@ -8,6 +8,11 @@ public class BattleUI : MonoBehaviour
     public PlayerInfoUI EnemyInfo1;
     public CommandUI BattleCommandUI;
     public BattlePokemon CurrentPokemon;
+    public PokemonTrainer CurrentPlayerTrainer;
+    public void SetCurrentPlayerTrainer(PokemonTrainer InTrainer)
+    {
+        CurrentPlayerTrainer = InTrainer;
+    }
     public void SetCurrentBattlePokemon(BattlePokemon InPokemon)
     {
         CurrentPokemon = InPokemon;
@@ -23,6 +28,11 @@ public class BattleUI : MonoBehaviour
     public void GenerateSkills()
     {
         BattleCommandUI.GenerateNewSkillGroup(CurrentPokemon);
+    }
+
+    public void GenerateSwitch()
+    {
+        BattleCommandUI.GenerateNewSwitchGroup(CurrentPlayerTrainer);
     }
 
     public void EnableCommandUI()

@@ -25,6 +25,8 @@ public class BattleManager : MonoBehaviour
 
     private bool PlayingAnimation;
     private int CurPlayingAnimationEvent;
+    private bool WaitForPlayerSwitchPokemonWhenDefeated;
+    private bool BattleEnd = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,12 +60,12 @@ public class BattleManager : MonoBehaviour
                 {
                     PlayingAnimation = false;
                     AnimationEventList.Clear();
-                    UpdateUI();
                     if(DefeatedPokemonList.Count > 0)
                     {
                         // Currently Only SingleBattle
                         if(DefeatedPokemonList.Count == 1 && DefeatedPokemonList[0].GetIsEnemy())
                         {
+                            UpdateUI(false);
                             EnemyAI NewEnemyAI = new EnemyAI(null, this, EnemyTrainer);
                             BattlePokemon EnemyNext = NewEnemyAI.GetNextPokemon(DefeatedPokemonList[0]);
                             EventsList.Add(new SwitchWhenDefeatedEvent(
@@ -75,9 +77,16 @@ public class BattleManager : MonoBehaviour
                             DefeatedPokemonList.Clear();
                             ProcessEvents();
                         }
+                        else if(DefeatedPokemonList.Count == 1 && !DefeatedPokemonList[0].GetIsEnemy())
+                        {
+                            WaitForPlayerSwitchPokemonWhenDefeated = true;
+                            UpdateUI(true);
+                            BattleUIManager.EnableCommandUI();
+                        }
                     }
                     else
                     {
+                        UpdateUI(false);
                         BattleUIManager.EnableCommandUI();
                     }
                 }
@@ -94,12 +103,20 @@ public class BattleManager : MonoBehaviour
         AnimationEventList.Add(InEvent);
     }
 
-    void UpdateUI()
+    void UpdateUI(bool SwitchCommand)
     {
+        BattleUIManager.SetCurrentPlayerTrainer(PlayerTrainer);
         BattleUIManager.UpdatePlayer1UI(BattlePokemonList[0], PlayerTrainer);
         BattleUIManager.UpdateEnemy1UI(BattlePokemonList[1], EnemyTrainer);
         BattleUIManager.SetCurrentBattlePokemon(BattlePokemonList[0]);
-        BattleUIManager.GenerateSkills();
+        if(SwitchCommand)
+        {
+            BattleUIManager.GenerateSwitch();
+        }
+        else
+        {
+            BattleUIManager.GenerateSkills();
+        }
     }
 
     public void AddDefeatedPokemon(BattlePokemon InPokemon)
@@ -171,7 +188,7 @@ public class BattleManager : MonoBehaviour
     {
         BattlePokemonList[0].LoadBasePokemonStats();
         BattlePokemonList[1].LoadBasePokemonStats();
-        UpdateUI();
+        UpdateUI(false);
         BeginSingleBattle(BattlePokemonList[0], BattlePokemonList[1]);
         ProcessEvents();
     }
@@ -234,6 +251,22 @@ public class BattleManager : MonoBehaviour
 
         return Result;
     }
+    public bool BattleEndIfPokemonDefeated(BattlePokemon InPokemon)
+    {
+        if(InPokemon.GetIsEnemy())
+        {
+            return EnemyTrainer.GetRemainPokemonNum() == 0;
+        }
+        return PlayerTrainer.GetRemainPokemonNum() == 0;
+    }
+    public bool IsLastPokemon(BattlePokemon InPokemon)
+    {
+        if(InPokemon.GetIsEnemy())
+        {
+            return EnemyTrainer.GetRemainPokemonNum() == 1;
+        }
+        return PlayerTrainer.GetRemainPokemonNum() == 1;
+    }
 
     public void SetNewPlayerPokemon(BattlePokemon InPokemon)
     {
@@ -242,5 +275,52 @@ public class BattleManager : MonoBehaviour
     public void SetNewEnemyPokemon(BattlePokemon InPokemon)
     {
         BattlePokemonList[1] = InPokemon;
+    }
+
+    public void OnPlayerSwitchNewPokemon(BattlePokemon InPokemon)
+    {
+        if(WaitForPlayerSwitchPokemonWhenDefeated)
+        {
+            UpdateUI(false);
+            BattlePokemon PlayerOld = null;
+            BattlePokemon PlayerNew = null;
+            BattlePokemon EnemyOld = null;
+            BattlePokemon EnemyNew = null;
+            for(int Index = 0; Index < DefeatedPokemonList.Count; Index++)
+            {  
+                if(DefeatedPokemonList[Index].GetIsEnemy())
+                {
+                    EnemyAI NewEnemyAI = new EnemyAI(null, this, EnemyTrainer);
+                    EnemyOld = DefeatedPokemonList[Index];
+                    EnemyNew = NewEnemyAI.GetNextPokemon(DefeatedPokemonList[Index]);
+                }
+                else
+                {
+                    PlayerOld = DefeatedPokemonList[Index];
+                    PlayerNew = InPokemon;
+                }
+            }
+
+            EventsList.Add(
+                new SwitchWhenDefeatedEvent(
+                EnemyOld, 
+                EnemyNew, 
+                PlayerOld,
+                PlayerNew
+                ));
+            DefeatedPokemonList.Clear();
+            WaitForPlayerSwitchPokemonWhenDefeated = false;
+            ProcessEvents();
+        }
+    }
+
+    public void SetBattleEnd(bool End)
+    {
+        BattleEnd = End;
+    }
+
+    public bool GetBattleEnd()
+    {
+        return BattleEnd;
     }
 }

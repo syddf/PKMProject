@@ -22,6 +22,7 @@ public class StatChangeEvent : EventAnimationPlayer, Event
 
     public bool ShouldProcess(BattleManager InBattleManager)
     {
+        if(InBattleManager.GetBattleEnd() == true) return false;
         return true;
     }
 
@@ -78,6 +79,7 @@ public class StatChangeEvent : EventAnimationPlayer, Event
 
     public void Process(BattleManager InManager)
     {
+        if(!ShouldProcess(InManager)) return;
         InManager.TranslateTimePoint(ETimePoint.BeforeStatChange, this);
         if(ShouldChange && GetChangeLevel() != 0)
         {

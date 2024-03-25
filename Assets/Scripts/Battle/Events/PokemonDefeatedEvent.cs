@@ -16,6 +16,7 @@ public class PokemonDefeatedEvent : EventAnimationPlayer, Event
     }
     public bool ShouldProcess(BattleManager InBattleManager)
     {
+        if(InBattleManager.GetBattleEnd() == true) return false;
         return true;
     }
 
@@ -47,11 +48,20 @@ public class PokemonDefeatedEvent : EventAnimationPlayer, Event
 
     public void Process(BattleManager InManager)
     {
+        if(!ShouldProcess(InManager)) return;
         InManager.TranslateTimePoint(ETimePoint.BeforePokemonDefeated, this);
         InManager.AddAnimationEvent(this);
-        EditorLog.DebugLog(TargetPokemon.name + " Defeated.");
         InManager.AddDefeatedPokemon(TargetPokemon);
-        InManager.TranslateTimePoint(ETimePoint.AfterPokemonDefeated, this);      
+        if(InManager.BattleEndIfPokemonDefeated(TargetPokemon))
+        {
+            bool Win = TargetPokemon.GetIsEnemy();
+            BattleEndEvent battleEndEvent = new BattleEndEvent(Win);
+            battleEndEvent.Process(InManager);
+        }
+        else
+        {
+            InManager.TranslateTimePoint(ETimePoint.AfterPokemonDefeated, this);
+        }      
     }
 
     public EventType GetEventType()
