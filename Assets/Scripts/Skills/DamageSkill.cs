@@ -39,8 +39,9 @@ public class DamageSkill : BaseSkill
 
     public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
+        bool J2 = TargetPokemon.GetType2() == EType.None;
         return typeEffectiveness[(int)this.SkillType, (int)TargetPokemon.GetType1()] != 0 
-        && typeEffectiveness[(int)this.SkillType, (int)TargetPokemon.GetType2()] != 0;
+        && (J2 || typeEffectiveness[(int)this.SkillType, (int)TargetPokemon.GetType2()] != 0);
     }
 
     public virtual bool IsSameType(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
@@ -55,7 +56,8 @@ public class DamageSkill : BaseSkill
 
     public virtual double GetTypeEffectiveFactor(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        return typeEffectiveness[(int)this.SkillType, (int)TargetPokemon.GetType1()] * typeEffectiveness[(int)this.SkillType, (int)TargetPokemon.GetType2()];
+        double Factor2 = TargetPokemon.GetType2() == EType.None ? 1.0 : typeEffectiveness[(int)this.SkillType, (int)TargetPokemon.GetType2()];
+        return typeEffectiveness[(int)this.SkillType, (int)TargetPokemon.GetType1()] * Factor2;
     }
 
     public virtual int GetSourceAtk(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)

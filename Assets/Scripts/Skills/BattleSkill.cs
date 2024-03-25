@@ -87,7 +87,8 @@ public class BattleSkill
 
     public void ProcessStatusEffect(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-
+        StatusSkill CastSkill = (StatusSkill)ReferenceBaseSkill;
+        CastSkill.ProcessStatusSkillEffect(InManager, SourcePokemon, TargetPokemon);
     }
 
     public void AfterDamageEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
@@ -99,9 +100,11 @@ public class BattleSkill
     {
         ReferenceBaseSkill.AfterSkillEffectEvent(InManager, SourcePokemon, TargetPokemon);
     }
-    public virtual bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        return true;
+        if(!TargetPokemon)
+            return true;
+        return ReferenceBaseSkill.JudgeIsEffective(InManager, SourcePokemon, TargetPokemon);
     }
 
     public string GetSkillName() { return ReferenceBaseSkill.GetSkillName(); }

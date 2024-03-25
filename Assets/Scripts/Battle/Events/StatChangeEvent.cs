@@ -10,7 +10,7 @@ public class StatChangeEvent : EventAnimationPlayer, Event
     private int ChangedStatLevel;
     private bool ShouldChange;
     private bool ReverseChangeLevel;
-
+    private bool ChangedSuccessed = false;
     public StatChangeEvent(BattlePokemon InTargetPokemon, string InChangedStatName, int InChangedStatLevel)
     {
         TargetPokemon = InTargetPokemon;
@@ -62,19 +62,29 @@ public class StatChangeEvent : EventAnimationPlayer, Event
     public override void InitAnimation()
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
-        PlayableDirector AnimDirector = Timelines.DebuffAnimation;
-        if(GetChangeLevel() > 0)
+        if(ChangedSuccessed)
         {
-            AnimDirector = Timelines.BuffAnimation;
-        }
-        AnimDirector.gameObject.transform.position = TargetPokemon.GetPokemonModel().transform.position;
-        TimelineAnimation TargetTimeline = new TimelineAnimation(AnimDirector);
-        AddAnimation(TargetTimeline);
+            PlayableDirector AnimDirector = Timelines.DebuffAnimation;
+            if(GetChangeLevel() > 0)
+            {
+                AnimDirector = Timelines.BuffAnimation;
+            }
+            AnimDirector.gameObject.transform.position = TargetPokemon.GetPokemonModel().transform.position;
+            TimelineAnimation TargetTimeline = new TimelineAnimation(AnimDirector);
+            AddAnimation(TargetTimeline);
 
-        PlayableDirector MessageDirector = Timelines.MessageAnimation;
-        TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-        MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", GetMessageText());
-        AddAnimation(MessageTimeline);
+            PlayableDirector MessageDirector = Timelines.MessageAnimation;
+            TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", GetMessageText());
+            AddAnimation(MessageTimeline);
+        }
+        else
+        {
+            PlayableDirector MessageDirector = Timelines.MessageAnimation;
+            TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "能力不能再进一步变化了!");
+            AddAnimation(MessageTimeline);
+        }
     }
 
     public void Process(BattleManager InManager)
@@ -87,7 +97,8 @@ public class StatChangeEvent : EventAnimationPlayer, Event
 
             if(TargetPokemon.ChangeStat(ChangedStatName, GetChangeLevel()))
             {
-                InManager.TranslateTimePoint(ETimePoint.AfterStatChange, this);        
+                InManager.TranslateTimePoint(ETimePoint.AfterStatChange, this);
+                ChangedSuccessed = true;
             }
         }
     }

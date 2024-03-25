@@ -211,7 +211,7 @@ public class BattlePokemon : MonoBehaviour
     {
         for(int Index = 0; Index < 4; Index++)
         {
-            if(ReferenceSkill[Index] != null && InSkill.GetSkillName() == InSkill.GetSkillName())
+            if(ReferenceSkill[Index] != null && ReferenceSkill[Index].GetSkillName() == InSkill.GetSkillName())
             {
                 SkillPP[Index] = SkillPP[Index] - 1;
             }

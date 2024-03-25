@@ -49,5 +49,13 @@ public class PokemonReceiver : ParameterizedSignalReceiver
         {
             AnimController.Reset();
         }
+        if(NewState == "BeginStatus")
+        {
+            AnimController.BeginStatus();
+        }
+        if(NewState == "EndStatus")
+        {
+            AnimController.EndStatus();
+        }
     }
 }

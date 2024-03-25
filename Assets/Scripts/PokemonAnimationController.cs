@@ -48,6 +48,14 @@ public class PokemonAnimationController : MonoBehaviour
     {
         PkmAnimator.SetBool("Dead", false);
     }
+    public void BeginStatus()
+    {
+        PkmAnimator.SetBool("Status", true);
+    }
+    public void EndStatus()
+    {
+        PkmAnimator.SetBool("Status", false);
+    }
     public void Reset()
     {
         PkmAnimator.Play("Entry", 0, 0.0f);

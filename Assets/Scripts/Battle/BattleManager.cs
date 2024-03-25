@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum ETarget
 {
+    None,
     P0,
     E0
 }
@@ -221,6 +222,10 @@ public class BattleManager : MonoBehaviour
         if(InSkill.GetSkillRange() != ERange.None)
         {
             TargetPokemon.Add(ETarget.E0);
+        }
+        else
+        {
+            TargetPokemon.Add(ETarget.None);
         }
         EventsList.Add(new SkillEvent(this, UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetPokemon));
         EnemyAI NewEnemyAI = new EnemyAI(Opposites[0], this, EnemyTrainer);
