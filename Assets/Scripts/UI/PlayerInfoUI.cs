@@ -70,6 +70,11 @@ public class PlayerInfoUI : MonoBehaviour
         }
     }
 
+    public void UpdateHP(int CurHP)
+    {
+        HPUI.SetHP(CurHP);
+    }
+
     public void DamageUI(int Damage)
     {
         HPUI.NewDamage(Damage, ReferencePokemon);

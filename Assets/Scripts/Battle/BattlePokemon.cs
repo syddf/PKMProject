@@ -42,6 +42,11 @@ public class BattlePokemon : MonoBehaviour
     private BagPokemon ReferenceBasePokemon;
     private BattlePokemonStat PokemonStats;
     private static double[] StatLevelFactor = new double[13]{0.25, 0.29, 0.33, 0.40, 0.50, 0.67, 1.00, 1.50, 2.00, 2.50, 3.00, 3.50, 4.00};
+
+    public BattlePokemonStat CloneBattlePokemonStats()
+    {
+        return PokemonStats;
+    }
     public BaseAbility GetAbility() => Ability;
     public bool GetIsEnemy() => IsEnemy;
     public string GetName() => Name;

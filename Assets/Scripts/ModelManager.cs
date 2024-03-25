@@ -9,9 +9,14 @@ public class ModelManager : MonoBehaviour
     {
         if(G_ModelManager == null)
         {
-            G_ModelManager = GameObject.Find("SingleBattle/G_Models").GetComponent<ModelManager>();
+            G_ModelManager = GameObject.Find("G_Models").GetComponent<ModelManager>();
         }
         return G_ModelManager;
+    }
+
+    public void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
     }
     public GameObject Player1Pokemon;
     public GameObject Player2Pokemon;

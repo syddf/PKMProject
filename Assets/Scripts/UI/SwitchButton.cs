@@ -19,7 +19,7 @@ public class SwitchButton : MonoBehaviour
         PokemonSprite.sprite = PokemonSpritesManager.Sprites[Index];
         if(InPokemon.IsDead())
         {
-            PokemonSprite.color = new Color(PokemonSprite.color.r, PokemonSprite.color.g, PokemonSprite.color.b, 0.5f);
+            PokemonSprite.color = new Color(PokemonSprite.color.r, PokemonSprite.color.g, PokemonSprite.color.b, 0.3f);
         }
         else
         {

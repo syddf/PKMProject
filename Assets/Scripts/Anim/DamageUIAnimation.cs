@@ -74,6 +74,13 @@ public class DamageUIAnimation : MonoBehaviour
         
     }
 
+    public void SetHP(int HP)
+    {
+        PreHP = HP;
+        TarHP = HP;
+        Play = true;
+    }
+
     public void SetPokemon(BattlePokemon InReferencePokemon)
     {
         ReferencePokemon = InReferencePokemon;

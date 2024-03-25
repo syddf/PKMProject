@@ -17,6 +17,12 @@ public class Intimidate : BaseAbility
             return CastedEvent.GetInPokemon() == this.ReferencePokemon;
         }
 
+        if(SourceEvent.GetEventType() == EventType.SwitchAfterDefeated)
+        {
+            SwitchWhenDefeatedEvent CastedEvent = (SwitchWhenDefeatedEvent)SourceEvent;
+            return CastedEvent.GetPlayerNewPokemon() == this.ReferencePokemon || CastedEvent.GetEnemyNewPokemon() == this.ReferencePokemon;
+        }
+
         if(SourceEvent.GetEventType() == EventType.BattleStart)
         {
             SingleBattleGameStartEvent CastedEvent = (SingleBattleGameStartEvent)SourceEvent;

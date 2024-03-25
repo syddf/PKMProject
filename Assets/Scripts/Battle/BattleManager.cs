@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ETarget
+{
+    P0,
+    E0
+}
+
 public class BattleManager : MonoBehaviour
 {
     [SerializeField]
@@ -69,6 +75,7 @@ public class BattleManager : MonoBehaviour
                             EnemyAI NewEnemyAI = new EnemyAI(null, this, EnemyTrainer);
                             BattlePokemon EnemyNext = NewEnemyAI.GetNextPokemon(DefeatedPokemonList[0]);
                             EventsList.Add(new SwitchWhenDefeatedEvent(
+                                this,
                                 DefeatedPokemonList[0], 
                                 EnemyNext, 
                                 null,
@@ -102,8 +109,20 @@ public class BattleManager : MonoBehaviour
     {
         AnimationEventList.Add(InEvent);
     }
-
-    void UpdateUI(bool SwitchCommand)
+    public void UpdatePokemonInfo(BattlePokemon InPokemon, BattlePokemonStat Stats)
+    {
+        if(InPokemon == null)
+            return;
+        if(InPokemon.GetIsEnemy())
+        {
+            BattleUIManager.SetEnemyHP(Stats.HP);
+        }
+        else
+        {
+            BattleUIManager.SetPlayerHP(Stats.HP);
+        }
+    }
+    public void UpdateUI(bool SwitchCommand)
     {
         BattleUIManager.SetCurrentPlayerTrainer(PlayerTrainer);
         BattleUIManager.UpdatePlayer1UI(BattlePokemonList[0], PlayerTrainer);
@@ -124,16 +143,16 @@ public class BattleManager : MonoBehaviour
         DefeatedPokemonList.Add(InPokemon);
     }
     
-    public void AddSkillEvent(BattleSkill InSkill, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public void AddSkillEvent(BattleSkill InSkill, BattlePokemon SourcePokemon, ETarget TargetPokemon)
     {
-        List<BattlePokemon> TargetList = new List<BattlePokemon>();
+        List<ETarget> TargetList = new List<ETarget>();
         TargetList.Add(TargetPokemon);
-        EventsList.Add(new SkillEvent(InSkill, SourcePokemon, TargetList));
+        EventsList.Add(new SkillEvent(this, InSkill, SourcePokemon, TargetList));
     }
 
     public void AddSwitchEvent(BattlePokemon OutPokemon, BattlePokemon InPokemon)
     {
-        EventsList.Add(new SwitchEvent(OutPokemon, InPokemon));
+        EventsList.Add(new SwitchEvent(this, OutPokemon, InPokemon));
     }
 
     public void TranslateTimePoint(ETimePoint NewTime, Event SourceEvent)
@@ -193,26 +212,17 @@ public class BattleManager : MonoBehaviour
         ProcessEvents();
     }
 
-    public void TestSkillFunc()
-    {
-        BattleSkill TestBattleSkill = new BattleSkill(TestSkill, EMasterSkill.None, BattlePokemonList[0]);
-        List<BattlePokemon> TargetPokemon = new List<BattlePokemon>();
-        TargetPokemon.Add(BattlePokemonList[1]);
-        EventsList.Add(new SkillEvent(TestBattleSkill, BattlePokemonList[0], TargetPokemon));
-        ProcessEvents();
-    }
-
     public void OnUseSkill(BaseSkill InSkill, BattlePokemon InReferencePokemon)
     {
         // Currently Only Single Battle.
         BattleSkill UseBattleSkill = new BattleSkill(InSkill, EMasterSkill.None, InReferencePokemon);
-        List<BattlePokemon> TargetPokemon = new List<BattlePokemon>();
+        List<ETarget> TargetPokemon = new List<ETarget>();
         List<BattlePokemon> Opposites = GetOpppoitePokemon(UseBattleSkill.GetReferencePokemon());
         if(InSkill.GetSkillRange() != ERange.None)
         {
-            TargetPokemon.Add(Opposites[0]);
+            TargetPokemon.Add(ETarget.E0);
         }
-        EventsList.Add(new SkillEvent(UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetPokemon));
+        EventsList.Add(new SkillEvent(this, UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetPokemon));
         EnemyAI NewEnemyAI = new EnemyAI(Opposites[0], this, EnemyTrainer);
         NewEnemyAI.GenerateEnemyEvent(EventsList);
         ProcessEvents();
@@ -268,6 +278,16 @@ public class BattleManager : MonoBehaviour
         return PlayerTrainer.GetRemainPokemonNum() == 1;
     }
 
+    public PokemonTrainer GetPlayerTrainer()
+    {
+        return PlayerTrainer;
+    }
+
+    public PokemonTrainer GetEnemyTrainer()
+    {
+        return EnemyTrainer;
+    }
+
     public void SetNewPlayerPokemon(BattlePokemon InPokemon)
     {
         BattlePokemonList[0] = InPokemon;
@@ -279,6 +299,10 @@ public class BattleManager : MonoBehaviour
 
     public void OnPlayerSwitchNewPokemon(BattlePokemon InPokemon)
     {
+        if(InPokemon.IsDead() || BattlePokemonList[0] == InPokemon)
+        {
+            return;
+        }
         if(WaitForPlayerSwitchPokemonWhenDefeated)
         {
             UpdateUI(false);
@@ -303,6 +327,7 @@ public class BattleManager : MonoBehaviour
 
             EventsList.Add(
                 new SwitchWhenDefeatedEvent(
+                this,
                 EnemyOld, 
                 EnemyNew, 
                 PlayerOld,
@@ -312,6 +337,26 @@ public class BattleManager : MonoBehaviour
             WaitForPlayerSwitchPokemonWhenDefeated = false;
             ProcessEvents();
         }
+        else
+        {
+            EventsList.Add(new SwitchEvent(this, BattlePokemonList[0], InPokemon));
+            EnemyAI NewEnemyAI = new EnemyAI(BattlePokemonList[1], this, EnemyTrainer);
+            NewEnemyAI.GenerateEnemyEvent(EventsList);
+            ProcessEvents();
+        }
+    }
+
+    public BattlePokemon GetTargetPokemon(ETarget Target)
+    {
+        if(Target == ETarget.P0)
+        {
+            return BattlePokemonList[0];
+        }
+        else if(Target == ETarget.E0)
+        {
+            return BattlePokemonList[1];
+        }
+        return null;
     }
 
     public void SetBattleEnd(bool End)

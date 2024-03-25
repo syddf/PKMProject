@@ -20,12 +20,13 @@ public class SkillEvent : EventAnimationPlayer, Event
 {
     private BattleSkill Skill;
     private BattlePokemon SourcePokemon;
-    private List<BattlePokemon> TargetPokemon;
+    private List<ETarget> TargetPokemon;
     private BattlePokemon CurrentProcessTargetPokemon;
     private List<SkillEventMetaInfo> SkillMetas;
     private bool SkillForbidden;
     private List<List<SkillEventMetaInfo>> SkillMetasHistory;
-
+    private int SkillAnimIndex = 0;
+    private BattleManager ReferenceBattleManager;
     private void ResetSkillMetas()
     {
         SkillMetas = new List<SkillEventMetaInfo>();
@@ -35,16 +36,17 @@ public class SkillEvent : EventAnimationPlayer, Event
             Result.Hit = false;
             Result.Damage = 0;
             Result.OtherAccuracy = 1.0f;
-            Result.ReferencePokemon = TargetPokemon;
+            Result.ReferencePokemon = ReferenceBattleManager.GetTargetPokemon(TargetPokemon);
             Result.NoEffect = false;
             SkillMetas.Add(Result);
         }
     }
-    public SkillEvent(BattleSkill InSkill, BattlePokemon InSourcePokemon, List<BattlePokemon> InTargetPokemon)
+    public SkillEvent(BattleManager InManager, BattleSkill InSkill, BattlePokemon InSourcePokemon, List<ETarget> InTargetPokemon)
     {
         Skill = InSkill;
         SourcePokemon = InSourcePokemon;
         TargetPokemon = InTargetPokemon;
+        ReferenceBattleManager = InManager;
         CurrentProcessTargetPokemon = null;
         SkillForbidden = false;
         SkillMetasHistory = new List<List<SkillEventMetaInfo>>();
@@ -97,10 +99,9 @@ public class SkillEvent : EventAnimationPlayer, Event
             MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
             AddAnimation(MessageTimeline);
             
-            for(int HitIndex = 0; HitIndex < SkillMetasHistory.Count; HitIndex++)
+            int HitIndex = SkillAnimIndex;
             {
                 var SkillMetas = SkillMetasHistory[HitIndex];
-                bool Hit = false;
                 if(SkillMetas.Count == 1)
                 {
                     GameObject SkillRootObject = Skill.GetSkillAnimation().gameObject;
@@ -164,11 +165,11 @@ public class SkillEvent : EventAnimationPlayer, Event
                             MissMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "命中了" + HitIndex.ToString() + "次!");
                             AddAnimation(MissMessage); 
                         }
-                        break;
                     }
                 }
             }
         }
+        SkillAnimIndex++;
     }
 
     public int GetSkillCount()
@@ -212,6 +213,7 @@ public class SkillEvent : EventAnimationPlayer, Event
             {
                 bool ShouldActivateEffect = false;
                 InManager.AddAnimationEvent(this);
+                SkillMetasHistory.Add(this.SkillMetas);
                 for(int TargetIndex = 0; TargetIndex < SkillMetas.Count; TargetIndex++)
                 {
                     CurrentProcessTargetPokemon = SkillMetas[TargetIndex].ReferencePokemon;
@@ -288,7 +290,6 @@ public class SkillEvent : EventAnimationPlayer, Event
                 {
                     break;
                 }
-                SkillMetasHistory.Add(this.SkillMetas);
             }
             SourcePokemon.ReducePP(Skill);
         }

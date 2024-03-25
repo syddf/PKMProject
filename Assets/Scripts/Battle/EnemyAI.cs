@@ -32,13 +32,14 @@ public class EnemyAI
         BattleSkill UseBattleSkill = new BattleSkill(InSkill, EMasterSkill.None, ReferencePokemon);
         if(InSkill.GetSkillRange() != ERange.None)
         {
-            List<BattlePokemon> TargetList = ReferenceBattleManager.GetOpppoitePokemon(ReferencePokemon);
-            InEvents.Add(new SkillEvent(UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetList));
+            List<ETarget> TargetList = new List<ETarget>();
+            TargetList.Add(ETarget.P0);
+            InEvents.Add(new SkillEvent(ReferenceBattleManager, UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetList));
         }
         else
         {
-            List<BattlePokemon> TargetList = new List<BattlePokemon>();
-            InEvents.Add(new SkillEvent(UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetList));
+            List<ETarget> TargetList = new List<ETarget>();
+            InEvents.Add(new SkillEvent(ReferenceBattleManager, UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetList));
         }
     }
 

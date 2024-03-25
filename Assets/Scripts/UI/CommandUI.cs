@@ -14,14 +14,20 @@ public class CommandUI : MonoBehaviour
     private Transform TargetTransform;
     private Transform SourceTransform;
     public BattleManager BattleManager;
+    public PokemonTrainer ReferenceTrainer;
+    public BattlePokemon ReferencePokemon;
+    public GameObject SwitchButton;
+    public GameObject SkillButton;
     private bool Play = false;
     public void GenerateNewSkillGroup(BattlePokemon InPokemon)
     {   
         SwitchGroupRootObj.SetActive(false);
         SkillGroupRootObj.SetActive(true);
+        ReferencePokemon = InPokemon;
         foreach (Transform child in SkillGroupRootObj.transform)
         {
-            Destroy(child.gameObject);
+            if(child.gameObject != SwitchButton)
+                Destroy(child.gameObject);
         }
         BaseSkill[] PokemonSkills = InPokemon.GetReferenceSkill();
         for(int Index = 0; Index < 4; Index ++)
@@ -30,6 +36,7 @@ public class CommandUI : MonoBehaviour
             {
                 GameObject NewButton = Instantiate(SkillButtonPrefab, new Vector3(0, 0, 0), Quaternion.identity, SkillGroupRootObj.transform);
                 NewButton.GetComponent<SkillButton>().Init(BattleManager, PokemonSkills[Index], InPokemon);
+                NewButton.transform.SetSiblingIndex(Index);
             }
         }
     }
@@ -68,6 +75,21 @@ public class CommandUI : MonoBehaviour
         }    
     }
 
+    public void SwitchMode()
+    {
+        ReferenceTrainer = BattleManager.GetPlayerTrainer();
+        GenerateNewSwitchGroup(ReferenceTrainer);
+        In();
+        SkillButton.SetActive(true);
+    }
+
+    public void SkillMode()
+    {
+        ReferenceTrainer = BattleManager.GetPlayerTrainer();
+        GenerateNewSkillGroup(ReferencePokemon);
+        In();
+    }
+
     public void GenerateNewSwitchGroup(PokemonTrainer InTrainer)
     {
         SwitchGroupRootObj.SetActive(true);
@@ -92,5 +114,6 @@ public class CommandUI : MonoBehaviour
         SubScript.SubObject4.GetComponent<SwitchButton>().UpdateSprite(Pokemons[3], BattleManager);
         SubScript.SubObject5.GetComponent<SwitchButton>().UpdateSprite(Pokemons[4], BattleManager);
         SubScript.SubObject6.GetComponent<SwitchButton>().UpdateSprite(Pokemons[5], BattleManager);
+        SkillButton.SetActive(false);
     }
 }

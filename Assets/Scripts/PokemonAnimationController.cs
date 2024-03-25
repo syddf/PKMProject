@@ -53,7 +53,12 @@ public class PokemonAnimationController : MonoBehaviour
         PkmAnimator.Play("Entry", 0, 0.0f);
         PkmAnimator.Update(0f);
     }
-
+    public void OnEnable() {
+    }
+    public void OnDisable() {
+        Play = false;
+        Timer = 0.0f;
+    }
     public void Update()
     {
         if(Play)

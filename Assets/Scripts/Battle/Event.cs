@@ -223,6 +223,11 @@ public class EventAnimationPlayer
     private List<EventAnimation> Anims = new List<EventAnimation>();
     private int CurAnimationIndex = -1;
 
+    public virtual void OnAnimationFinished()
+    {
+
+    }
+
     public virtual void AddAnimation(EventAnimation Anim)
     {
         Anims.Add(Anim);
@@ -234,6 +239,7 @@ public class EventAnimationPlayer
         if(CurAnimationIndex == Anims.Count)
         {
             Anims.Clear();
+            OnAnimationFinished();
             return true;
         }
         return false;

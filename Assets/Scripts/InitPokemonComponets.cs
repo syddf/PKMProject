@@ -15,6 +15,10 @@ public class InitPokemonComponets : MonoBehaviour
         AdjustColliderBounds();
         rb = GetComponent<Rigidbody>();
     }
+    void OnEnable()
+    {
+        this.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+    }
     void AdjustColliderBounds()
     {
         // 如果没有Renderer，直接退出
