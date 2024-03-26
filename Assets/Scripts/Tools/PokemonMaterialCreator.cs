@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.Animations;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 public class CustomAssetContextMenu : Editor
 {
@@ -232,12 +235,31 @@ public class CustomAssetContextMenu : Editor
             }
         }
 
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
         if (selectedObject != null && selectedObject is GameObject)
         {
             GameObject selectedGameObject = selectedObject as GameObject;
 
             GameObject instantiatedObject = Instantiate(selectedGameObject);
             instantiatedObject.name = selectedGameObject.name + "_Instance";
+
+            Rigidbody rb = instantiatedObject.AddComponent<Rigidbody>();
+            // 设置Rigidbody的一些属性，如下面示例所示，或根据需要进行调整
+            rb.useGravity = true; // 启用重力
+            rb.isKinematic = false; // 非运动学
+
+            // 添加BoxCollider组件
+            BoxCollider box = instantiatedObject.AddComponent<BoxCollider>();
+            // 设置BoxCollider的一些属性，如下面示例所示，或根据需要进行调整
+            box.size = new Vector3(1, 1, 1); // 设置碰撞器大小，可以根据实际需要调整
+
+            // 添加Animator组件
+            Animator anim = instantiatedObject.AddComponent<Animator>();
+            // 将Animator Controller赋值给Animator组件
+
+            instantiatedObject.AddComponent<InitPokemonComponets>();
 
             Renderer[] renderers = instantiatedObject.GetComponentsInChildren<Renderer>(true);
             foreach (Renderer renderer in renderers)
@@ -268,7 +290,7 @@ public class CustomAssetContextMenu : Editor
                 AssetDatabase.CreateFolder(currentDirectoryPath, "Prefabs");
             }
 
-            string prefabPath = prefabDirectoryPath + "/" + selectedGameObject.name + ".prefab";
+            string prefabPath = prefabDirectoryPath + "/pkmModel.prefab";
 
             if (File.Exists(prefabPath))
             {

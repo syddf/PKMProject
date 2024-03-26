@@ -7,6 +7,8 @@ public class InitPokemonComponets : MonoBehaviour
     private Rigidbody rb;
     private BoxCollider boxCollider;
     private Renderer[] renderers;
+    public float BattleWaitSpeed = 1;
+    private Animator Anim;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,6 +16,10 @@ public class InitPokemonComponets : MonoBehaviour
         renderers = GetComponentsInChildren<Renderer>();
         AdjustColliderBounds();
         rb = GetComponent<Rigidbody>();
+        Anim = GetComponent<Animator>();
+        if(BattleWaitSpeed == 0)
+            BattleWaitSpeed = 1;
+        Anim.speed = BattleWaitSpeed;
     }
     void OnEnable()
     {
