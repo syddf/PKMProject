@@ -41,6 +41,7 @@ public class BattlePokemon : MonoBehaviour
     [SerializeField]
     private BagPokemon ReferenceBasePokemon;
     private BattlePokemonStat PokemonStats;
+    private BattleItem Item;
     private static double[] StatLevelFactor = new double[13]{0.25, 0.29, 0.33, 0.40, 0.50, 0.67, 1.00, 1.50, 2.00, 2.50, 3.00, 3.50, 4.00};
 
     public BattlePokemonStat CloneBattlePokemonStats()
@@ -169,6 +170,27 @@ public class BattlePokemon : MonoBehaviour
     private BaseSkill[] ReferenceSkill = new BaseSkill[4];
     [SerializeField]
     private int[] SkillPP = new int[4];
+
+    public bool IsGroundPokemon()
+    {
+        if(Item && Item.ItemName == "黑色铁球")
+        {
+            return true;
+        }
+        if(GetType1() == EType.Flying || GetType2() == EType.Flying)
+        {
+            return false;
+        }
+        if(Ability.name == "飘浮")
+        {
+            return false;
+        }
+        if(Item && Item.ItemName == "气球")
+        {
+            return false;
+        }        
+        return true;
+    }
     public bool TakenDamage(int Damage)
     {
         PokemonStats.HP -= Damage;
@@ -177,6 +199,14 @@ public class BattlePokemon : MonoBehaviour
             PokemonStats.Dead = true;
         }
         return PokemonStats.Dead;
+    }
+
+    public int HealHP(int HealHPVal)
+    {
+        HealHPVal = Math.Max(1, HealHPVal);
+        int prevHP = PokemonStats.HP;
+        PokemonStats.HP = Math.Min(PokemonStats.HP + HealHPVal, PokemonStats.MaxHP);
+        return PokemonStats.HP - prevHP;
     }
 
     public bool IsDead()

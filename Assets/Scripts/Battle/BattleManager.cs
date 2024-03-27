@@ -34,6 +34,8 @@ public class BattleManager : MonoBehaviour
     private int CurPlayingAnimationEvent;
     private bool WaitForPlayerSwitchPokemonWhenDefeated;
     private bool BattleEnd = false;
+
+    private BattleFiledState FiledState;
     // Start is called before the first frame update
     void Start()
     {
@@ -83,7 +85,7 @@ public class BattleManager : MonoBehaviour
                                 null
                                 ));
                             DefeatedPokemonList.Clear();
-                            ProcessEvents();
+                            ProcessEvents(false);
                         }
                         else if(DefeatedPokemonList.Count == 1 && !DefeatedPokemonList[0].GetIsEnemy())
                         {
@@ -171,7 +173,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void ProcessEvents()
+    public void ProcessEvents(bool NewTurn)
     {
         foreach(var EventIter in EventsList)
         {
@@ -181,6 +183,11 @@ public class BattleManager : MonoBehaviour
             }
         }
         EventsList.Clear();
+        if(NewTurn)
+        {
+            TurnEndEvent TurnEnd = new TurnEndEvent(this);
+            TurnEnd.Process(this);
+        }
         PlayingAnimation = true;
         CurPlayingAnimationEvent = -1;
     }
@@ -210,7 +217,7 @@ public class BattleManager : MonoBehaviour
         BattlePokemonList[1].LoadBasePokemonStats();
         UpdateUI(false);
         BeginSingleBattle(BattlePokemonList[0], BattlePokemonList[1]);
-        ProcessEvents();
+        ProcessEvents(false);
     }
 
     public void OnUseSkill(BaseSkill InSkill, BattlePokemon InReferencePokemon)
@@ -230,7 +237,7 @@ public class BattleManager : MonoBehaviour
         EventsList.Add(new SkillEvent(this, UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetPokemon));
         EnemyAI NewEnemyAI = new EnemyAI(Opposites[0], this, EnemyTrainer);
         NewEnemyAI.GenerateEnemyEvent(EventsList);
-        ProcessEvents();
+        ProcessEvents(true);
     }
 
     public List<BattlePokemon> GetOpppoitePokemon(BattlePokemon InPokemon)
@@ -340,14 +347,14 @@ public class BattleManager : MonoBehaviour
                 ));
             DefeatedPokemonList.Clear();
             WaitForPlayerSwitchPokemonWhenDefeated = false;
-            ProcessEvents();
+            ProcessEvents(false);
         }
         else
         {
             EventsList.Add(new SwitchEvent(this, BattlePokemonList[0], InPokemon));
             EnemyAI NewEnemyAI = new EnemyAI(BattlePokemonList[1], this, EnemyTrainer);
             NewEnemyAI.GenerateEnemyEvent(EventsList);
-            ProcessEvents();
+            ProcessEvents(true);
         }
     }
 
@@ -372,5 +379,36 @@ public class BattleManager : MonoBehaviour
     public bool GetBattleEnd()
     {
         return BattleEnd;
+    }
+
+    public void SetTerrain(EBattleFieldTerrain TerrainType, int TurnNum)
+    {
+        FiledState.FieldTerrain = TerrainType;
+        FiledState.TerrainRemainTime = TurnNum;
+    }
+
+    public EBattleFieldTerrain GetTerrainType()
+    {
+        return FiledState.FieldTerrain;
+    }
+
+    public int GetTerrainRemainTurn()
+    {
+        return FiledState.TerrainRemainTime;
+    }
+    public bool ReduceTerrainTurn()
+    {
+        if(FiledState.FieldTerrain == EBattleFieldTerrain.None)
+        {
+            return false;
+        }
+        FiledState.TerrainRemainTime = FiledState.TerrainRemainTime - 1;
+        return FiledState.TerrainRemainTime == 0;
+    }
+
+
+    public List<BattlePokemon> GetBattlePokemons()
+    {
+        return BattlePokemonList;
     }
 }

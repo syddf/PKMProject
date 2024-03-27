@@ -23,6 +23,11 @@ public enum ETimePoint
     AfterSkillEffect,
     BeforePokemonDefeated,
     AfterPokemonDefeated,
+    BeforeChangeTerrain,
+    AfterChangeTerrain,
+    TurnEnd,
+    BeforeHeal,
+    AfterHeal
 }
 
 public enum EEventResultType
@@ -45,7 +50,10 @@ public enum EventType
     StatChange,
     AbilityTrigger,
     SwitchAfterDefeated,
-    BattleEnd
+    BattleEnd,
+    TerrainChange,
+    TurnEnd,
+    Heal
 }
 
 public interface Event

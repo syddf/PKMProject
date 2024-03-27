@@ -26,4 +26,7 @@ public class TimelineAnimationManager : MonoBehaviour
     public PlayableDirector DefeatedAnimation;
     public PlayableDirector SwitchWhenDefeatedAnimation;
     public PlayableDirector SwitchAnimation;
+    public PlayableDirector SwitchTerrainAnimation;
+    public PlayableDirector ResetTerrainAnimation;
+    public PlayableDirector HealAnimation;
 }
