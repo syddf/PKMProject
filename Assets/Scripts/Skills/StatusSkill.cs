@@ -10,7 +10,5 @@ public class StatusSkill : BaseSkill
     }
     public virtual void ProcessStatusSkillEffect(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        StatChangeEvent NewEvent = new StatChangeEvent(SourcePokemon, "Atk", 2);
-        NewEvent.Process(InManager);
     }
 }

@@ -27,20 +27,69 @@ public class DamageSkill : BaseSkill
         {1, 2, 1, 0.5, 1, 1, 1, 1, 0.5, 0.5, 1, 1, 1, 1, 1, 2, 2, 1} // 妖精
     };
 
-    public EType GetSkillType()
+    public double ApplyTerrainPowerFactor(BattleManager InManager, BattlePokemon SourcePokemon, double SourcePower)
     {
-        return SkillType;
-    }
-
-    public virtual int GetPower(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
-    {
-        double Result = Power;
-        if(InManager.GetTerrainType() == EBattleFieldTerrain.Grass && GetSkillType() == EType.Grass)
+        if(InManager.GetTerrainType() == EBattleFieldTerrain.Grass && GetSkillType(SourcePokemon) == EType.Grass)
         {
             EditorLog.DebugLog(SkillName + "因青草场地威力提高了!");
-            Result = (int)Math.Floor(Result * 1.3);
+            return (int)Math.Floor(SourcePower * 1.3);
+        }
+        return SourcePower;
+    }
+    protected virtual int GetSkillPower(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return Power;
+    }
+    public int GetPower(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        double Result = GetSkillPower(InManager, SourcePokemon, TargetPokemon);
+        Result = ApplyTerrainPowerFactor(InManager, SourcePokemon, Result);
+        if(SourcePokemon.GetAbility())
+        {
+            Result = SourcePokemon.GetAbility().ChangeSkillPower(InManager, this, SourcePokemon, TargetPokemon, Result);
+        }
+        if(TargetPokemon.GetAbility())
+        {
+            Result = TargetPokemon.GetAbility().ChangeSkillPower(InManager, this, SourcePokemon, TargetPokemon, Result);
         }
         return (int)Math.Floor(Result);
+    }
+
+    private ECaclStatsMode GetSourceAtkCaclMode(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT)
+    {
+        bool IgnorBuf = false;
+        bool IgnorDebuff = false;
+        if(CT)
+        {
+            IgnorDebuff = true;
+        }
+        if(TargetPokemon.HasAbility("纯朴"))
+        {
+            IgnorBuf = true;
+            IgnorDebuff = true;
+        }
+        if(IgnorDebuff && IgnorBuf) return ECaclStatsMode.IgnoreDebufAndBuf;
+        if(IgnorDebuff) return ECaclStatsMode.IgnoreDebuf;
+        if(IgnorBuf) return ECaclStatsMode.IgnoreBuf;
+        return ECaclStatsMode.Normal;
+    }
+    private ECaclStatsMode GetTargetDefCaclMode(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT)
+    {
+        bool IgnorBuf = false;
+        bool IgnorDebuff = false;
+        if(CT)
+        {
+            IgnorBuf = true;
+        }
+        if(SourcePokemon.HasAbility("纯朴"))
+        {
+            IgnorBuf = true;
+            IgnorDebuff = true;
+        }
+        if(IgnorDebuff && IgnorBuf) return ECaclStatsMode.IgnoreDebufAndBuf;
+        if(IgnorDebuff) return ECaclStatsMode.IgnoreDebuf;
+        if(IgnorBuf) return ECaclStatsMode.IgnoreBuf;
+        return ECaclStatsMode.Normal;
     }
 
     public virtual void AfterDamageEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
@@ -51,13 +100,13 @@ public class DamageSkill : BaseSkill
     public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         bool J2 = TargetPokemon.GetType2() == EType.None;
-        return typeEffectiveness[(int)GetSkillType(), (int)TargetPokemon.GetType1()] != 0 
-        && (J2 || typeEffectiveness[(int)GetSkillType(), (int)TargetPokemon.GetType2()] != 0);
+        return typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1()] != 0 
+        && (J2 || typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType2()] != 0);
     }
 
     public virtual bool IsSameType(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        return SourcePokemon.GetType1() == GetSkillType() || SourcePokemon.GetType2() == GetSkillType();        
+        return SourcePokemon.GetType1() == GetSkillType(SourcePokemon) || SourcePokemon.GetType2() == GetSkillType(SourcePokemon);        
     }
 
     public virtual double GetSameTypePowerFactor(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
@@ -67,25 +116,32 @@ public class DamageSkill : BaseSkill
 
     public virtual double GetTypeEffectiveFactor(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        double Factor2 = TargetPokemon.GetType2() == EType.None ? 1.0 : typeEffectiveness[(int)GetSkillType(), (int)TargetPokemon.GetType2()];
-        return typeEffectiveness[(int)GetSkillType(), (int)TargetPokemon.GetType1()] * Factor2;
+        double Factor2 = TargetPokemon.GetType2() == EType.None ? 1.0 : typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType2()];
+        return typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1()] * Factor2;
     }
 
-    public virtual int GetSourceAtk(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public virtual int GetSourceAtk(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT)
     {
+        ECaclStatsMode Mode = GetSourceAtkCaclMode(InManager, SourcePokemon, TargetPokemon, CT);
         if(this.SkillClass ==  ESkillClass.PhysicalMove)
         {
-            return SourcePokemon.GetAtk();
+            return SourcePokemon.GetAtk(Mode);
         }
-        return SourcePokemon.GetSAtk();
+        return SourcePokemon.GetSAtk(Mode);
     }
 
-    public virtual int GetTargetDef(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public virtual int GetTargetDef(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT)
     {
+        ECaclStatsMode Mode = GetTargetDefCaclMode(InManager, SourcePokemon, TargetPokemon, CT);
         if(this.SkillClass ==  ESkillClass.PhysicalMove)
         {
-            return TargetPokemon.GetDef();
+            return TargetPokemon.GetDef(Mode);
         }
-        return TargetPokemon.GetSDef();
+        return TargetPokemon.GetSDef(Mode);
+    }
+
+    public virtual double GetCTFactor(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return 1.5;
     }
 }

@@ -35,7 +35,7 @@ public class StatChangeEvent : EventAnimationPlayer, Event
         if(Stat == "Speed") return "速度";
         if(Stat == "Accuracyrate") return "命中率";
         if(Stat == "Evasionrate") return "闪避率";
-        if(Stat == "CT") return "集中要害率";
+        if(Stat == "CT") return "击中要害率";
         return "";
     }
 
@@ -62,6 +62,15 @@ public class StatChangeEvent : EventAnimationPlayer, Event
     public override void InitAnimation()
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        if(!ShouldChange)
+        {
+            PlayableDirector MessageDirector = Timelines.MessageAnimation;
+            TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+            string Desc = GetChangeLevel() > 0 ? "提高" : "降低";
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "的" + GetStatName(ChangedStatName) + "无法" + Desc + "!");
+            AddAnimation(MessageTimeline);
+            return;
+        }
         if(ChangedSuccessed)
         {
             PlayableDirector AnimDirector = Timelines.DebuffAnimation;
@@ -91,14 +100,16 @@ public class StatChangeEvent : EventAnimationPlayer, Event
     {
         if(!ShouldProcess(InManager)) return;
         InManager.TranslateTimePoint(ETimePoint.BeforeStatChange, this);
-        if(ShouldChange && GetChangeLevel() != 0)
+        if(GetChangeLevel() != 0)
         {
             InManager.AddAnimationEvent(this);
-
-            if(TargetPokemon.ChangeStat(ChangedStatName, GetChangeLevel()))
+            if(ShouldChange)
             {
-                InManager.TranslateTimePoint(ETimePoint.AfterStatChange, this);
-                ChangedSuccessed = true;
+                if(TargetPokemon.ChangeStat(ChangedStatName, GetChangeLevel()))
+                {
+                    InManager.TranslateTimePoint(ETimePoint.AfterStatChange, this);
+                    ChangedSuccessed = true;
+                }
             }
         }
     }
@@ -119,4 +130,6 @@ public class StatChangeEvent : EventAnimationPlayer, Event
         return Factor * ChangedStatLevel;
     }
     public void SetReverseLevel() { ReverseChangeLevel = true;}
+    public string GetChangeStatName() { return ChangedStatName; }
+    public void ForbidChange() { ShouldChange = false;}
 }

@@ -42,7 +42,7 @@ public class SkillButton : MonoBehaviour
         StatusObj.SetActive(false);
         ESkillClass SkillClass = ReferenceSkill.GetSkillClass();
 
-        EType SkillType = ReferenceSkill.GetSkillType();
+        EType SkillType = ReferenceSkill.GetSkillType(ReferencePokemon);
         TypeUI.SetType(SkillType);
         
         if(SkillClass == ESkillClass.PhysicalMove)

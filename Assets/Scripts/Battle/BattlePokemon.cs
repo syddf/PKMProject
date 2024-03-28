@@ -1,7 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
+
+public enum ECaclStatsMode
+{
+    Normal,
+    IgnoreBuf,
+    IgnoreDebuf,
+    IgnoreDebufAndBuf
+}
 
 public struct BattlePokemonStat
 {
@@ -54,33 +63,52 @@ public class BattlePokemon : MonoBehaviour
 
     public int GetHP() => PokemonStats.HP;
     public int GetMaxHP() => PokemonStats.MaxHP;
-    public int GetAtk() 
+
+    private int AdjustChangeLevel(ECaclStatsMode Mode, int SourceChangeLevel)
+    {
+        int ChangeLevel = SourceChangeLevel;
+        if((Mode == ECaclStatsMode.IgnoreBuf || Mode == ECaclStatsMode.IgnoreDebufAndBuf) && ChangeLevel > 0)
+        {
+            ChangeLevel = 0;
+        }
+        if((Mode == ECaclStatsMode.IgnoreDebuf || Mode == ECaclStatsMode.IgnoreDebufAndBuf) && ChangeLevel < 0)
+        {
+            ChangeLevel = 0;
+        }
+        return ChangeLevel;
+    }
+    public int GetAtk(ECaclStatsMode Mode) 
     { 
-        return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[PokemonStats.AtkChangeLevel + 6]);
+        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.AtkChangeLevel);        
+        return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[ChangeLevel + 6]);
     }
-    public int GetDef()
+    public int GetDef(ECaclStatsMode Mode)
     {
-        return (int)Math.Floor((double)PokemonStats.Def * StatLevelFactor[PokemonStats.DefChangeLevel + 6]);
+        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.DefChangeLevel);  
+        return (int)Math.Floor((double)PokemonStats.Def * StatLevelFactor[ChangeLevel + 6]);
     }
-    public int GetSAtk()
+    public int GetSAtk(ECaclStatsMode Mode)
     {
-        return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[PokemonStats.SAtkChangeLevel + 6]);
+        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SAtkChangeLevel);  
+        return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[ChangeLevel + 6]);
     }
-    public int GetSDef()
+    public int GetSDef(ECaclStatsMode Mode)
     {
-        return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[PokemonStats.SDefChangeLevel + 6]);
+        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SDefChangeLevel);  
+        return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6]);
     }    
-    public int GetSpeed()
+    public int GetSpeed(ECaclStatsMode Mode)
     {
-        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[PokemonStats.SpeedChangeLevel + 6]);
+        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SpeedChangeLevel);  
+        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6]);
     }
     public int GetAtkChangeLevel() => PokemonStats.AtkChangeLevel;
     public int GetDefChangeLevel() => PokemonStats.DefChangeLevel;
     public int GetSAtkChangeLevel() => PokemonStats.SAtkChangeLevel;
     public int GetSDefChangeLevel() => PokemonStats.SDefChangeLevel;
     public int GetSpeedChangeLevel() => PokemonStats.SpeedChangeLevel;
-    public int GetAccuracyrateLevel() => PokemonStats.AccuracyrateLevel;
-    public int GetEvasionrateLevel() => PokemonStats.EvasionrateLevel;
+    public int GetAccuracyrateLevel(ECaclStatsMode Mode) => AdjustChangeLevel(Mode, PokemonStats.AccuracyrateLevel);
+    public int GetEvasionrateLevel(ECaclStatsMode Mode) => AdjustChangeLevel(Mode, PokemonStats.EvasionrateLevel);
     public int GetLevel() => PokemonStats.Level;
     public int GetCTLevel() => PokemonStats.CTLevel;
     public PokemonGender GetGender() { return ReferenceBasePokemon.GetGender();}
@@ -173,7 +201,7 @@ public class BattlePokemon : MonoBehaviour
 
     public bool IsGroundPokemon()
     {
-        if(Item && Item.ItemName == "黑色铁球")
+        if(Item && Item.GetItemName() == "黑色铁球")
         {
             return true;
         }
@@ -185,7 +213,7 @@ public class BattlePokemon : MonoBehaviour
         {
             return false;
         }
-        if(Item && Item.ItemName == "气球")
+        if(Item && Item.GetItemName() == "气球")
         {
             return false;
         }        
@@ -291,5 +319,10 @@ public class BattlePokemon : MonoBehaviour
             }
         }
         return -1;
+    }
+
+    public bool HasAbility(string AbilityName)
+    {
+        return Ability && Ability.GetAbilityName() == AbilityName;
     }
 }

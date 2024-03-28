@@ -14,6 +14,58 @@ public class SkillEventMetaInfo
     public BattlePokemon ReferencePokemon;
     public bool NoEffect;
     public double EffectiveFactor;
+    public bool CT;
+}
+
+//Just Used For MessageAnimation
+public class UseSkillMessageEvent : EventAnimationPlayer, Event
+{
+    private BattleSkill Skill;
+    private BattlePokemon SourcePokemon;
+    private bool SkillForbidden;
+    public UseSkillMessageEvent(BattleSkill InSkill, BattlePokemon InSourcePokemon, bool InSkillForbidden)
+    {
+        Skill = InSkill;
+        SourcePokemon = InSourcePokemon;
+        SkillForbidden = InSkillForbidden;
+    }
+
+    public bool ShouldProcess(BattleManager InBattleManager)
+    {
+        if(InBattleManager.GetBattleEnd() == true) return false;
+        return true;
+    }
+
+    public override void InitAnimation()
+    {
+        TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        PlayableDirector MessageDirector = Timelines.MessageAnimation;
+        if(SkillForbidden)
+        {
+            TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+            string MessageText = SourcePokemon.GetName() + "无法使用" + Skill.GetSkillName();
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
+            AddAnimation(MessageTimeline);
+        }
+        else
+        {
+            TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+            string MessageText = SourcePokemon.GetName() + "使用了" + Skill.GetSkillName();
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
+            AddAnimation(MessageTimeline);
+        }
+    }
+
+    public void Process(BattleManager InManager)
+    {
+        if(!ShouldProcess(InManager)) return;
+        InManager.AddAnimationEvent(this);
+    }
+
+    public EventType GetEventType()
+    {
+        return EventType.UseSkill;
+    }
 }
 
 public class SkillEvent : EventAnimationPlayer, Event
@@ -27,6 +79,8 @@ public class SkillEvent : EventAnimationPlayer, Event
     private List<List<SkillEventMetaInfo>> SkillMetasHistory;
     private int SkillAnimIndex = 0;
     private BattleManager ReferenceBattleManager;
+    private int CurrentMetaIndex = 0;
+    private int CurrentPokemonInMetaIndex = 0;
     private void ResetSkillMetas()
     {
         SkillMetas = new List<SkillEventMetaInfo>();
@@ -89,90 +143,102 @@ public class SkillEvent : EventAnimationPlayer, Event
         {
             if(SkillForbidden)
             {
-                TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-                string MessageText = SourcePokemon.GetName() + "无法使用" + Skill.GetSkillName();
-                MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
-                AddAnimation(MessageTimeline);
+                
             }
             else
             {
-                TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-                string MessageText = SourcePokemon.GetName() + "使用了" + Skill.GetSkillName();
-                MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
-                AddAnimation(MessageTimeline);
-                
                 int HitIndex = SkillAnimIndex;
                 {
                     var SkillMetas = SkillMetasHistory[HitIndex];
                     if(SkillMetas.Count == 1)
                     {
-                        GameObject SkillRootObject = Skill.GetSkillAnimation().gameObject;
-                        SkillAnimationRoot RootScript = SkillRootObject.GetComponent<SkillAnimationRoot>();
-                        if(SkillMetas[0].ReferencePokemon && RootScript.TargetPokemonTransform != null)
-                        {
-                            RootScript.TargetPokemonTransform.position = SkillMetas[0].ReferencePokemon.GetPokemonModel().GetComponent<PokemonReceiver>().BodyTransform.transform.position;
-                        }
-                        if(RootScript.SourcePokemonTransform != null)
-                        {
-                            RootScript.SourcePokemonTransform.position = SourcePokemon.GetPokemonModel().GetComponent<PokemonReceiver>().BodyTransform.transform.position;
-                        }
                         var SkillMeta = SkillMetas[0];
-                        if(SkillMeta.Hit)
+                        if(SkillMeta.NoEffect)
                         {
-                            TimelineAnimation SkillAnimation = new TimelineAnimation(Skill.GetSkillAnimation());
-                            SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Damage", SkillMeta.Damage.ToString());
-                            
-                            if(Skill.IsDamageSkill())
+                            if(SkillAnimIndex == 0 && SkillMeta.ReferencePokemon)
                             {
-                                if(SkillMeta.ReferencePokemon.GetIsEnemy())
-                                {
-                                    SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Target", "Enemy1");
-                                }                  
-                                else
-                                {
-                                    SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Target", "Player1");
-                                }      
-                            }
-                            SkillAnimation.SetSignalReceiver("SourcePokemon", SourcePokemon.GetPokemonModel());
-                            if(SkillMetas[0].ReferencePokemon)
-                                SkillAnimation.SetSignalReceiver("TargetPokemon", SkillMetas[0].ReferencePokemon.GetPokemonModel());
-                            AddAnimation(SkillAnimation);
-                            if(Skill.IsDamageSkill())
-                            {
-                                if(SkillMeta.EffectiveFactor == 0.5)
-                                {
-                                    SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Effective", "Not");
-                                    TimelineAnimation EffectiveMessage = new TimelineAnimation(MessageDirector);
-                                    EffectiveMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这不是很有效...");
-                                    AddAnimation(EffectiveMessage);
-                                }
-                                else if(SkillMeta.EffectiveFactor == 1.0)
-                                {
-                                    SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Effective", "Normal");
-                                }
-                                else
-                                {
-                                    SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Effective", "Super");
-                                    TimelineAnimation EffectiveMessage = new TimelineAnimation(MessageDirector);
-                                    EffectiveMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这非常有效!");
-                                    AddAnimation(EffectiveMessage);                            
-                                }
+                                TimelineAnimation NoEffectMessage = new TimelineAnimation(MessageDirector);
+                                NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这对" + SkillMeta.ReferencePokemon.GetName() + "似乎没有效果...");
+                                AddAnimation(NoEffectMessage);
                             }
                         }
                         else
                         {
-                            if(HitIndex == 0)
+                            GameObject SkillRootObject = Skill.GetSkillAnimation().gameObject;
+                            SkillAnimationRoot RootScript = SkillRootObject.GetComponent<SkillAnimationRoot>();
+                            if(SkillMetas[0].ReferencePokemon && RootScript.TargetPokemonTransform != null)
                             {
-                                TimelineAnimation MissMessage = new TimelineAnimation(MessageDirector);
-                                MissMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "没有命中目标!");
-                                AddAnimation(MissMessage); 
+                                RootScript.TargetPokemonTransform.position = SkillMetas[0].ReferencePokemon.GetPokemonModel().GetComponent<PokemonReceiver>().BodyTransform.transform.position;
+                            }
+                            if(RootScript.SourcePokemonTransform != null)
+                            {
+                                RootScript.SourcePokemonTransform.position = SourcePokemon.GetPokemonModel().GetComponent<PokemonReceiver>().BodyTransform.transform.position;
+                            }
+                            
+                            if(SkillMeta.Hit)
+                            {
+                                TimelineAnimation SkillAnimation = new TimelineAnimation(Skill.GetSkillAnimation());
+                                SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Damage", SkillMeta.Damage.ToString());
+                                
+                                if(Skill.IsDamageSkill())
+                                {
+                                    if(SkillMeta.ReferencePokemon.GetIsEnemy())
+                                    {
+                                        SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Target", "Enemy1");
+                                    }                  
+                                    else
+                                    {
+                                        SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Target", "Player1");
+                                    }      
+                                }
+                                SkillAnimation.SetSignalReceiver("SourcePokemon", SourcePokemon.GetPokemonModel());
+                                if(SkillMetas[0].ReferencePokemon)
+                                    SkillAnimation.SetSignalReceiver("TargetPokemon", SkillMetas[0].ReferencePokemon.GetPokemonModel());
+                                AddAnimation(SkillAnimation);
+                                if(Skill.IsDamageSkill())
+                                {
+                                    if(SkillMeta.CT)
+                                    {
+                                        TimelineAnimation CTMessage = new TimelineAnimation(MessageDirector);
+                                        CTMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "击中了要害!");
+                                        AddAnimation(CTMessage);
+                                    }
+                                    if(SkillMeta.EffectiveFactor == 0.5)
+                                    {
+                                        SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Effective", "Not");
+                                        TimelineAnimation EffectiveMessage = new TimelineAnimation(MessageDirector);
+                                        EffectiveMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这不是很有效...");
+                                        AddAnimation(EffectiveMessage);
+                                    }
+                                    else if(SkillMeta.EffectiveFactor == 1.0)
+                                    {
+                                        SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Effective", "Normal");
+                                    }
+                                    else
+                                    {
+                                        SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Effective", "Super");
+                                        TimelineAnimation EffectiveMessage = new TimelineAnimation(MessageDirector);
+                                        EffectiveMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这非常有效!");
+                                        AddAnimation(EffectiveMessage);                            
+                                    }
+                                }
                             }
                             else
                             {
-                                TimelineAnimation MissMessage = new TimelineAnimation(MessageDirector);
-                                MissMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "命中了" + HitIndex.ToString() + "次!");
-                                AddAnimation(MissMessage); 
+                                if(HitIndex == 0)
+                                {
+                                    TimelineAnimation MissMessage = new TimelineAnimation(MessageDirector);
+                                    MissMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "没有命中目标!");
+                                    AddAnimation(MissMessage); 
+                                }
+                                else
+                                {
+                                    TimelineAnimation MissMessage = new TimelineAnimation(MessageDirector);
+                                    MissMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "命中了" + HitIndex.ToString() + "次!");
+                                    AddAnimation(MissMessage); 
+                                }
                             }
+
                         }
                     }
                 }
@@ -189,8 +255,8 @@ public class SkillEvent : EventAnimationPlayer, Event
     public bool JudgeAccuracy(BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         int SkillAccuracy = Skill.GetSkillAccuracy();
-        int AttackAccuracyLevel = SourcePokemon.GetAccuracyrateLevel();
-        int EvasionRateLevel = TargetPokemon.GetEvasionrateLevel();
+        int AttackAccuracyLevel = Skill.GetAttackAccuracyChangeLevel(ReferenceBattleManager, SourcePokemon, TargetPokemon);
+        int EvasionRateLevel = Skill.GetTargetEvasionChangeLevel(ReferenceBattleManager, SourcePokemon, TargetPokemon);
         int F = AttackAccuracyLevel - EvasionRateLevel;
         if(F >= 6) F = 6;
         if(F <= -6) F = -6;
@@ -213,6 +279,8 @@ public class SkillEvent : EventAnimationPlayer, Event
         if(!ShouldProcess(InManager)) return;
         ResetSkillMetas();
         InManager.TranslateTimePoint(ETimePoint.BeforeActivateSkill, this);
+        UseSkillMessageEvent MessageEvent = new UseSkillMessageEvent(Skill, SourcePokemon, SkillForbidden);
+        MessageEvent.Process(InManager);
         if(!SkillForbidden)
         {
             EditorLog.DebugLog(SourcePokemon.GetName() + " Use Skill：" + Skill.GetSkillName());
@@ -221,11 +289,12 @@ public class SkillEvent : EventAnimationPlayer, Event
             for(int SkillCountIndex = 0; SkillCountIndex < SkillCount; SkillCountIndex++)
             {
                 bool ShouldActivateEffect = false;
-                InManager.AddAnimationEvent(this);
+                CurrentMetaIndex = SkillCountIndex;
                 SkillMetasHistory.Add(this.SkillMetas);
                 for(int TargetIndex = 0; TargetIndex < SkillMetas.Count; TargetIndex++)
                 {
                     CurrentProcessTargetPokemon = SkillMetas[TargetIndex].ReferencePokemon;
+                    CurrentPokemonInMetaIndex = TargetIndex;
                     InManager.TranslateTimePoint(ETimePoint.BeforeJudgeSkillIsEffective, this);
                     if(SkillMetas[TargetIndex].ReferencePokemon && SkillMetas[TargetIndex].ReferencePokemon.IsDead())
                     {
@@ -237,6 +306,7 @@ public class SkillEvent : EventAnimationPlayer, Event
                         SkillMetas[TargetIndex].NoEffect = true;
                     }
                 }
+
                 for(int TargetIndex = 0; TargetIndex < SkillMetas.Count; TargetIndex++)
                 {
                     if(!SkillMetas[TargetIndex].NoEffect)
@@ -252,6 +322,7 @@ public class SkillEvent : EventAnimationPlayer, Event
                         }
                     }
                 }
+                InManager.AddAnimationEvent(this);
                 if(ShouldActivateEffect)
                 {
                     EditorLog.DebugLog(SourcePokemon.GetName()  + " Activate Skill：" + Skill.GetSkillName());
@@ -267,7 +338,8 @@ public class SkillEvent : EventAnimationPlayer, Event
                                     EditorLog.DebugLog(SourcePokemon.GetName()  + " Skill：" + Skill.GetSkillName() + "Hit: " + CurrentProcessTargetPokemon.GetName() );
                                 if(Skill.IsDamageSkill())
                                 {
-                                    SkillMetas[TargetIndex].Damage = Skill.DamagePhase(InManager, SourcePokemon, CurrentProcessTargetPokemon, out SkillMetas[TargetIndex].EffectiveFactor);
+                                    SkillMetas[TargetIndex].CT = Skill.JudgeCT(InManager, SourcePokemon, CurrentProcessTargetPokemon);
+                                    SkillMetas[TargetIndex].Damage = Skill.DamagePhase(InManager, SourcePokemon, CurrentProcessTargetPokemon, SkillMetas[TargetIndex].CT, out SkillMetas[TargetIndex].EffectiveFactor);
                                 }
                                 else
                                 {
@@ -318,5 +390,15 @@ public class SkillEvent : EventAnimationPlayer, Event
     public void ForbidSkill()
     {
         SkillForbidden = true;
+    }
+
+    public BattleSkill GetSkill()
+    {
+        return Skill;
+    }
+
+    public void MakeCurrentTargetNoEffect()
+    {
+        SkillMetasHistory[CurrentMetaIndex][CurrentPokemonInMetaIndex].NoEffect = true;
     }
 }

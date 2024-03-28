@@ -59,7 +59,7 @@ public class BaseSkill : MonoBehaviour
     [SerializeField]
     protected ESkillClass SkillClass;
     [SerializeField]
-    protected EType SkillType;
+    private EType SkillType;
     [SerializeField]
     protected ERange SkillRange;
     [SerializeField]
@@ -78,9 +78,37 @@ public class BaseSkill : MonoBehaviour
     public int GetAccuracy() => Accuracy;
     public int GetMinCount() => MinCount;
     public int GetMaxCount() => MaxCount;
-    public EType GetSkillType() => SkillType;
     public ERange GetSkillRange() => SkillRange;
     public PlayableDirector GetSkillAnimation() => SkillAnimation;
+
+    public ECaclStatsMode GetAttackAccuracyChangeLevelMode(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        if(TargetPokemon.HasAbility("纯朴"))
+        {
+            return ECaclStatsMode.IgnoreBuf;
+        }
+        return ECaclStatsMode.Normal;
+    }
+
+    public ECaclStatsMode GetTargetEvasionChangeLevelMode(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        if(TargetPokemon.HasAbility("纯朴"))
+        {
+            return ECaclStatsMode.IgnoreDebuf;
+        }
+        return ECaclStatsMode.Normal;
+    }
+
+    public int GetAttackAccuracyChangeLevel(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return SourcePokemon.GetAccuracyrateLevel(GetAttackAccuracyChangeLevelMode(InManager, SourcePokemon, TargetPokemon));
+    }
+
+    public int GetTargetEvasionChangeLevel(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return TargetPokemon.GetEvasionrateLevel(GetTargetEvasionChangeLevelMode(InManager, SourcePokemon, TargetPokemon));
+    }
+
     public virtual void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
 
@@ -91,5 +119,25 @@ public class BaseSkill : MonoBehaviour
         return true;
     }
 
+    public EType GetOriginSkillType()
+    {
+        return SkillType;
+    }
+    public EType GetSkillType(BattlePokemon InPokemon)
+    {
+        if(InPokemon.HasAbility("妖精皮肤") && SkillType == EType.Normal)
+        {
+            return EType.Fairy;
+        }
+        if(InPokemon.HasAbility("冰冻皮肤") && SkillType == EType.Normal)
+        {
+            return EType.Ice;
+        }
+        if(InPokemon.HasAbility("湿润之声") && BattleSkillMetaInfo.IsSoundSkill(SkillName))
+        {
+            return EType.Water;
+        }
+        return SkillType;  
+    }
     public string GetSkillName() => SkillName;
 }
