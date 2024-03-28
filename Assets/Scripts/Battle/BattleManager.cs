@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using UnityEngine;
 
 public enum ETarget
@@ -163,7 +164,7 @@ public class BattleManager : MonoBehaviour
         CurrentTimePoint = NewTime;
 
         List<BaseAbility> AbilitiesToTrigger = this.QueryAbilitiesWhenTimeChange(SourceEvent);
-
+        AbilitiesToTrigger.Sort(new AbilityComparer());
         foreach(var AbilityIter in AbilitiesToTrigger)
         {
             string name = AbilityIter.GetAbilityName();
@@ -175,12 +176,14 @@ public class BattleManager : MonoBehaviour
 
     public void ProcessEvents(bool NewTurn)
     {
-        foreach(var EventIter in EventsList)
+        while(EventsList.Count > 0)
         {
-            if(EventIter.ShouldProcess(this))
+            EventsList.Sort(new EventComparer());
+            if(EventsList[0].ShouldProcess(this))
             {
-                EventIter.Process(this);
+                EventsList[0].Process(this);
             }
+            EventsList.RemoveAt(0);
         }
         EventsList.Clear();
         if(NewTurn)

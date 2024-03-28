@@ -71,6 +71,8 @@ public class BaseSkill : MonoBehaviour
     [SerializeField]
     protected int MaxCount;
     [SerializeField]
+    protected int Priority = 0;
+    [SerializeField]
     protected PlayableDirector SkillAnimation;
     public ESkillClass GetSkillClass() => SkillClass;
     public int GetPower() => Power;
@@ -117,6 +119,11 @@ public class BaseSkill : MonoBehaviour
     public virtual bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         return true;
+    }
+
+    public virtual int GetSkillPriority(BattlePokemon SourcePokemon)
+    {
+        return Priority;
     }
 
     public EType GetOriginSkillType()

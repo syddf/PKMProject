@@ -163,6 +163,16 @@ public class BattleSkill
          return ReferenceBaseSkill.GetTargetEvasionChangeLevel(InManager, SourcePokemon, TargetPokemon);
     }
 
+    public int GetSkillPriority()
+    {
+        int Priority = ReferenceBaseSkill.GetSkillPriority(ReferencePokemon);
+        if(ReferencePokemon.GetAbility())
+        {
+            Priority = Priority + ReferencePokemon.GetAbility().GetAbilitySkillPriority(ReferenceBaseSkill);
+        }
+        return Priority;
+    }
+
     public string GetSkillName() { return ReferenceBaseSkill.GetSkillName(); }
     public ERange GetSkillRange() { return ReferenceBaseSkill.GetSkillRange();}
     public PlayableDirector GetSkillAnimation(){ return ReferenceBaseSkill.GetSkillAnimation();}

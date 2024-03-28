@@ -401,4 +401,9 @@ public class SkillEvent : EventAnimationPlayer, Event
     {
         SkillMetasHistory[CurrentMetaIndex][CurrentPokemonInMetaIndex].NoEffect = true;
     }
+
+    public BattlePokemon GetSourcePokemon()
+    {
+        return SourcePokemon;
+    }
 }

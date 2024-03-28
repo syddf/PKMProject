@@ -286,3 +286,78 @@ public class EventAnimationPlayer
         }
     }
 }
+
+public class EventComparer : IComparer<Event>
+{
+    public int Compare(Event x, Event y)
+    {
+        int XType = (int)x.GetEventType();
+        int YType = (int)y.GetEventType();
+        if(XType > YType)
+        {
+            return 1;
+        }
+        else if(XType < YType)
+        {
+            return -1;
+        }
+        else
+        {
+            if(x.GetEventType() == EventType.Switch)
+            {
+                SwitchEvent CastX = (SwitchEvent)x;
+                SwitchEvent CastY = (SwitchEvent)y;
+                if(CastX.GetOutPokemon().GetSpeed(ECaclStatsMode.Normal) < CastY.GetOutPokemon().GetSpeed(ECaclStatsMode.Normal))
+                {
+                    return 1;
+                }
+                else if(CastX.GetOutPokemon().GetSpeed(ECaclStatsMode.Normal) >  CastY.GetOutPokemon().GetSpeed(ECaclStatsMode.Normal))
+                {
+                    return -1;
+                }
+                else
+                {
+                    System.Random rnd = new System.Random();
+                    int Rand = rnd.Next(0, 2);
+                    if(Rand == 0) return 1;
+                    if(Rand == 1) return -1;
+                }
+            }
+            else if(x.GetEventType() == EventType.UseSkill)
+            {
+                SkillEvent CastX = (SkillEvent)x;
+                SkillEvent CastY = (SkillEvent)y;
+                BattleSkill SkillX = CastX.GetSkill();
+                BattleSkill SkillY = CastY.GetSkill();
+
+                if(SkillX.GetSkillPriority() < SkillY.GetSkillPriority())
+                {
+                    return 1;
+                }
+                else if(SkillX.GetSkillPriority() > SkillY.GetSkillPriority())
+                {
+                    return -1;
+                }
+                else
+                {
+                    if(CastX.GetSourcePokemon().GetSpeed(ECaclStatsMode.Normal) < CastY.GetSourcePokemon().GetSpeed(ECaclStatsMode.Normal))
+                    {
+                        return 1;
+                    }
+                    else if(CastX.GetSourcePokemon().GetSpeed(ECaclStatsMode.Normal) >  CastY.GetSourcePokemon().GetSpeed(ECaclStatsMode.Normal))
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        System.Random rnd = new System.Random();
+                        int Rand = rnd.Next(0, 2);
+                        if(Rand == 0) return 1;
+                        if(Rand == 1) return -1;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+}
