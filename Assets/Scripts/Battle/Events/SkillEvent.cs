@@ -158,7 +158,14 @@ public class SkillEvent : EventAnimationPlayer, Event
                             if(SkillAnimIndex == 0 && SkillMeta.ReferencePokemon)
                             {
                                 TimelineAnimation NoEffectMessage = new TimelineAnimation(MessageDirector);
-                                NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这对" + SkillMeta.ReferencePokemon.GetName() + "似乎没有效果...");
+                                if(SkillMeta.ReferencePokemon.IsDead())
+                                {
+                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "但是" + SkillMeta.ReferencePokemon.GetName() + "已经不在场上了...");
+                                }
+                                else
+                                {
+                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这对" + SkillMeta.ReferencePokemon.GetName() + "似乎没有效果...");
+                                }
                                 AddAnimation(NoEffectMessage);
                             }
                         }
@@ -356,7 +363,7 @@ public class SkillEvent : EventAnimationPlayer, Event
                             InManager.TranslateTimePoint(ETimePoint.BeforeTakenDamage, this);
                             EditorLog.DebugLog(CurrentProcessTargetPokemon.GetName()  + " Taken Damage:" + SkillMetas[TargetIndex].Damage);
                             bool Dead = CurrentProcessTargetPokemon.TakenDamage(SkillMetas[TargetIndex].Damage);
-                            Skill.AfterDamageEvent(InManager, SourcePokemon, CurrentProcessTargetPokemon);
+                            Skill.AfterDamageEvent(InManager, SourcePokemon, CurrentProcessTargetPokemon, SkillMetas[TargetIndex].Damage);
                             if(Dead)
                             {
                                 EditorLog.DebugLog(CurrentProcessTargetPokemon.GetName()  + " Defeated!");                            

@@ -53,7 +53,8 @@ public enum EventType
     BattleEnd,
     TerrainChange,
     TurnEnd,
-    Heal
+    Heal,
+    Damage
 }
 
 public interface Event

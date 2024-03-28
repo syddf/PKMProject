@@ -92,7 +92,7 @@ public class DamageSkill : BaseSkill
         return ECaclStatsMode.Normal;
     }
 
-    public virtual void AfterDamageEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public virtual void AfterDamageEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, int Damage)
     {
 
     }

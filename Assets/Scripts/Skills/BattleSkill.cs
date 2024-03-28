@@ -137,10 +137,10 @@ public class BattleSkill
         CastSkill.ProcessStatusSkillEffect(InManager, SourcePokemon, TargetPokemon);
     }
 
-    public void AfterDamageEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public void AfterDamageEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, int Damage)
     {
         DamageSkill CastSkill = (DamageSkill)ReferenceBaseSkill;
-        CastSkill.AfterDamageEvent(InManager, SourcePokemon, TargetPokemon);
+        CastSkill.AfterDamageEvent(InManager, SourcePokemon, TargetPokemon, Damage);
     }
     public void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
