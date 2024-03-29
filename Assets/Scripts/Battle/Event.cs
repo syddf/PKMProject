@@ -331,11 +331,11 @@ public class EventComparer : IComparer<Event>
                 BattleSkill SkillX = CastX.GetSkill();
                 BattleSkill SkillY = CastY.GetSkill();
 
-                if(SkillX.GetSkillPriority() < SkillY.GetSkillPriority())
+                if(SkillX.GetSkillPriority(CastX.GetReferenceManager()) < SkillY.GetSkillPriority(CastX.GetReferenceManager()))
                 {
                     return 1;
                 }
-                else if(SkillX.GetSkillPriority() > SkillY.GetSkillPriority())
+                else if(SkillX.GetSkillPriority(CastX.GetReferenceManager()) > SkillY.GetSkillPriority(CastX.GetReferenceManager()))
                 {
                     return -1;
                 }

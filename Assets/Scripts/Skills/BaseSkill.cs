@@ -121,7 +121,7 @@ public class BaseSkill : MonoBehaviour
         return true;
     }
 
-    public virtual int GetSkillPriority(BattlePokemon SourcePokemon)
+    public virtual int GetSkillPriority(BattleManager InManager,BattlePokemon SourcePokemon)
     {
         return Priority;
     }

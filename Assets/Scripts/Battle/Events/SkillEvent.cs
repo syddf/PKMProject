@@ -413,4 +413,9 @@ public class SkillEvent : EventAnimationPlayer, Event
     {
         return SourcePokemon;
     }
+    
+    public BattleManager GetReferenceManager()
+    {
+        return ReferenceBattleManager;
+    }
 }

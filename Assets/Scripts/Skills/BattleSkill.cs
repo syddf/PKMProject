@@ -163,9 +163,9 @@ public class BattleSkill
          return ReferenceBaseSkill.GetTargetEvasionChangeLevel(InManager, SourcePokemon, TargetPokemon);
     }
 
-    public int GetSkillPriority()
+    public int GetSkillPriority(BattleManager InManager)
     {
-        int Priority = ReferenceBaseSkill.GetSkillPriority(ReferencePokemon);
+        int Priority = ReferenceBaseSkill.GetSkillPriority(InManager, ReferencePokemon);
         if(ReferencePokemon.GetAbility())
         {
             Priority = Priority + ReferencePokemon.GetAbility().GetAbilitySkillPriority(ReferenceBaseSkill);

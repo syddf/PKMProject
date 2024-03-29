@@ -9,6 +9,7 @@ public class PokemonReceiver : ParameterizedSignalReceiver
     {
         string NewState = InSignal.GetParamValue("AnimationState");
         PokemonAnimationController AnimController = this.gameObject.GetComponent<PokemonAnimationController>();
+        PokemonScaleAnimation ScaleAnim = this.gameObject.GetComponent<PokemonScaleAnimation>();
         if(NewState == "BeginAttack1")
         {
             AnimController.BeginAttack1();
@@ -57,5 +58,14 @@ public class PokemonReceiver : ParameterizedSignalReceiver
         {
             AnimController.EndStatus();
         }
+        if(NewState == "Small")
+        {
+            ScaleAnim.ToSmall();
+        }
+        if(NewState == "Big")
+        {
+            ScaleAnim.ToBig();
+        }
+        
     }
 }

@@ -145,3 +145,32 @@ public class DamageSkill : BaseSkill
         return 1.5;
     }
 }
+
+public class DamageAndSelfDamageSkill : DamageSkill
+{
+    public virtual int SelfDamageRatio()
+    {
+        return 2;
+    }
+
+    protected override int GetSkillPower(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        double Result = Power;
+        if(SourcePokemon.HasAbility("舍身"))
+        {
+            Result = (int)Math.Floor(Result * 1.2);
+        }
+        return (int)Result;
+    }
+
+    public override void AfterDamageEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, int Damage)
+    {
+        if(SourcePokemon.HasAbility("坚硬脑袋") || SourcePokemon.HasAbility("魔法防守"))
+        {
+            return;
+        }
+        int selfDamage = Math.Min(SourcePokemon.GetHP(), Math.Max(1, Damage / SelfDamageRatio()));
+        DamageEvent damageEvent = new DamageEvent(SourcePokemon, selfDamage, "反作用力");
+        damageEvent.Process(InManager);   
+    }
+}
