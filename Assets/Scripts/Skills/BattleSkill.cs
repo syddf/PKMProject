@@ -142,6 +142,11 @@ public class BattleSkill
         DamageSkill CastSkill = (DamageSkill)ReferenceBaseSkill;
         CastSkill.AfterDamageEvent(InManager, SourcePokemon, TargetPokemon, Damage);
     }
+
+    public int GetAfterSkillEffectEventProbablity(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return ReferenceBaseSkill.AfterSkillEffectEventProbablity(InManager, SourcePokemon, TargetPokemon);
+    }
     public void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         ReferenceBaseSkill.AfterSkillEffectEvent(InManager, SourcePokemon, TargetPokemon);

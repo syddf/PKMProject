@@ -181,7 +181,10 @@ public class SkillEvent : EventAnimationPlayer, Event
                             {
                                 RootScript.SourcePokemonTransform.position = SourcePokemon.GetPokemonModel().GetComponent<PokemonReceiver>().BodyTransform.transform.position;
                             }
-                            
+                            if(SkillMetas[0].ReferencePokemon && RootScript.TargetPokemonTouchTransform != null)
+                            {
+                                RootScript.TargetPokemonTouchTransform.position = SkillMetas[0].ReferencePokemon.GetPokemonModel().GetComponent<PokemonReceiver>().TouchHitTransform.transform.position;
+                            }
                             if(SkillMeta.Hit)
                             {
                                 TimelineAnimation SkillAnimation = new TimelineAnimation(Skill.GetSkillAnimation());
@@ -372,7 +375,13 @@ public class SkillEvent : EventAnimationPlayer, Event
                             }                        
                             InManager.TranslateTimePoint(ETimePoint.AfterTakenDamage, this);
                         }
-                        Skill.AfterSkillEffectEvent(InManager, SourcePokemon, CurrentProcessTargetPokemon);
+                        int Probablity = Skill.GetAfterSkillEffectEventProbablity(InManager, SourcePokemon, CurrentProcessTargetPokemon);
+                        System.Random rnd = new System.Random();
+                        int Random = rnd.Next(0, 100);
+                        if(Random < Probablity)
+                        {
+                            Skill.AfterSkillEffectEvent(InManager, SourcePokemon, CurrentProcessTargetPokemon);
+                        }
                     }
                 }
                 else

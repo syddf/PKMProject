@@ -116,6 +116,11 @@ public class BaseSkill : MonoBehaviour
 
     }
 
+    public virtual int AfterSkillEffectEventProbablity(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return 100;
+    }
+
     public virtual bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         return true;

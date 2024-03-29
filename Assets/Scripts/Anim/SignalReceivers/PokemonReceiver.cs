@@ -5,11 +5,14 @@ using UnityEngine;
 public class PokemonReceiver : ParameterizedSignalReceiver
 {
     public Transform BodyTransform;
+    public Transform TouchHitTransform;
     public override void Process(SignalWithParams InSignal)
     {
         string NewState = InSignal.GetParamValue("AnimationState");
         PokemonAnimationController AnimController = this.gameObject.GetComponent<PokemonAnimationController>();
         PokemonScaleAnimation ScaleAnim = this.gameObject.GetComponent<PokemonScaleAnimation>();
+        PokemonMoveAnimation MoveAnim = this.gameObject.GetComponent<PokemonMoveAnimation>();
+        PokemonRotationAnimation RotationAnim = this.gameObject.GetComponent<PokemonRotationAnimation>();
         if(NewState == "BeginAttack1")
         {
             AnimController.BeginAttack1();
@@ -65,6 +68,34 @@ public class PokemonReceiver : ParameterizedSignalReceiver
         if(NewState == "Big")
         {
             ScaleAnim.ToBig();
+        }
+        if(NewState == "Big")
+        {
+            ScaleAnim.ToBig();
+        }
+        if(NewState == "BeginMoveForward")
+        {
+            MoveAnim.BeginMoveForward();
+        }
+        if(NewState == "EndMoveForward")
+        {
+            MoveAnim.EndMoveForward();
+        }
+        if(NewState == "BeginTouched")
+        {
+            MoveAnim.BeginTouched();
+        }
+        if(NewState == "EndTouched")
+        {
+            MoveAnim.EndTouched();
+        }
+        if(NewState == "BeginRotation")
+        {
+            RotationAnim.BeginRotation();
+        }
+        if(NewState == "EndRotation")
+        {
+            RotationAnim.EndRotation();
         }
         
     }

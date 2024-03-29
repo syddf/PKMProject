@@ -8,6 +8,8 @@ public class InitPokemonComponets : MonoBehaviour
     private BoxCollider boxCollider;
     private Renderer[] renderers;
     public float BattleWaitSpeed = 1;
+    public Vector3 BoundsSize;
+    public List<GameObject> HideWhenTouched = new List<GameObject>();
     private Animator Anim;
     // Start is called before the first frame update
     void Start()
@@ -47,6 +49,7 @@ public class InitPokemonComponets : MonoBehaviour
         // boxCollider.center = combinedBounds.center - transform.position;
         boxCollider.size = combinedBounds.size;
         boxCollider.center = new Vector3(0, 0, -0.5f * boxCollider.size.z);
+        BoundsSize = combinedBounds.size;
     }
 
     // Update is called once per frame

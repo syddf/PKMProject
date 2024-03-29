@@ -6488,6 +6488,37 @@ Transform:
   m_Father: {fileID: 1824228383708267965}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6665548185375219178
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8325233065379426527}
+  m_Layer: 0
+  m_Name: TouchPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8325233065379426527
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6665548185375219178}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: 0.01, y: 1.358, z: -1.158}
+  m_LocalScale: {x: 0.9999991, y: 0.9999996, z: 0.9999996}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7087162065862788089}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6679207285018243543
 GameObject:
   m_ObjectHideFlags: 0
@@ -8355,6 +8386,7 @@ GameObject:
   - component: {fileID: 2493583954638665976}
   - component: {fileID: 2249405786856184842}
   - component: {fileID: 5465050999116695054}
+  - component: {fileID: 4085362472731753179}
   m_Layer: 0
   m_Name: pm0950_00_00
   m_TagString: Untagged
@@ -8380,6 +8412,7 @@ Transform:
   - {fileID: 4278440717161721856}
   - {fileID: 7704329018553733870}
   - {fileID: 255430840336009521}
+  - {fileID: 8325233065379426527}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8433,6 +8466,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4085362472731753179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7872284361480662235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74ce0d6c89b59644eb41c7362edc3b10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BattleWaitSpeed: 1
+  BoundsSize: {x: 0, y: 0, z: 0}
+  HideWhenTouched:
+  - {fileID: 7056365421613245293}
+  - {fileID: 2881391704760585638}
 --- !u!1 &7938454896313325607
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,109 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PokemonMoveAnimation : MonoBehaviour
+{
+    public float Duration = 0.5f;
+    public float Speed = 1.0f;
+    private bool Play = false;
+    private Vector3 Origin;
+    private Vector3 Prev;
+    private bool Return;
+    private Rigidbody RB;
+    private float Timer = 0.0f;
+
+    private List<GameObject> HideWhenTouched;
+
+    public void Start()
+    {
+        Transform[] children = GetComponentsInChildren<Transform>();
+        foreach (Transform child in children)
+        {
+            Rigidbody rb = child.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                RB = rb;
+            }
+
+            InitPokemonComponets InitScript = child.GetComponent<InitPokemonComponets>();
+            if(InitScript != null)
+            {
+                HideWhenTouched = InitScript.HideWhenTouched;
+            }
+        }
+    }
+    public void Update()
+    {
+        Timer += Time.deltaTime;
+        if(Play)
+        {
+            if(Return)
+            {
+                if(Timer < Duration)
+                {
+                   this.gameObject.transform.position = Vector3.Lerp(Prev, Origin, Timer / Duration);
+                }
+                else
+                {
+                    this.gameObject.transform.position = Origin;
+                }
+            }
+            else
+            {
+                this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, 
+                this.gameObject.transform.position.y, 
+                this.gameObject.transform.position.z) + Speed * this.gameObject.transform.up;
+            }
+            if(Timer >= Duration)
+            {
+                Play = false;
+            }
+        }
+    }
+
+    public void BeginMoveForward()
+    {
+        Origin = this.gameObject.transform.position;
+        RB.isKinematic = true; 
+        Play = true;
+        Return = false;
+        Timer = 0.0f;
+
+        foreach(var hideObj in HideWhenTouched)
+        {
+            hideObj.SetActive(false);
+        }
+    }
+
+    public void EndMoveForward()
+    {
+        RB.isKinematic = false;
+        Play = true;
+        Timer = 0.0f;
+        Return = true;
+        Prev = this.gameObject.transform.position;
+        foreach(var hideObj in HideWhenTouched)
+        {
+            hideObj.SetActive(true);
+        }
+    }
+
+    public void BeginTouched()
+    {
+        RB.isKinematic = true; 
+        foreach(var hideObj in HideWhenTouched)
+        {
+            hideObj.SetActive(false);
+        }
+    }
+    public void EndTouched()
+    {
+        RB.isKinematic = false; 
+        foreach(var hideObj in HideWhenTouched)
+        {
+            hideObj.SetActive(true);
+        }
+    }
+
+}

@@ -6,4 +6,5 @@ public class SkillAnimationRoot : MonoBehaviour
 {
     public Transform SourcePokemonTransform;
     public Transform TargetPokemonTransform;
+    public Transform TargetPokemonTouchTransform;
 }
