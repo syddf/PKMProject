@@ -46,6 +46,18 @@ public class TurnEndEvent : EventAnimationPlayer, Event
         }
     }
 
+    public void ProcessStatusChange(BattleManager InManager)
+    {
+        var BattlePokemons = InManager.GetBattlePokemons();
+        for(int Index = 0; Index < BattlePokemons.Count; Index++)
+        {
+            if(!BattlePokemons[Index].IsDead())
+            {
+                BattlePokemons[Index].ReduceAllStatusChangeRemainTime();
+            }
+        }
+    }
+
     public void Process(BattleManager InManager)
     {
         if(!ShouldProcess(InManager)) return;
@@ -56,7 +68,7 @@ public class TurnEndEvent : EventAnimationPlayer, Event
             ProcessGrassTerrainHealEvent(InManager);
         }
         ProcessTimeReduceEvent(InManager);
-                
+        ProcessStatusChange(InManager);
         InManager.AddAnimationEvent(this);
     }
 

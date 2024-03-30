@@ -27,7 +27,9 @@ public enum ETimePoint
     AfterChangeTerrain,
     TurnEnd,
     BeforeHeal,
-    AfterHeal
+    AfterHeal,
+    BeforeSetPokemonStatusChange,
+    AfterSetPokemonStatusChange
 }
 
 public enum EEventResultType
@@ -54,7 +56,8 @@ public enum EventType
     TerrainChange,
     TurnEnd,
     Heal,
-    Damage
+    Damage,
+    PokemonStatusChange
 }
 
 public interface Event

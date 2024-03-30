@@ -89,6 +89,7 @@ public class SwitchEvent : EventAnimationPlayer, Event
         {
             InManager.SetNewEnemyPokemon(InPokemon);
         }
+        OutPokemon.ClearStatusChange();
         CloneInPokemon = InPokemon.CloneBattlePokemonStats();
         InManager.TranslateTimePoint(ETimePoint.PokemonIn, this);
     }
@@ -153,10 +154,12 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
         if(PlayerNewPokemon != null)
         {
             InManager.SetNewPlayerPokemon(PlayerNewPokemon);
+            PlayerDefeatedPokemon.ClearStatusChange();
         }
         if(EnemyNewPokemon != null)
         {
             InManager.SetNewEnemyPokemon(EnemyNewPokemon);
+            EnemyDefeatedPokemon.ClearStatusChange();
         }
         InManager.TranslateTimePoint(ETimePoint.PokemonIn, this);
     }

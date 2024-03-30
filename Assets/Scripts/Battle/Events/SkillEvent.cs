@@ -23,11 +23,13 @@ public class UseSkillMessageEvent : EventAnimationPlayer, Event
     private BattleSkill Skill;
     private BattlePokemon SourcePokemon;
     private bool SkillForbidden;
-    public UseSkillMessageEvent(BattleSkill InSkill, BattlePokemon InSourcePokemon, bool InSkillForbidden)
+    private string ForbiddenReason;
+    public UseSkillMessageEvent(BattleSkill InSkill, BattlePokemon InSourcePokemon, bool InSkillForbidden, string InForbiddenReason)
     {
         Skill = InSkill;
         SourcePokemon = InSourcePokemon;
         SkillForbidden = InSkillForbidden;
+        ForbiddenReason = InForbiddenReason;
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)
@@ -43,7 +45,7 @@ public class UseSkillMessageEvent : EventAnimationPlayer, Event
         if(SkillForbidden)
         {
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            string MessageText = SourcePokemon.GetName() + "无法使用" + Skill.GetSkillName();
+            string MessageText = SourcePokemon.GetName() + "因" + ForbiddenReason + "无法使用" + Skill.GetSkillName();
             MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
             AddAnimation(MessageTimeline);
         }
@@ -76,6 +78,7 @@ public class SkillEvent : EventAnimationPlayer, Event
     private BattlePokemon CurrentProcessTargetPokemon;
     private List<SkillEventMetaInfo> SkillMetas;
     private bool SkillForbidden;
+    private string SkillForbiddenReason;
     private List<List<SkillEventMetaInfo>> SkillMetasHistory;
     private int SkillAnimIndex = 0;
     private BattleManager ReferenceBattleManager;
@@ -289,7 +292,7 @@ public class SkillEvent : EventAnimationPlayer, Event
         if(!ShouldProcess(InManager)) return;
         ResetSkillMetas();
         InManager.TranslateTimePoint(ETimePoint.BeforeActivateSkill, this);
-        UseSkillMessageEvent MessageEvent = new UseSkillMessageEvent(Skill, SourcePokemon, SkillForbidden);
+        UseSkillMessageEvent MessageEvent = new UseSkillMessageEvent(Skill, SourcePokemon, SkillForbidden, SkillForbiddenReason);
         MessageEvent.Process(InManager);
         if(!SkillForbidden)
         {
@@ -403,9 +406,10 @@ public class SkillEvent : EventAnimationPlayer, Event
         return EventType.UseSkill;
     }
 
-    public void ForbidSkill()
+    public void ForbidSkill(string Reason)
     {
         SkillForbidden = true;
+        SkillForbiddenReason = Reason;
     }
 
     public BattleSkill GetSkill()

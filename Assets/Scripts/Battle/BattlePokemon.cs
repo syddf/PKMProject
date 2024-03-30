@@ -12,6 +12,27 @@ public enum ECaclStatsMode
     IgnoreDebufAndBuf
 }
 
+public enum EStatusChange
+{
+    ThroatChop
+}
+
+public struct StatusChange
+{
+    public EStatusChange StatusChangeType;
+    public bool HasLimitedTime;
+    public int RemainTime;
+    public BaseStatusChange ReferenceBaseStatusChange;
+    public static BaseStatusChange GetBaseStatusChange(EStatusChange StatusChangeType, BattlePokemon InPokemon)
+    {
+        if(StatusChangeType == EStatusChange.ThroatChop)
+        {
+            return new ThroatChopStatusChange(InPokemon);
+        }
+        return null;
+    }
+}
+
 public struct BattlePokemonStat
 {
     public int HP;
@@ -31,6 +52,8 @@ public struct BattlePokemonStat
     public int CTLevel;
     public int Level;
     public bool Dead;
+
+    public List<StatusChange> StatusChangeList;
 }
 
 public class BattlePokemon : MonoBehaviour
@@ -325,4 +348,149 @@ public class BattlePokemon : MonoBehaviour
     {
         return Ability && Ability.GetAbilityName() == AbilityName;
     }
+
+    public void AddStatusChange(EStatusChange StatusType, bool HasLimitedTime, int RemainTime)
+    {
+        if(PokemonStats.StatusChangeList == null)
+        {
+            PokemonStats.StatusChangeList = new List<StatusChange>();
+        }
+
+        for(int Index = 0; Index < PokemonStats.StatusChangeList.Count; Index++)
+        {
+            if(PokemonStats.StatusChangeList[Index].StatusChangeType == StatusType)
+            {
+                StatusChange OldStatus = PokemonStats.StatusChangeList[Index];
+                OldStatus.HasLimitedTime = HasLimitedTime;
+                OldStatus.RemainTime = Math.Max(OldStatus.RemainTime, RemainTime);
+                PokemonStats.StatusChangeList[Index] = OldStatus;
+                return;
+            }
+        }
+
+        StatusChange NewStatus;
+        NewStatus.HasLimitedTime = HasLimitedTime;
+        NewStatus.RemainTime = RemainTime;
+        NewStatus.StatusChangeType = StatusType;
+        NewStatus.ReferenceBaseStatusChange = StatusChange.GetBaseStatusChange(StatusType, this);
+        PokemonStats.StatusChangeList.Add(NewStatus);
+    }
+
+    public void RemoveStatusChange(EStatusChange StatusType)
+    {
+        if(PokemonStats.StatusChangeList == null)
+        {
+            return;
+        }
+
+        for(int Index = 0; Index < PokemonStats.StatusChangeList.Count; Index++)
+        {
+            if(PokemonStats.StatusChangeList[Index].StatusChangeType == StatusType)
+            {
+                PokemonStats.StatusChangeList.RemoveAt(Index);
+                return;
+            }
+        }
+    }
+
+    public bool HasStatusChange(EStatusChange StatusType)
+    {
+        if(PokemonStats.StatusChangeList == null)
+        {
+            return false;
+        }
+
+        for(int Index = 0; Index < PokemonStats.StatusChangeList.Count; Index++)
+        {
+            if(PokemonStats.StatusChangeList[Index].StatusChangeType == StatusType)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int GetStatusChangeRemainTime(EStatusChange StatusType)
+    {
+        if(PokemonStats.StatusChangeList == null)
+        {
+            return 0;
+        }
+
+        for(int Index = 0; Index < PokemonStats.StatusChangeList.Count; Index++)
+        {
+            if(PokemonStats.StatusChangeList[Index].StatusChangeType == StatusType)
+            {
+                return PokemonStats.StatusChangeList[Index].RemainTime;
+            }
+        }
+
+        return 0;
+    }
+
+    public BaseStatusChange GetBaseStatusChange(EStatusChange StatusType)
+    {
+        if(PokemonStats.StatusChangeList == null)
+        {
+            return null;
+        }
+
+        for(int Index = 0; Index < PokemonStats.StatusChangeList.Count; Index++)
+        {
+            if(PokemonStats.StatusChangeList[Index].StatusChangeType == StatusType)
+            {
+                return PokemonStats.StatusChangeList[Index].ReferenceBaseStatusChange;
+            }
+        }
+
+        return null;
+    }
+
+    public void ReduceAllStatusChangeRemainTime()
+    {
+        if(PokemonStats.StatusChangeList == null)
+        {
+            return;
+        }
+
+        for(int Index = PokemonStats.StatusChangeList.Count - 1; Index >= 0; Index--)
+        {
+            if(PokemonStats.StatusChangeList[Index].HasLimitedTime)
+            {
+                StatusChange OldStatus = PokemonStats.StatusChangeList[Index];
+                OldStatus.RemainTime = OldStatus.RemainTime - 1;
+                PokemonStats.StatusChangeList[Index] = OldStatus;
+                if(PokemonStats.StatusChangeList[Index].RemainTime == 0)
+                {
+                    PokemonStats.StatusChangeList.RemoveAt(Index);
+                }
+            }
+        }
+    }
+
+    public void ClearStatusChange()
+    {
+        if(PokemonStats.StatusChangeList == null)
+        {
+            return;
+        }
+        PokemonStats.StatusChangeList.Clear();
+    }
+
+    public List<BaseStatusChange> GetAllStatusChange()
+    {
+        List<BaseStatusChange> Result = new List<BaseStatusChange>();
+        if(PokemonStats.StatusChangeList != null)
+        {
+            foreach(var statusChange in PokemonStats.StatusChangeList)
+            {
+                if(statusChange.ReferenceBaseStatusChange != null)
+                {
+                    Result.Add(statusChange.ReferenceBaseStatusChange);
+                }
+            }
+        }
+        return Result;
+    }   
 }

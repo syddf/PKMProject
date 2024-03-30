@@ -172,6 +172,17 @@ public class BattleManager : MonoBehaviour
             AbilityTriggerEvent AbilityEvent = new AbilityTriggerEvent(EventsToProcess, AbilityIter);
             AbilityEvent.Process(this);
         }
+
+        List<BaseStatusChange> BastStatusChangesToTrigger = this.QueryBaseStatusChangesWhenTimeChange(SourceEvent);
+        BastStatusChangesToTrigger.Sort(new BaseStatusChangeComparer());
+        foreach(var BaseStatusChangeIter in BastStatusChangesToTrigger)
+        {
+            List<Event> EventsToProcess = BaseStatusChangeIter.Trigger(this, SourceEvent);
+            foreach(var EventIter in EventsToProcess)
+            {
+                EventIter.Process(this);
+            }
+        }
     }
 
     public void ProcessEvents(bool NewTurn)
@@ -212,6 +223,23 @@ public class BattleManager : MonoBehaviour
             }
         }
         return AbilitiesToTrigger;
+    }
+
+    public List<BaseStatusChange> QueryBaseStatusChangesWhenTimeChange(Event SourceEvent)
+    {
+        List<BaseStatusChange> BaseStatusChangesToTrigger = new List<BaseStatusChange>();
+        foreach(var BattlePokemonIter in BattlePokemonList)
+        {
+            List<BaseStatusChange> PokemonStatusChanges = BattlePokemonIter.GetAllStatusChange();
+            foreach(var PokemonStatusChange in PokemonStatusChanges)
+            {   
+                if(PokemonStatusChange.ShouldTrigger(CurrentTimePoint, SourceEvent))
+                {
+                    BaseStatusChangesToTrigger.Add(PokemonStatusChange);
+                }
+            }            
+        }
+        return BaseStatusChangesToTrigger;
     }
 
     public void Test()
