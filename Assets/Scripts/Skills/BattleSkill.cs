@@ -161,6 +161,11 @@ public class BattleSkill
         return ReferenceBaseSkill.JudgeIsEffective(InManager, SourcePokemon, TargetPokemon);
     }
 
+    public bool HasHealEffect(BattleManager InManager)
+    {
+        return ReferenceBaseSkill.HasHealEffect(InManager);
+    }
+
     public int GetAttackAccuracyChangeLevel(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         return ReferenceBaseSkill.GetAttackAccuracyChangeLevel(InManager, SourcePokemon, TargetPokemon);
@@ -171,9 +176,9 @@ public class BattleSkill
          return ReferenceBaseSkill.GetTargetEvasionChangeLevel(InManager, SourcePokemon, TargetPokemon);
     }
 
-    public int GetSkillPriority(BattleManager InManager)
+    public int GetSkillPriority(BattleManager InManager, BattlePokemon TargetPokemon)
     {
-        int Priority = ReferenceBaseSkill.GetSkillPriority(InManager, ReferencePokemon);
+        int Priority = ReferenceBaseSkill.GetSkillPriority(InManager, ReferencePokemon, TargetPokemon);
         if(ReferencePokemon.GetAbility())
         {
             Priority = Priority + ReferencePokemon.GetAbility().GetAbilitySkillPriority(ReferenceBaseSkill);

@@ -41,6 +41,14 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         {
             return "中毒了!";
         }
+        if(StatusChangeType == EStatusChange.ForbidHeal)
+        {
+            return "陷入无法回复的状态了!";
+        }
+        if(StatusChangeType == EStatusChange.Flinch)
+        {
+            return "畏缩了!";
+        }
         return "";
     }
 

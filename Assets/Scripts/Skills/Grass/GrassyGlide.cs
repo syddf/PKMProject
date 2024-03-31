@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GrassyGlide : DamageSkill
 {
-    public override int GetSkillPriority(BattleManager InManager,BattlePokemon SourcePokemon)
+    public override int GetSkillPriority(BattleManager InManager,BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         if(InManager.GetTerrainType() == EBattleFieldTerrain.Grass)
         {

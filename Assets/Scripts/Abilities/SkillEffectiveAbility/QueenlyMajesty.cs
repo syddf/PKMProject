@@ -17,7 +17,7 @@ public class QueenlyMajesty : BaseAbility
             BattlePokemon Target = CastedEvent.GetCurrentProcessTargetPokemon();
             if(Target == this.ReferencePokemon)
             {
-                if(CastedEvent.GetSkill().GetSkillPriority(CastedEvent.GetReferenceManager()) > 0)
+                if(CastedEvent.GetSkill().GetSkillPriority(CastedEvent.GetReferenceManager(), Target) > 0)
                 {
                     return true;
                 }

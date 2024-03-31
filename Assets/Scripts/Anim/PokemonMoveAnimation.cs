@@ -38,22 +38,13 @@ public class PokemonMoveAnimation : MonoBehaviour
         Timer += Time.deltaTime;
         if(Play)
         {
-            if(Return)
+            if(Timer < Duration)
             {
-                if(Timer < Duration)
-                {
-                   this.gameObject.transform.position = Vector3.Lerp(Prev, Origin, Timer / Duration);
-                }
-                else
-                {
-                    this.gameObject.transform.position = Origin;
-                }
+                this.gameObject.transform.position = Vector3.Lerp(Prev, Origin, Timer / Duration);
             }
             else
             {
-                this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, 
-                this.gameObject.transform.position.y, 
-                this.gameObject.transform.position.z) + Speed * this.gameObject.transform.up;
+                this.gameObject.transform.position = Origin;
             }
             if(Timer >= Duration)
             {
@@ -64,7 +55,8 @@ public class PokemonMoveAnimation : MonoBehaviour
 
     public void BeginMoveForward()
     {
-        Origin = this.gameObject.transform.position;
+        Prev = this.gameObject.transform.position;
+        Origin = new Vector3(0, Prev.y, 0);
         RB.isKinematic = true; 
         Play = true;
         Return = false;
@@ -82,6 +74,7 @@ public class PokemonMoveAnimation : MonoBehaviour
         Play = true;
         Timer = 0.0f;
         Return = true;
+        Origin = Prev;
         Prev = this.gameObject.transform.position;
         foreach(var hideObj in HideWhenTouched)
         {

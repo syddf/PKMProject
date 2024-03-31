@@ -477,4 +477,21 @@ public class BattleManager : MonoBehaviour
     {
         return BattlePokemonList[0] == InPokemon || BattlePokemonList[1] == InPokemon;
     }
+
+    public bool IsPokemonUseDamageSkillThisTurn(BattlePokemon InPokemon)
+    {
+        foreach(var EventIter in EventsList)
+        {
+            if(EventIter.GetEventType() == EventType.UseSkill)
+            {
+                SkillEvent CastedEvent = (SkillEvent)EventIter;
+                if(CastedEvent.GetSourcePokemon() == InPokemon &&
+                    CastedEvent.GetSkill().IsDamageSkill())
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -16,6 +16,8 @@ public enum EStatusChange
 {
     ThroatChop,
     Protect,
+    ForbidHeal,
+    Flinch,
     Poison,
     Paralysis,
     Drowsy,
@@ -42,6 +44,14 @@ public struct StatusChange
         if(StatusChangeType == EStatusChange.Poison)
         {
             return new PoisonStatusChange(InPokemon);
+        }
+        if(StatusChangeType == EStatusChange.ForbidHeal)
+        {
+            return new ForbidHealStatusChange(InPokemon);
+        }
+        if(StatusChangeType == EStatusChange.Flinch)
+        {
+            return new FlinchStatusChange(InPokemon);
         }
         return null;
     }

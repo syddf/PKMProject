@@ -23,6 +23,7 @@ public class HealEvent : EventAnimationPlayer, Event
     {
         if(InBattleManager.GetBattleEnd() == true) return false;
         if(ReferencePokemon.IsDead()) return false;
+        if(ReferencePokemon.HasStatusChange(EStatusChange.ForbidHeal)) return false;
         return true;
     }
 

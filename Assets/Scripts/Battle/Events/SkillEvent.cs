@@ -166,9 +166,13 @@ public class SkillEvent : EventAnimationPlayer, Event
                                 {
                                     NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "但是" + SkillMeta.ReferencePokemon.GetName() + "已经不在场上了...");
                                 }
-                                else if(SkillMeta.NoEffectReason != "")
+                                else if(SkillMeta.NoEffectReason != null && SkillMeta.NoEffectReason != "")
                                 {
                                     NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", SkillMeta.ReferencePokemon.GetName() + SkillMeta.NoEffectReason);
+                                }
+                                else if(Skill.GetSkillName() == "突袭")
+                                {
+                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "但是失败了!");
                                 }
                                 else
                                 {
@@ -459,5 +463,9 @@ public class SkillEvent : EventAnimationPlayer, Event
             }
         }
         return true;
+    }
+    public List<ETarget> GetTargetPokemon()
+    {
+        return TargetPokemon;
     }
 }

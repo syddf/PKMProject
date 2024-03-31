@@ -126,7 +126,7 @@ public class BaseSkill : MonoBehaviour
         return true;
     }
 
-    public virtual int GetSkillPriority(BattleManager InManager,BattlePokemon SourcePokemon)
+    public virtual int GetSkillPriority(BattleManager InManager,BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         return Priority;
     }
@@ -136,6 +136,10 @@ public class BaseSkill : MonoBehaviour
         return true;
     }
 
+    public virtual bool HasHealEffect(BattleManager InManager)
+    {
+        return false;
+    }
     public EType GetOriginSkillType()
     {
         return SkillType;
