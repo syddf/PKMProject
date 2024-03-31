@@ -14,7 +14,13 @@ public enum ECaclStatsMode
 
 public enum EStatusChange
 {
-    ThroatChop
+    ThroatChop,
+    Protect,
+    Poison,
+    Paralysis,
+    Drowsy,
+    Burn,
+    Frostbite
 }
 
 public struct StatusChange
@@ -29,7 +35,24 @@ public struct StatusChange
         {
             return new ThroatChopStatusChange(InPokemon);
         }
+        if(StatusChangeType == EStatusChange.Protect)
+        {
+            return new ProtectStatusChange(InPokemon);
+        }
+        if(StatusChangeType == EStatusChange.Poison)
+        {
+            return new PoisonStatusChange(InPokemon);
+        }
         return null;
+    }
+
+    public static bool IsStatusChange(EStatusChange InStatusChangeType)
+    {  
+        return InStatusChangeType == EStatusChange.Poison || 
+        InStatusChangeType == EStatusChange.Paralysis ||
+        InStatusChangeType == EStatusChange.Drowsy ||
+        InStatusChangeType == EStatusChange.Burn ||
+        InStatusChangeType == EStatusChange.Frostbite;    
     }
 }
 
@@ -358,11 +381,14 @@ public class BattlePokemon : MonoBehaviour
 
         for(int Index = 0; Index < PokemonStats.StatusChangeList.Count; Index++)
         {
-            if(PokemonStats.StatusChangeList[Index].StatusChangeType == StatusType)
+            if(PokemonStats.StatusChangeList[Index].StatusChangeType == StatusType ||                
+               ( StatusChange.IsStatusChange(StatusType) && StatusChange.IsStatusChange(PokemonStats.StatusChangeList[Index].StatusChangeType)) )
             {
                 StatusChange OldStatus = PokemonStats.StatusChangeList[Index];
                 OldStatus.HasLimitedTime = HasLimitedTime;
                 OldStatus.RemainTime = Math.Max(OldStatus.RemainTime, RemainTime);
+                OldStatus.StatusChangeType = StatusType;
+                OldStatus.ReferenceBaseStatusChange = StatusChange.GetBaseStatusChange(StatusType, this);
                 PokemonStats.StatusChangeList[Index] = OldStatus;
                 return;
             }

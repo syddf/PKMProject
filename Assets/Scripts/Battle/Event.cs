@@ -57,7 +57,8 @@ public enum EventType
     TurnEnd,
     Heal,
     Damage,
-    PokemonStatusChange
+    PokemonStatusChange,
+    Fake
 }
 
 public interface Event

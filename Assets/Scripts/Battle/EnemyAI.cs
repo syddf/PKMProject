@@ -39,6 +39,7 @@ public class EnemyAI
         else
         {
             List<ETarget> TargetList = new List<ETarget>();
+            TargetList.Add(ETarget.None);
             InEvents.Add(new SkillEvent(ReferenceBattleManager, UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetList));
         }
     }

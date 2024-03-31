@@ -131,6 +131,11 @@ public class BaseSkill : MonoBehaviour
         return Priority;
     }
 
+    public virtual bool CanBeProtected()
+    {
+        return true;
+    }
+
     public EType GetOriginSkillType()
     {
         return SkillType;

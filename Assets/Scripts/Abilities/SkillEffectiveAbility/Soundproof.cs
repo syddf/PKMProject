@@ -31,7 +31,7 @@ public class Soundproof : BaseAbility
     {
         List<Event> NewEvents = new List<Event>();
         SkillEvent CastedEvent = (SkillEvent)SourceEvent;
-        CastedEvent.MakeCurrentTargetNoEffect();
+        CastedEvent.MakeCurrentTargetNoEffect("因为隔音无法受到声音类招式的攻击!");
         return NewEvents;
     }
 }

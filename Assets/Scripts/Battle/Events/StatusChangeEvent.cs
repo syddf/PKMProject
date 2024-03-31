@@ -27,6 +27,23 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         return true;
     }
 
+    public string GetSetMessageText()
+    {
+        if(StatusChangeType == EStatusChange.ThroatChop)
+        {
+            return "痛苦得难以发出声音!";
+        }
+        if(StatusChangeType == EStatusChange.Protect)
+        {
+            return "保护了自己!";
+        }
+        if(StatusChangeType == EStatusChange.Poison)
+        {
+            return "中毒了!";
+        }
+        return "";
+    }
+
     public override void InitAnimation()
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
@@ -34,7 +51,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         string Message = ReferencePokemon.GetName() + ForbiddenReason;
         if(!Forbidden)
         {
-            Message = ReferencePokemon.GetBaseStatusChange(StatusChangeType).GetSetMessageText();
+            Message = ReferencePokemon.GetName() + GetSetMessageText();
         }
         TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
         MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);

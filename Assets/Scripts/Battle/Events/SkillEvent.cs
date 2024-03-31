@@ -13,6 +13,7 @@ public class SkillEventMetaInfo
     public float OtherAccuracy;
     public BattlePokemon ReferencePokemon;
     public bool NoEffect;
+    public string NoEffectReason;
     public double EffectiveFactor;
     public bool CT;
 }
@@ -45,14 +46,14 @@ public class UseSkillMessageEvent : EventAnimationPlayer, Event
         if(SkillForbidden)
         {
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            string MessageText = SourcePokemon.GetName() + "因" + ForbiddenReason + "无法使用" + Skill.GetSkillName();
+            string MessageText = SourcePokemon.GetName() + "因" + ForbiddenReason + "无法使用" + Skill.GetSkillName()+ "!";
             MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
             AddAnimation(MessageTimeline);
         }
         else
         {
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            string MessageText = SourcePokemon.GetName() + "使用了" + Skill.GetSkillName();
+            string MessageText = SourcePokemon.GetName() + "使用了" + Skill.GetSkillName() + "!";
             MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
             AddAnimation(MessageTimeline);
         }
@@ -165,10 +166,20 @@ public class SkillEvent : EventAnimationPlayer, Event
                                 {
                                     NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "但是" + SkillMeta.ReferencePokemon.GetName() + "已经不在场上了...");
                                 }
+                                else if(SkillMeta.NoEffectReason != "")
+                                {
+                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", SkillMeta.ReferencePokemon.GetName() + SkillMeta.NoEffectReason);
+                                }
                                 else
                                 {
                                     NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这对" + SkillMeta.ReferencePokemon.GetName() + "似乎没有效果...");
                                 }
+                                AddAnimation(NoEffectMessage);
+                            }
+                            else
+                            {
+                                TimelineAnimation NoEffectMessage = new TimelineAnimation(MessageDirector);
+                                NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "但是失败了!");
                                 AddAnimation(NoEffectMessage);
                             }
                         }
@@ -417,9 +428,10 @@ public class SkillEvent : EventAnimationPlayer, Event
         return Skill;
     }
 
-    public void MakeCurrentTargetNoEffect()
+    public void MakeCurrentTargetNoEffect(string Reason)
     {
         SkillMetasHistory[CurrentMetaIndex][CurrentPokemonInMetaIndex].NoEffect = true;
+        SkillMetasHistory[CurrentMetaIndex][CurrentPokemonInMetaIndex].NoEffectReason = Reason;
     }
 
     public BattlePokemon GetSourcePokemon()
@@ -430,5 +442,22 @@ public class SkillEvent : EventAnimationPlayer, Event
     public BattleManager GetReferenceManager()
     {
         return ReferenceBattleManager;
+    }
+
+    public bool IsSkillForbidden()
+    {
+        return SkillForbidden;
+    }
+
+    public bool IsSkillEffective()
+    {
+        if(SkillMetasHistory.Count == 1)
+        {
+            if(SkillMetasHistory[0].Count == 1)
+            {
+                return !SkillMetasHistory[0][0].NoEffect;
+            }
+        }
+        return true;
     }
 }

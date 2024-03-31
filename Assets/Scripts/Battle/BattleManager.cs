@@ -17,6 +17,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private PokemonTrainer EnemyTrainer;
     private List<Event> EventsList;
+    private List<List<Event>> EventsListHistory;
     private ETimePoint CurrentTimePoint;
 
     [SerializeField]
@@ -37,6 +38,7 @@ public class BattleManager : MonoBehaviour
     private bool BattleEnd = false;
 
     private BattleFiledState FiledState;
+    private int TurnIndex;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +46,7 @@ public class BattleManager : MonoBehaviour
         CurrentTimePoint = ETimePoint.None;
         DefeatedPokemonList = new List<BattlePokemon>();
         PlayingAnimation = false;
+        EventsListHistory = new List<List<Event>>();
     }
 
     void Update()
@@ -187,6 +190,7 @@ public class BattleManager : MonoBehaviour
 
     public void ProcessEvents(bool NewTurn)
     {
+        List<Event> TurnEvents = new List<Event>();
         while(EventsList.Count > 0)
         {
             EventsList.Sort(new EventComparer());
@@ -194,6 +198,7 @@ public class BattleManager : MonoBehaviour
             {
                 EventsList[0].Process(this);
             }
+            TurnEvents.Add(EventsList[0]);
             EventsList.RemoveAt(0);
         }
         EventsList.Clear();
@@ -201,6 +206,8 @@ public class BattleManager : MonoBehaviour
         {
             TurnEndEvent TurnEnd = new TurnEndEvent(this);
             TurnEnd.Process(this);
+            TurnIndex = TurnIndex + 1;
+            EventsListHistory.Add(TurnEvents);
         }
         PlayingAnimation = true;
         CurPlayingAnimationEvent = -1;
@@ -209,6 +216,8 @@ public class BattleManager : MonoBehaviour
     public void BeginSingleBattle(BattlePokemon PlayerPokemon, BattlePokemon EnemyPokemon)
     {
         EventsList.Add(new SingleBattleGameStartEvent(PlayerPokemon, EnemyPokemon));
+        TurnIndex = 0;
+        EventsListHistory.Clear();
     }
 
     public List<BaseAbility> QueryAbilitiesWhenTimeChange(Event SourceEvent)
@@ -441,5 +450,31 @@ public class BattleManager : MonoBehaviour
     public List<BattlePokemon> GetBattlePokemons()
     {
         return BattlePokemonList;
+    }
+
+    public int GetCurrentTurnIndex()
+    {
+        return TurnIndex;
+    }
+    public List<BattleSkill> GetPokemonSkillInTurnEffective(BattlePokemon InPokemon, int TurnIndex)
+    {
+        List<BattleSkill> Result = new List<BattleSkill>();
+        foreach(var EventIter in EventsListHistory[TurnIndex])
+        {
+            if(EventIter.GetEventType() == EventType.UseSkill)
+            {
+                SkillEvent CastedSkillEvent = (SkillEvent)EventIter;
+                if(CastedSkillEvent.GetSourcePokemon() == InPokemon && CastedSkillEvent.IsSkillEffective() == true)
+                {
+                    Result.Add(CastedSkillEvent.GetSkill());
+                }
+            }
+        }
+        return Result;
+    }
+
+    public bool IsPokemonInField(BattlePokemon InPokemon)
+    {
+        return BattlePokemonList[0] == InPokemon || BattlePokemonList[1] == InPokemon;
     }
 }

@@ -9,7 +9,7 @@ public class TurnEndEvent : EventAnimationPlayer, Event
 
     public TurnEndEvent(BattleManager InBattleManager)
     {
-
+        ReferenceBattleManager = InBattleManager;
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)
@@ -44,10 +44,7 @@ public class TurnEndEvent : EventAnimationPlayer, Event
             TerrainChangeEvent resetTerrain = new TerrainChangeEvent(null, InManager, EBattleFieldTerrain.None);
             resetTerrain.Process(InManager);
         }
-    }
 
-    public void ProcessStatusChange(BattleManager InManager)
-    {
         var BattlePokemons = InManager.GetBattlePokemons();
         for(int Index = 0; Index < BattlePokemons.Count; Index++)
         {
@@ -61,20 +58,23 @@ public class TurnEndEvent : EventAnimationPlayer, Event
     public void Process(BattleManager InManager)
     {
         if(!ShouldProcess(InManager)) return;
-        InManager.TranslateTimePoint(ETimePoint.TurnEnd, this);
-
         if(InManager.GetTerrainType() == EBattleFieldTerrain.Grass)
         {
             ProcessGrassTerrainHealEvent(InManager);
         }
+        InManager.TranslateTimePoint(ETimePoint.TurnEnd, this);
         ProcessTimeReduceEvent(InManager);
-        ProcessStatusChange(InManager);
         InManager.AddAnimationEvent(this);
     }
 
     public EventType GetEventType()
     {
         return EventType.TurnEnd;
+    }
+
+    public BattleManager GetReferenceManager()
+    {
+        return ReferenceBattleManager;   
     }
 
 }

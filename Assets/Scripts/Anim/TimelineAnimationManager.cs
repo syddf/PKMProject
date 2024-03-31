@@ -30,4 +30,6 @@ public class TimelineAnimationManager : MonoBehaviour
     public PlayableDirector ResetTerrainAnimation;
     public PlayableDirector HealAnimation;
     public PlayableDirector DamageAnimation;
+
+    public PlayableDirector PoisonStatusAnimation;
 }

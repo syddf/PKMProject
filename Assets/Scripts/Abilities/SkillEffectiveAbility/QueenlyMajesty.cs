@@ -31,7 +31,7 @@ public class QueenlyMajesty : BaseAbility
     {
         List<Event> NewEvents = new List<Event>();
         SkillEvent CastedEvent = (SkillEvent)SourceEvent;
-        CastedEvent.MakeCurrentTargetNoEffect();
+        CastedEvent.MakeCurrentTargetNoEffect("因为女王的威严无法受到任何先制招式的攻击!");
         return NewEvents;
     }
 }

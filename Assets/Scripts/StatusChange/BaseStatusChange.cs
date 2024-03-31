@@ -20,11 +20,6 @@ public class BaseStatusChange
         return null;
     }
 
-    public virtual string GetSetMessageText()
-    {
-        return "";
-    }
-    
     public BattlePokemon GetReferencePokemon()
     {
         return ReferencePokemon;

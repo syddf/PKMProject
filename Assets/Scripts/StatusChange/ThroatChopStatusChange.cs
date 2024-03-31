@@ -40,11 +40,6 @@ public class ThroatChopStatusChange : BaseStatusChange
         return NewEvents;
     }
 
-    public override string GetSetMessageText()
-    {
-        return ReferencePokemon.GetName() + "变得无法发出声音了!";
-    }
-    
     public BattlePokemon GetReferencePokemon()
     {
         return ReferencePokemon;

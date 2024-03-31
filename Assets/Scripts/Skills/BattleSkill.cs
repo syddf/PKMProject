@@ -151,10 +151,13 @@ public class BattleSkill
     {
         ReferenceBaseSkill.AfterSkillEffectEvent(InManager, SourcePokemon, TargetPokemon);
     }
+
+    public bool CanBeProtected()
+    {
+        return ReferenceBaseSkill.CanBeProtected();
+    }
     public bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        if(!TargetPokemon)
-            return true;
         return ReferenceBaseSkill.JudgeIsEffective(InManager, SourcePokemon, TargetPokemon);
     }
 

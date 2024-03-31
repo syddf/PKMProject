@@ -99,6 +99,10 @@ public class DamageSkill : BaseSkill
 
     public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
+        if(TargetPokemon == null)
+        {
+            return false;
+        }
         bool J2 = TargetPokemon.GetType2() == EType.None;
         return typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1()] != 0 
         && (J2 || typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType2()] != 0);
