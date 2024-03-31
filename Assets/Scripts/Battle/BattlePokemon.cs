@@ -14,6 +14,7 @@ public enum ECaclStatsMode
 
 public enum EStatusChange
 {
+    None,
     ThroatChop,
     Protect,
     ForbidHeal,
@@ -53,6 +54,22 @@ public struct StatusChange
         {
             return new FlinchStatusChange(InPokemon);
         }
+        if(StatusChangeType == EStatusChange.Paralysis)
+        {
+            return new ParalysisStatusChange(InPokemon);
+        }
+        if(StatusChangeType == EStatusChange.Burn)
+        {
+            return new BurnStatusChange(InPokemon);
+        }
+        if(StatusChangeType == EStatusChange.Frostbite)
+        {
+            return new FrostbiteStatusChange(InPokemon);
+        } 
+        if(StatusChangeType == EStatusChange.Drowsy)
+        {
+            return new DrowsyStatusChange(InPokemon);
+        }       
         return null;
     }
 
@@ -155,8 +172,13 @@ public class BattlePokemon : MonoBehaviour
     }    
     public int GetSpeed(ECaclStatsMode Mode)
     {
-        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SpeedChangeLevel);  
-        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6]);
+        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SpeedChangeLevel);
+        double ParalysisFactor = 1.0;
+        if(this.HasStatusChange(EStatusChange.Paralysis))
+        {
+            ParalysisFactor = 0.5;
+        }  
+        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor);
     }
     public int GetAtkChangeLevel() => PokemonStats.AtkChangeLevel;
     public int GetDefChangeLevel() => PokemonStats.DefChangeLevel;
@@ -382,7 +404,7 @@ public class BattlePokemon : MonoBehaviour
         return Ability && Ability.GetAbilityName() == AbilityName;
     }
 
-    public void AddStatusChange(EStatusChange StatusType, bool HasLimitedTime, int RemainTime)
+    public bool AddStatusChange(EStatusChange StatusType, bool HasLimitedTime, int RemainTime)
     {
         if(PokemonStats.StatusChangeList == null)
         {
@@ -400,7 +422,7 @@ public class BattlePokemon : MonoBehaviour
                 OldStatus.StatusChangeType = StatusType;
                 OldStatus.ReferenceBaseStatusChange = StatusChange.GetBaseStatusChange(StatusType, this);
                 PokemonStats.StatusChangeList[Index] = OldStatus;
-                return;
+                return true;
             }
         }
 
@@ -410,6 +432,7 @@ public class BattlePokemon : MonoBehaviour
         NewStatus.StatusChangeType = StatusType;
         NewStatus.ReferenceBaseStatusChange = StatusChange.GetBaseStatusChange(StatusType, this);
         PokemonStats.StatusChangeList.Add(NewStatus);
+        return false;
     }
 
     public void RemoveStatusChange(EStatusChange StatusType)

@@ -14,6 +14,12 @@ public class PlayerInfoUI : MonoBehaviour
     public GameObject Type2Obj;
     public GameObject Male;
     public GameObject Female;
+
+    public GameObject Poison;
+    public GameObject Paralysis;
+    public GameObject Burn;
+    public GameObject Frostbite;
+    public GameObject Drowsy;
     public Image[] PkBallImages = new Image[6];
     public Color DefeatedPokemonColor;
     public Color NormalPokemonColor;
@@ -68,6 +74,21 @@ public class PlayerInfoUI : MonoBehaviour
                 PkBallImages[Index].color = NormalPokemonColor;
             }
         }
+
+        Poison.SetActive(ReferencePokemon.HasStatusChange(EStatusChange.Poison));
+        Paralysis.SetActive(ReferencePokemon.HasStatusChange(EStatusChange.Paralysis));
+        Burn.SetActive(ReferencePokemon.HasStatusChange(EStatusChange.Burn));
+        Frostbite.SetActive(ReferencePokemon.HasStatusChange(EStatusChange.Frostbite));
+        Drowsy.SetActive(ReferencePokemon.HasStatusChange(EStatusChange.Drowsy));
+    }
+
+    public void UpdateStateChange(EStatusChange InType)
+    {
+        Poison.SetActive(InType == EStatusChange.Poison);
+        Paralysis.SetActive(InType == EStatusChange.Paralysis);
+        Burn.SetActive(InType == EStatusChange.Burn);
+        Frostbite.SetActive(InType == EStatusChange.Frostbite);
+        Drowsy.SetActive(InType == EStatusChange.Drowsy);
     }
 
     public void UpdateHP(int CurHP)

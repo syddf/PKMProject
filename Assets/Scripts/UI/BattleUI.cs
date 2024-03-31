@@ -17,6 +17,7 @@ public class BattleUI : MonoBehaviour
     {
         CurrentPokemon = InPokemon;
     }
+
     public void SetPlayerHP(int HP)
     {
         PlayerInfo1.UpdateHP(HP);
@@ -25,7 +26,14 @@ public class BattleUI : MonoBehaviour
     {
         EnemyInfo1.UpdateHP(HP);
     }
-
+    public void SetPlayerStateChange(EStatusChange InType)
+    {
+        PlayerInfo1.UpdateStateChange(InType);
+    }
+    public void SetEnemyStateChange(EStatusChange InType)
+    {
+        EnemyInfo1.UpdateStateChange(InType);
+    }
     public void UpdatePlayer1UI(BattlePokemon InPokemon, PokemonTrainer InTrainer)
     {
         PlayerInfo1.UpdateUI(InPokemon, InTrainer);

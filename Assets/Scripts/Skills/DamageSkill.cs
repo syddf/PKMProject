@@ -148,6 +148,11 @@ public class DamageSkill : BaseSkill
     {
         return 1.5;
     }
+
+    public virtual bool IsPhysicalMove(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return this.SkillClass == ESkillClass.PhysicalMove;
+    }
 }
 
 public class DamageAndSelfDamageSkill : DamageSkill

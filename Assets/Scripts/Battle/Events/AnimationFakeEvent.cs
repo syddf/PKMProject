@@ -28,8 +28,28 @@ public class StatusChangeAnimationFakeEvent : EventAnimationPlayer, Event
         if(StatusType == EStatusChange.Poison)
         {
             MessageDirector = Timelines.PoisonStatusAnimation;
+            MessageDirector.gameObject.transform.position = ReferencePokemon.GetPokemonModel().transform.position;
         }
-        MessageDirector.gameObject.transform.position = ReferencePokemon.GetPokemonModel().transform.position;
+        if(StatusType == EStatusChange.Paralysis)
+        {
+            MessageDirector = Timelines.ParalysisStatusAnimation;
+            MessageDirector.gameObject.GetComponent<DistributeObjects>().Distribute(ReferencePokemon.GetPokemonModel().gameObject);
+        }
+        if(StatusType == EStatusChange.Burn)
+        {
+            MessageDirector = Timelines.BurnStatusAnimation;
+            MessageDirector.gameObject.GetComponent<DistributeObjects>().Distribute(ReferencePokemon.GetPokemonModel().gameObject);
+        }
+        if(StatusType == EStatusChange.Frostbite)
+        {
+            MessageDirector = Timelines.FrostbiteStatusAnimation;
+            MessageDirector.gameObject.GetComponent<DistributeObjects>().Distribute(ReferencePokemon.GetPokemonModel().gameObject);
+        }
+        if(StatusType == EStatusChange.Drowsy)
+        {
+            MessageDirector = Timelines.DrowsyStatusAnimation;
+            MessageDirector.gameObject.transform.position = ReferencePokemon.GetPokemonModel().transform.position;
+        }
         TimelineAnimation StatusAnimation = new TimelineAnimation(MessageDirector);                                
         StatusAnimation.SetSignalReceiver("SourcePokemon", ReferencePokemon.GetPokemonModel());
         AddAnimation(StatusAnimation);

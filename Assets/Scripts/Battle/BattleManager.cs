@@ -120,6 +120,21 @@ public class BattleManager : MonoBehaviour
     {
         if(InPokemon == null)
             return;
+        for(int Index = 0; Index < Stats.StatusChangeList.Count; Index++)
+        {
+            if(StatusChange.IsStatusChange(Stats.StatusChangeList[Index].StatusChangeType))
+            {
+                if(InPokemon.GetIsEnemy())
+                {
+                    BattleUIManager.SetEnemyStateChange(Stats.StatusChangeList[Index].StatusChangeType);
+                }
+                else
+                {
+                    BattleUIManager.SetPlayerStateChange(Stats.StatusChangeList[Index].StatusChangeType);
+                }
+                break;
+            }
+        }
         if(InPokemon.GetIsEnemy())
         {
             BattleUIManager.SetEnemyHP(Stats.HP);
@@ -127,6 +142,26 @@ public class BattleManager : MonoBehaviour
         else
         {
             BattleUIManager.SetPlayerHP(Stats.HP);
+        }
+    }
+    public void UpdatePokemonStatusChange(BattlePokemon InPokemon, BattlePokemonStat Stats)
+    {
+        if(InPokemon == null)
+            return;
+        for(int Index = 0; Index < Stats.StatusChangeList.Count; Index++)
+        {
+            if(StatusChange.IsStatusChange(Stats.StatusChangeList[Index].StatusChangeType))
+            {
+                if(InPokemon.GetIsEnemy())
+                {
+                    BattleUIManager.SetEnemyStateChange(Stats.StatusChangeList[Index].StatusChangeType);
+                }
+                else
+                {
+                    BattleUIManager.SetPlayerStateChange(Stats.StatusChangeList[Index].StatusChangeType);
+                }
+                break;
+            }
         }
     }
     public void UpdateUI(bool SwitchCommand)

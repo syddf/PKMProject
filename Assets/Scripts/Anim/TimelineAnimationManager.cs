@@ -32,4 +32,8 @@ public class TimelineAnimationManager : MonoBehaviour
     public PlayableDirector DamageAnimation;
 
     public PlayableDirector PoisonStatusAnimation;
+    public PlayableDirector ParalysisStatusAnimation;
+    public PlayableDirector BurnStatusAnimation;
+    public PlayableDirector FrostbiteStatusAnimation;
+    public PlayableDirector DrowsyStatusAnimation;
 }

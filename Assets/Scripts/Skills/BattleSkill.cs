@@ -115,6 +115,29 @@ public class BattleSkill
         EffectiveFactor = TypeEffectiveFactor;
         Damage = (int)Math.Floor(Damage * TypeEffectiveFactor);
 
+        if(CastSkill.IsPhysicalMove(InManager, SourcePokemon, TargetPokemon))
+        {
+            if(SourcePokemon.HasStatusChange(EStatusChange.Burn))
+            {
+                double BurnFactor = 0.5;
+                Damage = (int)Math.Floor(Damage * BurnFactor);
+            }
+        }
+        else
+        {
+            if(SourcePokemon.HasStatusChange(EStatusChange.Frostbite))
+            {
+                double FrostbiteFactor = 0.5;
+                Damage = (int)Math.Floor(Damage * FrostbiteFactor);
+            }
+        }
+
+        if(TargetPokemon.HasStatusChange(EStatusChange.Drowsy))
+        {
+            double DrowsyFactor = 1.5;
+            Damage = (int)Math.Floor(Damage * DrowsyFactor);
+        }
+
         Damage = ApplyTerrainDamageFactor(InManager, CastSkill, Damage);
 
         if(SourcePokemon.GetAbility())
