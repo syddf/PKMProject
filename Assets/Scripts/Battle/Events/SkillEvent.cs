@@ -203,11 +203,26 @@ public class SkillEvent : EventAnimationPlayer, Event
                             {
                                 RootScript.TargetPokemonTouchTransform.position = SkillMetas[0].ReferencePokemon.GetPokemonModel().GetComponent<PokemonReceiver>().TouchHitTransform.transform.position;
                             }
+
                             if(SkillMeta.Hit)
                             {
                                 TimelineAnimation SkillAnimation = new TimelineAnimation(Skill.GetSkillAnimation());
                                 SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Damage", SkillMeta.Damage.ToString());
                                 
+                                if(SkillMetas[0].ReferencePokemon)
+                                {
+                                    GameObject Cameras = GameObject.Find("Cameras");
+                                    GameObject EnemyCamera = Cameras.GetComponent<SubObjects>().SubObject1;
+                                    GameObject PlayerCamera = Cameras.GetComponent<SubObjects>().SubObject2;
+                                    if(SkillMetas[0].ReferencePokemon.GetIsEnemy())
+                                    {
+                                        SkillAnimation.SetTrackObject("TargetCamera", EnemyCamera);
+                                    }
+                                    else
+                                    {
+                                        SkillAnimation.SetTrackObject("TargetCamera", PlayerCamera);
+                                    }
+                                }
                                 if(Skill.IsDamageSkill())
                                 {
                                     if(SkillMeta.ReferencePokemon.GetIsEnemy())

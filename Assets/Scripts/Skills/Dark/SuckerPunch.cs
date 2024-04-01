@@ -12,8 +12,8 @@ public class SuckerPunch : DamageSkill
     {
         if(InManager.IsPokemonUseDamageSkillThisTurn(TargetPokemon))
         {
-            return 6;
+            return 1;
         }
-        return 1;
+        return 0;
     }
 }

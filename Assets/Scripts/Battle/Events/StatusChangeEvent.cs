@@ -24,6 +24,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
     public bool ShouldProcess(BattleManager InBattleManager)
     {
         if(InBattleManager.GetBattleEnd() == true) return false;
+        if(ReferencePokemon.HasType(EType.Fire) && StatusChangeType == EStatusChange.Burn) return false;
         if(ReferencePokemon.IsDead()) return false;
         return true;
     }

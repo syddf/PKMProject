@@ -404,6 +404,11 @@ public class BattlePokemon : MonoBehaviour
         return Ability && Ability.GetAbilityName() == AbilityName;
     }
 
+    public bool HasType(EType Type)
+    {
+        return GetType1() == Type || GetType2() == Type;
+    }
+
     public bool AddStatusChange(EStatusChange StatusType, bool HasLimitedTime, int RemainTime)
     {
         if(PokemonStats.StatusChangeList == null)
