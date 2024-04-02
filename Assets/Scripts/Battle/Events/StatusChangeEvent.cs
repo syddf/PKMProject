@@ -69,7 +69,11 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         }
         return "";
     }
-    
+
+    public EStatusChange GetStatusType()
+    {
+        return StatusChangeType;
+    } 
     public override void OnAnimationFinished()
     {
         ReferenceBattleManager.UpdatePokemonStatusChange(ReferencePokemon, CloneInPokemon);
@@ -126,17 +130,101 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
                 }
             }
         }
+        CloneInPokemon = ReferencePokemon.CloneBattlePokemonStats();
         if(!SameAsOrigin)
         {
             InManager.AddAnimationEvent(this);
+            InManager.TranslateTimePoint(ETimePoint.AfterSetPokemonStatusChange, this);
         }
-        CloneInPokemon = ReferencePokemon.CloneBattlePokemonStats();
-        InManager.TranslateTimePoint(ETimePoint.AfterSetPokemonStatusChange, this);
     }
 
     public EventType GetEventType()
     {
-        return EventType.PokemonStatusChange;
+        return EventType.SetPokemonStatusChange;
+    }
+    public BattlePokemon GetReferencePokemon()
+    {
+        return ReferencePokemon;
     }
 
+}
+
+public class RemovePokemonStatusChangeEvent : EventAnimationPlayer, Event
+{
+    private EStatusChange StatusChangeType;
+    private BattlePokemon ReferencePokemon;
+    private BattleManager ReferenceBattleManager;
+    private string RemoveReason = "";
+    private BattlePokemonStat CloneInPokemon;
+    public RemovePokemonStatusChangeEvent(BattlePokemon InSourcePokemon, BattleManager InBattleManager, EStatusChange InStatusChangeType, string InRemoveReason)
+    {
+        ReferenceBattleManager = InBattleManager;
+        ReferencePokemon = InSourcePokemon;   
+        StatusChangeType = InStatusChangeType;
+        RemoveReason = InRemoveReason;
+    }
+
+    public bool ShouldProcess(BattleManager InBattleManager)
+    {
+        if(InBattleManager.GetBattleEnd() == true) return false;
+        if(ReferencePokemon.IsDead()) return false;
+        return true;
+    }
+
+    public BattlePokemon GetReferencePokemon()
+    {
+        return ReferencePokemon;
+    }
+    public string GetRemoveMessageText()
+    {
+        if(StatusChangeType == EStatusChange.Poison)
+        {
+            return "解除了中毒!";
+        }
+        if(StatusChangeType == EStatusChange.Paralysis)
+        {
+            return "解除了麻痹!";
+        }
+        if(StatusChangeType == EStatusChange.Burn)
+        {
+            return "解除了烧伤!";
+        }
+        if(StatusChangeType == EStatusChange.Frostbite)
+        {
+            return "解除了冻伤!";
+        }
+        if(StatusChangeType == EStatusChange.Drowsy)
+        {
+            return "解除了瞌睡!";
+        }
+        return "";
+    }
+    
+    public override void OnAnimationFinished()
+    {
+        ReferenceBattleManager.UpdatePokemonStatusChange(ReferencePokemon, CloneInPokemon);
+    }
+
+    public override void InitAnimation()
+    {
+        TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        PlayableDirector MessageDirector = Timelines.MessageAnimation;
+        string Message = ReferencePokemon.GetName() + "因" + RemoveReason + GetRemoveMessageText();
+        TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+        MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);
+        AddAnimation(MessageTimeline);
+    }
+
+    public void Process(BattleManager InManager)
+    {
+        if(!ShouldProcess(InManager)) return;
+        ReferencePokemon.RemoveStatusChange(StatusChangeType);
+        CloneInPokemon = ReferencePokemon.CloneBattlePokemonStats();
+        InManager.AddAnimationEvent(this);
+    }
+
+    public EventType GetEventType()
+    {
+        return EventType.RemovePokemonStatusChange;
+    }
 }

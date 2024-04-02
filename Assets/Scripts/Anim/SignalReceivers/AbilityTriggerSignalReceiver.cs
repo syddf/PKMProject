@@ -9,8 +9,8 @@ public class AbilityTriggerSignalReceiver : ParameterizedSignalReceiver
     {
         string AbilityName = InSignal.GetParamValue("AbilityName");
         AbilityStateInUI AbilityStateUI = this.gameObject.GetComponent<AbilityStateInUI>();
-        AbilityStateUI.AbilityText.text = AbilityName;
+        AbilityStateUI.Text.text = AbilityName;
         int Index = Convert.ToInt32(InSignal.GetParamValue("PokemonIndex"));
-        AbilityStateUI.PKMSprite.sprite = PokemonSpritesManager.Sprites[Index];
+        AbilityStateUI.Sprite.sprite = PokemonSpritesManager.PKMSprites[Index];
     }
 }

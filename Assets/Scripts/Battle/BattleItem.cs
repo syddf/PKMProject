@@ -2,20 +2,90 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-class BattleItem : MonoBehaviour
+public class BattleItem
 {    
-    [SerializeField]
-    private string ItemName;
-    [SerializeField]
-    private string Description;
+    private BaseItem ReferenceBaseItem;
+    private BattlePokemon ReferencePokemon;
+    private bool Consumed = false;
+    private bool KnockOffed = false;
+
+    public BattleItem(BaseItem InReferenceBaseItem, BattlePokemon InReferencePokemon)
+    {
+        ReferenceBaseItem = InReferenceBaseItem;
+        ReferencePokemon = InReferencePokemon;
+    }
 
     public string GetItemName()
     {
-        return ItemName;
+        return ReferenceBaseItem.ItemName;
     }
 
     public string GetItemDescription()
     {
-        return Description;
+        return ReferenceBaseItem.Description;
+    }
+
+    public BattlePokemon GetReferencePokemon()
+    {
+        return ReferencePokemon;
+    }
+
+    public bool IsConsumable()
+    {
+        if(ReferenceBaseItem == null) return false;
+        return ReferenceBaseItem.IsConsumable();
+    }
+
+    public bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
+    {
+        if(IsConsumable() && Consumed) return false;
+        if(KnockOffed) return false;
+        if(ReferenceBaseItem == null) return false;
+        return ReferenceBaseItem.ShouldTrigger(TimePoint, SourceEvent, ReferencePokemon);
+    }
+
+    public virtual List<Event> Trigger(BattleManager InManager, Event SourceEvent)
+    {
+        Consume();
+        return ReferenceBaseItem.Trigger(InManager, SourceEvent, ReferencePokemon);
+    }
+
+    public bool HasItem()
+    {
+        return ReferenceBaseItem != null && KnockOffed == false && Consumed == false;
+    }
+
+    public void Consume()
+    {
+        if(IsConsumable())
+            Consumed = true;
+        ReferencePokemon.SetLostItem();        
+    }
+
+    public void KnockOffItem()
+    {
+        KnockOffed = true;
+        ReferencePokemon.SetLostItem();        
+    }
+
+    public bool CanKnockOff()
+    {
+        return ReferenceBaseItem.CanKnockOff;
+    }
+}
+
+public class BattleItemComparer : IComparer<BattleItem>
+{
+    public int Compare(BattleItem x, BattleItem y)
+    {
+        if(x.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal) < y.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal))
+        {
+            return 1;
+        }
+        else if(x.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal) > y.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal))
+        {
+            return -1;
+        }
+        return 0;
     }
 }

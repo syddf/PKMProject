@@ -199,19 +199,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 598233919459713740}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &6895486949310863584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,7 +225,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 3c039ffe17d5846dba1a421df28d8fdd, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 775a8c2abfbc0cb428a88f519f4b627e, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -245,7 +233,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 46
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -377,6 +365,7 @@ MonoBehaviour:
   SpecialObj: {fileID: 271285430421317514}
   StatusObj: {fileID: 5142482967002207164}
   TypeUI: {fileID: 2745969574472775149}
+  Audio: {fileID: 0}
 --- !u!1 &4731349861045615073
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,7 +611,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18.05
+  m_fontSize: 19.4
   m_fontSizeBase: 17.3
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -757,7 +746,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 13.95
+  m_fontSize: 20
   m_fontSizeBase: 19.2
   m_fontWeight: 400
   m_enableAutoSizing: 1

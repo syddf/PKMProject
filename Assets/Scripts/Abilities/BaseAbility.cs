@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class BaseAbility : MonoBehaviour
@@ -11,6 +12,7 @@ public class BaseAbility : MonoBehaviour
     [SerializeField]
     protected BattlePokemon ReferencePokemon;
 
+    private bool Processing = false;
     public virtual bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
     {
         return false;
@@ -77,6 +79,9 @@ public class BaseAbility : MonoBehaviour
     }
 
     public BattlePokemon GetReferencePokemon() => ReferencePokemon;
+
+    public void SetIsProcessing(bool IsProcessing) { Processing = IsProcessing;} 
+    public bool GetIsProcessing() { return Processing;} 
 }
 
 public class AbilityComparer : IComparer<BaseAbility>

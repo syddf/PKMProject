@@ -51,13 +51,16 @@ public enum EventType
     PokemonDefeated,
     StatChange,
     AbilityTrigger,
+    ItemTrigger,
     SwitchAfterDefeated,
     BattleEnd,
     TerrainChange,
     TurnEnd,
     Heal,
     Damage,
-    PokemonStatusChange,
+    SetPokemonStatusChange,
+    RemovePokemonStatusChange,
+    KnockOffItem,
     Fake
 }
 

@@ -20,6 +20,7 @@ public class TimelineAnimationManager : MonoBehaviour
     }
     public PlayableDirector BattleStartAnimation;
     public PlayableDirector AbilityStateAnimation;
+    public PlayableDirector ItemStateAnimation;
     public PlayableDirector BuffAnimation;
     public PlayableDirector DebuffAnimation;
     public PlayableDirector MessageAnimation;

@@ -9,8 +9,8 @@ public class AbilityStateInUI : MonoBehaviour
     public Transform EndTrans;
     public float Duration;
     public float Totaltime = 0.5f;
-    public TextMeshProUGUI AbilityText;
-    public Image PKMSprite;
+    public TextMeshProUGUI Text;
+    public Image Sprite;
     void Start()
     {
     }

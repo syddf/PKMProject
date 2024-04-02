@@ -16,7 +16,7 @@ public class SwitchButton : MonoBehaviour
         if(InPokemon == null)
             return;        
         int Index = InPokemon.GetIndexInPKDex();
-        PokemonSprite.sprite = PokemonSpritesManager.Sprites[Index];
+        PokemonSprite.sprite = PokemonSpritesManager.PKMSprites[Index];
         if(InPokemon.IsDead())
         {
             PokemonSprite.color = new Color(PokemonSprite.color.r, PokemonSprite.color.g, PokemonSprite.color.b, 0.3f);

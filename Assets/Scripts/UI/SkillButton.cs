@@ -15,11 +15,13 @@ public class SkillButton : MonoBehaviour
     public GameObject SpecialObj;
     public GameObject StatusObj;
     public TypeUI TypeUI;
+    public AudioSource Audio;
 
     // Start is called before the first frame update
     void Start()
     {
         UIButton = this.GetComponent<Button>();
+        Audio = this.GetComponent<AudioSource>();
         UIButton.onClick.AddListener(() => ButtonClicked());
     }
 
@@ -61,6 +63,7 @@ public class SkillButton : MonoBehaviour
 
     void ButtonClicked()
     {
+        Audio.Play();
         g_BattleManager.OnUseSkill(ReferenceSkill, ReferencePokemon);
     }
 }

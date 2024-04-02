@@ -86,6 +86,8 @@ public class BagPokemon : MonoBehaviour
     private int[] BasePoints = new int[6]{ 0, 0, 0, 0, 0, 0};
     [SerializeField]
     PokemonGender Gender;
+    [SerializeField]
+    private BaseItem Item;
     public PokemonGender GetGender()
     {
         return Gender;
@@ -167,6 +169,11 @@ public class BagPokemon : MonoBehaviour
             return EType.None;
         }
         return (EType)Enum.Parse(typeof(EType), SourcePokemonData.Type1);
+    }
+
+    public BaseItem GetItem()
+    {  
+        return Item;
     }
 
     public int GetIndexInPKDex()

@@ -205,10 +205,25 @@ public class BattleManager : MonoBehaviour
         AbilitiesToTrigger.Sort(new AbilityComparer());
         foreach(var AbilityIter in AbilitiesToTrigger)
         {
+            AbilityIter.SetIsProcessing(true);
             string name = AbilityIter.GetAbilityName();
             List<Event> EventsToProcess = AbilityIter.Trigger(this, SourceEvent);
             AbilityTriggerEvent AbilityEvent = new AbilityTriggerEvent(EventsToProcess, AbilityIter);
             AbilityEvent.Process(this);
+        }
+
+        foreach(var AbilityIter in AbilitiesToTrigger)
+        {
+            AbilityIter.SetIsProcessing(false);
+        }
+                  
+        List<BattleItem> ItemsToTrigger = this.QueryItemsWhenTimeChange(SourceEvent);
+        ItemsToTrigger.Sort(new BattleItemComparer());
+        foreach(var ItemIter in ItemsToTrigger)
+        {
+            List<Event> EventsToProcess = ItemIter.Trigger(this, SourceEvent);
+            ItemTriggerEvent ItemEvent = new ItemTriggerEvent(EventsToProcess, ItemIter);
+            ItemEvent.Process(this);
         }
 
         List<BaseStatusChange> BastStatusChangesToTrigger = this.QueryBaseStatusChangesWhenTimeChange(SourceEvent);
@@ -261,7 +276,7 @@ public class BattleManager : MonoBehaviour
         foreach(var BattlePokemonIter in BattlePokemonList)
         {
             BaseAbility CurrentAbility = BattlePokemonIter.GetAbility();
-            if(CurrentAbility && CurrentAbility.ShouldTrigger(CurrentTimePoint, SourceEvent))
+            if(CurrentAbility && CurrentAbility.GetIsProcessing() == false && CurrentAbility.ShouldTrigger(CurrentTimePoint, SourceEvent))
             {
                 AbilitiesToTrigger.Add(CurrentAbility);
             }
@@ -284,6 +299,20 @@ public class BattleManager : MonoBehaviour
             }            
         }
         return BaseStatusChangesToTrigger;
+    }
+
+    public List<BattleItem> QueryItemsWhenTimeChange(Event SourceEvent)
+    {
+        List<BattleItem> ItemsToTrigger = new List<BattleItem>();
+        foreach(var BattlePokemonIter in BattlePokemonList)
+        {
+            BattleItem CurrentItem = BattlePokemonIter.GetBattleItem();
+            if(CurrentItem != null && CurrentItem.ShouldTrigger(CurrentTimePoint, SourceEvent))
+            {
+                ItemsToTrigger.Add(CurrentItem);
+            }
+        }
+        return ItemsToTrigger;
     }
 
     public void Test()

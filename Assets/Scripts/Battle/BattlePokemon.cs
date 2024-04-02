@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -126,9 +127,13 @@ public class BattlePokemon : MonoBehaviour
     private BattleItem Item;
     private static double[] StatLevelFactor = new double[13]{0.25, 0.29, 0.33, 0.40, 0.50, 0.67, 1.00, 1.50, 2.00, 2.50, 3.00, 3.50, 4.00};
 
+    private bool LostItem = false;
+
     public BattlePokemonStat CloneBattlePokemonStats()
     {
-        return PokemonStats;
+        BattlePokemonStat NewStats = PokemonStats;
+        NewStats.StatusChangeList = PokemonStats.StatusChangeList.ToList();
+        return NewStats;
     }
     public BaseAbility GetAbility() => Ability;
     public bool GetIsEnemy() => IsEnemy;
@@ -279,7 +284,7 @@ public class BattlePokemon : MonoBehaviour
 
     public bool IsGroundPokemon()
     {
-        if(Item && Item.GetItemName() == "黑色铁球")
+        if(HasItem() && Item.GetItemName() == "黑色铁球")
         {
             return true;
         }
@@ -291,7 +296,7 @@ public class BattlePokemon : MonoBehaviour
         {
             return false;
         }
-        if(Item && Item.GetItemName() == "气球")
+        if(HasItem() && Item.GetItemName() == "气球")
         {
             return false;
         }        
@@ -341,6 +346,8 @@ public class BattlePokemon : MonoBehaviour
                 SkillPP[Index] = ReferenceSkill[Index].GetPP();
             }
         }
+
+        Item = new BattleItem(ReferenceBasePokemon.GetItem(), this);
     }
 
     public void ReducePP(BattleSkill InSkill)
@@ -535,11 +542,18 @@ public class BattlePokemon : MonoBehaviour
 
     public void ClearStatusChange()
     {
+        LostItem = false;
         if(PokemonStats.StatusChangeList == null)
         {
             return;
         }
-        PokemonStats.StatusChangeList.Clear();
+        for(int Index = PokemonStats.StatusChangeList.Count - 1; Index >= 0; Index--)
+        {
+            if(StatusChange.IsStatusChange(PokemonStats.StatusChangeList[Index].StatusChangeType))
+            {
+                PokemonStats.StatusChangeList.RemoveAt(Index);
+            }
+        }
     }
 
     public List<BaseStatusChange> GetAllStatusChange()
@@ -556,5 +570,24 @@ public class BattlePokemon : MonoBehaviour
             }
         }
         return Result;
+    }
+
+    public BattleItem GetBattleItem()
+    {
+        return Item;
+    }   
+
+    public bool HasItem()
+    {
+        return Item.HasItem();
+    }
+
+    public void SetLostItem()
+    {
+        LostItem = true;
+    } 
+    public void GetLostItem()
+    {
+        LostItem = true;
     }   
 }
