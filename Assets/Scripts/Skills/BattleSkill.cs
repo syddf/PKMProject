@@ -149,6 +149,21 @@ public class BattleSkill
             Damage = TargetPokemon.GetAbility().ChangeSkillDamage(InManager, CastSkill, SourcePokemon, TargetPokemon, Damage);
         }
 
+        bool IsPlayer = !TargetPokemon.GetIsEnemy();
+        if(!CT)
+        {
+            double WallFactor = 1.0;
+            if(InManager.HasBattleFieldStatus(IsPlayer, EBattleFieldStatus.ReflectStatus) && CastSkill.IsPhysicalMove(InManager, SourcePokemon, TargetPokemon))
+            {
+                WallFactor = 0.5;
+            }
+            if(InManager.HasBattleFieldStatus(IsPlayer, EBattleFieldStatus.LightScreenStatus) && !CastSkill.IsPhysicalMove(InManager, SourcePokemon, TargetPokemon))
+            {
+                WallFactor = 0.5;
+            }
+            Damage = (int)Math.Floor(Damage * WallFactor);
+        }
+
         int IntDamage = (int)Math.Floor(Damage);
         IntDamage = Math.Min(IntDamage, TargetPokemon.GetHP());
         return Mathf.Max(1, IntDamage);

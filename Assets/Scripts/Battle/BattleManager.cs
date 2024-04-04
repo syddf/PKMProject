@@ -39,6 +39,9 @@ public class BattleManager : MonoBehaviour
 
     private BattleFiledState FiledState;
     private int TurnIndex;
+
+    private List<List<BattleFieldStatus>> BattleFiledStatusLists;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +50,9 @@ public class BattleManager : MonoBehaviour
         DefeatedPokemonList = new List<BattlePokemon>();
         PlayingAnimation = false;
         EventsListHistory = new List<List<Event>>();
+        BattleFiledStatusLists = new List<List<BattleFieldStatus>>();
+        BattleFiledStatusLists.Add(new List<BattleFieldStatus>());
+        BattleFiledStatusLists.Add(new List<BattleFieldStatus>());
     }
 
     void Update()
@@ -268,6 +274,8 @@ public class BattleManager : MonoBehaviour
         EventsList.Add(new SingleBattleGameStartEvent(PlayerPokemon, EnemyPokemon));
         TurnIndex = 0;
         EventsListHistory.Clear();
+        BattleFiledStatusLists[0].Clear();
+        BattleFiledStatusLists[1].Clear();
     }
 
     public List<BaseAbility> QueryAbilitiesWhenTimeChange(Event SourceEvent)
@@ -557,5 +565,64 @@ public class BattleManager : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public bool HasBattleFieldStatus(bool Player, EBattleFieldStatus StatusType)
+    {
+        int Index = 0;
+        if(!Player) Index = 1;
+        foreach(var BattleFieldStatus in BattleFiledStatusLists[Index])
+        {
+            if(BattleFieldStatus.StatusType == StatusType)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void AddBattleFieldStatus(bool Player, EBattleFieldStatus StatusType, bool HasLimitedTime, int InTime)
+    {
+        int Index = 0;
+        if(!Player) Index = 1;
+        BattleFieldStatus NewStatus = new BattleFieldStatus(StatusType, HasLimitedTime, InTime);
+        BattleFiledStatusLists[Index].Add(NewStatus);
+    }
+
+    public void RemoveBattleFieldStatus(bool Player, EBattleFieldStatus StatusType)
+    {
+        int Index = 0;
+        if(!Player) Index = 1;
+        for(int StatusIndex = 0; StatusIndex < BattleFiledStatusLists[Index].Count; StatusIndex++)
+        {
+            if(BattleFiledStatusLists[Index][StatusIndex].StatusType == StatusType)
+            {
+                BattleFiledStatusLists[Index].RemoveAt(StatusIndex);
+                return;
+            }
+        }
+    }
+
+    public List<EBattleFieldStatus> ReduceBattleFieldTime(bool Player)
+    {
+        List<EBattleFieldStatus> RemoveStatus = new List<EBattleFieldStatus>();
+        int Index = 0;
+        if(!Player) Index = 1;
+        for(int StatusIndex = 0; StatusIndex < BattleFiledStatusLists[Index].Count; StatusIndex++)
+        {
+            if(BattleFiledStatusLists[Index][StatusIndex].HasLimitedTime)
+            {
+                BattleFieldStatus OldStatus = BattleFiledStatusLists[Index][StatusIndex];
+                OldStatus.RemainTurn = OldStatus.RemainTurn - 1;
+                BattleFiledStatusLists[Index][StatusIndex] = OldStatus;
+
+                if(BattleFiledStatusLists[Index][StatusIndex].RemainTurn == 0)
+                {
+                    RemoveStatus.Add(BattleFiledStatusLists[Index][StatusIndex].StatusType);
+                }
+            }
+        }
+
+        return RemoveStatus;
     }
 }

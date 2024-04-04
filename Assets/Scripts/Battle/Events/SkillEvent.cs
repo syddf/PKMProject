@@ -203,6 +203,11 @@ public class SkillEvent : EventAnimationPlayer, Event
                             {
                                 RootScript.TargetPokemonTouchTransform.position = SkillMetas[0].ReferencePokemon.GetPokemonModel().GetComponent<PokemonReceiver>().TouchHitTransform.transform.position;
                             }
+                            AutoScaler[] Scalers = SkillRootObject.GetComponentsInChildren<AutoScaler>();
+                            foreach(var Scaler in Scalers)
+                            {
+                                Scaler.targetCharacter = SourcePokemon.GetPokemonModel().transform;
+                            }
 
                             if(SkillMeta.Hit)
                             {

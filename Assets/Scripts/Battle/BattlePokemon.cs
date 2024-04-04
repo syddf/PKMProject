@@ -518,11 +518,12 @@ public class BattlePokemon : MonoBehaviour
         return null;
     }
 
-    public void ReduceAllStatusChangeRemainTime()
+    public List<EStatusChange> ReduceAllStatusChangeRemainTime()
     {
+        List<EStatusChange> RemoveStatus = new List<EStatusChange>();
         if(PokemonStats.StatusChangeList == null)
         {
-            return;
+            return RemoveStatus;
         }
 
         for(int Index = PokemonStats.StatusChangeList.Count - 1; Index >= 0; Index--)
@@ -534,10 +535,12 @@ public class BattlePokemon : MonoBehaviour
                 PokemonStats.StatusChangeList[Index] = OldStatus;
                 if(PokemonStats.StatusChangeList[Index].RemainTime == 0)
                 {
-                    PokemonStats.StatusChangeList.RemoveAt(Index);
+                    RemoveStatus.Add(PokemonStats.StatusChangeList[Index].StatusChangeType);
                 }
             }
         }
+
+        return RemoveStatus;
     }
 
     public void ClearStatusChange()

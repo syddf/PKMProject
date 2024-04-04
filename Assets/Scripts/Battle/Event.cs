@@ -29,7 +29,9 @@ public enum ETimePoint
     BeforeHeal,
     AfterHeal,
     BeforeSetPokemonStatusChange,
-    AfterSetPokemonStatusChange
+    AfterSetPokemonStatusChange,
+    BeforeSetBattleFieldStatusChange,
+    AfterSetBattleFieldStatusChange,
 }
 
 public enum EEventResultType
@@ -59,7 +61,9 @@ public enum EventType
     Heal,
     Damage,
     SetPokemonStatusChange,
+    SetBattleFieldStatusChange,
     RemovePokemonStatusChange,
+    RemoveBattleFieldStatusChange,
     KnockOffItem,
     Fake
 }

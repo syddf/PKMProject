@@ -50,8 +50,27 @@ public class TurnEndEvent : EventAnimationPlayer, Event
         {
             if(!BattlePokemons[Index].IsDead())
             {
-                BattlePokemons[Index].ReduceAllStatusChangeRemainTime();
+                List<EStatusChange> RemoveStatus = BattlePokemons[Index].ReduceAllStatusChangeRemainTime();
+                foreach(var Status in RemoveStatus)
+                {
+                    RemovePokemonStatusChangeEvent RemoveEvent = 
+                    new RemovePokemonStatusChangeEvent(BattlePokemons[Index], InManager, Status, "持续时间结束");
+                    RemoveEvent.Process(InManager);
+                }
             }
+        }
+
+        List<EBattleFieldStatus> PlayerRemoveStatusList = ReferenceBattleManager.ReduceBattleFieldTime(true);
+        List<EBattleFieldStatus> EnemyRemoveStatusList = ReferenceBattleManager.ReduceBattleFieldTime(false);
+        foreach(var PlayerRemoveStatus in PlayerRemoveStatusList)
+        {
+            RemoveBattleFieldStatusChangeEvent RemoveStatusEvent = new RemoveBattleFieldStatusChangeEvent(InManager, PlayerRemoveStatus, "持续时间结束", true);
+            RemoveStatusEvent.Process(InManager);
+        }
+        foreach(var EnemyRemoveStatus in EnemyRemoveStatusList)
+        {
+            RemoveBattleFieldStatusChangeEvent RemoveStatusEvent = new RemoveBattleFieldStatusChangeEvent(InManager, EnemyRemoveStatus, "持续时间结束", false);
+            RemoveStatusEvent.Process(InManager);
         }
     }
 
