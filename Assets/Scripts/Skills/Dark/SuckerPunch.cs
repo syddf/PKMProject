@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class SuckerPunch : DamageSkill
 {
-    public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, out string Reason)
     {
+        Reason = "使用突袭失败了!突袭只能先于对手攻击招式使用!";
         return InManager.IsPokemonUseDamageSkillThisTurn(TargetPokemon);
     }
     public override int GetSkillPriority(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)

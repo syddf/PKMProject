@@ -121,8 +121,9 @@ public class BaseSkill : MonoBehaviour
         return 100;
     }
 
-    public virtual bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public virtual bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, out string Reason)
     {
+        Reason = "";
         return true;
     }
 

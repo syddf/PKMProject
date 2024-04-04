@@ -97,8 +97,9 @@ public class DamageSkill : BaseSkill
 
     }
 
-    public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, out string Reason)
     {
+        Reason = "";
         if(TargetPokemon == null)
         {
             return false;

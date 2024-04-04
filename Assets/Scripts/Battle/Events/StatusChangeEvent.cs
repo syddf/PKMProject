@@ -209,10 +209,14 @@ public class RemovePokemonStatusChangeEvent : EventAnimationPlayer, Event
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
         PlayableDirector MessageDirector = Timelines.MessageAnimation;
-        string Message = ReferencePokemon.GetName() + "因" + RemoveReason + GetRemoveMessageText();
-        TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-        MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);
-        AddAnimation(MessageTimeline);
+        string Desc = GetRemoveMessageText();
+        if(Desc != "")
+        {
+            string Message = ReferencePokemon.GetName() + "因" + RemoveReason + Desc;
+            TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);
+            AddAnimation(MessageTimeline);
+        }
     }
 
     public void Process(BattleManager InManager)

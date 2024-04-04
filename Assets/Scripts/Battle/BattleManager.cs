@@ -262,8 +262,16 @@ public class BattleManager : MonoBehaviour
         {
             TurnEndEvent TurnEnd = new TurnEndEvent(this);
             TurnEnd.Process(this);
-            TurnIndex = TurnIndex + 1;
+            TurnEvents.Add(TurnEnd);
             EventsListHistory.Add(TurnEvents);
+            TurnIndex = TurnIndex + 1;
+        }
+        else
+        {
+            if(EventsListHistory.Count > 0)
+            {
+                EventsListHistory[EventsListHistory.Count - 1].AddRange(TurnEvents);
+            }
         }
         PlayingAnimation = true;
         CurPlayingAnimationEvent = -1;
@@ -327,6 +335,8 @@ public class BattleManager : MonoBehaviour
     {
         BattlePokemonList[0].LoadBasePokemonStats();
         BattlePokemonList[1].LoadBasePokemonStats();
+        PlayerTrainer.BattlePokemons[1].LoadBasePokemonStats();
+        EnemyTrainer.BattlePokemons[1].LoadBasePokemonStats();
         UpdateUI(false);
         BeginSingleBattle(BattlePokemonList[0], BattlePokemonList[1]);
         ProcessEvents(false);
@@ -624,5 +634,32 @@ public class BattleManager : MonoBehaviour
         }
 
         return RemoveStatus;
+    }
+
+    public bool IsPokemonInLastTurn(BattlePokemon TargetPokemon)
+    {
+        if(TurnIndex == 0) return false;
+        List<Event> LastTurnEvents = EventsListHistory[TurnIndex - 1];
+        foreach(var EventIter in LastTurnEvents)
+        {
+            if(EventIter.GetEventType() == EventType.Switch)
+            {
+                SwitchEvent CastedEvent = (SwitchEvent)EventIter;
+                if(CastedEvent.GetInPokemon() == TargetPokemon)
+                {
+                    return true;
+                }
+            }
+            else if(EventIter.GetEventType() == EventType.SwitchAfterDefeated)
+            {
+                SwitchWhenDefeatedEvent CastedEvent = (SwitchWhenDefeatedEvent)EventIter;
+                if(CastedEvent.GetPlayerNewPokemon() == TargetPokemon 
+                || CastedEvent.GetEnemyNewPokemon() == TargetPokemon)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

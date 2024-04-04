@@ -132,7 +132,10 @@ public class BattlePokemon : MonoBehaviour
     public BattlePokemonStat CloneBattlePokemonStats()
     {
         BattlePokemonStat NewStats = PokemonStats;
-        NewStats.StatusChangeList = PokemonStats.StatusChangeList.ToList();
+        if(PokemonStats.StatusChangeList != null)
+        {
+            NewStats.StatusChangeList = PokemonStats.StatusChangeList.ToList();
+        }
         return NewStats;
     }
     public BaseAbility GetAbility() => Ability;

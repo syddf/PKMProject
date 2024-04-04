@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class WillOWisp : StatusSkill
 {
-    public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, out string Reason)
     {
+        Reason = "";
         return TargetPokemon.HasType(EType.Fire) == false;
     }
     public override void ProcessStatusSkillEffect(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)

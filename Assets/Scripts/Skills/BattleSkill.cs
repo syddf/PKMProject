@@ -194,9 +194,9 @@ public class BattleSkill
     {
         return ReferenceBaseSkill.CanBeProtected();
     }
-    public bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, out string Reason)
     {
-        return ReferenceBaseSkill.JudgeIsEffective(InManager, SourcePokemon, TargetPokemon);
+        return ReferenceBaseSkill.JudgeIsEffective(InManager, SourcePokemon, TargetPokemon, out Reason);
     }
 
     public bool HasHealEffect(BattleManager InManager)

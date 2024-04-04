@@ -11,8 +11,9 @@ public class Protect : StatusSkill
         setStatChangeEvent.Process(InManager);
     }
 
-    public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, out string Reason)
     {
+        Reason = "";
         int FailedNumber = 1;
         int CurrentTurn = InManager.GetCurrentTurnIndex();
 

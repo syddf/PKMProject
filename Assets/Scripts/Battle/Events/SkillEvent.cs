@@ -168,11 +168,7 @@ public class SkillEvent : EventAnimationPlayer, Event
                                 }
                                 else if(SkillMeta.NoEffectReason != null && SkillMeta.NoEffectReason != "")
                                 {
-                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", SkillMeta.ReferencePokemon.GetName() + SkillMeta.NoEffectReason);
-                                }
-                                else if(Skill.GetSkillName() == "突袭")
-                                {
-                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "但是失败了!");
+                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", SourcePokemon.GetName() + SkillMeta.NoEffectReason);
                                 }
                                 else
                                 {
@@ -199,9 +195,19 @@ public class SkillEvent : EventAnimationPlayer, Event
                             {
                                 RootScript.SourcePokemonTransform.position = SourcePokemon.GetPokemonModel().GetComponent<PokemonReceiver>().BodyTransform.transform.position;
                             }
+                            if(RootScript.SourcePokemonTouchTransform != null)
+                            {
+                                RootScript.SourcePokemonTouchTransform.position = SourcePokemon.GetPokemonModel().GetComponent<PokemonReceiver>().TouchHitTransform.transform.position;
+                            }
                             if(SkillMetas[0].ReferencePokemon && RootScript.TargetPokemonTouchTransform != null)
                             {
                                 RootScript.TargetPokemonTouchTransform.position = SkillMetas[0].ReferencePokemon.GetPokemonModel().GetComponent<PokemonReceiver>().TouchHitTransform.transform.position;
+                            }
+                            if(SkillMetas[0].ReferencePokemon && RootScript.TargetPokemonFloorTransform != null)
+                            {
+                                Vector3 position = SkillMetas[0].ReferencePokemon.GetPokemonModel().transform.position;
+                                position.y = 0;
+                                RootScript.TargetPokemonFloorTransform.position = position;
                             }
                             AutoScaler[] Scalers = SkillRootObject.GetComponentsInChildren<AutoScaler>();
                             foreach(var Scaler in Scalers)
@@ -348,7 +354,7 @@ public class SkillEvent : EventAnimationPlayer, Event
                     {
                         SkillMetas[TargetIndex].NoEffect = true;
                     }
-                    bool Effective = Skill.JudgeIsEffective(InManager, SourcePokemon, CurrentProcessTargetPokemon);
+                    bool Effective = Skill.JudgeIsEffective(InManager, SourcePokemon, CurrentProcessTargetPokemon, out SkillMetas[TargetIndex].NoEffectReason);
                     if(!Effective)
                     {
                         SkillMetas[TargetIndex].NoEffect = true;
