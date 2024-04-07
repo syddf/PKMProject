@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class PokemonTrainer : MonoBehaviour
 {
+    public string TrainerName;
     public BattlePokemon[] BattlePokemons = new BattlePokemon[6];
-
+    public bool IsPlayer;
+    public BaseTrainerSkill TrainerSkill;
     public int GetRemainPokemonNum()
     {
         int Result = 0;

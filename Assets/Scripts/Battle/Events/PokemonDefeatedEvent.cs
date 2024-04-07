@@ -42,7 +42,7 @@ public class PokemonDefeatedEvent : EventAnimationPlayer, Event
         AddAnimation(DefeatedTimeline);
 
         TimelineAnimation MessageTimeline = new TimelineAnimation(Timelines.MessageAnimation);
-        MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "被击败了!");
+        MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "被击败了！");
         AddAnimation(MessageTimeline);
     }
 

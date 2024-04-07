@@ -11,13 +11,15 @@ public class StatChangeEvent : EventAnimationPlayer, Event
     private bool ShouldChange;
     private bool ReverseChangeLevel;
     private bool ChangedSuccessed = false;
-    public StatChangeEvent(BattlePokemon InTargetPokemon, string InChangedStatName, int InChangedStatLevel)
+    private string Reason = "";
+    public StatChangeEvent(BattlePokemon InTargetPokemon, string InChangedStatName, int InChangedStatLevel, string InReason = "")
     {
         TargetPokemon = InTargetPokemon;
         ChangedStatName = InChangedStatName;
         ChangedStatLevel = InChangedStatLevel;
         ShouldChange = true;
         ReverseChangeLevel = false;
+        Reason = InReason;
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)
@@ -55,8 +57,12 @@ public class StatChangeEvent : EventAnimationPlayer, Event
         string PokemonName = TargetPokemon.GetName();
         string StatName = GetStatName(ChangedStatName);
         string Description = GetChangeDescription(ChangedStatLevel);
-
-        return PokemonName + "的" + StatName + Description + "!";
+        string ReasonString = "因" + Reason;
+        if(Reason == "")
+        {
+            ReasonString = "";   
+        }
+        return PokemonName + "的" + StatName + ReasonString + Description + "！";
     }
 
     public override void InitAnimation()
@@ -67,7 +73,7 @@ public class StatChangeEvent : EventAnimationPlayer, Event
             PlayableDirector MessageDirector = Timelines.MessageAnimation;
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
             string Desc = GetChangeLevel() > 0 ? "提高" : "降低";
-            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "的" + GetStatName(ChangedStatName) + "无法" + Desc + "!");
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "的" + GetStatName(ChangedStatName) + "无法" + Desc + "！");
             AddAnimation(MessageTimeline);
             return;
         }
@@ -91,7 +97,7 @@ public class StatChangeEvent : EventAnimationPlayer, Event
         {
             PlayableDirector MessageDirector = Timelines.MessageAnimation;
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "能力不能再进一步变化了!");
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "能力不能再进一步变化了！");
             AddAnimation(MessageTimeline);
         }
     }

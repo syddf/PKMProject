@@ -9,6 +9,7 @@ public class SetBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
     private BattleManager ReferenceBattleManager;
     private int StatusChangeTurn;
     private bool HasLimitedTime;
+    private BattleFieldStatus ReferenceFieldStatus;
     public SetBattleFieldStatusChangeEvent(BattleManager InBattleManager, EBattleFieldStatus InStatusChangeType, int InStatusChangeTurn, bool InHasLimitedTime, bool InIsPlayerField)
     {
         ReferenceBattleManager = InBattleManager;  
@@ -33,6 +34,10 @@ public class SetBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
         PlayableDirector MessageDirector = Timelines.MessageAnimation;
+        if(ReferenceFieldStatus.BaseStatusChange != null)
+        {
+            ReferenceFieldStatus.BaseStatusChange.OnSetAnimation();
+        }
         string Message = "己方";
         if(IsPlayerField == false)
         {
@@ -48,7 +53,7 @@ public class SetBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
     {
         if(!ShouldProcess(InManager)) return;
         InManager.TranslateTimePoint(ETimePoint.BeforeSetBattleFieldStatusChange, this);
-        InManager.AddBattleFieldStatus(IsPlayerField, StatusChangeType, HasLimitedTime, StatusChangeTurn);
+        ReferenceFieldStatus = InManager.AddBattleFieldStatus(IsPlayerField, StatusChangeType, HasLimitedTime, StatusChangeTurn);
         InManager.AddAnimationEvent(this);
         InManager.TranslateTimePoint(ETimePoint.AfterSetBattleFieldStatusChange, this);
     }
@@ -66,6 +71,7 @@ public class RemoveBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
     private BattleManager ReferenceBattleManager;
     private string RemoveReason;
     private bool IsPlayerField;
+    private BattleFieldStatus ReferenceFieldStatus;
     public RemoveBattleFieldStatusChangeEvent(BattleManager InBattleManager, EBattleFieldStatus InStatusChangeType, string InRemoveReason, bool InIsPlayerField)
     {
         ReferenceBattleManager = InBattleManager;
@@ -84,13 +90,17 @@ public class RemoveBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
         PlayableDirector MessageDirector = Timelines.MessageAnimation;
+        if(ReferenceFieldStatus.BaseStatusChange != null)
+        {
+            ReferenceFieldStatus.BaseStatusChange.OnRemoveAnimation();
+        }
         string Message = "己方场上的";
         if(IsPlayerField == false)
         {
             Message = "敌方场上的";
         }        
         string FieldName = BattleFieldStatus.GetFieldName(StatusChangeType);
-        Message = Message + FieldName + "消失了!";
+        Message = Message + FieldName + "消失了！";
         TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
         MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);
         AddAnimation(MessageTimeline);
@@ -99,7 +109,7 @@ public class RemoveBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
     public void Process(BattleManager InManager)
     {
         if(!ShouldProcess(InManager)) return;
-        InManager.RemoveBattleFieldStatus(IsPlayerField, StatusChangeType);
+        ReferenceFieldStatus = InManager.RemoveBattleFieldStatus(IsPlayerField, StatusChangeType);
         InManager.AddAnimationEvent(this);
     }
 

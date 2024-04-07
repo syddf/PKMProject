@@ -53,14 +53,14 @@ public class HealEvent : EventAnimationPlayer, Event
 
             PlayableDirector MessageDirector = Timelines.MessageAnimation;
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", ReferencePokemon.GetName() + "因为" + HealReason + "回复了生命值!");
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", ReferencePokemon.GetName() + "因为" + HealReason + "回复了生命值！");
             AddAnimation(MessageTimeline);        
         }
         else
         {
             PlayableDirector MessageDirector = Timelines.MessageAnimation;
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", ReferencePokemon.GetName() + "无法回复生命值!");
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", ReferencePokemon.GetName() + "无法回复生命值！");
             AddAnimation(MessageTimeline);
         }
     }

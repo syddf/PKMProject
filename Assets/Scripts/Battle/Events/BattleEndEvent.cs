@@ -24,11 +24,11 @@ public class BattleEndEvent : EventAnimationPlayer, Event
         TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
         if(Win)
         {
-            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "你战胜了对手!");
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "你战胜了对手！");
         }
         else
         {
-            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "你被击败了!");
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "你被击败了！");
         }
         AddAnimation(MessageTimeline);
     }

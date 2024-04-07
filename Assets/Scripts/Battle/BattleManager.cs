@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using System.Net.WebSockets;
 using UnityEngine;
 
 public enum ETarget
@@ -126,19 +127,22 @@ public class BattleManager : MonoBehaviour
     {
         if(InPokemon == null)
             return;
-        for(int Index = 0; Index < Stats.StatusChangeList.Count; Index++)
+        if(Stats.StatusChangeList != null)
         {
-            if(StatusChange.IsStatusChange(Stats.StatusChangeList[Index].StatusChangeType))
+            for(int Index = 0; Index < Stats.StatusChangeList.Count; Index++)
             {
-                if(InPokemon.GetIsEnemy())
+                if(StatusChange.IsStatusChange(Stats.StatusChangeList[Index].StatusChangeType))
                 {
-                    BattleUIManager.SetEnemyStateChange(Stats.StatusChangeList[Index].StatusChangeType);
+                    if(InPokemon.GetIsEnemy())
+                    {
+                        BattleUIManager.SetEnemyStateChange(Stats.StatusChangeList[Index].StatusChangeType);
+                    }
+                    else
+                    {
+                        BattleUIManager.SetPlayerStateChange(Stats.StatusChangeList[Index].StatusChangeType);
+                    }
+                    break;
                 }
-                else
-                {
-                    BattleUIManager.SetPlayerStateChange(Stats.StatusChangeList[Index].StatusChangeType);
-                }
-                break;
             }
         }
         if(InPokemon.GetIsEnemy())
@@ -242,6 +246,30 @@ public class BattleManager : MonoBehaviour
                 EventIter.Process(this);
             }
         }
+
+        List<BattleFieldStatus> FieldStatusList =  this.QueryBattleFieldStatusWhenTimeChange(SourceEvent);
+        foreach(var FieldStatus in FieldStatusList)
+        {
+            List<Event> EventsToProcess = FieldStatus.BaseStatusChange.Trigger(this, SourceEvent);
+            foreach(var EventIter in EventsToProcess)
+            {
+                EventIter.Process(this);
+            }
+        }
+
+        if(PlayerTrainer.TrainerSkill && PlayerTrainer.TrainerSkill.ShouldTrigger(CurrentTimePoint, SourceEvent))
+        {
+            List<Event> EventsToProcess = PlayerTrainer.TrainerSkill.Trigger(this, SourceEvent);
+            TrainerSkillTriggerEvent TrainerSkillEvent = new TrainerSkillTriggerEvent(EventsToProcess, PlayerTrainer.TrainerSkill);
+            TrainerSkillEvent.Process(this);
+        }
+
+        if(EnemyTrainer.TrainerSkill && EnemyTrainer.TrainerSkill.ShouldTrigger(CurrentTimePoint, SourceEvent))
+        {
+            List<Event> EventsToProcess = EnemyTrainer.TrainerSkill.Trigger(this, SourceEvent);
+            TrainerSkillTriggerEvent TrainerSkillEvent = new TrainerSkillTriggerEvent(EventsToProcess, EnemyTrainer.TrainerSkill);
+            TrainerSkillEvent.Process(this);
+        }
     }
 
     public void ProcessEvents(bool NewTurn)
@@ -315,6 +343,22 @@ public class BattleManager : MonoBehaviour
             }            
         }
         return BaseStatusChangesToTrigger;
+    }
+
+    public List<BattleFieldStatus> QueryBattleFieldStatusWhenTimeChange(Event SourceEvent)
+    {
+        List<BattleFieldStatus> Result = new List<BattleFieldStatus>();
+        foreach(var StatusList  in BattleFiledStatusLists)
+        {
+            foreach(var Status in StatusList)
+            {
+                if(Status.BaseStatusChange != null && Status.BaseStatusChange.ShouldTrigger(CurrentTimePoint, SourceEvent))
+                {
+                    Result.Add(Status);
+                }
+            }
+        }
+        return Result;
     }
 
     public List<BattleItem> QueryItemsWhenTimeChange(Event SourceEvent)
@@ -591,26 +635,30 @@ public class BattleManager : MonoBehaviour
         return false;
     }
 
-    public void AddBattleFieldStatus(bool Player, EBattleFieldStatus StatusType, bool HasLimitedTime, int InTime)
+    public BattleFieldStatus AddBattleFieldStatus(bool Player, EBattleFieldStatus StatusType, bool HasLimitedTime, int InTime)
     {
         int Index = 0;
         if(!Player) Index = 1;
-        BattleFieldStatus NewStatus = new BattleFieldStatus(StatusType, HasLimitedTime, InTime);
+        BattleFieldStatus NewStatus = new BattleFieldStatus(StatusType, HasLimitedTime, InTime, Player);
         BattleFiledStatusLists[Index].Add(NewStatus);
+        return NewStatus;
     }
 
-    public void RemoveBattleFieldStatus(bool Player, EBattleFieldStatus StatusType)
+    public BattleFieldStatus RemoveBattleFieldStatus(bool Player, EBattleFieldStatus StatusType)
     {
         int Index = 0;
         if(!Player) Index = 1;
+        BattleFieldStatus Tmp = new BattleFieldStatus(EBattleFieldStatus.None, false, 0, false);
         for(int StatusIndex = 0; StatusIndex < BattleFiledStatusLists[Index].Count; StatusIndex++)
         {
             if(BattleFiledStatusLists[Index][StatusIndex].StatusType == StatusType)
             {
+                Tmp = BattleFiledStatusLists[Index][StatusIndex];
                 BattleFiledStatusLists[Index].RemoveAt(StatusIndex);
-                return;
+                return Tmp;
             }
         }
+        return Tmp;
     }
 
     public List<EBattleFieldStatus> ReduceBattleFieldTime(bool Player)

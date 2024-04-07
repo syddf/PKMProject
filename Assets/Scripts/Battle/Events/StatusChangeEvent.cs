@@ -33,39 +33,39 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
     {
         if(StatusChangeType == EStatusChange.ThroatChop)
         {
-            return "痛苦得难以发出声音!";
+            return "痛苦得难以发出声音！";
         }
         if(StatusChangeType == EStatusChange.Protect)
         {
-            return "保护了自己!";
+            return "保护了自己！";
         }
         if(StatusChangeType == EStatusChange.Poison)
         {
-            return "中毒了!";
+            return "中毒了！";
         }
         if(StatusChangeType == EStatusChange.Paralysis)
         {
-            return "麻痹了!";
+            return "麻痹了！";
         }
         if(StatusChangeType == EStatusChange.ForbidHeal)
         {
-            return "陷入无法回复的状态了!";
+            return "陷入无法回复的状态了！";
         }
         if(StatusChangeType == EStatusChange.Flinch)
         {
-            return "畏缩了!";
+            return "畏缩了！";
         }
         if(StatusChangeType == EStatusChange.Burn)
         {
-            return "被烧伤了!";
+            return "被烧伤了！";
         }
         if(StatusChangeType == EStatusChange.Frostbite)
         {
-            return "被冻伤了!";
+            return "被冻伤了！";
         }
         if(StatusChangeType == EStatusChange.Drowsy)
         {
-            return "感觉到有点困倦了!";
+            return "感觉到有点困倦了！";
         }
         return "";
     }
@@ -179,23 +179,23 @@ public class RemovePokemonStatusChangeEvent : EventAnimationPlayer, Event
     {
         if(StatusChangeType == EStatusChange.Poison)
         {
-            return "解除了中毒!";
+            return "解除了中毒！";
         }
         if(StatusChangeType == EStatusChange.Paralysis)
         {
-            return "解除了麻痹!";
+            return "解除了麻痹！";
         }
         if(StatusChangeType == EStatusChange.Burn)
         {
-            return "解除了烧伤!";
+            return "解除了烧伤！";
         }
         if(StatusChangeType == EStatusChange.Frostbite)
         {
-            return "解除了冻伤!";
+            return "解除了冻伤！";
         }
         if(StatusChangeType == EStatusChange.Drowsy)
         {
-            return "解除了瞌睡!";
+            return "解除了瞌睡！";
         }
         return "";
     }

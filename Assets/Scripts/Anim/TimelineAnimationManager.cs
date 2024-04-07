@@ -37,4 +37,5 @@ public class TimelineAnimationManager : MonoBehaviour
     public PlayableDirector BurnStatusAnimation;
     public PlayableDirector FrostbiteStatusAnimation;
     public PlayableDirector DrowsyStatusAnimation;
+    public PlayableDirector TrainerSkillAnimation;
 }

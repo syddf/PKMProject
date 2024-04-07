@@ -5,6 +5,44 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Playables;
 
+
+public class MessageAnimationFakeEvent : EventAnimationPlayer, Event
+{
+    private List<string> MessageList;
+    public MessageAnimationFakeEvent(List<string> InMessageList)
+    {
+        MessageList = InMessageList;
+    }
+
+    public bool ShouldProcess(BattleManager InBattleManager)
+    {
+        if(InBattleManager.GetBattleEnd() == true) return false;
+        return true;
+    }
+
+    public override void InitAnimation()
+    {
+        TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        PlayableDirector MessageDirector = Timelines.MessageAnimation;
+        foreach(var MessageString in MessageList)
+        {
+            TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageString);
+            AddAnimation(MessageTimeline);
+        }
+    }
+
+    public void Process(BattleManager InManager)
+    {
+        if(!ShouldProcess(InManager)) return;
+        InManager.AddAnimationEvent(this);
+    }
+
+    public EventType GetEventType()
+    {
+        return EventType.Fake;
+    }
+}
 public class StatusChangeAnimationFakeEvent : EventAnimationPlayer, Event
 {
     private BattlePokemon ReferencePokemon;

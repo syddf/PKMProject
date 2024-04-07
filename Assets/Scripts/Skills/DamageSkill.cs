@@ -52,6 +52,24 @@ public class DamageSkill : BaseSkill
         {
             Result = TargetPokemon.GetAbility().ChangeSkillPower(InManager, this, SourcePokemon, TargetPokemon, Result);
         }
+
+        PokemonTrainer PlayerTrainer = InManager.GetPlayerTrainer();
+        PokemonTrainer EnemyTrainer = InManager.GetEnemyTrainer();
+
+        double TrainerFactor = 1.0;
+        if(SourcePokemon.GetIsEnemy())
+        {
+            TrainerFactor = TrainerFactor * EnemyTrainer.TrainerSkill.GetPowerFactorWhenAttack(InManager, SourcePokemon, TargetPokemon, this);
+            TrainerFactor = TrainerFactor * PlayerTrainer.TrainerSkill.GetPowerFactorWhenDefense(InManager, SourcePokemon, TargetPokemon, this);
+        }
+        else
+        {
+            TrainerFactor = TrainerFactor * EnemyTrainer.TrainerSkill.GetPowerFactorWhenDefense(InManager, SourcePokemon, TargetPokemon, this);
+            TrainerFactor = TrainerFactor * PlayerTrainer.TrainerSkill.GetPowerFactorWhenAttack(InManager, SourcePokemon, TargetPokemon, this);
+        }
+
+        Result = Result * TrainerFactor;
+
         return (int)Math.Floor(Result);
     }
 

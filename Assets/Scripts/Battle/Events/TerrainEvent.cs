@@ -70,7 +70,7 @@ public class TerrainChangeEvent : EventAnimationPlayer, Event
 
                 PlayableDirector MessageDirector = Timelines.MessageAnimation;
                 TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-                MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "场地复原了!");
+                MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "场地复原了！");
                 AddAnimation(MessageTimeline);      
             }
             else
@@ -83,7 +83,7 @@ public class TerrainChangeEvent : EventAnimationPlayer, Event
 
                 PlayableDirector MessageDirector = Timelines.MessageAnimation;
                 TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-                MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "场地变成了" + GetTerrainTypeName() + "!");
+                MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "场地变成了" + GetTerrainTypeName() + "！");
                 AddAnimation(MessageTimeline);   
             }
         }
@@ -91,7 +91,7 @@ public class TerrainChangeEvent : EventAnimationPlayer, Event
         {
             PlayableDirector MessageDirector = Timelines.MessageAnimation;
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "切换" + GetTerrainTypeName() + "失败了!");
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "切换" + GetTerrainTypeName() + "失败了！");
             AddAnimation(MessageTimeline);            
         }
     }

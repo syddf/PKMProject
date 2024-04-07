@@ -46,14 +46,14 @@ public class UseSkillMessageEvent : EventAnimationPlayer, Event
         if(SkillForbidden)
         {
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            string MessageText = SourcePokemon.GetName() + "因" + ForbiddenReason + "无法使用" + Skill.GetSkillName()+ "!";
+            string MessageText = SourcePokemon.GetName() + "因" + ForbiddenReason + "无法使用" + Skill.GetSkillName()+ "！";
             MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
             AddAnimation(MessageTimeline);
         }
         else
         {
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            string MessageText = SourcePokemon.GetName() + "使用了" + Skill.GetSkillName() + "!";
+            string MessageText = SourcePokemon.GetName() + "使用了" + Skill.GetSkillName() + "！";
             MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
             AddAnimation(MessageTimeline);
         }
@@ -164,7 +164,7 @@ public class SkillEvent : EventAnimationPlayer, Event
                                 TimelineAnimation NoEffectMessage = new TimelineAnimation(MessageDirector);
                                 if(SkillMeta.ReferencePokemon.IsDead())
                                 {
-                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "但是" + SkillMeta.ReferencePokemon.GetName() + "已经不在场上了...");
+                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "但是" + SkillMeta.ReferencePokemon.GetName() + "已经不在场上了！");
                                 }
                                 else if(SkillMeta.NoEffectReason != null && SkillMeta.NoEffectReason != "")
                                 {
@@ -172,14 +172,14 @@ public class SkillEvent : EventAnimationPlayer, Event
                                 }
                                 else
                                 {
-                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这对" + SkillMeta.ReferencePokemon.GetName() + "似乎没有效果...");
+                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这对" + SkillMeta.ReferencePokemon.GetName() + "似乎没有效果！");
                                 }
                                 AddAnimation(NoEffectMessage);
                             }
                             else
                             {
                                 TimelineAnimation NoEffectMessage = new TimelineAnimation(MessageDirector);
-                                NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "但是失败了!");
+                                NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "但是失败了！");
                                 AddAnimation(NoEffectMessage);
                             }
                         }
@@ -254,14 +254,14 @@ public class SkillEvent : EventAnimationPlayer, Event
                                     if(SkillMeta.CT)
                                     {
                                         TimelineAnimation CTMessage = new TimelineAnimation(MessageDirector);
-                                        CTMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "击中了要害!");
+                                        CTMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "击中了要害！");
                                         AddAnimation(CTMessage);
                                     }
                                     if(SkillMeta.EffectiveFactor == 0.5)
                                     {
                                         SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Effective", "Not");
                                         TimelineAnimation EffectiveMessage = new TimelineAnimation(MessageDirector);
-                                        EffectiveMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这不是很有效...");
+                                        EffectiveMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这不是很有效！");
                                         AddAnimation(EffectiveMessage);
                                     }
                                     else if(SkillMeta.EffectiveFactor == 1.0)
@@ -272,7 +272,7 @@ public class SkillEvent : EventAnimationPlayer, Event
                                     {
                                         SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Effective", "Super");
                                         TimelineAnimation EffectiveMessage = new TimelineAnimation(MessageDirector);
-                                        EffectiveMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这非常有效!");
+                                        EffectiveMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这非常有效！");
                                         AddAnimation(EffectiveMessage);                            
                                     }
                                 }
@@ -282,13 +282,13 @@ public class SkillEvent : EventAnimationPlayer, Event
                                 if(HitIndex == 0)
                                 {
                                     TimelineAnimation MissMessage = new TimelineAnimation(MessageDirector);
-                                    MissMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "没有命中目标!");
+                                    MissMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "没有命中目标！");
                                     AddAnimation(MissMessage); 
                                 }
                                 else
                                 {
                                     TimelineAnimation MissMessage = new TimelineAnimation(MessageDirector);
-                                    MissMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "命中了" + HitIndex.ToString() + "次!");
+                                    MissMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "命中了" + HitIndex.ToString() + "次！");
                                     AddAnimation(MissMessage); 
                                 }
                             }
@@ -427,6 +427,7 @@ public class SkillEvent : EventAnimationPlayer, Event
                             Skill.AfterSkillEffectEvent(InManager, SourcePokemon, CurrentProcessTargetPokemon);
                         }
                     }
+                    InManager.TranslateTimePoint(ETimePoint.AfterSkillEffect, this);
                 }
                 else
                 {

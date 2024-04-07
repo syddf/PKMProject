@@ -80,7 +80,7 @@ public class KnockOffItemEvent : EventAnimationPlayer, Event
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
         PlayableDirector MessageDirector = Timelines.MessageAnimation;
         TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-        MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "的" + TargetPokemon.GetBattleItem().GetItemName() + "被拍落了!");
+        MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "的" + TargetPokemon.GetBattleItem().GetItemName() + "被拍落了！");
         AddAnimation(MessageTimeline);
     }
 

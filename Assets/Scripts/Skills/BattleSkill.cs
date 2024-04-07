@@ -189,7 +189,7 @@ public class BattleSkill
     {
         ReferenceBaseSkill.AfterSkillEffectEvent(InManager, SourcePokemon, TargetPokemon);
     }
-
+    public ESkillClass GetSkillClass() => ReferenceBaseSkill.GetSkillClass();
     public bool CanBeProtected()
     {
         return ReferenceBaseSkill.CanBeProtected();

@@ -9,6 +9,6 @@ public class MessageReceiver : ParameterizedSignalReceiver
     {
         string Text = InSignal.GetParamValue("MessageText");
         MessageAnim MessageScript = this.gameObject.GetComponent<MessageAnim>();
-        MessageScript.MessageText = " " + Text;
+        MessageScript.MessageText = Text;
     }
 }

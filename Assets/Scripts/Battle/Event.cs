@@ -54,6 +54,7 @@ public enum EventType
     StatChange,
     AbilityTrigger,
     ItemTrigger,
+    TrainerSkillTrigger,
     SwitchAfterDefeated,
     BattleEnd,
     TerrainChange,

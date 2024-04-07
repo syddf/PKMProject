@@ -43,7 +43,7 @@ public class DamageEvent : EventAnimationPlayer, Event
         AddAnimation(DamageAnimation);      
         PlayableDirector MessageDirector = Timelines.MessageAnimation;
         TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-        MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", ReferencePokemon.GetName() + "因为" + DamageReason + "受到了伤害!");
+        MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", ReferencePokemon.GetName() + "因为" + DamageReason + "受到了伤害！");
         AddAnimation(MessageTimeline);    
     }
 
