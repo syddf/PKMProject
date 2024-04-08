@@ -8,10 +8,22 @@ public class RotateAroundTarget : MonoBehaviour
 
     private CinemachineOrbitalTransposer orbitalTransposer;
 
+    public Transform OriginCamera;
+    private bool Reset;
+    void OnEnable()
+    {
+        this.transform.position = OriginCamera.position;
+        this.transform.rotation = OriginCamera.rotation;
+        this.transform.localScale = OriginCamera.localScale;
+        orbitalTransposer.m_XAxis.Value = 130.0f;
+    }
     void Start()
     {
         // 获取CinemachineOrbitalTransposer组件
         orbitalTransposer = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineOrbitalTransposer>();
+        this.transform.position = OriginCamera.position;
+        this.transform.rotation = OriginCamera.rotation;
+        this.transform.localScale = OriginCamera.localScale;
     }
 
     void Update()

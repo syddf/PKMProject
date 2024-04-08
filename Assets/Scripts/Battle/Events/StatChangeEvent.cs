@@ -25,6 +25,7 @@ public class StatChangeEvent : EventAnimationPlayer, Event
     public bool ShouldProcess(BattleManager InBattleManager)
     {
         if(InBattleManager.GetBattleEnd() == true) return false;
+        if(TargetPokemon.IsDead() == true) return false;
         return true;
     }
 

@@ -268,6 +268,7 @@ public class BattleSkillMetaInfo
         if(SkillName == "闪焰高歌") return true;
         if(SkillName == "魅诱之声") return true;
         if(SkillName == "精神噪音") return true;
+        if(SkillName == "岩石音爆") return true;
         return false;
     }
 }
