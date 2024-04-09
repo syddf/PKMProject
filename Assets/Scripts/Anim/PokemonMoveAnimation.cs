@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PokemonMoveAnimation : MonoBehaviour
 {
-    public float Duration = 0.5f;
-    public float Speed = 1.0f;
+    public float Duration = 0.2f;
+    public float Speed = 0.05f;
     private bool Play = false;
     private Vector3 Origin;
     private Vector3 Prev;

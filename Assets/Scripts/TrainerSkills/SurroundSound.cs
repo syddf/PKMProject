@@ -6,6 +6,10 @@ public class SurroundSound : BaseTrainerSkill
 {
     private int SoundCount = 0;
     
+    public void Start()
+    {
+        SoundCount = 0;
+    }
     public override double GetPowerFactorWhenAttack(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, DamageSkill InSkill)
     {
         if(SourcePokemon.GetIsEnemy() != ReferenceTrainer.IsPlayer && BattleSkillMetaInfo.IsSoundSkill(InSkill.GetSkillName()))

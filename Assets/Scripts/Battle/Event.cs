@@ -116,7 +116,7 @@ public class TimelineAnimation : EventAnimation
 
     private List<TimelineTrackParameterCache> ParamsCache = new List<TimelineTrackParameterCache>();
     private List<TimelineTrackSetCache> SignalTrackSetCache = new List<TimelineTrackSetCache>();
-       private List<TimelineTrackSetCache> ActivationTrackSetCache = new List<TimelineTrackSetCache>();
+    private List<TimelineTrackSetCache> ActivationTrackSetCache = new List<TimelineTrackSetCache>();
  
     public TimelineAnimation(PlayableDirector InDirector)
     {

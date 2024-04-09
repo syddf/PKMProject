@@ -21,7 +21,7 @@ public enum EType
 {
     None = -1,
     Normal = 0,
-    Fight,
+    Fighting,
     Flying,
     Poison,
     Ground,
@@ -73,7 +73,7 @@ public class BaseSkill : MonoBehaviour
     [SerializeField]
     protected int Priority = 0;
     [SerializeField]
-    protected PlayableDirector SkillAnimation;
+    public PlayableDirector SkillAnimation;
     public ESkillClass GetSkillClass() => SkillClass;
     public int GetPower() => Power;
     public int GetPP() => PP;

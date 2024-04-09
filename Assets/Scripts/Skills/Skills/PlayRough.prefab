@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7387724155322221569
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7387724155322221574}
+  - component: {fileID: 7387724155322221575}
+  m_Layer: 0
+  m_Name: PlayRough
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7387724155322221574
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7387724155322221569}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7387724155322221575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7387724155322221569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a13c76972f08924aaeab1d311dd21d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 90
+  PP: 16
+  Accuracy: 90
+  SkillClass: 0
+  SkillType: 17
+  SkillRange: 1
+  SkillName: "\u5B09\u95F9"
+  SkillDescription: "\u4E0E\u5BF9\u624B\u5B09\u95F9\u5E76\u653B\u51FB\u3002\u6709\u65F6\u4F1A\u964D\u4F4E\u5BF9\u624B\u7684\u653B\u51FB\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  SkillAnimation: {fileID: 5724601710273965432, guid: d872eb044e29c86459828f33cb5836c4, type: 3}

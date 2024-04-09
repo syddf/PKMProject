@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6630153504273135044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6630153504273135047}
+  - component: {fileID: 6630153504273135046}
+  m_Layer: 0
+  m_Name: BulkUp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6630153504273135047
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6630153504273135044}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6630153504273135046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6630153504273135044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9f029cda273c3c47a645b25e90cf47f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 0
+  PP: 20
+  Accuracy: 0
+  SkillClass: 2
+  SkillType: 1
+  SkillRange: 0
+  SkillName: "\u5065\u7F8E"
+  SkillDescription: "\u4F7F\u51FA\u5168\u8EAB\u529B\u6C14\u7EF7\u7D27\u808C\u8089\uFF0C\u4ECE\u800C\u63D0\u9AD8\u81EA\u5DF1\u7684\u653B\u51FB\u548C\u9632\u5FA1\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  SkillAnimation: {fileID: 4334886135818862959, guid: ac1ebc8d13ae4f64da8f66c4c2ce490e, type: 3}

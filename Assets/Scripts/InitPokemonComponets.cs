@@ -11,6 +11,8 @@ public class InitPokemonComponets : MonoBehaviour
     public Vector3 BoundsSize;
     public List<GameObject> HideWhenTouched = new List<GameObject>();
     private Animator Anim;
+    public Transform CenterPosition;
+    public Transform TouchHitPosition;
     // Start is called before the first frame update
     void Start()
     {

@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3288487058095950002
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3288487058095950013}
+  - component: {fileID: 3288487058095950012}
+  m_Layer: 0
+  m_Name: LightScreen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3288487058095950013
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3288487058095950002}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3288487058095950012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3288487058095950002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 575f496281003274cb4be8eab6ca41fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 0
+  PP: 20
+  Accuracy: 0
+  SkillClass: 2
+  SkillType: 13
+  SkillRange: 0
+  SkillName: "\u5149\u5899"
+  SkillDescription: "\u5229\u7528\u795E\u5947\u7684\u5899\u58C1\uFF0C\u5728\uFF15\u56DE\u5408\u5185\u51CF\u5F31\u4ECE\u5BF9\u624B\u90A3\u91CC\u53D7\u5230\u7684\u7279\u6B8A\u653B\u51FB\u7684\u4F24\u5BB3\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  SkillAnimation: {fileID: 4677523299961606794, guid: 40b2a25ea201ab24aa3f822563f86671, type: 3}

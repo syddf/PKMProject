@@ -158,6 +158,14 @@ public class BattleManager : MonoBehaviour
     {
         if(InPokemon == null)
             return;
+        if(InPokemon.GetIsEnemy())
+        {
+            BattleUIManager.SetEnemyStateChange(EStatusChange.None);
+        }
+        else
+        {
+            BattleUIManager.SetPlayerStateChange(EStatusChange.None);
+        }
         for(int Index = 0; Index < Stats.StatusChangeList.Count; Index++)
         {
             if(StatusChange.IsStatusChange(Stats.StatusChangeList[Index].StatusChangeType))
@@ -377,10 +385,9 @@ public class BattleManager : MonoBehaviour
 
     public void Test()
     {
-        BattlePokemonList[0].LoadBasePokemonStats();
-        BattlePokemonList[1].LoadBasePokemonStats();
-        PlayerTrainer.BattlePokemons[1].LoadBasePokemonStats();
-        EnemyTrainer.BattlePokemons[1].LoadBasePokemonStats();
+        this.GetComponent<BattleInitializer>().InitBattleResources(PlayerTrainer, EnemyTrainer);
+        BattlePokemonList[0] = PlayerTrainer.BattlePokemons[0];
+        BattlePokemonList[1] = EnemyTrainer.BattlePokemons[0];
         UpdateUI(false);
         BeginSingleBattle(BattlePokemonList[0], BattlePokemonList[1]);
         ProcessEvents(false);
@@ -402,7 +409,7 @@ public class BattleManager : MonoBehaviour
         }
         EventsList.Add(new SkillEvent(this, UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetPokemon));
         EnemyAI NewEnemyAI = new EnemyAI(Opposites[0], this, EnemyTrainer);
-        NewEnemyAI.GenerateEnemyEvent(EventsList);
+        NewEnemyAI.GenerateEnemyEvent(EventsList, this, EventsList[EventsList.Count - 1]);
         ProcessEvents(true);
     }
 
@@ -519,7 +526,7 @@ public class BattleManager : MonoBehaviour
         {
             EventsList.Add(new SwitchEvent(this, BattlePokemonList[0], InPokemon));
             EnemyAI NewEnemyAI = new EnemyAI(BattlePokemonList[1], this, EnemyTrainer);
-            NewEnemyAI.GenerateEnemyEvent(EventsList);
+            NewEnemyAI.GenerateEnemyEvent(EventsList, this, EventsList[EventsList.Count - 1]);
             ProcessEvents(true);
         }
     }

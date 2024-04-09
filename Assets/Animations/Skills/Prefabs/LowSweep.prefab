@@ -19434,7 +19434,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7428577243634679323
 Transform:
   m_ObjectHideFlags: 0
@@ -19466,6 +19466,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SourcePokemonTransform: {fileID: 7428577244566145337}
   TargetPokemonTransform: {fileID: 7428577243927381690}
+  TargetPokemonTouchTransform: {fileID: 0}
+  SourcePokemonTouchTransform: {fileID: 0}
+  TargetPokemonFloorTransform: {fileID: 0}
 --- !u!320 &7428577243634679316
 PlayableDirector:
   m_ObjectHideFlags: 0

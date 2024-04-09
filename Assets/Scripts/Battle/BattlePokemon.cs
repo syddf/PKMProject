@@ -295,7 +295,7 @@ public class BattlePokemon : MonoBehaviour
         {
             return false;
         }
-        if(Ability.name == "飘浮")
+        if(Ability && Ability.name == "飘浮")
         {
             return false;
         }
@@ -328,8 +328,22 @@ public class BattlePokemon : MonoBehaviour
         return PokemonStats.Dead;
     }
 
-    public void LoadBasePokemonStats()
+    public void SetBattlePokemonData(BagPokemon InBagPokemon, PokemonTrainer InTrainer, GameObject ModelObject)
     {
+        ReferenceBasePokemon = InBagPokemon;
+        IsEnemy = !InTrainer.IsPlayer;
+        Ability = InBagPokemon.GetAbility();
+        if(Ability)
+        {
+            Ability.SetReferencePokemon(this);
+        }
+        PokemonModelObj = ModelObject;
+        LoadBasePokemonStats();
+    }
+
+    private void LoadBasePokemonStats()
+    {
+        Name = ReferenceBasePokemon.GetPokemonName();
         PokemonStats.Atk = ReferenceBasePokemon.GetAtk();
         PokemonStats.SAtk = ReferenceBasePokemon.GetSAtk();
         PokemonStats.Def = ReferenceBasePokemon.GetDef();
@@ -342,8 +356,11 @@ public class BattlePokemon : MonoBehaviour
         Type1 = ReferenceBasePokemon.GetType0();
         Type2 = ReferenceBasePokemon.GetType1();
 
+
+
         for(int Index = 0; Index < 4; Index++)
         {
+            ReferenceSkill[Index] = ReferenceBasePokemon.GetBaseSkill(Index);
             if(ReferenceSkill[Index] != null)
             {
                 SkillPP[Index] = ReferenceSkill[Index].GetPP();
@@ -386,10 +403,6 @@ public class BattlePokemon : MonoBehaviour
     public int GetIndexInPKDex()
     {
         return ReferenceBasePokemon.GetIndexInPKDex();
-    }
-    public void Start()
-    {
-        LoadBasePokemonStats();
     }
 
     public GameObject GetPokemonModel()
@@ -519,6 +532,29 @@ public class BattlePokemon : MonoBehaviour
         }
 
         return null;
+    }
+
+    public HashSet<BaseSkill> GetForbiddenBattleSkills(BattleManager InManager)
+    {
+        HashSet<BaseSkill> Result = new HashSet<BaseSkill>();
+        for(int SkillIndex = 0; SkillIndex < 4; SkillIndex++)
+        {
+            if(SkillPP[SkillIndex] == 0)
+            {
+                Result.Add(ReferenceSkill[SkillIndex]);
+            }
+
+            if(BattleSkillMetaInfo.IsSoundSkill(ReferenceSkill[SkillIndex].GetSkillName()) && HasStatusChange(EStatusChange.ThroatChop))
+            {
+                Result.Add(ReferenceSkill[SkillIndex]);
+            }
+
+            if(ReferenceSkill[SkillIndex].HasHealEffect(InManager) && HasStatusChange(EStatusChange.ForbidHeal))
+            {
+                Result.Add(ReferenceSkill[SkillIndex]);
+            }
+        }
+        return Result;   
     }
 
     public List<EStatusChange> ReduceAllStatusChangeRemainTime()

@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8335937347133350253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8335937347133350226}
+  - component: {fileID: 8335937347133350227}
+  - component: {fileID: 8335937347133350225}
+  - component: {fileID: 8335937347133350224}
+  m_Layer: 0
+  m_Name: SurroundSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8335937347133350226
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8335937347133350253}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8335937347133350227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8335937347133350253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cf774e81491fa94f83164f64d026d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: "\u805A\u5408\u5FC3\u58F0"
+  Description: "\u5DF1\u65B9\u5B9D\u53EF\u68A6\u6BCF\u4F7F\u7528\u4E00\u6B21\u58F0\u97F3\u7C7B\u62DB\u5F0F\uFF0C\u5728\u672C\u573A\u5BF9\u6218\u7684\u5269\u4F59\u65F6\u95F4\u91CC\uFF0C\u6240\u6709\u58F0\u97F3\u7C7B\u62DB\u5F0F\u7684\u5A01\u529B\u63D0\u9AD820%"
+  ReferenceTrainer: {fileID: 0}
+--- !u!114 &8335937347133350225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8335937347133350253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8e2d61e3eb2cd244a78cdddcf55a8f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timelines:
+  - {fileID: 11400000, guid: e9e923afae701ef4c9752fda9bff5788, type: 2}
+  - {fileID: 11400000, guid: 49278bafea309a44eb6ee2dde9e84aec, type: 2}
+  - {fileID: 11400000, guid: 4b8c1ed2cee0cc74986049de58caa0fe, type: 2}
+  - {fileID: 11400000, guid: 8ecf9e6238963f74da0e97ac3606defc, type: 2}
+--- !u!320 &8335937347133350224
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8335937347133350253}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 0}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings: []
+  m_ExposedReferences:
+    m_References: []

@@ -134,7 +134,7 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
 
     public override void OnAnimationFinished()
     {
-        ReferenceManager.UpdateUI(false);
+        //ReferenceManager.UpdateUI(false);
         if(EnemyNewPokemon)
             ReferenceManager.UpdatePokemonInfo(EnemyNewPokemon, CloneEnemyNewPokemonStats);
         if(PlayerNewPokemon)

@@ -45,4 +45,9 @@ public class BaseTrainerSkill : MonoBehaviour
     {
         return ReferenceTrainer;
     }
+
+    public void SetTrainer(PokemonTrainer InTrainer)
+    {
+        ReferenceTrainer = InTrainer;
+    }
 }

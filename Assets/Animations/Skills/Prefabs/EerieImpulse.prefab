@@ -81,7 +81,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &513449941037560048
 Transform:
   m_ObjectHideFlags: 0
@@ -114,6 +114,8 @@ MonoBehaviour:
   SourcePokemonTransform: {fileID: 513449940462517753}
   TargetPokemonTransform: {fileID: 513449940764044395}
   TargetPokemonTouchTransform: {fileID: 0}
+  SourcePokemonTouchTransform: {fileID: 0}
+  TargetPokemonFloorTransform: {fileID: 0}
 --- !u!320 &513449941037560063
 PlayableDirector:
   m_ObjectHideFlags: 0

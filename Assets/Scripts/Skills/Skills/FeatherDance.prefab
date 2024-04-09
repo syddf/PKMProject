@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8794698323349034406
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8794698323349034405}
+  - component: {fileID: 8794698323349034404}
+  m_Layer: 0
+  m_Name: FeatherDance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8794698323349034405
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8794698323349034406}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8794698323349034404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8794698323349034406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5b0dab71945cee40b846acc8f38010b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 0
+  PP: 15
+  Accuracy: 100
+  SkillClass: 2
+  SkillType: 2
+  SkillRange: 1
+  SkillName: "\u7FBD\u6BDB\u821E"
+  SkillDescription: "\u6492\u51FA\u7FBD\u6BDB\uFF0C\u7B3C\u7F69\u5728\u5BF9\u624B\u7684\u5468\u56F4\u3002\u5927\u5E45\u964D\u4F4E\u5BF9\u624B\u7684\u653B\u51FB\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  SkillAnimation: {fileID: 2529367906668194350, guid: 6087b9811a7f3ea48b14ec3c6df91d41, type: 3}

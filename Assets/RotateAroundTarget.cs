@@ -15,7 +15,10 @@ public class RotateAroundTarget : MonoBehaviour
         this.transform.position = OriginCamera.position;
         this.transform.rotation = OriginCamera.rotation;
         this.transform.localScale = OriginCamera.localScale;
-        orbitalTransposer.m_XAxis.Value = 130.0f;
+        if (orbitalTransposer != null)
+        {
+            orbitalTransposer.m_XAxis.Value = 130.0f;
+        }
     }
     void Start()
     {

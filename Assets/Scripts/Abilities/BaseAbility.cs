@@ -79,7 +79,7 @@ public class BaseAbility : MonoBehaviour
     }
 
     public BattlePokemon GetReferencePokemon() => ReferencePokemon;
-
+    public void SetReferencePokemon(BattlePokemon InPokemon) { ReferencePokemon = InPokemon;}
     public void SetIsProcessing(bool IsProcessing) { Processing = IsProcessing;} 
     public bool GetIsProcessing() { return Processing;} 
 }

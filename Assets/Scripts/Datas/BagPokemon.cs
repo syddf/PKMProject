@@ -88,6 +88,17 @@ public class BagPokemon : MonoBehaviour
     PokemonGender Gender;
     [SerializeField]
     private BaseItem Item;
+    [SerializeField]
+    private BaseAbility Ability;
+    [SerializeField]
+    private BaseSkill[] ReferenceSkill = new BaseSkill[4];
+    [SerializeField]
+    private string PokemonName;
+    [SerializeField]
+    private bool MultiSpecies;
+    [SerializeField]
+    private int SpecieIndex;
+    
     public PokemonGender GetGender()
     {
         return Gender;
@@ -176,9 +187,38 @@ public class BagPokemon : MonoBehaviour
         return Item;
     }
 
+    public void SetItem(BaseItem InItem)
+    {
+        Item = InItem;
+    }
+
     public int GetIndexInPKDex()
     {
         return SourcePokemonData.Number;
+    }
+
+    public void SetBaseSkill(int Index, BaseSkill InSkill)
+    {
+        ReferenceSkill[Index] = InSkill;
+    }
+    public BaseSkill GetBaseSkill(int Index)
+    {
+        return ReferenceSkill[Index];
+    }
+
+    public string GetPokemonName()
+    {
+        return PokemonName;
+    }
+
+    public BaseAbility GetAbility()
+    {
+        return Ability;
+    }
+
+    public void SetAbility(BaseAbility InAbility)
+    {
+        Ability = InAbility;
     }
     public void Awake() 
     {

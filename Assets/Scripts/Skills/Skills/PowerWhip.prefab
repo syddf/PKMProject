@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4769436109443529201
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4769436109443529200}
+  - component: {fileID: 4769436109443529206}
+  m_Layer: 0
+  m_Name: PowerWhip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4769436109443529200
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4769436109443529201}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4769436109443529206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4769436109443529201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eb6553f230e0164ca04979376ed5860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 120
+  PP: 10
+  Accuracy: 85
+  SkillClass: 0
+  SkillType: 11
+  SkillRange: 1
+  SkillName: "\u5F3A\u529B\u97AD\u6253"
+  SkillDescription: "\u6FC0\u70C8\u5730\u6325\u821E\u9752\u85E4\u6216\u89E6\u624B\u6454\u6253\u5BF9\u624B\u8FDB\u884C\u653B\u51FB\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  SkillAnimation: {fileID: 5267942121647236857, guid: cc983e5a5255ba2478bf6a676a20727d, type: 3}

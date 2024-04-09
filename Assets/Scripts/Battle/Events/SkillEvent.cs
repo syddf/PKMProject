@@ -257,7 +257,7 @@ public class SkillEvent : EventAnimationPlayer, Event
                                         CTMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "击中了要害！");
                                         AddAnimation(CTMessage);
                                     }
-                                    if(SkillMeta.EffectiveFactor == 0.5)
+                                    if(SkillMeta.EffectiveFactor == 0.5 || SkillMeta.EffectiveFactor == 0.25)
                                     {
                                         SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Effective", "Not");
                                         TimelineAnimation EffectiveMessage = new TimelineAnimation(MessageDirector);

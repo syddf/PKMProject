@@ -4,13 +4,15 @@ public class AudioController : MonoBehaviour
 {
     public AudioClip firstClip;
     public AudioClip secondClip;
+    public AudioSource secondSource;
 
     private AudioSource audioSource;
     void Start()
     {
         // 获取AudioSource组件
         audioSource = GetComponent<AudioSource>();
-
+        firstClip.LoadAudioData();
+        secondClip.LoadAudioData();
         // 播放第一段音频
         PlayFirstClip();
     }
@@ -22,14 +24,14 @@ public class AudioController : MonoBehaviour
         audioSource.Play();
 
         // 等待第一段音频播放完成后，开始播放第二段音频
-        Invoke("PlaySecondClip", firstClip.length);
+        Invoke("PlaySecondClip", firstClip.length - 1.0f);
     }
 
     void PlaySecondClip()
     {
         // 设置第二段音频并循环播放
-        audioSource.clip = secondClip;
-        audioSource.loop = true;
-        audioSource.Play();
+        secondSource.clip = secondClip;
+        secondSource.loop = true;
+        secondSource.Play();
     }
 }

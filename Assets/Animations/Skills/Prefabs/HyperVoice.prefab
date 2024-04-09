@@ -15401,7 +15401,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 10
+        scalar: 20
         minScalar: 1
         maxCurve:
           serializedVersion: 2
@@ -19419,6 +19419,8 @@ MonoBehaviour:
   SourcePokemonTransform: {fileID: 7987392227567448186}
   TargetPokemonTransform: {fileID: 7987392226124791801}
   TargetPokemonTouchTransform: {fileID: 0}
+  SourcePokemonTouchTransform: {fileID: 0}
+  TargetPokemonFloorTransform: {fileID: 0}
 --- !u!320 &7987392226333345623
 PlayableDirector:
   m_ObjectHideFlags: 0

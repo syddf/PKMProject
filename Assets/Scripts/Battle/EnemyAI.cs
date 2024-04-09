@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct AISkillEntry
+{
+    public BaseSkill ReferenceSkill;
+    public int Priority;
+}
+
 public class EnemyAI
 {
     BattlePokemon ReferencePokemon;
@@ -17,11 +23,13 @@ public class EnemyAI
     public BattlePokemon GetNextPokemon(BattlePokemon OutPokemon)
     {
         BattlePokemon[] BattlePokemons = ReferenceTrainer.BattlePokemons;
-        for(int Index = 0; Index < 6; Index++)
+        while(true)
         {
-            if(BattlePokemons[Index] != null && BattlePokemons[Index] != OutPokemon && BattlePokemons[Index].IsDead() == false)
+            System.Random rnd = new System.Random();
+            int RandNum = rnd.Next(0, 6);
+            if(BattlePokemons[RandNum] != null && BattlePokemons[RandNum] != OutPokemon && BattlePokemons[RandNum].IsDead() == false)
             {
-                return BattlePokemons[Index];
+                return BattlePokemons[RandNum];
             }
         }
         return null;
@@ -44,18 +52,121 @@ public class EnemyAI
         }
     }
 
-    public void GenerateEnemyEvent(List<Event> InEvents)
+    public void GenerateEnemyEvent(List<Event> InEvents, BattleManager InManager, Event InPlayerAction)
     {
+        HashSet<BaseSkill> ForbiddenSkillSet = ReferencePokemon.GetForbiddenBattleSkills(InManager);
         BaseSkill[] Skills = ReferencePokemon.GetReferenceSkill();
+        List<AISkillEntry> EntryList = new List<AISkillEntry>();
+        BattlePokemon TargetPokemon = InManager.GetTargetPokemon(ETarget.P0);
+
+        if(InPlayerAction.GetEventType() == EventType.Switch)
+        {
+            SwitchEvent CastedEvent = (SwitchEvent)InPlayerAction;
+            System.Random rnd = new System.Random();
+            int RandNum = rnd.Next(0, 2);
+            if(RandNum == 0)
+            {
+                TargetPokemon = CastedEvent.GetInPokemon();
+            }
+        }
+
         for(int Index = 0; Index < 4; Index++)
         {
-            if(Skills[Index] != null)
+            if(!ForbiddenSkillSet.Contains(Skills[Index]))
             {
-                if(ReferencePokemon.GetSkillPP(Skills[Index]) > 0)
+                AISkillEntry SkillEntry = new AISkillEntry();
+                SkillEntry.ReferenceSkill = Skills[Index];
+                SkillEntry.Priority = 100;
+                string Reason = "";
+                if(!Skills[Index].JudgeIsEffective(InManager, ReferencePokemon, TargetPokemon, out Reason))
                 {
-                    AddUseSkillEvent(Skills[Index], InEvents);
-                    return;
+                    SkillEntry.Priority = -999;
                 }
+                EntryList.Add(SkillEntry);
+            }
+        }
+
+        List<int> KillSkillIndex = new List<int>();
+
+        for(int Index = 0; Index < EntryList.Count; Index++)
+        {
+            AISkillEntry Entry = EntryList[Index];
+            if(Entry.Priority != -999)
+            {
+                ESkillClass skillClass = Entry.ReferenceSkill.GetSkillClass();
+                if(skillClass == ESkillClass.StatusMove)
+                {
+
+                }
+                else
+                {
+                    BattleSkill UseBattleSkill = new BattleSkill(Entry.ReferenceSkill, EMasterSkill.None, TargetPokemon);
+                    double Factor;
+                    int Damage = UseBattleSkill.DamagePhase(InManager, ReferencePokemon, TargetPokemon, false, out Factor);
+                    if(Damage >= TargetPokemon.GetHP())
+                    {
+                        KillSkillIndex.Add(Index);
+                        Entry.Priority = 999;
+                    }
+                    else if(Damage >= (TargetPokemon.GetMaxHP() / 2))
+                    {
+                        double Ratio = (double)Damage / TargetPokemon.GetMaxHP();
+                        Entry.Priority = (int)Mathf.Lerp(100.0f, 500.0f, (float)Ratio);
+                    }
+                    else
+                    {
+                        double Ratio = (double)Damage / (TargetPokemon.GetMaxHP() / 2);
+                        Entry.Priority = (int)Mathf.Lerp(10.0f, 100.0f, (float)Ratio);
+                    }
+                    EntryList[Index] = Entry;
+                }
+            }
+        }
+
+        if(KillSkillIndex.Count > 0)
+        {
+            System.Random rnd = new System.Random();
+            int RandNum = rnd.Next(0, KillSkillIndex.Count);
+            int SkillIndex = KillSkillIndex[RandNum];
+            AddUseSkillEvent(EntryList[SkillIndex].ReferenceSkill, InEvents);
+            return;
+        }
+        else
+        {
+            List<AISkillEntry> SkillPriorityLargeThanZero = new List<AISkillEntry>();
+            int TotalValue = 0;
+            for(int Index = 0; Index < EntryList.Count; Index++)
+            {
+                AISkillEntry Entry = EntryList[Index];
+                if(Entry.Priority > 0)
+                {
+                    SkillPriorityLargeThanZero.Add(Entry);
+                    TotalValue += Entry.Priority;
+                }
+            }
+
+            if(TotalValue > 0)
+            {
+                System.Random rnd = new System.Random();
+                int RandNum = rnd.Next(0, TotalValue);
+
+                int Accu = 0;
+                for(int Index = 0; Index < SkillPriorityLargeThanZero.Count; Index++)
+                {
+                    Accu += SkillPriorityLargeThanZero[Index].Priority;
+                    if(Accu >= RandNum)
+                    {
+                        AddUseSkillEvent(SkillPriorityLargeThanZero[Index].ReferenceSkill, InEvents);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                System.Random rnd = new System.Random();
+                int RandNum = rnd.Next(0, EntryList.Count);
+                AddUseSkillEvent(EntryList[RandNum].ReferenceSkill, InEvents);
+                return;
             }
         }
     }
