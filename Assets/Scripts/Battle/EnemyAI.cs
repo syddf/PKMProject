@@ -32,7 +32,6 @@ public class EnemyAI
                 return BattlePokemons[RandNum];
             }
         }
-        return null;
     }
 
     public void AddUseSkillEvent(BaseSkill InSkill, List<Event> InEvents)

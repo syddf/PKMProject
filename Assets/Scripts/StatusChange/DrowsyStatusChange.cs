@@ -41,8 +41,4 @@ public class DrowsyStatusChange : BaseStatusChange
         return NewEvents;
     }
 
-    public BattlePokemon GetReferencePokemon()
-    {
-        return ReferencePokemon;
-    }
 }

@@ -16,7 +16,7 @@ public class Leftovers : BaseItem
             return false;
         }
 
-        if(SourceEvent.GetEventType() == EventType.TurnEnd && ReferencePokemon.IsDead() == false)
+        if(SourceEvent.GetEventType() == EventType.TurnEnd && ReferencePokemon.IsDead() == false && ReferencePokemon.GetHP() < ReferencePokemon.GetMaxHP())
         {
             return true;
         }

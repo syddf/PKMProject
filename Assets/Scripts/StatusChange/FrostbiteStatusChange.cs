@@ -33,9 +33,4 @@ public class FrostbiteStatusChange : BaseStatusChange
         NewEvents.Add(damageEvent);
         return NewEvents;
     }
-
-    public BattlePokemon GetReferencePokemon()
-    {
-        return ReferencePokemon;
-    }
 }

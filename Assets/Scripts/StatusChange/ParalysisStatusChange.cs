@@ -40,9 +40,4 @@ public class ParalysisStatusChange : BaseStatusChange
         NewEvents.Add(new StatusChangeAnimationFakeEvent(ReferencePokemon, EStatusChange.Paralysis));
         return NewEvents;
     }
-
-    public BattlePokemon GetReferencePokemon()
-    {
-        return ReferencePokemon;
-    }
 }

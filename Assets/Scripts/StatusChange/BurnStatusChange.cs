@@ -34,8 +34,4 @@ public class BurnStatusChange : BaseStatusChange
         return NewEvents;
     }
 
-    public BattlePokemon GetReferencePokemon()
-    {
-        return ReferencePokemon;
-    }
 }

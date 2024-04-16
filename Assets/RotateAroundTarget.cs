@@ -5,7 +5,8 @@ public class RotateAroundTarget : MonoBehaviour
 {
     public CinemachineVirtualCamera cinemachineVirtualCamera;
     public float rotationSpeed = 10f;
-
+    public int startMin;
+    public int startMax;
     private CinemachineOrbitalTransposer orbitalTransposer;
 
     public Transform OriginCamera;
@@ -17,7 +18,9 @@ public class RotateAroundTarget : MonoBehaviour
         this.transform.localScale = OriginCamera.localScale;
         if (orbitalTransposer != null)
         {
-            orbitalTransposer.m_XAxis.Value = 130.0f;
+            System.Random rnd = new System.Random();
+            int rand = rnd.Next(startMin, startMax);
+            orbitalTransposer.m_XAxis.Value = rand;
         }
     }
     void Start()

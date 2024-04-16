@@ -39,9 +39,4 @@ public class ThroatChopStatusChange : BaseStatusChange
         CastedEvent.ForbidSkill("深渊突刺的效果");
         return NewEvents;
     }
-
-    public BattlePokemon GetReferencePokemon()
-    {
-        return ReferencePokemon;
-    }
 }

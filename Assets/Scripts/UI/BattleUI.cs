@@ -9,6 +9,8 @@ public class BattleUI : MonoBehaviour
     public CommandUI BattleCommandUI;
     public BattlePokemon CurrentPokemon;
     public PokemonTrainer CurrentPlayerTrainer;
+    public SetTrainerSkillInfo PlayerTrainerSkillInfo;
+    public SetTrainerSkillInfo EnemyTrainerSkillInfo;
     public void SetCurrentPlayerTrainer(PokemonTrainer InTrainer)
     {
         CurrentPlayerTrainer = InTrainer;
@@ -37,10 +39,12 @@ public class BattleUI : MonoBehaviour
     public void UpdatePlayer1UI(BattlePokemon InPokemon, PokemonTrainer InTrainer)
     {
         PlayerInfo1.UpdateUI(InPokemon, InTrainer);
+        PlayerTrainerSkillInfo.SetBattleTrainer(InTrainer);
     }
     public void UpdateEnemy1UI(BattlePokemon InPokemon, PokemonTrainer InTrainer)
     {
         EnemyInfo1.UpdateUI(InPokemon, InTrainer);
+        EnemyTrainerSkillInfo.SetBattleTrainer(InTrainer);
     }
     public void GenerateSkills()
     {

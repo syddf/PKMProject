@@ -24,12 +24,16 @@ public class AbilityStateInUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Duration += Time.deltaTime;
         if(Duration < Totaltime)
         {
             float fraction = Duration / Totaltime;
             this.gameObject.transform.position = 
             Vector3.Lerp(StartTrans.position, EndTrans.position, fraction);
+            Duration += Time.deltaTime;
+        }
+        else
+        {
+            this.gameObject.transform.position = EndTrans.position;
         }
     }
 }

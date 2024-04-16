@@ -60,6 +60,7 @@ public class BattleManager : MonoBehaviour
     {
         if(PlayingAnimation)
         {
+            GetComponent<BattleCameraSwitcher>().DisableSwitching();
             if(AnimationEventList.Count == 0)
             {
                 PlayingAnimation = false;
@@ -80,6 +81,10 @@ public class BattleManager : MonoBehaviour
                 {
                     PlayingAnimation = false;
                     AnimationEventList.Clear();
+                    if(GetBattleEnd())
+                    {
+                        return;
+                    }
                     if(DefeatedPokemonList.Count > 0)
                     {
                         // Currently Only SingleBattle
@@ -109,6 +114,7 @@ public class BattleManager : MonoBehaviour
                     {
                         UpdateUI(false);
                         BattleUIManager.EnableCommandUI();
+                        GetComponent<BattleCameraSwitcher>().EnableSwitching();
                     }
                 }
                 else
@@ -182,6 +188,17 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
+
+    public void UpdatePlayerUI()
+    {
+        BattleUIManager.SetCurrentPlayerTrainer(PlayerTrainer);
+        BattleUIManager.UpdatePlayer1UI(BattlePokemonList[0], PlayerTrainer);
+    }
+
+    public void UpdateEnemyUI()
+    {
+        BattleUIManager.UpdateEnemy1UI(BattlePokemonList[1], EnemyTrainer);
+    }
     public void UpdateUI(bool SwitchCommand)
     {
         BattleUIManager.SetCurrentPlayerTrainer(PlayerTrainer);
@@ -234,7 +251,8 @@ public class BattleManager : MonoBehaviour
         {
             AbilityIter.SetIsProcessing(false);
         }
-                  
+
+        CurrentTimePoint = NewTime;           
         List<BattleItem> ItemsToTrigger = this.QueryItemsWhenTimeChange(SourceEvent);
         ItemsToTrigger.Sort(new BattleItemComparer());
         foreach(var ItemIter in ItemsToTrigger)
@@ -244,6 +262,7 @@ public class BattleManager : MonoBehaviour
             ItemEvent.Process(this);
         }
 
+        CurrentTimePoint = NewTime;
         List<BaseStatusChange> BastStatusChangesToTrigger = this.QueryBaseStatusChangesWhenTimeChange(SourceEvent);
         BastStatusChangesToTrigger.Sort(new BaseStatusChangeComparer());
         foreach(var BaseStatusChangeIter in BastStatusChangesToTrigger)
@@ -255,6 +274,7 @@ public class BattleManager : MonoBehaviour
             }
         }
 
+        CurrentTimePoint = NewTime;
         List<BattleFieldStatus> FieldStatusList =  this.QueryBattleFieldStatusWhenTimeChange(SourceEvent);
         foreach(var FieldStatus in FieldStatusList)
         {
@@ -265,6 +285,7 @@ public class BattleManager : MonoBehaviour
             }
         }
 
+        CurrentTimePoint = NewTime;
         if(PlayerTrainer.TrainerSkill && PlayerTrainer.TrainerSkill.ShouldTrigger(CurrentTimePoint, SourceEvent))
         {
             List<Event> EventsToProcess = PlayerTrainer.TrainerSkill.Trigger(this, SourceEvent);
@@ -272,6 +293,7 @@ public class BattleManager : MonoBehaviour
             TrainerSkillEvent.Process(this);
         }
 
+        CurrentTimePoint = NewTime;
         if(EnemyTrainer.TrainerSkill && EnemyTrainer.TrainerSkill.ShouldTrigger(CurrentTimePoint, SourceEvent))
         {
             List<Event> EventsToProcess = EnemyTrainer.TrainerSkill.Trigger(this, SourceEvent);

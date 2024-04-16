@@ -145,6 +145,19 @@ public class BattlePokemon : MonoBehaviour
     public int GetHP() => PokemonStats.HP;
     public int GetMaxHP() => PokemonStats.MaxHP;
 
+    private bool FirstIn = true;
+
+    public void SwitchIn()
+    {
+        FirstIn = false;
+    }
+    public bool GetFirstIn()
+    {
+        return FirstIn;
+    }
+
+    public string GetEnName() => ReferenceBasePokemon.GetName();
+    
     private int AdjustChangeLevel(ECaclStatsMode Mode, int SourceChangeLevel)
     {
         int ChangeLevel = SourceChangeLevel;

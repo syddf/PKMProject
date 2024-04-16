@@ -40,8 +40,4 @@ public class ForbidHealStatusChange : BaseStatusChange
         return NewEvents;
     }
 
-    public BattlePokemon GetReferencePokemon()
-    {
-        return ReferencePokemon;
-    }
 }

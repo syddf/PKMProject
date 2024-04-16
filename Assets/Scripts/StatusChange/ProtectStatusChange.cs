@@ -40,8 +40,4 @@ public class ProtectStatusChange : BaseStatusChange
         return NewEvents;
     }
 
-    public BattlePokemon GetReferencePokemon()
-    {
-        return ReferencePokemon;
-    }
 }

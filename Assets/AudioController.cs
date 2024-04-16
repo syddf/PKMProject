@@ -24,7 +24,7 @@ public class AudioController : MonoBehaviour
         audioSource.Play();
 
         // 等待第一段音频播放完成后，开始播放第二段音频
-        Invoke("PlaySecondClip", firstClip.length - 1.0f);
+        Invoke("PlaySecondClip", firstClip.length);
     }
 
     void PlaySecondClip()

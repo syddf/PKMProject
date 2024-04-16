@@ -38,4 +38,7 @@ public class TimelineAnimationManager : MonoBehaviour
     public PlayableDirector FrostbiteStatusAnimation;
     public PlayableDirector DrowsyStatusAnimation;
     public PlayableDirector TrainerSkillAnimation;
+    public PlayableDirector ChatAnimation;
+    public PlayableDirector HalfSecondActiveAnimation;
+    public PlayableDirector InBattleAnimation;
 }

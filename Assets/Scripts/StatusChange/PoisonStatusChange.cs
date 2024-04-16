@@ -33,9 +33,4 @@ public class PoisonStatusChange : BaseStatusChange
         NewEvents.Add(damageEvent);
         return NewEvents;
     }
-
-    public BattlePokemon GetReferencePokemon()
-    {
-        return ReferencePokemon;
-    }
 }

@@ -6,6 +6,92 @@ using UnityEngine.AI;
 using UnityEngine.Playables;
 
 
+public class ActiveHalfSecondAnimationEvent : EventAnimationPlayer, Event
+{
+    private GameObject TargetObject;
+    public ActiveHalfSecondAnimationEvent(GameObject InTargetObject)
+    {
+        TargetObject = InTargetObject;
+    }
+
+    public bool ShouldProcess(BattleManager InBattleManager)
+    {
+        if(InBattleManager.GetBattleEnd() == true) return false;
+        return true;
+    }
+
+    public override void InitAnimation()
+    {
+        TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        PlayableDirector HalfSecondActiveDirector = Timelines.HalfSecondActiveAnimation;
+        TimelineAnimation HalfSecondActiveTimeline = new TimelineAnimation(HalfSecondActiveDirector);
+        HalfSecondActiveTimeline.SetTrackObject("Object", TargetObject);
+        AddAnimation(HalfSecondActiveTimeline);
+    }
+
+    public void Process(BattleManager InManager)
+    {
+        if(!ShouldProcess(InManager)) return;
+        InManager.AddAnimationEvent(this);
+    }
+
+    public EventType GetEventType()
+    {
+        return EventType.Fake;
+    }
+}
+
+public class ChatAnimationFakeEvent : EventAnimationPlayer, Event
+{
+    private List<string> MessageList;
+    private List<bool> IsPlayerList;
+    public static Event AddChatEvent(List<string> MessageList, bool IsPlayer)
+    {
+        List<bool> IsPlayerList = new List<bool>();
+        for(int Index = 0; Index < MessageList.Count; Index++)
+            IsPlayerList.Add(IsPlayer);
+
+        ChatAnimationFakeEvent NewEvent = new ChatAnimationFakeEvent(MessageList, IsPlayerList);
+
+        return NewEvent;
+    }
+    public ChatAnimationFakeEvent(List<string> InMessageList, List<bool> InIsPlayer)
+    {
+        MessageList = InMessageList;
+        IsPlayerList = InIsPlayer;
+    }
+
+    public bool ShouldProcess(BattleManager InBattleManager)
+    {
+        if(InBattleManager.GetBattleEnd() == true) return false;
+        return true;
+    }
+
+    public override void InitAnimation()
+    {
+        TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        PlayableDirector ChatDirector = Timelines.ChatAnimation;
+        for(int Index = 0; Index < MessageList.Count; Index++)
+        {
+            TimelineAnimation ChatTimeline = new TimelineAnimation(ChatDirector);
+            ChatTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageList[Index]);
+            ChatTimeline.SetSignalParameter("SignalObject", "MessageSignal", "Trainer", IsPlayerList[Index] ? "Player" : "Enemy");
+            AddAnimation(ChatTimeline);
+        }
+    }
+
+    public void Process(BattleManager InManager)
+    {
+        if(!ShouldProcess(InManager)) return;
+        InManager.AddAnimationEvent(this);
+    }
+
+    public EventType GetEventType()
+    {
+        return EventType.Fake;
+    }
+}
+
 public class MessageAnimationFakeEvent : EventAnimationPlayer, Event
 {
     private List<string> MessageList;

@@ -34,9 +34,9 @@ public class DistributeObjects : MonoBehaviour
             for (int i = 0; i < objectsToDistribute.Length; i++)
             {
                 Vector3 randomPosition = new Vector3(
-                    Random.Range(worldCenter.x - worldSize.x / 2, worldCenter.x + worldSize.x / 2),
-                    Random.Range(worldCenter.y - worldSize.y / 2, worldCenter.y + worldSize.y / 2),
-                    Random.Range(worldCenter.z - worldSize.z / 2, worldCenter.z + worldSize.z / 2)
+                    Random.Range(worldCenter.x - worldSize.x / 3, worldCenter.x + worldSize.x / 3),
+                    Random.Range(worldCenter.y - worldSize.y / 3, worldCenter.y + worldSize.y / 3),
+                    Random.Range(worldCenter.z - worldSize.z / 3, worldCenter.z + worldSize.z / 3)
                 );
 
                 objectsToDistribute[i].transform.position = randomPosition;

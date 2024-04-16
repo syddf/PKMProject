@@ -33,7 +33,9 @@ public class SwitchEvent : EventAnimationPlayer, Event
         {
             TargetTimeline.SetTrackObject("Pokemon1", null);
             TargetTimeline.SetTrackObject("MonsterBall1", null);
-            TargetTimeline.SetTrackObject("Explosion1", null);            
+            TargetTimeline.SetTrackObject("Explosion1", null); 
+            TargetTimeline.SetSignalParameter("PlayerPokemonCry", "AudioSignal", "Pokemon", InPokemon.GetEnName());         
+            TargetTimeline.SetSignalParameter("EnemyPokemonCry", "AudioSignal", "Pokemon", "");                    
         }
         else
         {            
@@ -47,7 +49,9 @@ public class SwitchEvent : EventAnimationPlayer, Event
         {
             TargetTimeline.SetTrackObject("Pokemon2", null);
             TargetTimeline.SetTrackObject("MonsterBall2", null);
-            TargetTimeline.SetTrackObject("Explosion2", null);            
+            TargetTimeline.SetTrackObject("Explosion2", null);    
+            TargetTimeline.SetSignalParameter("EnemyPokemonCry", "AudioSignal", "Pokemon", InPokemon.GetEnName()); 
+            TargetTimeline.SetSignalParameter("PlayerPokemonCry", "AudioSignal", "Pokemon", "");                    
         }
         else
         {
@@ -92,6 +96,17 @@ public class SwitchEvent : EventAnimationPlayer, Event
         OutPokemon.ClearStatusChange();
         CloneInPokemon = InPokemon.CloneBattlePokemonStats();
         InManager.TranslateTimePoint(ETimePoint.PokemonIn, this);
+
+        if(InPokemon.GetIsEnemy())
+        {            
+            List<string> Lines = InManager.GetEnemyTrainer().GetLineWhenPokemonFirstIn(InPokemon);
+            if(Lines.Count > 0 && InPokemon.GetFirstIn())
+            {
+                ChatAnimationFakeEvent.AddChatEvent(Lines, false).Process(InManager);
+            }
+        }
+
+        InPokemon.SwitchIn();
     }
 
     public EventType GetEventType()
@@ -136,9 +151,15 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
     {
         //ReferenceManager.UpdateUI(false);
         if(EnemyNewPokemon)
+        {
             ReferenceManager.UpdatePokemonInfo(EnemyNewPokemon, CloneEnemyNewPokemonStats);
-        if(PlayerNewPokemon)
+            ReferenceManager.UpdateEnemyUI();
+        }
+        else
+        {
             ReferenceManager.UpdatePokemonInfo(PlayerNewPokemon, ClonePlayerNewPokemonStats);
+            ReferenceManager.UpdatePlayerUI();
+        }
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)
@@ -154,6 +175,7 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
         if(PlayerNewPokemon != null)
         {
             InManager.SetNewPlayerPokemon(PlayerNewPokemon);
+            PlayerNewPokemon.SwitchIn();
             PlayerDefeatedPokemon.ClearStatusChange();
         }
         if(EnemyNewPokemon != null)
@@ -162,13 +184,30 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
             EnemyDefeatedPokemon.ClearStatusChange();
         }
         InManager.TranslateTimePoint(ETimePoint.PokemonIn, this);
+        if(EnemyNewPokemon != null)
+        {
+            List<string> Lines = InManager.GetEnemyTrainer().GetLineWhenPokemonFirstIn(EnemyNewPokemon);
+            if(Lines.Count > 0 && EnemyNewPokemon.GetFirstIn())
+            {
+                ChatAnimationFakeEvent.AddChatEvent(Lines, false).Process(InManager);
+            }
+            EnemyNewPokemon.SwitchIn();
+        }
+
+        if(PlayerNewPokemon != null)
+        {
+            PlayerNewPokemon.SwitchIn();
+        }
     }
+
 
     public override void InitAnimation()
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
         TimelineAnimation TargetTimeline = new TimelineAnimation(Timelines.SwitchWhenDefeatedAnimation);
         SubObjects SubObj = Timelines.SwitchWhenDefeatedAnimation.gameObject.GetComponent<SubObjects>();
+        TargetTimeline.SetSignalParameter("PlayerPokemonCry", "AudioSignal", "Pokemon", "");
+        TargetTimeline.SetSignalParameter("EnemyPokemonCry", "AudioSignal", "Pokemon", "");
         if(!PlayerNewPokemon)
         {
             TargetTimeline.SetTrackObject("Pokemon1", null);
@@ -183,6 +222,7 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
             TargetTimeline.SetTrackObject("MonsterBall1", SubObj.SubObject2);
             TargetTimeline.SetTrackObject("Explosion1", SubObj.SubObject1);    
             PlayerNewPokemon.GetPokemonModel().gameObject.transform.position = SubObj.SubObject5.transform.position;        
+            TargetTimeline.SetSignalParameter("PlayerPokemonCry", "AudioSignal", "Pokemon", PlayerNewPokemon.GetEnName());
         }
 
         if(!EnemyNewPokemon)
@@ -198,6 +238,7 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
             TargetTimeline.SetTrackObject("MonsterBall2", SubObj.SubObject4);
             TargetTimeline.SetTrackObject("Explosion2", SubObj.SubObject3);            
             EnemyNewPokemon.GetPokemonModel().gameObject.transform.position = SubObj.SubObject6.transform.position;        
+            TargetTimeline.SetSignalParameter("EnemyPokemonCry", "AudioSignal", "Pokemon", EnemyNewPokemon.GetEnName());
         }
         AddAnimation(TargetTimeline);
     }
@@ -222,7 +263,6 @@ public class SingleBattleGameStartEvent : EventAnimationPlayer, Event
 {
     private BattlePokemon PlayerPokemon;
     private BattlePokemon EnemyPokemon;
-
     public SingleBattleGameStartEvent(BattlePokemon InPlayerPokemon, BattlePokemon InEnemyPokemon)
     {
         PlayerPokemon = InPlayerPokemon;
@@ -241,14 +281,40 @@ public class SingleBattleGameStartEvent : EventAnimationPlayer, Event
         if(!ShouldProcess(InManager)) return;
         InManager.AddAnimationEvent(this);
         InManager.TranslateTimePoint(ETimePoint.BattleStart, this);
+        
+        //Battle Start Animation.
+        GameObject battleStartObj = GameObject.Find("Canvas").GetComponent<SubObjects>().SubObject1;
+        ActiveHalfSecondAnimationEvent AnimEvent = new ActiveHalfSecondAnimationEvent(battleStartObj);
+        AnimEvent.Process(InManager);
+
+        List<string> Lines = InManager.GetEnemyTrainer().GetLineWhenBattleStart();
+        if(Lines.Count > 0)
+        {
+            ChatAnimationFakeEvent.AddChatEvent(Lines, false).Process(InManager);
+        }
+
+        Lines = InManager.GetEnemyTrainer().GetLineWhenPokemonFirstIn(EnemyPokemon);
+        if(Lines.Count > 0 && EnemyPokemon.GetFirstIn())
+        {
+            ChatAnimationFakeEvent.AddChatEvent(Lines, false).Process(InManager);
+        }
+
+        PlayerPokemon.SwitchIn();
+        EnemyPokemon.SwitchIn();
     }
 
     public override void InitAnimation()
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        TimelineAnimation InBattleTimeline = new TimelineAnimation(Timelines.InBattleAnimation);
+        AddAnimation(InBattleTimeline);
+
         TimelineAnimation TargetTimeline = new TimelineAnimation(Timelines.BattleStartAnimation);
         TargetTimeline.SetTrackObject("Pokemon1", PlayerPokemon.GetPokemonModel());
         TargetTimeline.SetTrackObject("Pokemon2", EnemyPokemon.GetPokemonModel());
+
+        TargetTimeline.SetSignalParameter("PlayerPokemonCry", "AudioSignal", "Pokemon", PlayerPokemon.GetEnName());
+        TargetTimeline.SetSignalParameter("EnemyPokemonCry", "AudioSignal", "Pokemon", EnemyPokemon.GetEnName());
         AddAnimation(TargetTimeline);
     }
 

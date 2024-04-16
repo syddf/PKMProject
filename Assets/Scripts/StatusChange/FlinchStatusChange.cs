@@ -36,9 +36,4 @@ public class FlinchStatusChange : BaseStatusChange
         CastedEvent.ForbidSkill("畏缩");
         return NewEvents;
     }
-
-    public BattlePokemon GetReferencePokemon()
-    {
-        return ReferencePokemon;
-    }
 }

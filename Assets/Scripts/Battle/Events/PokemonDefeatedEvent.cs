@@ -37,7 +37,7 @@ public class PokemonDefeatedEvent : EventAnimationPlayer, Event
         }
         Timelines.DefeatedAnimation.gameObject.GetComponent<SubObjects>().SubObject3.
         GetComponent<PositionWithObject>().target = TargetPokemon.GetPokemonModel().GetComponent<PokemonReceiver>().BodyTransform;
-
+        DefeatedTimeline.SetSignalParameter("PokemonCry", "AudioSignal", "Pokemon", TargetPokemon.GetEnName());
         //TargetTimeline.SetSignalParameter("SignalObject", "AbilityTriggerSignal", "AbilityName", SourceAbility.GetAbilityName());
         AddAnimation(DefeatedTimeline);
 
