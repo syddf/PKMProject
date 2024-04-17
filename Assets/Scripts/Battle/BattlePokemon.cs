@@ -128,7 +128,7 @@ public class BattlePokemon : MonoBehaviour
     private static double[] StatLevelFactor = new double[13]{0.25, 0.29, 0.33, 0.40, 0.50, 0.67, 1.00, 1.50, 2.00, 2.50, 3.00, 3.50, 4.00};
 
     private bool LostItem = false;
-
+    private BaseSkill FirstSkill = null;
     public BattlePokemonStat CloneBattlePokemonStats()
     {
         BattlePokemonStat NewStats = PokemonStats;
@@ -173,8 +173,13 @@ public class BattlePokemon : MonoBehaviour
     }
     public int GetAtk(ECaclStatsMode Mode) 
     { 
-        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.AtkChangeLevel);        
-        return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[ChangeLevel + 6]);
+        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.AtkChangeLevel);
+        double ItemFactor = 1.0;
+        if(HasItem("讲究头带"))
+        {
+            ItemFactor = 1.5;
+        }        
+        return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[ChangeLevel + 6] * ItemFactor);
     }
     public int GetDef(ECaclStatsMode Mode)
     {
@@ -183,13 +188,23 @@ public class BattlePokemon : MonoBehaviour
     }
     public int GetSAtk(ECaclStatsMode Mode)
     {
-        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SAtkChangeLevel);  
-        return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[ChangeLevel + 6]);
+        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SAtkChangeLevel);
+        double ItemFactor = 1.0;
+        if(HasItem("讲究眼镜"))
+        {
+            ItemFactor = 1.5;
+        }  
+        return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[ChangeLevel + 6] * ItemFactor);
     }
     public int GetSDef(ECaclStatsMode Mode)
     {
-        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SDefChangeLevel);  
-        return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6]);
+        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SDefChangeLevel);
+        double ItemFactor = 1.0;
+        if(HasItem("突击背心"))
+        {
+            ItemFactor = 1.5;
+        }  
+        return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6] * ItemFactor);
     }    
     public int GetSpeed(ECaclStatsMode Mode)
     {
@@ -198,8 +213,13 @@ public class BattlePokemon : MonoBehaviour
         if(this.HasStatusChange(EStatusChange.Paralysis))
         {
             ParalysisFactor = 0.5;
-        }  
-        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor);
+        }
+        double ItemFactor = 1.0;
+        if(HasItem("讲究围巾"))
+        {
+            ItemFactor = 1.5;
+        }         
+        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor * ItemFactor);
     }
     public int GetAtkChangeLevel() => PokemonStats.AtkChangeLevel;
     public int GetDefChangeLevel() => PokemonStats.DefChangeLevel;
@@ -566,6 +586,22 @@ public class BattlePokemon : MonoBehaviour
             {
                 Result.Add(ReferenceSkill[SkillIndex]);
             }
+
+            if(HasItem("讲究头带") || HasItem("讲究眼睛") || HasItem("讲究围巾"))
+            {
+                if(FirstSkill != null && ReferenceSkill[SkillIndex] != FirstSkill)
+                {
+                    Result.Add(ReferenceSkill[SkillIndex]);
+                }
+            }
+
+            if(HasItem("突击背心"))
+            {
+                if(ReferenceSkill[SkillIndex].GetSkillClass() == ESkillClass.StatusMove)
+                {
+                    Result.Add(ReferenceSkill[SkillIndex]);
+                }
+            }
         }
         return Result;   
     }
@@ -598,17 +634,23 @@ public class BattlePokemon : MonoBehaviour
     public void ClearStatusChange()
     {
         LostItem = false;
+        FirstSkill = null;
         if(PokemonStats.StatusChangeList == null)
         {
             return;
         }
         for(int Index = PokemonStats.StatusChangeList.Count - 1; Index >= 0; Index--)
         {
-            if(StatusChange.IsStatusChange(PokemonStats.StatusChangeList[Index].StatusChangeType))
+            if(!StatusChange.IsStatusChange(PokemonStats.StatusChangeList[Index].StatusChangeType))
             {
                 PokemonStats.StatusChangeList.RemoveAt(Index);
             }
         }
+    }
+
+    public void SetFirstSkill(BaseSkill ReferenceSkill)
+    {
+        FirstSkill = ReferenceSkill;
     }
 
     public List<BaseStatusChange> GetAllStatusChange()
@@ -632,6 +674,14 @@ public class BattlePokemon : MonoBehaviour
         return Item;
     }   
 
+    public bool HasItem(string ItemName)
+    {
+        if(HasItem() && Item.GetItemName() == ItemName)
+        {
+            return true;
+        }
+        return false;
+    }
     public bool HasItem()
     {
         return Item.HasItem();

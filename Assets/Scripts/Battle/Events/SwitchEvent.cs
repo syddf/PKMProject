@@ -77,8 +77,16 @@ public class SwitchEvent : EventAnimationPlayer, Event
     }
     public override void OnAnimationFinished()
     {
-        ReferenceManager.UpdateUI(false);
-        ReferenceManager.UpdatePokemonInfo(InPokemon, CloneInPokemon);
+        if(InPokemon.GetIsEnemy())
+        {
+            ReferenceManager.UpdateEnemyUI();
+            ReferenceManager.UpdatePokemonInfo(InPokemon, CloneInPokemon);
+        }
+        else
+        {
+            ReferenceManager.UpdatePlayerUI();
+            ReferenceManager.UpdatePokemonInfo(InPokemon, CloneInPokemon);
+        }
     }
 
     public void Process(BattleManager InManager)
@@ -155,7 +163,7 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
             ReferenceManager.UpdatePokemonInfo(EnemyNewPokemon, CloneEnemyNewPokemonStats);
             ReferenceManager.UpdateEnemyUI();
         }
-        else
+        if(PlayerNewPokemon)
         {
             ReferenceManager.UpdatePokemonInfo(PlayerNewPokemon, ClonePlayerNewPokemonStats);
             ReferenceManager.UpdatePlayerUI();

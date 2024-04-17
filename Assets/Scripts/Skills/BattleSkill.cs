@@ -227,6 +227,8 @@ public class BattleSkill
     public string GetSkillName() { return ReferenceBaseSkill.GetSkillName(); }
     public ERange GetSkillRange() { return ReferenceBaseSkill.GetSkillRange();}
     public PlayableDirector GetSkillAnimation(){ return ReferenceBaseSkill.GetSkillAnimation();}
+
+    public BaseSkill GetReferenceSkill() { return ReferenceBaseSkill;}
 }
 
 

@@ -25,4 +25,8 @@ public class BaseItem : MonoBehaviour
         return null;
     }
 
+    public virtual bool IsGem()
+    {
+        return false;
+    }
 }

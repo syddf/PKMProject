@@ -109,6 +109,12 @@ public class BattleManager : MonoBehaviour
                             UpdateUI(true);
                             BattleUIManager.EnableCommandUI();
                         }
+                        else if(DefeatedPokemonList.Count == 2)
+                        {
+                            WaitForPlayerSwitchPokemonWhenDefeated = true;
+                            UpdateUI(true);
+                            BattleUIManager.EnableCommandUI();
+                        }
                     }
                     else
                     {
@@ -192,6 +198,7 @@ public class BattleManager : MonoBehaviour
     public void UpdatePlayerUI()
     {
         BattleUIManager.SetCurrentPlayerTrainer(PlayerTrainer);
+        BattleUIManager.SetCurrentBattlePokemon(BattlePokemonList[0]);
         BattleUIManager.UpdatePlayer1UI(BattlePokemonList[0], PlayerTrainer);
     }
 

@@ -7,7 +7,7 @@ public class WillOWisp : StatusSkill
     public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, out string Reason)
     {
         Reason = "";
-        return TargetPokemon.HasType(EType.Fire) == false;
+        return TargetPokemon.HasType(EType.Fire) == false && TargetPokemon.HasStatusChange(EStatusChange.Burn) == false;
     }
     public override void ProcessStatusSkillEffect(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {

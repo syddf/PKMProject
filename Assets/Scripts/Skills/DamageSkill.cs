@@ -67,8 +67,26 @@ public class DamageSkill : BaseSkill
             TrainerFactor = TrainerFactor * EnemyTrainer.TrainerSkill.GetPowerFactorWhenDefense(InManager, SourcePokemon, TargetPokemon, this);
             TrainerFactor = TrainerFactor * PlayerTrainer.TrainerSkill.GetPowerFactorWhenAttack(InManager, SourcePokemon, TargetPokemon, this);
         }
-
         Result = Result * TrainerFactor;
+
+        double ItemFactor = 1.0;
+        if(SourcePokemon.HasItem("生命宝珠"))
+        {
+            ItemFactor *= 1.3;
+        }
+        if(SourcePokemon.HasItem("奇迹种子") && GetSkillType(SourcePokemon) == EType.Grass)
+        {
+            ItemFactor *= 1.2;
+        }
+        if(SourcePokemon.HasItem() && SourcePokemon.GetBattleItem().GetBaseItem().IsGem())
+        {
+            Gem CastItem = (Gem)SourcePokemon.GetBattleItem().GetBaseItem();
+            if(CastItem.GemType == GetSkillType(SourcePokemon))
+            {
+                ItemFactor *= 1.3;
+            }
+        }
+        Result = Result * ItemFactor;
 
         return (int)Math.Floor(Result);
     }
@@ -118,6 +136,10 @@ public class DamageSkill : BaseSkill
     public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, out string Reason)
     {
         Reason = "";
+        if(GetSkillType(SourcePokemon) == EType.None)
+        {
+            return true;
+        }
         if(TargetPokemon == null)
         {
             return false;
@@ -139,6 +161,10 @@ public class DamageSkill : BaseSkill
 
     public virtual double GetTypeEffectiveFactor(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
+        if(GetSkillType(SourcePokemon) == EType.None)
+        {
+            return 1.0;
+        }
         double Factor2 = TargetPokemon.GetType2() == EType.None ? 1.0 : typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType2()];
         return typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1()] * Factor2;
     }

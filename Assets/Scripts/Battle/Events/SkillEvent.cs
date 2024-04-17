@@ -338,8 +338,10 @@ public class SkillEvent : EventAnimationPlayer, Event
         if(!SkillForbidden)
         {
             EditorLog.DebugLog(SourcePokemon.GetName() + " Use Skill：" + Skill.GetSkillName());
+            SourcePokemon.SetFirstSkill(Skill.GetReferenceSkill());
             InManager.TranslateTimePoint(ETimePoint.BeforeGetSkillCount, this);
             int SkillCount = GetSkillCount();
+            bool SkillHasEffect = false;
             for(int SkillCountIndex = 0; SkillCountIndex < SkillCount; SkillCountIndex++)
             {
                 bool ShouldActivateEffect = false;
@@ -376,6 +378,10 @@ public class SkillEvent : EventAnimationPlayer, Event
                         }
                     }
                 }
+                if(ShouldActivateEffect)
+                {
+                    InManager.TranslateTimePoint(ETimePoint.BeforeSkillEffectAnimFake, this);
+                }
                 InManager.AddAnimationEvent(this);
                 if(ShouldActivateEffect)
                 {
@@ -388,6 +394,7 @@ public class SkillEvent : EventAnimationPlayer, Event
                         {
                             if(SkillMetas[TargetIndex].Hit)
                             {
+                                SkillHasEffect = true;
                                 if(CurrentProcessTargetPokemon)
                                     EditorLog.DebugLog(SourcePokemon.GetName()  + " Skill：" + Skill.GetSkillName() + "Hit: " + CurrentProcessTargetPokemon.GetName() );
                                 if(Skill.IsDamageSkill())
@@ -434,8 +441,22 @@ public class SkillEvent : EventAnimationPlayer, Event
                     break;
                 }
             }
+            if(SkillHasEffect)
+            {
+                InManager.TranslateTimePoint(ETimePoint.AfterActivateSkill, this);
+            }
             SourcePokemon.ReducePP(Skill);
         }
+    }
+
+    public int GetCurrentDamage()
+    {
+        return SkillMetasHistory[CurrentMetaIndex][CurrentPokemonInMetaIndex].Damage;
+    }
+
+    public void SetCurrentDamage(int Damage)
+    {
+        SkillMetasHistory[CurrentMetaIndex][CurrentPokemonInMetaIndex].Damage = Damage;
     }
 
     public BattlePokemon GetCurrentProcessTargetPokemon()

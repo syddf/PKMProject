@@ -18,6 +18,7 @@ public class CommandUI : MonoBehaviour
     public BattlePokemon ReferencePokemon;
     public GameObject SwitchButton;
     public GameObject SkillButton;
+    public GameObject StruggleButton;
     private bool Play = false;
     public void GenerateNewSkillGroup(BattlePokemon InPokemon)
     {   
@@ -29,13 +30,21 @@ public class CommandUI : MonoBehaviour
             if(child.gameObject != SwitchButton)
                 Destroy(child.gameObject);
         }
+        StruggleButton.SetActive(false);
         BaseSkill[] PokemonSkills = InPokemon.GetReferenceSkill();
+        HashSet<BaseSkill> ForbiddenSkills = InPokemon.GetForbiddenBattleSkills(BattleManager);
+        if(ForbiddenSkills.Count == 4)
+        {
+            StruggleButton.SetActive(true);
+            StruggleButton.GetComponent<SkillButton>().g_BattleManager = BattleManager;
+            StruggleButton.GetComponent<SkillButton>().ReferencePokemon = InPokemon;
+        }
         for(int Index = 0; Index < 4; Index ++)
         {
             if(PokemonSkills[Index] != null)
             {
                 GameObject NewButton = Instantiate(SkillButtonPrefab, new Vector3(0, 0, 0), Quaternion.identity, SkillGroupRootObj.transform);
-                NewButton.GetComponent<SkillButton>().Init(BattleManager, PokemonSkills[Index], InPokemon);
+                NewButton.GetComponent<SkillButton>().Init(BattleManager, PokemonSkills[Index], InPokemon, ForbiddenSkills.Contains(PokemonSkills[Index]));
                 NewButton.transform.SetSiblingIndex(Index);
             }
         }
@@ -92,6 +101,7 @@ public class CommandUI : MonoBehaviour
 
     public void GenerateNewSwitchGroup(PokemonTrainer InTrainer)
     {
+        StruggleButton.SetActive(false);
         SwitchGroupRootObj.SetActive(true);
         SkillGroupRootObj.SetActive(false);
         BattlePokemon[] Pokemons = InTrainer.BattlePokemons;

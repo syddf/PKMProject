@@ -16,6 +16,9 @@ public class SkillButton : MonoBehaviour
     public GameObject StatusObj;
     public TypeUI TypeUI;
     public AudioSource Audio;
+    private bool Forbidden;
+    public Color NormalColor;
+    public Color ForbiddenColor;
 
     // Start is called before the first frame update
     void Start()
@@ -23,18 +26,25 @@ public class SkillButton : MonoBehaviour
         UIButton = this.GetComponent<Button>();
         Audio = this.GetComponent<AudioSource>();
         UIButton.onClick.AddListener(() => ButtonClicked());
+        Forbidden = false;
     }
 
-    public void Init(BattleManager InManager, BaseSkill InReferenceSkill, BattlePokemon InReferencePokemon)
+    public void Init(BattleManager InManager, BaseSkill InReferenceSkill, BattlePokemon InReferencePokemon, bool InForbidden)
     {
         g_BattleManager = InManager;
         ReferenceSkill = InReferenceSkill;
         ReferencePokemon = InReferencePokemon;
+        Forbidden = InForbidden;
         UpdateButtonUI();
     }
 
     public void UpdateButtonUI()
     {
+        this.GetComponent<Image>().color = NormalColor;
+        if(Forbidden)
+        {
+            this.GetComponent<Image>().color = ForbiddenColor;
+        }
         SkillNameText.text = ReferenceSkill.GetSkillName();
         int CurPP = ReferencePokemon.GetSkillPP(ReferenceSkill);
         int MaxPP = ReferenceSkill.GetPP();
@@ -63,7 +73,10 @@ public class SkillButton : MonoBehaviour
 
     void ButtonClicked()
     {
-        Audio.Play();
-        g_BattleManager.OnUseSkill(ReferenceSkill, ReferencePokemon);
+        if(!Forbidden)
+        {
+            Audio.Play();
+            g_BattleManager.OnUseSkill(ReferenceSkill, ReferencePokemon);
+        }
     }
 }

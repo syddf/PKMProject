@@ -15,6 +15,10 @@ public class BattleItem
         ReferencePokemon = InReferencePokemon;
     }
 
+    public BaseItem GetBaseItem()
+    {
+        return ReferenceBaseItem;
+    }
     public string GetItemName()
     {
         return ReferenceBaseItem.ItemName;
