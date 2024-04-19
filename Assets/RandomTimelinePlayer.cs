@@ -6,7 +6,7 @@ public class RandomTimelinePlayer : MonoBehaviour
 {
     private PlayableDirector playableDirector;
     public PlayableAsset[] timelines;
-
+    private int LastIndex = 0;
     void Start()
     {
         playableDirector = this.GetComponent<PlayableDirector>();
@@ -21,7 +21,12 @@ public class RandomTimelinePlayer : MonoBehaviour
             return;
         }
         int randomIndex = Random.Range(0, timelines.Length);
+        if(LastIndex == randomIndex)
+        {
+            randomIndex = (randomIndex + 1) % timelines.Length;
+        }
         PlayTimeline(timelines[randomIndex]);
+        LastIndex = randomIndex;
     }
 
     void PlayTimeline(PlayableAsset timeline)

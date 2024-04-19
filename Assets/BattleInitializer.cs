@@ -72,6 +72,37 @@ public class BattleInitializer : MonoBehaviour
         NewModel.AddComponent<PokemonScaleAnimation>();
         NewModel.AddComponent<PokemonMoveAnimation>();
         NewModel.AddComponent<PokemonRotationAnimation>();
+
+        if(Trainer.BagPokemons[PokemonIndex].GetCanMega())
+        {
+            GameObject MegaModel = new GameObject(Trainer.TrainerName + "_" + Trainer.BagPokemons[PokemonIndex].GetName() + "-Mega");
+            if(Trainer.IsPlayer)
+            {
+                MegaModel.transform.position = PlayerTransform.position;
+                MegaModel.transform.rotation = PlayerTransform.rotation;
+            }
+            else
+            {
+                MegaModel.transform.position = EnemyTransform.position;
+                MegaModel.transform.rotation = EnemyTransform.rotation;
+            }
+            MegaModel.transform.parent = ModelsRoot.transform;
+            prefabPath = "Models/" + Trainer.BagPokemons[PokemonIndex].GetName() + "-Mega" + "/Prefabs/pkmModel";
+            GameObject megaPrefab = Resources.Load<GameObject>(prefabPath);
+            GameObject instantiatedMegaPrefab = Instantiate(megaPrefab, new Vector3(0, 0, 0), megaPrefab.transform.rotation);
+            instantiatedMegaPrefab.transform.parent = MegaModel.transform;
+            instantiatedMegaPrefab.transform.localPosition = Vector3.zero;
+            instantiatedMegaPrefab.transform.localRotation = megaPrefab.transform.rotation;
+            MegaModel.AddComponent<PokemonAnimationController>();
+            MegaModel.GetComponent<PokemonAnimationController>().PkmAnimator = instantiatedMegaPrefab.GetComponent<Animator>();
+            MegaModel.AddComponent<PokemonReceiver>();
+            MegaModel.GetComponent<PokemonReceiver>().BodyTransform = instantiatedMegaPrefab.GetComponent<InitPokemonComponets>().CenterPosition;
+            MegaModel.GetComponent<PokemonReceiver>().TouchHitTransform = instantiatedMegaPrefab.GetComponent<InitPokemonComponets>().TouchHitPosition;
+            MegaModel.AddComponent<PokemonScaleAnimation>();
+            MegaModel.AddComponent<PokemonMoveAnimation>();
+            MegaModel.AddComponent<PokemonRotationAnimation>();
+            MegaModel.SetActive(false);
+        }
         return NewModel;
     }
 

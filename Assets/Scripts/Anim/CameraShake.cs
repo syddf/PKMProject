@@ -4,8 +4,6 @@ using Cinemachine;
 
 public class CameraShake : MonoBehaviour
 {
-    public static CameraShake Instance { get; private set; }
-
     private CinemachineVirtualCamera cinemachineVirtualCamera;
     private float shakeTimer;
     public RectTransform uiElement;
@@ -20,7 +18,6 @@ public class CameraShake : MonoBehaviour
     }
     private void Awake()
     {
-        Instance = this;
         cinemachineVirtualCamera = GetComponent<CinemachineVirtualCamera>();
         CinemachineBasicMultiChannelPerlin perlin = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         perlin.m_AmplitudeGain = 0f;

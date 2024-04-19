@@ -13,6 +13,7 @@ public class InitPokemonComponets : MonoBehaviour
     private Animator Anim;
     public Transform CenterPosition;
     public Transform TouchHitPosition;
+    public bool MegaUpgrade;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +28,15 @@ public class InitPokemonComponets : MonoBehaviour
     }
     void OnEnable()
     {
-        this.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+        if(MegaUpgrade)
+        {
+            this.transform.localPosition = new Vector3(0.0f, 0.0f, 1.48f);
+            MegaUpgrade = false;
+        }
+        else
+        {
+            this.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+        }
     }
     void AdjustColliderBounds()
     {

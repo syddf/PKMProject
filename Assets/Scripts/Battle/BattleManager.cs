@@ -42,6 +42,7 @@ public class BattleManager : MonoBehaviour
     private int TurnIndex;
 
     private List<List<BattleFieldStatus>> BattleFiledStatusLists;
+    public BaseSkill StruggleSkill;
 
     // Start is called before the first frame update
     void Start()
@@ -178,19 +179,22 @@ public class BattleManager : MonoBehaviour
         {
             BattleUIManager.SetPlayerStateChange(EStatusChange.None);
         }
-        for(int Index = 0; Index < Stats.StatusChangeList.Count; Index++)
+        if(Stats.StatusChangeList != null)
         {
-            if(StatusChange.IsStatusChange(Stats.StatusChangeList[Index].StatusChangeType))
+            for(int Index = 0; Index < Stats.StatusChangeList.Count; Index++)
             {
-                if(InPokemon.GetIsEnemy())
+                if(StatusChange.IsStatusChange(Stats.StatusChangeList[Index].StatusChangeType))
                 {
-                    BattleUIManager.SetEnemyStateChange(Stats.StatusChangeList[Index].StatusChangeType);
+                    if(InPokemon.GetIsEnemy())
+                    {
+                        BattleUIManager.SetEnemyStateChange(Stats.StatusChangeList[Index].StatusChangeType);
+                    }
+                    else
+                    {
+                        BattleUIManager.SetPlayerStateChange(Stats.StatusChangeList[Index].StatusChangeType);
+                    }
+                    break;
                 }
-                else
-                {
-                    BattleUIManager.SetPlayerStateChange(Stats.StatusChangeList[Index].StatusChangeType);
-                }
-                break;
             }
         }
     }
@@ -720,6 +724,10 @@ public class BattleManager : MonoBehaviour
         return RemoveStatus;
     }
 
+    public BaseSkill GetStruggleSkill()
+    {
+        return StruggleSkill;
+    }
     public bool IsPokemonInLastTurn(BattlePokemon TargetPokemon)
     {
         if(TurnIndex == 0) return false;

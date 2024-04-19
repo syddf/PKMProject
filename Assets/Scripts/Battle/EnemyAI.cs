@@ -51,6 +51,17 @@ public class EnemyAI
         }
     }
 
+    public double GetSkillPriorityFactor(BaseSkill InSkill, BattleManager InManager, BattlePokemon ReferencePokemon)
+    {
+        double Factor = 1.0;
+        BagPokemonSkillAI PokemonAI = ReferencePokemon.GetSkillAI();
+        if(PokemonAI)
+        {
+            Factor = Factor * PokemonAI.GetSkillPriorityFactor(InSkill, InManager, ReferencePokemon);
+        }
+        return Factor;
+    }
+
     public void GenerateEnemyEvent(List<Event> InEvents, BattleManager InManager, Event InPlayerAction)
     {
         HashSet<BaseSkill> ForbiddenSkillSet = ReferencePokemon.GetForbiddenBattleSkills(InManager);
@@ -67,6 +78,12 @@ public class EnemyAI
             {
                 TargetPokemon = CastedEvent.GetInPokemon();
             }
+        }
+
+        if(ForbiddenSkillSet.Count == 4)
+        {
+            AddUseSkillEvent(InManager.GetStruggleSkill(), InEvents);
+            return;
         }
 
         for(int Index = 0; Index < 4; Index++)
@@ -105,17 +122,17 @@ public class EnemyAI
                     if(Damage >= TargetPokemon.GetHP())
                     {
                         KillSkillIndex.Add(Index);
-                        Entry.Priority = 999;
+                        Entry.Priority = (int)(999 * GetSkillPriorityFactor(Entry.ReferenceSkill, InManager, ReferencePokemon));
                     }
                     else if(Damage >= (TargetPokemon.GetMaxHP() / 2))
                     {
                         double Ratio = (double)Damage / TargetPokemon.GetMaxHP();
-                        Entry.Priority = (int)Mathf.Lerp(100.0f, 500.0f, (float)Ratio);
+                        Entry.Priority = (int)(Mathf.Lerp(100.0f, 500.0f, (float)Ratio) * GetSkillPriorityFactor(Entry.ReferenceSkill, InManager, ReferencePokemon));
                     }
                     else
                     {
                         double Ratio = (double)Damage / (TargetPokemon.GetMaxHP() / 2);
-                        Entry.Priority = (int)Mathf.Lerp(10.0f, 100.0f, (float)Ratio);
+                        Entry.Priority = (int)(Mathf.Lerp(10.0f, 100.0f, (float)Ratio) * GetSkillPriorityFactor(Entry.ReferenceSkill, InManager, ReferencePokemon));
                     }
                     EntryList[Index] = Entry;
                 }
@@ -124,11 +141,25 @@ public class EnemyAI
 
         if(KillSkillIndex.Count > 0)
         {
+            int TotalValue = 0;
+            for(int Index = 0; Index < KillSkillIndex.Count; Index++)
+            {
+                AISkillEntry Entry = EntryList[KillSkillIndex[Index]];
+                TotalValue += Entry.Priority;
+            }
             System.Random rnd = new System.Random();
-            int RandNum = rnd.Next(0, KillSkillIndex.Count);
-            int SkillIndex = KillSkillIndex[RandNum];
-            AddUseSkillEvent(EntryList[SkillIndex].ReferenceSkill, InEvents);
-            return;
+            int RandNum = rnd.Next(0, TotalValue);
+
+            int Accu = 0;
+            for(int Index = 0; Index < KillSkillIndex.Count; Index++)
+            {
+                Accu += EntryList[KillSkillIndex[Index]].Priority;
+                if(Accu >= RandNum)
+                {
+                    AddUseSkillEvent(EntryList[KillSkillIndex[Index]].ReferenceSkill, InEvents);
+                    return;
+                }
+            }
         }
         else
         {

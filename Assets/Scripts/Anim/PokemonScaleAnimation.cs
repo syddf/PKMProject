@@ -43,6 +43,7 @@ public class PokemonScaleAnimation : MonoBehaviour
                 {
                     RB.isKinematic = false; 
                 }
+                this.gameObject.transform.localScale = End;
                 Play = false;
                 Timer = 0.0f;
             }

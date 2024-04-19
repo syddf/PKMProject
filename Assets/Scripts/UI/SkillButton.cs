@@ -25,7 +25,6 @@ public class SkillButton : MonoBehaviour
     {
         UIButton = this.GetComponent<Button>();
         Audio = this.GetComponent<AudioSource>();
-        UIButton.onClick.AddListener(() => ButtonClicked());
         Forbidden = false;
     }
 
@@ -44,6 +43,10 @@ public class SkillButton : MonoBehaviour
         if(Forbidden)
         {
             this.GetComponent<Image>().color = ForbiddenColor;
+        }
+        else
+        {
+            this.GetComponent<Button>().onClick.AddListener(() => ButtonClicked());
         }
         SkillNameText.text = ReferenceSkill.GetSkillName();
         int CurPP = ReferencePokemon.GetSkillPP(ReferenceSkill);
@@ -73,7 +76,7 @@ public class SkillButton : MonoBehaviour
 
     void ButtonClicked()
     {
-        if(!Forbidden)
+        if(!this.Forbidden)
         {
             Audio.Play();
             g_BattleManager.OnUseSkill(ReferenceSkill, ReferencePokemon);

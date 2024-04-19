@@ -98,6 +98,8 @@ public class BagPokemon : MonoBehaviour
     private bool MultiSpecies;
     [SerializeField]
     private int SpecieIndex;
+    [SerializeField]
+    private bool CanMega;
     
     public PokemonGender GetGender()
     {
@@ -232,5 +234,10 @@ public class BagPokemon : MonoBehaviour
         Debug.Log(Name + "Speed" + GetSpeed());
         Debug.Log(Name + "MaxHP" + GetMaxHP());
         */
+    }
+
+    public bool GetCanMega()
+    {
+        return CanMega;
     }
 }

@@ -22,7 +22,7 @@ public class AnimatorCreator : MonoBehaviour
     [MenuItem("Assets/Custom Tools/CloneAndReplaceAnimatorClips")]
     public static void CloneAndReplaceClips()
     {
-        string sourcePath = "Assets/Models/Animator.controller"; // 源Animator路径
+        string sourcePath = "Assets/Resources/Models/Animator.controller"; // 源Animator路径
         string destinationPath =  AssetDatabase.GetAssetPath(Selection.activeObject); // 目标Animator路径
         string animationsPath = Path.Combine(destinationPath, "Animation");
 

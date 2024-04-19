@@ -11,6 +11,6 @@ public class CameraShakeReceiver : ParameterizedSignalReceiver
         float Intensity = Convert.ToSingle(IntensityText);
         string TimeText = InSignal.GetParamValue("Time");
         float Time = Convert.ToSingle(TimeText);
-        CameraShake.Instance.ShakeCamera(Intensity, Time);
+        this.GetComponent<CameraShake>().ShakeCamera(Intensity, Time);
     }
 }

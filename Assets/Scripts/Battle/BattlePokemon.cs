@@ -129,6 +129,11 @@ public class BattlePokemon : MonoBehaviour
 
     private bool LostItem = false;
     private BaseSkill FirstSkill = null;
+
+    public BagPokemonSkillAI GetSkillAI()
+    {
+        return this.ReferenceBasePokemon.gameObject.GetComponent<BagPokemonSkillAI>();
+    }
     public BattlePokemonStat CloneBattlePokemonStats()
     {
         BattlePokemonStat NewStats = PokemonStats;

@@ -9,6 +9,7 @@ public class SwitchEvent : EventAnimationPlayer, Event
     private BattlePokemon InPokemon;
     private BattleManager ReferenceManager;
     private BattlePokemonStat CloneInPokemon;
+
     private int HP;
     public SwitchEvent(BattleManager InManager, BattlePokemon InOutPokemon, BattlePokemon InInPokemon)
     {
@@ -81,11 +82,13 @@ public class SwitchEvent : EventAnimationPlayer, Event
         {
             ReferenceManager.UpdateEnemyUI();
             ReferenceManager.UpdatePokemonInfo(InPokemon, CloneInPokemon);
+            ReferenceManager.UpdatePokemonStatusChange(InPokemon, CloneInPokemon);
         }
         else
         {
             ReferenceManager.UpdatePlayerUI();
             ReferenceManager.UpdatePokemonInfo(InPokemon, CloneInPokemon);
+            ReferenceManager.UpdatePokemonStatusChange(InPokemon, CloneInPokemon);
         }
     }
 
@@ -162,11 +165,13 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
         {
             ReferenceManager.UpdatePokemonInfo(EnemyNewPokemon, CloneEnemyNewPokemonStats);
             ReferenceManager.UpdateEnemyUI();
+            ReferenceManager.UpdatePokemonStatusChange(EnemyNewPokemon, CloneEnemyNewPokemonStats);
         }
         if(PlayerNewPokemon)
         {
             ReferenceManager.UpdatePokemonInfo(PlayerNewPokemon, ClonePlayerNewPokemonStats);
             ReferenceManager.UpdatePlayerUI();
+            ReferenceManager.UpdatePokemonStatusChange(PlayerNewPokemon, ClonePlayerNewPokemonStats);
         }
     }
 
