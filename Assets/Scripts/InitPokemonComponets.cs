@@ -31,7 +31,6 @@ public class InitPokemonComponets : MonoBehaviour
         if(MegaUpgrade)
         {
             this.transform.localPosition = new Vector3(0.0f, 0.0f, 1.48f);
-            MegaUpgrade = false;
         }
         else
         {

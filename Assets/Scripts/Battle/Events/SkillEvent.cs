@@ -356,7 +356,12 @@ public class SkillEvent : EventAnimationPlayer, Event
                     {
                         SkillMetas[TargetIndex].NoEffect = true;
                     }
-                    bool Effective = Skill.JudgeIsEffective(InManager, SourcePokemon, CurrentProcessTargetPokemon, out SkillMetas[TargetIndex].NoEffectReason);
+                    string NoEffectReason = "";
+                    bool Effective = Skill.JudgeIsEffective(InManager, SourcePokemon, CurrentProcessTargetPokemon, ref NoEffectReason);
+                    if(NoEffectReason != "")
+                    {
+                        SkillMetas[TargetIndex].NoEffectReason = NoEffectReason;
+                    }
                     if(!Effective)
                     {
                         SkillMetas[TargetIndex].NoEffect = true;

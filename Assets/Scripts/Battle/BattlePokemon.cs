@@ -122,6 +122,8 @@ public class BattlePokemon : MonoBehaviour
     [SerializeField]
     private GameObject PokemonModelObj;
     [SerializeField]
+    private GameObject PokemonMegaModelObj;
+    [SerializeField]
     private BagPokemon ReferenceBasePokemon;
     private BattlePokemonStat PokemonStats;
     private BattleItem Item;
@@ -151,6 +153,8 @@ public class BattlePokemon : MonoBehaviour
     public int GetMaxHP() => PokemonStats.MaxHP;
 
     private bool FirstIn = true;
+
+    private bool Mega = false;
 
     public void SwitchIn()
     {
@@ -366,33 +370,34 @@ public class BattlePokemon : MonoBehaviour
         return PokemonStats.Dead;
     }
 
-    public void SetBattlePokemonData(BagPokemon InBagPokemon, PokemonTrainer InTrainer, GameObject ModelObject)
+    public void SetBattlePokemonData(BagPokemon InBagPokemon, PokemonTrainer InTrainer, GameObject ModelObject, GameObject MegaModelObject)
     {
         ReferenceBasePokemon = InBagPokemon;
         IsEnemy = !InTrainer.IsPlayer;
-        Ability = InBagPokemon.GetAbility();
+        Ability = InBagPokemon.GetAbility(false);
         if(Ability)
         {
             Ability.SetReferencePokemon(this);
         }
         PokemonModelObj = ModelObject;
+        PokemonMegaModelObj = MegaModelObject;
         LoadBasePokemonStats();
     }
 
     private void LoadBasePokemonStats()
     {
         Name = ReferenceBasePokemon.GetPokemonName();
-        PokemonStats.Atk = ReferenceBasePokemon.GetAtk();
-        PokemonStats.SAtk = ReferenceBasePokemon.GetSAtk();
-        PokemonStats.Def = ReferenceBasePokemon.GetDef();
-        PokemonStats.SDef = ReferenceBasePokemon.GetSDef();
+        PokemonStats.Atk = ReferenceBasePokemon.GetAtk(false);
+        PokemonStats.SAtk = ReferenceBasePokemon.GetSAtk(false);
+        PokemonStats.Def = ReferenceBasePokemon.GetDef(false);
+        PokemonStats.SDef = ReferenceBasePokemon.GetSDef(false);
         PokemonStats.MaxHP = ReferenceBasePokemon.GetMaxHP();
-        PokemonStats.Speed = ReferenceBasePokemon.GetSpeed();
+        PokemonStats.Speed = ReferenceBasePokemon.GetSpeed(false);
         PokemonStats.Level = ReferenceBasePokemon.GetLevel();
         PokemonStats.HP = ReferenceBasePokemon.GetHP();
         
-        Type1 = ReferenceBasePokemon.GetType0();
-        Type2 = ReferenceBasePokemon.GetType1();
+        Type1 = ReferenceBasePokemon.GetType0(false);
+        Type2 = ReferenceBasePokemon.GetType1(false);
 
 
 
@@ -443,8 +448,22 @@ public class BattlePokemon : MonoBehaviour
         return ReferenceBasePokemon.GetIndexInPKDex();
     }
 
+    public GameObject GetOriginPokemonModel()
+    {
+        return PokemonModelObj;
+    }
+    public GameObject GetMegaPokemonModel()
+    {
+        return PokemonMegaModelObj;
+    }
+
+
     public GameObject GetPokemonModel()
     {
+        if(Mega)
+        {
+            return PokemonMegaModelObj;
+        }
         return PokemonModelObj;
     }
 
@@ -699,5 +718,27 @@ public class BattlePokemon : MonoBehaviour
     public void GetLostItem()
     {
         LostItem = true;
-    }   
+    } 
+
+    public bool CanMega()
+    {
+        return ReferenceBasePokemon.GetCanMega() && Mega == false;
+    }
+
+    public void MegaEvolution()
+    {
+        Mega = true;
+        PokemonStats.Atk = ReferenceBasePokemon.GetAtk(Mega);
+        PokemonStats.SAtk = ReferenceBasePokemon.GetSAtk(Mega);
+        PokemonStats.Def = ReferenceBasePokemon.GetDef(Mega);
+        PokemonStats.SDef = ReferenceBasePokemon.GetSDef(Mega);
+        PokemonStats.Speed = ReferenceBasePokemon.GetSpeed(Mega);
+        Ability = ReferenceBasePokemon.GetAbility(Mega);
+        if(Ability)
+        {
+            Ability.SetReferencePokemon(this);
+        }
+        Type1 = ReferenceBasePokemon.GetType0(Mega);
+        Type2 = ReferenceBasePokemon.GetType1(Mega);
+    }
 }

@@ -41,4 +41,5 @@ public class TimelineAnimationManager : MonoBehaviour
     public PlayableDirector ChatAnimation;
     public PlayableDirector HalfSecondActiveAnimation;
     public PlayableDirector InBattleAnimation;
+    public PlayableDirector MegaAnimation;
 }

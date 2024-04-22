@@ -10,6 +10,21 @@ public class PokemonAnimationController : MonoBehaviour
     private Vector3 Small = new Vector3(0.2f, 0.2f, 0.2f);
     private bool Play = false;
     public Animator PkmAnimator;
+    public InitPokemonComponets ModelRootInitializer;
+
+    public void AfterMega()
+    {
+        ModelRootInitializer.MegaUpgrade = false;
+    }
+
+    public void BeginMega()
+    {
+        PkmAnimator.SetBool("Mega", true);
+    }
+    public void EndMega()
+    {
+        PkmAnimator.SetBool("Mega", false);
+    }
     public void BeginAttack1()
     {
         PkmAnimator.SetBool("Attack1", true);

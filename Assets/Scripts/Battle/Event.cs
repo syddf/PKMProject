@@ -34,6 +34,8 @@ public enum ETimePoint
     AfterSetPokemonStatusChange,
     BeforeSetBattleFieldStatusChange,
     AfterSetBattleFieldStatusChange,
+    BeforeMegaEvolution,
+    AfterMegaEvolution
 }
 
 public enum EEventResultType
@@ -51,6 +53,7 @@ public enum EventType
 {
     BattleStart,
     Switch,
+    MegaEvolution,
     UseSkill,
     PokemonDefeated,
     StatChange,

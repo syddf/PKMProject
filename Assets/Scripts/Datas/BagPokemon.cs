@@ -70,6 +70,7 @@ public class BagPokemon : MonoBehaviour
         {1, 1, 1, 1, 1},
     };
     private PokemonData SourcePokemonData;
+    private PokemonData SourcePokemonMegaData;
     [SerializeField]
     private PokemonDataCollection PkmDataCollections;
     [SerializeField]
@@ -90,6 +91,8 @@ public class BagPokemon : MonoBehaviour
     private BaseItem Item;
     [SerializeField]
     private BaseAbility Ability;
+    [SerializeField]
+    private BaseAbility MegaAbility;
     [SerializeField]
     private BaseSkill[] ReferenceSkill = new BaseSkill[4];
     [SerializeField]
@@ -132,28 +135,48 @@ public class BagPokemon : MonoBehaviour
         return Level;
     }
 
-    public int GetAtk()
+    public int GetAtk(bool Mega)
     {
+        if(Mega)
+        {
+            CaclStatus(SourcePokemonMegaData.Atk, 1);
+        }
         return CaclStatus(SourcePokemonData.Atk, 1);
     }
 
-    public int GetSAtk()
+    public int GetSAtk(bool Mega)
     {
+        if(Mega)
+        {
+            CaclStatus(SourcePokemonMegaData.SAtk, 3);
+        }
         return CaclStatus(SourcePokemonData.SAtk, 3);
     }
 
-    public int GetDef()
+    public int GetDef(bool Mega)
     {
+        if(Mega)
+        {
+            CaclStatus(SourcePokemonMegaData.Def, 2);
+        }
         return CaclStatus(SourcePokemonData.Def, 2);
     }
 
-    public int GetSDef()
+    public int GetSDef(bool Mega)
     {
+        if(Mega)
+        {
+            CaclStatus(SourcePokemonMegaData.Spd, 4);
+        }
         return CaclStatus(SourcePokemonData.Spd, 4);
     }
 
-    public int GetSpeed()
+    public int GetSpeed(bool Mega)
     {
+        if(Mega)
+        {
+            CaclStatus(SourcePokemonMegaData.Spe, 5);
+        }
         return CaclStatus(SourcePokemonData.Spe, 5);
     }
 
@@ -166,8 +189,16 @@ public class BagPokemon : MonoBehaviour
         return HP;
     }
 
-    public EType GetType0()
+    public EType GetType0(bool Mega)
     {
+        if(Mega)
+        {
+            if(SourcePokemonMegaData.Type0 == "undefined")
+            {
+                return EType.None;
+            }
+            return (EType)Enum.Parse(typeof(EType), SourcePokemonMegaData.Type0);
+        }
         if(SourcePokemonData.Type0 == "undefined")
         {
             return EType.None;
@@ -175,8 +206,16 @@ public class BagPokemon : MonoBehaviour
         return (EType)Enum.Parse(typeof(EType), SourcePokemonData.Type0);
     }
 
-    public EType GetType1()
-    {
+    public EType GetType1(bool Mega)
+    {        
+        if(Mega)
+        {
+            if(SourcePokemonMegaData.Type1 == "undefined")
+            {
+                return EType.None;
+            }
+            return (EType)Enum.Parse(typeof(EType), SourcePokemonMegaData.Type1);
+        }
         if(SourcePokemonData.Type1 == "undefined")
         {
             return EType.None;
@@ -213,18 +252,30 @@ public class BagPokemon : MonoBehaviour
         return PokemonName;
     }
 
-    public BaseAbility GetAbility()
+    public BaseAbility GetAbility(bool Mega)
     {
+        if(Mega)
+        {
+            return MegaAbility;
+        }
         return Ability;
     }
 
-    public void SetAbility(BaseAbility InAbility)
+    public void SetAbility(BaseAbility InAbility, bool Mega)
     {
+        if(Mega)
+        {
+            MegaAbility = InAbility;
+        }
         Ability = InAbility;
     }
     public void Awake() 
     {
         SourcePokemonData = PkmDataCollections.GetPokemonData(Name);
+        if(CanMega)
+        {
+            SourcePokemonMegaData = PkmDataCollections.GetPokemonData(Name + "-Mega");
+        }
         HP = GetMaxHP();
         /*
         Debug.Log(Name + "Atk" + GetAtk());

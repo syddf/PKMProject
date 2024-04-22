@@ -52,7 +52,16 @@ public class PokemonReceiver : ParameterizedSignalReceiver
         if(NewState == "Reset")
         {
             AnimController.Reset();
+        }        
+        if(NewState == "BeginMega")
+        {
+            AnimController.BeginMega();
         }
+        if(NewState == "EndMega")
+        {
+            AnimController.EndMega();
+        }
+
         if(NewState == "BeginStatus")
         {
             AnimController.BeginStatus();

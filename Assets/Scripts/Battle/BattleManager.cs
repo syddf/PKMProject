@@ -61,7 +61,10 @@ public class BattleManager : MonoBehaviour
     {
         if(PlayingAnimation)
         {
-            GetComponent<BattleCameraSwitcher>().DisableSwitching();
+            if(GetComponent<BattleCameraSwitcher>().enabled)
+            {
+                GetComponent<BattleCameraSwitcher>().DisableSwitching();
+            }
             if(AnimationEventList.Count == 0)
             {
                 PlayingAnimation = false;
@@ -439,6 +442,10 @@ public class BattleManager : MonoBehaviour
         else
         {
             TargetPokemon.Add(ETarget.None);
+        }
+        if(InReferencePokemon.CanMega())
+        {
+            EventsList.Add(new MegaEvent(this, InReferencePokemon));
         }
         EventsList.Add(new SkillEvent(this, UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetPokemon));
         EnemyAI NewEnemyAI = new EnemyAI(Opposites[0], this, EnemyTrainer);

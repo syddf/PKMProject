@@ -44,7 +44,7 @@ public class BattleInitializer : MonoBehaviour
         }
     }
 
-    public GameObject SpawnBattlePokemonModel(PokemonTrainer Trainer, int PokemonIndex)
+    public GameObject SpawnBattlePokemonModel(PokemonTrainer Trainer, int PokemonIndex, out GameObject OutMegaModel)
     {
         GameObject NewModel = new GameObject(Trainer.TrainerName + "_" + Trainer.BagPokemons[PokemonIndex].GetName());
         if(Trainer.IsPlayer)
@@ -66,6 +66,7 @@ public class BattleInitializer : MonoBehaviour
         instantiatedPrefab.transform.localRotation = prefab.transform.rotation;
         NewModel.AddComponent<PokemonAnimationController>();
         NewModel.GetComponent<PokemonAnimationController>().PkmAnimator = instantiatedPrefab.GetComponent<Animator>();
+        NewModel.GetComponent<PokemonAnimationController>().ModelRootInitializer = instantiatedPrefab.GetComponent<InitPokemonComponets>();
         NewModel.AddComponent<PokemonReceiver>();
         NewModel.GetComponent<PokemonReceiver>().BodyTransform = instantiatedPrefab.GetComponent<InitPokemonComponets>().CenterPosition;
         NewModel.GetComponent<PokemonReceiver>().TouchHitTransform = instantiatedPrefab.GetComponent<InitPokemonComponets>().TouchHitPosition;
@@ -73,6 +74,8 @@ public class BattleInitializer : MonoBehaviour
         NewModel.AddComponent<PokemonMoveAnimation>();
         NewModel.AddComponent<PokemonRotationAnimation>();
 
+
+        OutMegaModel = null;
         if(Trainer.BagPokemons[PokemonIndex].GetCanMega())
         {
             GameObject MegaModel = new GameObject(Trainer.TrainerName + "_" + Trainer.BagPokemons[PokemonIndex].GetName() + "-Mega");
@@ -95,6 +98,7 @@ public class BattleInitializer : MonoBehaviour
             instantiatedMegaPrefab.transform.localRotation = megaPrefab.transform.rotation;
             MegaModel.AddComponent<PokemonAnimationController>();
             MegaModel.GetComponent<PokemonAnimationController>().PkmAnimator = instantiatedMegaPrefab.GetComponent<Animator>();
+            MegaModel.GetComponent<PokemonAnimationController>().ModelRootInitializer = instantiatedMegaPrefab.GetComponent<InitPokemonComponets>();
             MegaModel.AddComponent<PokemonReceiver>();
             MegaModel.GetComponent<PokemonReceiver>().BodyTransform = instantiatedMegaPrefab.GetComponent<InitPokemonComponets>().CenterPosition;
             MegaModel.GetComponent<PokemonReceiver>().TouchHitTransform = instantiatedMegaPrefab.GetComponent<InitPokemonComponets>().TouchHitPosition;
@@ -102,6 +106,8 @@ public class BattleInitializer : MonoBehaviour
             MegaModel.AddComponent<PokemonMoveAnimation>();
             MegaModel.AddComponent<PokemonRotationAnimation>();
             MegaModel.SetActive(false);
+
+            OutMegaModel = MegaModel;
         }
         return NewModel;
     }
@@ -138,13 +144,22 @@ public class BattleInitializer : MonoBehaviour
     public void SpawnAbility(PokemonTrainer Trainer, int PokemonIndex)
     {
         BagPokemon Pkm = Trainer.BagPokemons[PokemonIndex];
-        BaseAbility Ability = Pkm.GetAbility();
+        BaseAbility Ability = Pkm.GetAbility(false);
         if(Ability)
         {
             GameObject prefab = Ability.gameObject;
             GameObject instantiatedPrefab = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
             instantiatedPrefab.transform.parent = AbilitiesSkillRoot.transform;
-            Pkm.SetAbility(instantiatedPrefab.GetComponent<BaseAbility>());   
+            Pkm.SetAbility(instantiatedPrefab.GetComponent<BaseAbility>(), false);   
+        }
+
+        BaseAbility MegaAbility = Pkm.GetAbility(true);
+        if(MegaAbility)
+        {
+            GameObject prefab = MegaAbility.gameObject;
+            GameObject instantiatedPrefab = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
+            instantiatedPrefab.transform.parent = AbilitiesSkillRoot.transform;
+            Pkm.SetAbility(instantiatedPrefab.GetComponent<BaseAbility>(), true);   
         }
     }
     public void SpawnItem(PokemonTrainer Trainer, int PokemonIndex)
@@ -166,11 +181,12 @@ public class BattleInitializer : MonoBehaviour
             SpawnSkillAnimations(Trainer, PokemonIndex);
             SpawnAbility(Trainer, PokemonIndex);
             SpawnItem(Trainer, PokemonIndex);
-            GameObject ModelObject = SpawnBattlePokemonModel(Trainer, PokemonIndex);
+            GameObject MegaModel;
+            GameObject ModelObject = SpawnBattlePokemonModel(Trainer, PokemonIndex, out MegaModel);
             GameObject newPokemon = new GameObject(Trainer.TrainerName + "_" + Trainer.BagPokemons[PokemonIndex].GetName());
             newPokemon.transform.parent = BattlePokemonRoot.transform;
             BattlePokemon battlePokemon = newPokemon.AddComponent<BattlePokemon>();
-            battlePokemon.SetBattlePokemonData(Trainer.BagPokemons[PokemonIndex], Trainer, ModelObject);
+            battlePokemon.SetBattlePokemonData(Trainer.BagPokemons[PokemonIndex], Trainer, ModelObject, MegaModel);
             Trainer.BattlePokemons[PokemonIndex] = battlePokemon;
             ModelObject.SetActive(false);
         }
