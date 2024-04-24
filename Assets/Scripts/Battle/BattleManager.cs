@@ -356,6 +356,10 @@ public class BattleManager : MonoBehaviour
         EventsListHistory.Clear();
         BattleFiledStatusLists[0].Clear();
         BattleFiledStatusLists[1].Clear();
+        FiledState.WeatherType = EWeather.None;
+        FiledState.WeatherRemainTime = 0;
+        FiledState.FieldTerrain = EBattleFieldTerrain.None;
+        FiledState.TerrainRemainTime = 0;
     }
 
     public List<BaseAbility> QueryAbilitiesWhenTimeChange(Event SourceEvent)
@@ -761,4 +765,32 @@ public class BattleManager : MonoBehaviour
         }
         return false;
     }
+
+    public void SetWeather(EWeather WeatherType, int TurnNum)
+    {
+        FiledState.WeatherType = WeatherType;
+        FiledState.WeatherRemainTime = TurnNum;
+    }
+
+
+    public EWeather GetWeatherType()
+    {
+        return FiledState.WeatherType;
+    }
+
+    public int GetWeatherRemainTurn()
+    {
+        return FiledState.WeatherRemainTime;
+    }
+    public bool ReduceWeatherTurn()
+    {
+        if(FiledState.WeatherType == EWeather.None)
+        {
+            return false;
+        }
+        FiledState.WeatherRemainTime = FiledState.WeatherRemainTime - 1;
+        return FiledState.WeatherRemainTime == 0;
+    }
+
+
 }

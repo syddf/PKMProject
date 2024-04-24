@@ -37,6 +37,20 @@ public class TurnEndEvent : EventAnimationPlayer, Event
         }
     }
 
+    public void ProcessSandEvent(BattleManager InManager)
+    {
+        var BattlePokemons = InManager.GetBattlePokemons();
+        for(int Index = 0; Index < BattlePokemons.Count; Index++)
+        {
+            if(!BattlePokemons[Index].IsDead() && !(BattlePokemons[Index].HasType(EType.Ground) || BattlePokemons[Index].HasType(EType.Rock) || BattlePokemons[Index].HasType(EType.Steel)))
+            {
+                int Damage = BattlePokemons[Index].GetMaxHP() / 16;
+                DamageEvent damageEvent = new DamageEvent(BattlePokemons[Index], Damage, "沙暴天气");
+                damageEvent.Process(InManager);
+            }
+        }
+    }
+
     public void ProcessTimeReduceEvent(BattleManager InManager)
     {
         if(InManager.ReduceTerrainTurn())
@@ -80,6 +94,10 @@ public class TurnEndEvent : EventAnimationPlayer, Event
         if(InManager.GetTerrainType() == EBattleFieldTerrain.Grass)
         {
             ProcessGrassTerrainHealEvent(InManager);
+        }
+        if(InManager.GetWeatherType() == EWeather.Sand)
+        {
+            ProcessSandEvent(InManager);
         }
         InManager.TranslateTimePoint(ETimePoint.TurnEnd, this);
         ProcessTimeReduceEvent(InManager);

@@ -139,7 +139,7 @@ public class BagPokemon : MonoBehaviour
     {
         if(Mega)
         {
-            CaclStatus(SourcePokemonMegaData.Atk, 1);
+            return CaclStatus(SourcePokemonMegaData.Atk, 1);
         }
         return CaclStatus(SourcePokemonData.Atk, 1);
     }
@@ -148,7 +148,7 @@ public class BagPokemon : MonoBehaviour
     {
         if(Mega)
         {
-            CaclStatus(SourcePokemonMegaData.SAtk, 3);
+            return CaclStatus(SourcePokemonMegaData.SAtk, 3);
         }
         return CaclStatus(SourcePokemonData.SAtk, 3);
     }
@@ -157,7 +157,7 @@ public class BagPokemon : MonoBehaviour
     {
         if(Mega)
         {
-            CaclStatus(SourcePokemonMegaData.Def, 2);
+            return CaclStatus(SourcePokemonMegaData.Def, 2);
         }
         return CaclStatus(SourcePokemonData.Def, 2);
     }
@@ -166,7 +166,7 @@ public class BagPokemon : MonoBehaviour
     {
         if(Mega)
         {
-            CaclStatus(SourcePokemonMegaData.Spd, 4);
+            return CaclStatus(SourcePokemonMegaData.Spd, 4);
         }
         return CaclStatus(SourcePokemonData.Spd, 4);
     }
@@ -175,7 +175,7 @@ public class BagPokemon : MonoBehaviour
     {
         if(Mega)
         {
-            CaclStatus(SourcePokemonMegaData.Spe, 5);
+            return CaclStatus(SourcePokemonMegaData.Spe, 5);
         }
         return CaclStatus(SourcePokemonData.Spe, 5);
     }
@@ -266,6 +266,7 @@ public class BagPokemon : MonoBehaviour
         if(Mega)
         {
             MegaAbility = InAbility;
+            return;
         }
         Ability = InAbility;
     }

@@ -180,7 +180,7 @@ public class BattlePokemon : MonoBehaviour
         }
         return ChangeLevel;
     }
-    public int GetAtk(ECaclStatsMode Mode) 
+    public int GetAtk(ECaclStatsMode Mode, BattleManager InManager) 
     { 
         int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.AtkChangeLevel);
         double ItemFactor = 1.0;
@@ -190,12 +190,17 @@ public class BattlePokemon : MonoBehaviour
         }        
         return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[ChangeLevel + 6] * ItemFactor);
     }
-    public int GetDef(ECaclStatsMode Mode)
+    public int GetDef(ECaclStatsMode Mode, BattleManager InManager)
     {
-        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.DefChangeLevel);  
-        return (int)Math.Floor((double)PokemonStats.Def * StatLevelFactor[ChangeLevel + 6]);
+        int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.DefChangeLevel);
+        double WeatherFactor = 1.0;
+        if(InManager.GetWeatherType() == EWeather.Snow && HasType(EType.Ice))
+        {
+            WeatherFactor = 1.5;
+        }
+        return (int)Math.Floor((double)PokemonStats.Def * StatLevelFactor[ChangeLevel + 6] * WeatherFactor);
     }
-    public int GetSAtk(ECaclStatsMode Mode)
+    public int GetSAtk(ECaclStatsMode Mode, BattleManager InManager)
     {
         int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SAtkChangeLevel);
         double ItemFactor = 1.0;
@@ -205,15 +210,20 @@ public class BattlePokemon : MonoBehaviour
         }  
         return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[ChangeLevel + 6] * ItemFactor);
     }
-    public int GetSDef(ECaclStatsMode Mode)
+    public int GetSDef(ECaclStatsMode Mode, BattleManager InManager)
     {
         int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SDefChangeLevel);
         double ItemFactor = 1.0;
         if(HasItem("突击背心"))
         {
             ItemFactor = 1.5;
-        }  
-        return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6] * ItemFactor);
+        }
+        double WeatherFactor = 1.0;
+        if(InManager.GetWeatherType() == EWeather.Sand && HasType(EType.Rock))
+        {
+            WeatherFactor = 1.5;
+        }
+        return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6] * ItemFactor * WeatherFactor);
     }    
     public int GetSpeed(ECaclStatsMode Mode)
     {
@@ -723,6 +733,11 @@ public class BattlePokemon : MonoBehaviour
     public bool CanMega()
     {
         return ReferenceBasePokemon.GetCanMega() && Mega == false;
+    }
+
+    public bool IsMega()
+    {
+        return Mega;
     }
 
     public void MegaEvolution()

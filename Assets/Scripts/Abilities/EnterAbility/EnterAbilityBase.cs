@@ -6,7 +6,7 @@ public class EnterAbilityBase : BaseAbility
 {
     public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
     {
-        if(TimePoint != ETimePoint.PokemonIn && TimePoint != ETimePoint.BattleStart)
+        if(TimePoint != ETimePoint.PokemonIn && TimePoint != ETimePoint.BattleStart && TimePoint != ETimePoint.AfterMegaEvolution)
         {
             return false;
         }
@@ -27,6 +27,12 @@ public class EnterAbilityBase : BaseAbility
         {
             SingleBattleGameStartEvent CastedEvent = (SingleBattleGameStartEvent)SourceEvent;
             return CastedEvent.GetPlayerPokemon() == this.ReferencePokemon || CastedEvent.GetEnemyPokemon() == this.ReferencePokemon;
+        }
+
+        if(SourceEvent.GetEventType() == EventType.MegaEvolution)
+        {
+            MegaEvent CastedEvent = (MegaEvent)SourceEvent;
+            return CastedEvent.GetReferencePokemon() == this.ReferencePokemon;
         }
 
         return false;

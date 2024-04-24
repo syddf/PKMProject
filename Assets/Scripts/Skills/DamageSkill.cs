@@ -88,6 +88,35 @@ public class DamageSkill : BaseSkill
         }
         Result = Result * ItemFactor;
 
+        double WeatherFactor = 1.0;
+        if(TargetPokemon.HasItem("万能伞") == false)
+        {
+            if(InManager.GetWeatherType() == EWeather.SunLight)
+            {
+                if(GetSkillType(SourcePokemon) == EType.Fire)
+                {
+                    WeatherFactor *= 1.5;
+                }   
+                if(GetSkillType(SourcePokemon) == EType.Water)
+                {
+                    WeatherFactor *= 0.5;
+                }   
+            }
+
+            if(InManager.GetWeatherType() == EWeather.Rain)
+            {
+                if(GetSkillType(SourcePokemon) == EType.Water)
+                {
+                    WeatherFactor *= 1.5;
+                }   
+                if(GetSkillType(SourcePokemon) == EType.Fire)
+                {
+                    WeatherFactor *= 0.5;
+                }   
+            }
+        }
+        Result = Result * WeatherFactor;
+
         return (int)Math.Floor(Result);
     }
 
@@ -174,9 +203,9 @@ public class DamageSkill : BaseSkill
         ECaclStatsMode Mode = GetSourceAtkCaclMode(InManager, SourcePokemon, TargetPokemon, CT);
         if(this.SkillClass ==  ESkillClass.PhysicalMove)
         {
-            return SourcePokemon.GetAtk(Mode);
+            return SourcePokemon.GetAtk(Mode, InManager);
         }
-        return SourcePokemon.GetSAtk(Mode);
+        return SourcePokemon.GetSAtk(Mode, InManager);
     }
 
     public virtual int GetTargetDef(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT)
@@ -184,9 +213,9 @@ public class DamageSkill : BaseSkill
         ECaclStatsMode Mode = GetTargetDefCaclMode(InManager, SourcePokemon, TargetPokemon, CT);
         if(this.SkillClass ==  ESkillClass.PhysicalMove)
         {
-            return TargetPokemon.GetDef(Mode);
+            return TargetPokemon.GetDef(Mode, InManager);
         }
-        return TargetPokemon.GetSDef(Mode);
+        return TargetPokemon.GetSDef(Mode, InManager);
     }
 
     public virtual double GetCTFactor(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)

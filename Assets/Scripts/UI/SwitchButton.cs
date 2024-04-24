@@ -17,6 +17,10 @@ public class SwitchButton : MonoBehaviour
         if(InPokemon == null)
             return;        
         int Index = InPokemon.GetIndexInPKDex();
+        if(InPokemon.IsMega())
+        {
+            Index = Index + 2000;
+        }
         PokemonSprite.sprite = PokemonSpritesManager.PKMSprites[Index];
         ItemSprite.sprite = null;
         if(InPokemon.HasItem())

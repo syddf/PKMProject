@@ -42,4 +42,5 @@ public class TimelineAnimationManager : MonoBehaviour
     public PlayableDirector HalfSecondActiveAnimation;
     public PlayableDirector InBattleAnimation;
     public PlayableDirector MegaAnimation;
+    public PlayableDirector WeatherDamageAnimation;
 }

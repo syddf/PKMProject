@@ -29,6 +29,13 @@ public class DamageEvent : EventAnimationPlayer, Event
             return;
         }
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        if(DamageReason == "沙暴天气")
+        {
+            PlayableDirector AnimDirector = Timelines.WeatherDamageAnimation;
+            TimelineAnimation WeatherDamageMessage = new TimelineAnimation(AnimDirector);
+            WeatherDamageMessage.SetSignalReceiver("TargetPokemon", ReferencePokemon.GetPokemonModel());
+            AddAnimation(WeatherDamageMessage);
+        }
         TimelineAnimation DamageAnimation = new TimelineAnimation(Timelines.DamageAnimation);
         DamageAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Damage", Damage.ToString());
 

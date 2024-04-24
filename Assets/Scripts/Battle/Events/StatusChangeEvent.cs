@@ -25,6 +25,9 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
     {
         if(InBattleManager.GetBattleEnd() == true) return false;
         if(ReferencePokemon.HasType(EType.Fire) && StatusChangeType == EStatusChange.Burn) return false;
+        if(ReferencePokemon.HasType(EType.Ice) && StatusChangeType == EStatusChange.Frostbite) return false;
+        if(ReferencePokemon.HasType(EType.Electric) && StatusChangeType == EStatusChange.Paralysis) return false;
+        if(InBattleManager.GetWeatherType() == EWeather.SunLight && StatusChangeType == EStatusChange.Frostbite) return false;
         if(ReferencePokemon.IsDead()) return false;
         return true;
     }

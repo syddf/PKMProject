@@ -13,6 +13,11 @@ public class MegaEvent : EventAnimationPlayer, Event
         ReferenceManager = InManager;
     }
 
+    public BattlePokemon GetReferencePokemon()
+    {
+        return ReferencePokemon;
+    }
+
     public bool ShouldProcess(BattleManager InBattleManager)
     {
         if(InBattleManager.GetBattleEnd() == true) return false;

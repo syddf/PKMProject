@@ -43,7 +43,12 @@ public class AbilityTriggerEvent : EventAnimationPlayer, Event
         TargetTimeline.SetTrackObject("StateObject", AbilityObj);
         TargetTimeline.SetSignalReceiver("SignalObject", AbilityObj);
         TargetTimeline.SetSignalParameter("SignalObject", "AbilityTriggerSignal", "AbilityName", SourceAbility.GetAbilityName());
-        TargetTimeline.SetSignalParameter("SignalObject", "AbilityTriggerSignal", "PokemonIndex", SourceAbility.GetReferencePokemon().GetIndexInPKDex().ToString());
+        int Index = SourceAbility.GetReferencePokemon().GetIndexInPKDex();
+        if(SourceAbility.GetReferencePokemon().IsMega())
+        {
+            Index = Index + 2000;
+        }
+        TargetTimeline.SetSignalParameter("SignalObject", "AbilityTriggerSignal", "PokemonIndex", Index.ToString());
         AddAnimation(TargetTimeline);
     }
 
