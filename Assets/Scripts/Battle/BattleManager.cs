@@ -43,6 +43,7 @@ public class BattleManager : MonoBehaviour
 
     private List<List<BattleFieldStatus>> BattleFiledStatusLists;
     public BaseSkill StruggleSkill;
+    public BattleMenuUI BeforeBattleUI;
 
     // Start is called before the first frame update
     void Start()
@@ -423,8 +424,23 @@ public class BattleManager : MonoBehaviour
         return ItemsToTrigger;
     }
 
+    public void ShowBeforeBattleMenu(string BattleName)
+    {
+        GameObject BattleConfigObj = GameObject.Find("BattleConfig/" + BattleName);
+        PlayerTrainer = BattleConfigObj.GetComponent<BattleConfig>().PlayerTrainer;
+        EnemyTrainer = BattleConfigObj.GetComponent<BattleConfig>().EnemyTrainer;
+        BeforeBattleUI.gameObject.SetActive(true);
+        BeforeBattleUI.SetEnemyPokemonTrainer(EnemyTrainer);
+        BeforeBattleUI.SetPlayerPokemonTrainer(PlayerTrainer);
+    }
+
     public void Test()
     {
+        GameObject NaniObj = GameObject.Find("Naninovel<Runtime>");
+        if(NaniObj)
+        {
+            NaniObj.SetActive(false);
+        }
         this.GetComponent<BattleInitializer>().InitBattleResources(PlayerTrainer, EnemyTrainer);
         BattlePokemonList[0] = PlayerTrainer.BattlePokemons[0];
         BattlePokemonList[1] = EnemyTrainer.BattlePokemons[0];
@@ -792,5 +808,8 @@ public class BattleManager : MonoBehaviour
         return FiledState.WeatherRemainTime == 0;
     }
 
-
+    public void TestAVG()
+    {
+        Debug.Log("Test.");
+    }
 }

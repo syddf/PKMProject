@@ -40,6 +40,121 @@ public enum PokemonGender
 }
 public class BagPokemon : MonoBehaviour
 {
+    public static string GetChineseNameWithCorrection(PokemonNature nature)
+    {
+        string chineseName = "";
+        string correction = "";
+
+        switch (nature)
+        {
+            case PokemonNature.Hardy:
+                chineseName = "勤奋";
+                correction = "不修正";
+                break;
+            case PokemonNature.Lonely:
+                chineseName = "怕寂寞";
+                correction = "攻击↑, 防御↓";
+                break;
+            case PokemonNature.Adamant:
+                chineseName = "固执";
+                correction = "攻击↑, 特攻↓";
+                break;
+            case PokemonNature.Naughty:
+                chineseName = "顽皮";
+                correction = "攻击↑, 防御↓";
+                break;
+            case PokemonNature.Brave:
+                chineseName = "勇敢";
+                correction = "攻击↑, 速度↓";
+                break;
+            case PokemonNature.Bold:
+                chineseName = "大胆";
+                correction = "防御↑, 攻击↓";
+                break;
+            case PokemonNature.Docile:
+                chineseName = "坦率";
+                correction = "不修正";
+                break;
+            case PokemonNature.Impish:
+                chineseName = "淘气";
+                correction = "防御↑, 特攻↓";
+                break;
+            case PokemonNature.Lax:
+                chineseName = "乐天";
+                correction = "防御↑, 特防↓";
+                break;
+            case PokemonNature.Relaxed:
+                chineseName = "悠闲";
+                correction = "防御↑, 速度↓";
+                break;
+            case PokemonNature.Modest:
+                chineseName = "内敛";
+                correction = "特攻↑, 攻击↓";
+                break;
+            case PokemonNature.Mild:
+                chineseName = "慢吞吞";
+                correction = "特攻↑, 防御↓";
+                break;
+            case PokemonNature.Bashful:
+                chineseName = "害羞";
+                correction = "不修正";
+                break;
+            case PokemonNature.Rash:
+                chineseName = "马虎";
+                correction = "特攻↑, 特防↓";
+                break;
+            case PokemonNature.Quiet:
+                chineseName = "冷静";
+                correction = "特攻↑, 速度↓";
+                break;
+            case PokemonNature.Calm:
+                chineseName = "温和";
+                correction = "特防↑, 攻击↓";
+                break;
+            case PokemonNature.Gentle:
+                chineseName = "温顺";
+                correction = "特防↑, 防御↓";
+                break;
+            case PokemonNature.Careful:
+                chineseName = "慎重";
+                correction = "特防↑, 特攻↓";
+                break;
+            case PokemonNature.Quirky:
+                chineseName = "浮躁";
+                correction = "不修正";
+                break;
+            case PokemonNature.Sassy:
+                chineseName = "自大";
+                correction = "特防↑, 速度↓";
+                break;
+            case PokemonNature.Timid:
+                chineseName = "胆小";
+                correction = "速度↑, 攻击↓";
+                break;
+            case PokemonNature.Hasty:
+                chineseName = "急躁";
+                correction = "速度↑, 防御↓";
+                break;
+            case PokemonNature.Jolly:
+                chineseName = "爽朗";
+                correction = "速度↑, 特攻↓";
+                break;
+            case PokemonNature.Naive:
+                chineseName = "天真";
+                correction = "速度↑, 特防↓";
+                break;
+            case PokemonNature.Serious:
+                chineseName = "认真";
+                correction = "不修正";
+                break;
+            default:
+                chineseName = "未知";
+                correction = "未知";
+                break;
+        }
+
+        return $"{chineseName} ({correction})";
+    }
     private static double[,] NatureFactor = new double[,] 
     {
         //ATK DEF SATK SDEF SPEED
@@ -104,6 +219,10 @@ public class BagPokemon : MonoBehaviour
     [SerializeField]
     private bool CanMega;
     
+    public PokemonNature GetNature()
+    {
+        return Nature;
+    }
     public PokemonGender GetGender()
     {
         return Gender;
