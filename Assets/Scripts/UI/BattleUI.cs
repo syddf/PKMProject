@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleUI : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class BattleUI : MonoBehaviour
     public PokemonTrainer CurrentPlayerTrainer;
     public SetTrainerSkillInfo PlayerTrainerSkillInfo;
     public SetTrainerSkillInfo EnemyTrainerSkillInfo;
+    public Image PlayerTrainerImage;
+    public Image EnemyTrainerImage;
+    public Image InBattlePlayerTrainerImage;
+    public Image InBattleEnemyTrainerImage;
     public void SetCurrentPlayerTrainer(PokemonTrainer InTrainer)
     {
         CurrentPlayerTrainer = InTrainer;
@@ -40,11 +45,15 @@ public class BattleUI : MonoBehaviour
     {
         PlayerInfo1.UpdateUI(InPokemon, InTrainer);
         PlayerTrainerSkillInfo.SetBattleTrainer(InTrainer);
+        PlayerTrainerImage.sprite = InTrainer.TrainerSpirte;
+        InBattlePlayerTrainerImage.sprite = InTrainer.TrainerSpirte;
     }
     public void UpdateEnemy1UI(BattlePokemon InPokemon, PokemonTrainer InTrainer)
     {
         EnemyInfo1.UpdateUI(InPokemon, InTrainer);
         EnemyTrainerSkillInfo.SetBattleTrainer(InTrainer);
+        EnemyTrainerImage.sprite = InTrainer.TrainerSpirte;
+        InBattleEnemyTrainerImage.sprite = InTrainer.TrainerSpirte;
     }
     public void GenerateSkills()
     {

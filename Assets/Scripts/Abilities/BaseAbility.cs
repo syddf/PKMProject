@@ -23,6 +23,11 @@ public class BaseAbility : MonoBehaviour
         return this.Name;
     }
 
+    public string GetAbilityDesc()
+    {
+        return this.Description;
+    }
+
     public virtual List<Event> Trigger(BattleManager InManager, Event SourceEvent)
     {
         return null;
