@@ -45,15 +45,15 @@ public class BattleUI : MonoBehaviour
     {
         PlayerInfo1.UpdateUI(InPokemon, InTrainer);
         PlayerTrainerSkillInfo.SetBattleTrainer(InTrainer);
-        PlayerTrainerImage.sprite = InTrainer.TrainerSpirte;
-        InBattlePlayerTrainerImage.sprite = InTrainer.TrainerSpirte;
+        PlayerTrainerImage.sprite = InTrainer.TrainerSprite;
+        InBattlePlayerTrainerImage.sprite = InTrainer.TrainerSprite;
     }
     public void UpdateEnemy1UI(BattlePokemon InPokemon, PokemonTrainer InTrainer)
     {
         EnemyInfo1.UpdateUI(InPokemon, InTrainer);
         EnemyTrainerSkillInfo.SetBattleTrainer(InTrainer);
-        EnemyTrainerImage.sprite = InTrainer.TrainerSpirte;
-        InBattleEnemyTrainerImage.sprite = InTrainer.TrainerSpirte;
+        EnemyTrainerImage.sprite = InTrainer.TrainerSprite;
+        InBattleEnemyTrainerImage.sprite = InTrainer.TrainerSprite;
     }
     public void GenerateSkills()
     {

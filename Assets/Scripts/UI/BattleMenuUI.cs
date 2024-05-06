@@ -45,7 +45,7 @@ public class BattleMenuUI : MonoBehaviour
     public void SetEnemyPokemonTrainer(PokemonTrainer InTrainer)
     {
         CurrentTrainer = InTrainer;
-        TrainerSprite.sprite = InTrainer.TrainerSpirte;
+        TrainerSprite.sprite = InTrainer.TrainerSprite;
         TrainerSkillDesc.text = InTrainer.TrainerSkill.GetSkillDescription();
         TrainerSkillName.text = InTrainer.TrainerSkill.GetSkillName();
         ChoosePokemon(CurrentTrainer.BagPokemons[0]);
@@ -58,7 +58,8 @@ public class BattleMenuUI : MonoBehaviour
 
     public void SwitchMega(bool isOn)
     {
-        InfoUI.SetBagPokemon(CurrentPokemon, isOn);
+        BagPokemonOverrideData OverrideData = new BagPokemonOverrideData();
+        InfoUI.SetBagPokemon(CurrentPokemon, isOn, OverrideData);
     }
 
     public void ChoosePokemon(BagPokemon InPokemon)
@@ -72,7 +73,8 @@ public class BattleMenuUI : MonoBehaviour
         SetPokemonSprite(Pokemon4Image, CurrentTrainer.BagPokemons[4], InPokemon == CurrentTrainer.BagPokemons[4]);
         SetPokemonSprite(Pokemon5Image, CurrentTrainer.BagPokemons[5], InPokemon == CurrentTrainer.BagPokemons[5]);
         CurrentPokemon = InPokemon;
-        InfoUI.SetBagPokemon(InPokemon, false);
+        BagPokemonOverrideData OverrideData = new BagPokemonOverrideData();
+        InfoUI.SetBagPokemon(InPokemon, false, OverrideData);
     }
 
     public void OnPokemonClick(int Index)
@@ -88,6 +90,6 @@ public class BattleMenuUI : MonoBehaviour
         SetPokemonSprite(PlayerPokemon3Image, PlayerTrainer.BagPokemons[3], true);
         SetPokemonSprite(PlayerPokemon4Image, PlayerTrainer.BagPokemons[4], true);
         SetPokemonSprite(PlayerPokemon5Image, PlayerTrainer.BagPokemons[5], true);
-        PlayerTrainerImage.sprite = PlayerTrainer.TrainerSpirte;
+        PlayerTrainerImage.sprite = PlayerTrainer.TrainerSprite;
     }
 }
