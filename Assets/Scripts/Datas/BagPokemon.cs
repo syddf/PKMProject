@@ -218,6 +218,26 @@ public class BagPokemon : MonoBehaviour
     private int SpecieIndex;
     [SerializeField]
     private bool CanMega;
+    [SerializeField]
+    private BaseSkill[] SkillPool = new BaseSkill[8];
+    private bool UseOverrideNatureForUI;
+    private PokemonNature OverrideNatureForUI;
+
+    public BaseSkill GetSkillPoolSkill(int Index)
+    {
+        return SkillPool[Index];
+    }
+
+    public void SetOverrideNature(PokemonNature InNature)
+    {
+        UseOverrideNatureForUI = true;
+        OverrideNatureForUI = InNature;
+    }
+
+    public void DisableOverrideNature()
+    {
+        UseOverrideNatureForUI = false;
+    }
     
     public PokemonNature GetNature()
     {
@@ -239,8 +259,12 @@ public class BagPokemon : MonoBehaviour
         else
         {
             double A = SpeciesStrength * 2 + IVs[Index] + (double)BasePoints[Index] / 4;
-            double Top = (double)Math.Floor(((double)A * (double)Level / 100.0f + 5.0f));
+            double Top = (double)Math.Floor(((double)A * (double)Level / 100.0f + 5.0f));            
             double fA = Top * NatureFactor[(int)Nature, Index - 1]; 
+            if(UseOverrideNatureForUI)
+            {
+                fA = Top * NatureFactor[(int)OverrideNatureForUI, Index - 1]; 
+            }
             return (int)Math.Floor(fA);
         }
     }

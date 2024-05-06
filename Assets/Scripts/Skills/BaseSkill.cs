@@ -162,4 +162,5 @@ public class BaseSkill : MonoBehaviour
         return SkillType;  
     }
     public string GetSkillName() => SkillName;
+    public string GetSkillDesc() => SkillDescription;
 }

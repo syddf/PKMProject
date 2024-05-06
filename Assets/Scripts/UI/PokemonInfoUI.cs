@@ -21,7 +21,9 @@ public class PokemonInfoUI : MonoBehaviour
     public TextMeshProUGUI AbilityDesc;
     public Image ItemImage;
     public TextMeshProUGUI ItemDesc;
-    public void SetBagPokemon(BagPokemon InPokemon, bool Mega)
+    public TMP_Dropdown NatureDropDown;
+    public PokemonTrainer CurrentTrainer;
+    public void SetBagPokemon(BagPokemon InPokemon, bool Mega, BagPokemonOverrideData OverrideData, bool UpdateNatureDropDown = true)
     {
         CurrentBagPokemon = InPokemon;
         int HP = InPokemon.GetMaxHP();
@@ -62,6 +64,110 @@ public class PokemonInfoUI : MonoBehaviour
             ItemText.text = "无";
             ItemDesc.text = "无";
             ItemImage.sprite = null;
+        }
+
+        if(UpdateNatureDropDown && NatureDropDown)
+        {
+            List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
+            int Start = (int)PokemonNature.Hardy;
+            int End = (int)PokemonNature.Serious;
+            for(int Val = Start; Val <= End; Val++)
+            {
+                options.Add(new TMP_Dropdown.OptionData(BagPokemon.GetChineseNameWithCorrection((PokemonNature)Val)));
+            }
+            NatureDropDown.ClearOptions();
+            NatureDropDown.AddOptions(options);
+            NatureDropDown.value = (int)InPokemon.GetNature();
+        }
+
+
+        if(OverrideData.Overrided)
+        {
+            string TrainerName = OverrideData.ReplaceTrainerName;
+            string PokemonName = OverrideData.ReplacePokemonName;
+
+            GameObject TrainerObj = GameObject.Find("SingleBattle/AllTrainers/" + TrainerName);
+            PokemonTrainer Trainer = TrainerObj.GetComponent<PokemonTrainer>();
+            BagPokemon ReferencePokemon = null;
+            foreach(var BagPkm in Trainer.BagPokemons)
+            {
+                if(BagPkm.GetPokemonName() == PokemonName)
+                {
+                    ReferencePokemon = BagPkm;
+                    break;
+                }
+            }
+
+            if(ReferencePokemon != null)
+            {
+                if(UpdateNatureDropDown && NatureDropDown)
+                {
+                    NatureDropDown.value = (int)OverrideData.Nature;
+                }
+                ReferencePokemon.SetOverrideNature(OverrideData.Nature);
+                int NewHP = ReferencePokemon.GetMaxHP();
+                HPText.text = NewHP.ToString() + "/" + NewHP.ToString();
+                AtkText.text = ReferencePokemon.GetAtk(Mega).ToString();
+                DefText.text = ReferencePokemon.GetDef(Mega).ToString();
+                SAtkText.text = ReferencePokemon.GetSAtk(Mega).ToString();
+                SDefText.text = ReferencePokemon.GetSDef(Mega).ToString();
+                SpeedText.text = ReferencePokemon.GetSpeed(Mega).ToString();
+                PokemonNameText.text = ReferencePokemon.GetPokemonName();
+                BaseAbility NewAbility = ReferencePokemon.GetAbility(Mega);
+                if(NewAbility)
+                {
+                    AbilityText.text = ReferencePokemon.GetAbility(Mega).GetAbilityName();
+                    AbilityDesc.text = ReferencePokemon.GetAbility(Mega).GetAbilityDesc();
+                }
+                else
+                {
+                    AbilityText.text = "无";
+                    AbilityDesc.text = "无";
+                }
+                int NewIndex = ReferencePokemon.GetIndexInPKDex();
+                if(Mega)
+                {
+                    NewIndex = NewIndex + 2000;
+                }
+                PokemonSpriteImage.sprite = PokemonSpritesManager.PKMSprites[NewIndex];
+                NatureText.text = BagPokemon.GetChineseNameWithCorrection(ReferencePokemon.GetNature());
+
+                int NewItemIndex = OverrideData.ItemIndex;
+                if(CurrentTrainer)
+                {
+                    BaseItem NewItem = CurrentTrainer.BagPokemons[NewItemIndex].GetItem();
+                    if(NewItem)
+                    {
+                        ItemText.text = NewItem.ItemName;
+                        ItemDesc.text = NewItem.Description;
+                        ItemImage.sprite = PokemonSpritesManager.ItemSprites[NewItem.ItemName];
+                    }
+                    else
+                    {
+                        ItemText.text = "无";
+                        ItemDesc.text = "无";
+                        ItemImage.sprite = null;
+                    }
+                }
+                else
+                {
+                    BaseItem NewItem = ReferencePokemon.GetItem();
+                    if(NewItem)
+                    {
+                        ItemText.text = NewItem.ItemName;
+                        ItemDesc.text = NewItem.Description;
+                        ItemImage.sprite = PokemonSpritesManager.ItemSprites[NewItem.ItemName];
+                    }
+                    else
+                    {
+                        ItemText.text = "无";
+                        ItemDesc.text = "无";
+                        ItemImage.sprite = null;
+                    }
+                }
+
+                ReferencePokemon.DisableOverrideNature();
+            }
         }
     }
 }

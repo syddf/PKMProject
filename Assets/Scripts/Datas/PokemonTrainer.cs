@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class PokemonTrainer : MonoBehaviour
 {
     public string TrainerName;
-    public Sprite TrainerSpirte;
+    public Sprite TrainerSprite;
     public BattlePokemon[] BattlePokemons = new BattlePokemon[6];
     public BagPokemon[] BagPokemons = new BagPokemon[6];
     public List<string> LineWhenPokemon0FirstIn = new List<string>();
