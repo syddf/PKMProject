@@ -424,13 +424,19 @@ public class BattleManager : MonoBehaviour
         return ItemsToTrigger;
     }
 
-    public void ShowBeforeBattleMenu(string BattleName)
+    public void ShowBeforeBattleMenu(string BattleName, int Index)
     {
         GameObject BattleConfigObj = GameObject.Find("BattleConfig/" + BattleName);
         PlayerTrainer = BattleConfigObj.GetComponent<BattleConfig>().PlayerTrainer;
-        EnemyTrainer = BattleConfigObj.GetComponent<BattleConfig>().EnemyTrainer;
         BeforeBattleUI.gameObject.SetActive(true);
-        BeforeBattleUI.SetEnemyPokemonTrainer(EnemyTrainer);
+        if(Index == 0)
+        {
+            BeforeBattleUI.SetEnemyPokemonTrainer(BattleConfigObj.GetComponent<BattleConfig>().EnemyTrainer1);
+        }
+        else if(Index == 1)
+        {
+            BeforeBattleUI.SetEnemyPokemonTrainer(BattleConfigObj.GetComponent<BattleConfig>().EnemyTrainer2);
+        }
         BeforeBattleUI.SetPlayerPokemonTrainer(PlayerTrainer);
     }
 
