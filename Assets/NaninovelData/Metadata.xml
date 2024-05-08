@@ -87,11 +87,11 @@
     &lt;Commands&gt;
       &lt;Command&gt;
         &lt;Id&gt;NaniNovelCustomFunc&lt;/Id&gt;
-        &lt;Alias&gt;beginbattle&lt;/Alias&gt;
+        &lt;Alias&gt;finishStory&lt;/Alias&gt;
         &lt;Localizable&gt;false&lt;/Localizable&gt;
         &lt;Parameters&gt;
           &lt;Parameter&gt;
-            &lt;Id&gt;Name&lt;/Id&gt;
+            &lt;Id&gt;ChapterIndex&lt;/Id&gt;
             &lt;Nameless&gt;false&lt;/Nameless&gt;
             &lt;Required&gt;false&lt;/Required&gt;
             &lt;Localizable&gt;false&lt;/Localizable&gt;
@@ -292,6 +292,10 @@
         &lt;Type&gt;Scripts&lt;/Type&gt;
       &lt;/Resource&gt;
       &lt;Resource&gt;
+        &lt;Path&gt;Chapter0&lt;/Path&gt;
+        &lt;Type&gt;Scripts&lt;/Type&gt;
+      &lt;/Resource&gt;
+      &lt;Resource&gt;
         &lt;Path&gt;Normal&lt;/Path&gt;
         &lt;Type&gt;Characters/希特隆&lt;/Type&gt;
       &lt;/Resource&gt;
@@ -299,6 +303,10 @@
     &lt;Constants&gt;
       &lt;Constant&gt;
         &lt;Name&gt;Labels/NewScript&lt;/Name&gt;
+        &lt;Values /&gt;
+      &lt;/Constant&gt;
+      &lt;Constant&gt;
+        &lt;Name&gt;Labels/Chapter0&lt;/Name&gt;
         &lt;Values /&gt;
       &lt;/Constant&gt;
     &lt;/Constants&gt;

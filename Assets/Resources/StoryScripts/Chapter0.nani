@@ -1,0 +1,18 @@
+@wait 4
+
+; Activate fullscreen printer.
+@printer Fullscreen
+
+; Following lines will be printed in the same window, separated by 2 breaks.
+Lorem ipsum dolor sit amet. Proin ultricies in leo id scelerisque.
+Praesent vel orci luctus, tincidunt nisi et, fringilla arcu. In a metus orci.
+Maecenas congue nunc quis lectus porttitor, eget commodo massa congue.
+
+; Clear contents of the printer.
+@resetText
+
+; Print more lines.
+Morbi ultrices dictum diam, in gravida neque vulputate in.
+...
+@finishStory ChapterIndex:0
+@stop

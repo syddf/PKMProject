@@ -6,6 +6,15 @@ using System.Security.Cryptography;
 using System.Text;
 using System;
 
+public enum EProgress
+{
+    New,
+    FinishStory,
+    FinishBattle1,
+    FinishBattle2,
+    FinishAllBattle
+}
+
 [Serializable]
 public class SerializableDictionary<TKey, TValue> : ISerializationCallbackReceiver
 {
@@ -108,6 +117,7 @@ public struct PlayerData
     public List<string> UseableTrainerList;
     public SerializableDictionary<string, SerializableDictionary<string, BagPokemonOverrideData>> OverrideData;
     public string BattleTrainerName;
+    public List<EProgress> MainChapterProgress;
 }
 
 // 定义一个接口用于序列化和反序列化操作
@@ -225,7 +235,11 @@ public class SavedData : MonoBehaviour
             playerData.UseableTrainerList = UseableTrainerList;
 
             playerData.OverrideData = new SerializableDictionary<string, SerializableDictionary<string, BagPokemonOverrideData>>();
-
+            playerData.MainChapterProgress = new List<EProgress>();
+            for(int Index = 0; Index <= 9; Index++)
+            {
+                playerData.MainChapterProgress.Add(EProgress.New);
+            }
             IDataSerializer serializer = new EncryptedJSONDataSerializer();
             serializer.SerializeToFile(playerData, filePath);
             SavedPlayerData = playerData;
