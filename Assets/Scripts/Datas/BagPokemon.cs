@@ -435,4 +435,104 @@ public class BagPokemon : MonoBehaviour
     {
         return CanMega;
     }
+
+    public void UpdateByOverrideData(SavedData InData, string TrainerName, string PkmName)
+    {
+        PokemonTrainer TargetTrainer = GameObject.Find("SingleBattle/AllTrainers/" + TrainerName).GetComponent<PokemonTrainer>();
+        BagPokemon ReferencePkm = null;
+        foreach(var Pkm in TargetTrainer.BagPokemons)
+        {
+            if(Pkm.GetPokemonName() == PkmName)
+            {
+                ReferencePkm = Pkm;
+                break;
+            }
+        }
+
+        int SkillIndex0 = 0;
+        int SkillIndex1 = 1;
+        int SkillIndex2 = 2;
+        int SkillIndex3 = 3;
+        BaseItem OverrideItem = null;
+        PokemonNature OverrideNature = ReferencePkm.Nature;
+        if(InData.SavedPlayerData.OverrideData.ContainsKey(TrainerName))
+        {
+            if(InData.SavedPlayerData.OverrideData[TrainerName].ContainsKey(PkmName))
+            {
+                if(InData.SavedPlayerData.OverrideData[TrainerName][PkmName].Overrided)
+                {
+                    string OverrideTrainerName = InData.SavedPlayerData.OverrideData[TrainerName][PkmName].ReplaceTrainerName;
+                    string OverridePokemonName = InData.SavedPlayerData.OverrideData[TrainerName][PkmName].ReplacePokemonName;
+                    SkillIndex0 = InData.SavedPlayerData.OverrideData[TrainerName][PkmName].SkillIndex0;
+                    SkillIndex1 = InData.SavedPlayerData.OverrideData[TrainerName][PkmName].SkillIndex1;
+                    SkillIndex2 = InData.SavedPlayerData.OverrideData[TrainerName][PkmName].SkillIndex2;
+                    SkillIndex3 = InData.SavedPlayerData.OverrideData[TrainerName][PkmName].SkillIndex3;
+                    int ItemOverrideIndex = InData.SavedPlayerData.OverrideData[TrainerName][PkmName].ItemIndex;
+                    OverrideNature = InData.SavedPlayerData.OverrideData[TrainerName][PkmName].Nature;
+                    GameObject TrainerObj = GameObject.Find("SingleBattle/AllTrainers/" + OverrideTrainerName);
+                    PokemonTrainer Trainer = TrainerObj.GetComponent<PokemonTrainer>();
+                    foreach(var BagPkm in Trainer.BagPokemons)
+                    {
+                        if(BagPkm.GetPokemonName() == OverridePokemonName)
+                        {
+                            ReferencePkm = BagPkm;
+                            break;
+                        }
+                    }
+                    OverrideItem = Trainer.BagPokemons[ItemOverrideIndex].Item;
+                    
+                }
+            }
+        }
+
+        SourcePokemonData = ReferencePkm.SourcePokemonData;
+        SourcePokemonMegaData = ReferencePkm.SourcePokemonMegaData;
+        PkmDataCollections = ReferencePkm.PkmDataCollections;
+        Name = ReferencePkm.Name;
+        Level = ReferencePkm.Level;
+        HP = ReferencePkm.HP;
+        Nature = OverrideNature;
+
+        IVs[0] = ReferencePkm.IVs[0];
+        IVs[1] = ReferencePkm.IVs[1];
+        IVs[2] = ReferencePkm.IVs[2];
+        IVs[3] = ReferencePkm.IVs[3];
+        IVs[4] = ReferencePkm.IVs[4];
+        IVs[5] = ReferencePkm.IVs[5];
+
+        BasePoints[0] = ReferencePkm.BasePoints[0];
+        BasePoints[1] = ReferencePkm.BasePoints[1];
+        BasePoints[2] = ReferencePkm.BasePoints[2];
+        BasePoints[3] = ReferencePkm.BasePoints[3];
+        BasePoints[4] = ReferencePkm.BasePoints[4];
+        BasePoints[5] = ReferencePkm.BasePoints[5];
+
+        Gender = ReferencePkm.Gender;
+        Item = ReferencePkm.Item;
+        if(OverrideItem)
+        {
+            Item = OverrideItem;
+        }
+        Ability = ReferencePkm.Ability;
+        MegaAbility = ReferencePkm.MegaAbility;
+
+        ReferenceSkill[0] = ReferencePkm.SkillPool[SkillIndex0];
+        ReferenceSkill[1] = ReferencePkm.SkillPool[SkillIndex1];
+        ReferenceSkill[2] = ReferencePkm.SkillPool[SkillIndex2];
+        ReferenceSkill[3] = ReferencePkm.SkillPool[SkillIndex3];
+        
+        PokemonName = ReferencePkm.PokemonName;
+        MultiSpecies = ReferencePkm.MultiSpecies;
+        SpecieIndex = ReferencePkm.SpecieIndex;
+        CanMega = ReferencePkm.CanMega;
+
+        SkillPool[0] = ReferencePkm.SkillPool[0];
+        SkillPool[1] = ReferencePkm.SkillPool[1];
+        SkillPool[2] = ReferencePkm.SkillPool[2];
+        SkillPool[3] = ReferencePkm.SkillPool[3];
+        SkillPool[4] = ReferencePkm.SkillPool[4];
+        SkillPool[5] = ReferencePkm.SkillPool[5];
+        SkillPool[6] = ReferencePkm.SkillPool[6];
+        SkillPool[7] = ReferencePkm.SkillPool[7];
+    }
 }

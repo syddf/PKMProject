@@ -30,6 +30,31 @@ public class BattleMenuUI : MonoBehaviour
     public Image PlayerPokemon4Image;
     public Image PlayerPokemon5Image;
     public Image PlayerTrainerImage;
+
+    public BagPokemon PlayerOverridePokemon1;
+    public BagPokemon PlayerOverridePokemon2;
+    public BagPokemon PlayerOverridePokemon3;
+    public BagPokemon PlayerOverridePokemon4;
+    public BagPokemon PlayerOverridePokemon5;
+    public BagPokemon PlayerOverridePokemon6;
+    public SavedData SavedPlayerData;
+    
+    public void UpdatePlayerTeam()
+    {
+        PokemonTrainer UsingTrainer = GameObject.Find("SingleBattle/AllTrainers/" + SavedPlayerData.SavedPlayerData.BattleTrainerName).GetComponent<PokemonTrainer>();
+        PlayerTrainer.TrainerName = UsingTrainer.TrainerName;
+        PlayerTrainer.TrainerSprite = UsingTrainer.TrainerSprite;
+        PlayerTrainer.TrainerSkill = UsingTrainer.TrainerSkill;
+
+        PlayerTrainer.BagPokemons[0].UpdateByOverrideData(SavedPlayerData, UsingTrainer.TrainerName, UsingTrainer.BagPokemons[0].GetPokemonName());
+        PlayerTrainer.BagPokemons[1].UpdateByOverrideData(SavedPlayerData, UsingTrainer.TrainerName, UsingTrainer.BagPokemons[1].GetPokemonName());
+        PlayerTrainer.BagPokemons[2].UpdateByOverrideData(SavedPlayerData, UsingTrainer.TrainerName, UsingTrainer.BagPokemons[2].GetPokemonName());
+        PlayerTrainer.BagPokemons[3].UpdateByOverrideData(SavedPlayerData, UsingTrainer.TrainerName, UsingTrainer.BagPokemons[3].GetPokemonName());
+        PlayerTrainer.BagPokemons[4].UpdateByOverrideData(SavedPlayerData, UsingTrainer.TrainerName, UsingTrainer.BagPokemons[4].GetPokemonName());
+        PlayerTrainer.BagPokemons[5].UpdateByOverrideData(SavedPlayerData, UsingTrainer.TrainerName, UsingTrainer.BagPokemons[5].GetPokemonName());
+        UpdatePlayerInfo();
+    }
+
     public void SetPokemonSprite(Image TargetImage, BagPokemon InPokemon, bool Chosen)
     {
         int Index = InPokemon.GetIndexInPKDex();
@@ -53,6 +78,7 @@ public class BattleMenuUI : MonoBehaviour
     public void SetPlayerPokemonTrainer(PokemonTrainer InTrainer)
     {
         PlayerTrainer = InTrainer;
+        UpdatePlayerTeam();
         UpdatePlayerInfo();
     }
 

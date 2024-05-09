@@ -9,6 +9,7 @@ public class TeamEditUI : MonoBehaviour
     public SavedData SaveData;
     public PokemonEditMainMenu MainMenu;
     public GameObject PokemonEditObj;
+    public GameObject InfoObj;
 
     public void UpdateTrainerTag()
     {
@@ -25,10 +26,12 @@ public class TeamEditUI : MonoBehaviour
         }
         MainMenu.SetCurrentPokemonTrainer(InTrainer);
         PokemonEditObj.SetActive(true);
+        InfoObj.SetActive(false);
     }
 
     public void OnEnable() 
     {
+        InfoObj.SetActive(true);
         foreach (Transform child in ContentsRoot.transform)
         {
             GameObject.Destroy(child.gameObject);
