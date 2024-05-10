@@ -168,7 +168,7 @@ public class SkillEvent : EventAnimationPlayer, Event
                                 }
                                 else if(SkillMeta.NoEffectReason != null && SkillMeta.NoEffectReason != "")
                                 {
-                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", SourcePokemon.GetName() + SkillMeta.NoEffectReason);
+                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", SkillMeta.NoEffectReason);
                                 }
                                 else
                                 {

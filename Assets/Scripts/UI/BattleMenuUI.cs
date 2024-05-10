@@ -30,6 +30,12 @@ public class BattleMenuUI : MonoBehaviour
     public Image PlayerPokemon4Image;
     public Image PlayerPokemon5Image;
     public Image PlayerTrainerImage;
+    public GameObject Pokemon0FirstObj;
+    public GameObject Pokemon1FirstObj;
+    public GameObject Pokemon2FirstObj;
+    public GameObject Pokemon3FirstObj;
+    public GameObject Pokemon4FirstObj;
+    public GameObject Pokemon5FirstObj;
 
     public BagPokemon PlayerOverridePokemon1;
     public BagPokemon PlayerOverridePokemon2;
@@ -38,6 +44,37 @@ public class BattleMenuUI : MonoBehaviour
     public BagPokemon PlayerOverridePokemon5;
     public BagPokemon PlayerOverridePokemon6;
     public SavedData SavedPlayerData;
+    public BattleManager ReferenceBattleManager;
+    public int FirstPokemonIndex = 0;
+    public void OnChangeFirstPokemon(int Index)
+    {
+        FirstPokemonIndex = Index;
+        Pokemon0FirstObj.SetActive(false);
+        Pokemon1FirstObj.SetActive(false);
+        Pokemon2FirstObj.SetActive(false);
+        Pokemon3FirstObj.SetActive(false);
+        Pokemon4FirstObj.SetActive(false);
+        Pokemon5FirstObj.SetActive(false);
+        if(Index == 0)
+            Pokemon0FirstObj.SetActive(true);
+        if(Index == 1)
+            Pokemon1FirstObj.SetActive(true);
+        if(Index == 2)
+            Pokemon2FirstObj.SetActive(true);
+        if(Index == 3)
+            Pokemon3FirstObj.SetActive(true);
+        if(Index == 4)
+            Pokemon4FirstObj.SetActive(true);
+        if(Index == 5)
+            Pokemon5FirstObj.SetActive(true);
+    }
+
+    public void OnClickBeginBattle()
+    {
+        ReferenceBattleManager.SetPlayerTrainer(PlayerTrainer);
+        ReferenceBattleManager.SetEnemyTrainer(CurrentTrainer);
+        ReferenceBattleManager.BeginBattle(FirstPokemonIndex);
+    }
     
     public void UpdatePlayerTeam()
     {
@@ -110,6 +147,7 @@ public class BattleMenuUI : MonoBehaviour
 
     public void UpdatePlayerInfo()
     {
+        OnChangeFirstPokemon(FirstPokemonIndex);
         SetPokemonSprite(PlayerPokemon0Image, PlayerTrainer.BagPokemons[0], true);
         SetPokemonSprite(PlayerPokemon1Image, PlayerTrainer.BagPokemons[1], true);
         SetPokemonSprite(PlayerPokemon2Image, PlayerTrainer.BagPokemons[2], true);
