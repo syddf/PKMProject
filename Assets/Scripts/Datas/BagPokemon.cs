@@ -520,7 +520,22 @@ public class BagPokemon : MonoBehaviour
         ReferenceSkill[1] = ReferencePkm.SkillPool[SkillIndex1];
         ReferenceSkill[2] = ReferencePkm.SkillPool[SkillIndex2];
         ReferenceSkill[3] = ReferencePkm.SkillPool[SkillIndex3];
-        
+        if(ReferenceSkill[0] == null)
+        {
+            ReferenceSkill[0] = ReferencePkm.ReferenceSkill[0];
+        }
+        if(ReferenceSkill[1] == null)
+        {
+            ReferenceSkill[1] = ReferencePkm.ReferenceSkill[1];
+        }
+        if(ReferenceSkill[2] == null)
+        {
+            ReferenceSkill[2] = ReferencePkm.ReferenceSkill[2];
+        }
+        if(ReferenceSkill[3] == null)
+        {
+            ReferenceSkill[3] = ReferencePkm.ReferenceSkill[3];
+        }
         PokemonName = ReferencePkm.PokemonName;
         MultiSpecies = ReferencePkm.MultiSpecies;
         SpecieIndex = ReferencePkm.SpecieIndex;

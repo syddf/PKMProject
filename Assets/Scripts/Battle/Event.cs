@@ -63,6 +63,7 @@ public enum EventType
     ItemTrigger,
     TrainerSkillTrigger,
     SwitchAfterDefeated,
+    SwitchAfterSkillUse,
     BattleEnd,
     TerrainChange,
     WeatherChange,

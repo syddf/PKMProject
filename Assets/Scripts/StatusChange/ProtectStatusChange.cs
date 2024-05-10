@@ -36,7 +36,8 @@ public class ProtectStatusChange : BaseStatusChange
     {
         List<Event> NewEvents = new List<Event>();
         SkillEvent CastedEvent = (SkillEvent)SourceEvent;
-        CastedEvent.MakeCurrentTargetNoEffect("因为守住效果保护了自己!");
+        BattlePokemon Target = CastedEvent.GetCurrentProcessTargetPokemon();
+        CastedEvent.MakeCurrentTargetNoEffect(Target.GetName() + "因为守住效果保护了自己!");
         return NewEvents;
     }
 

@@ -136,6 +136,41 @@ public class SwitchEvent : EventAnimationPlayer, Event
     }
 }
 
+public class SwitchAfterSkillUseEvent : EventAnimationPlayer, Event
+{
+    private BattlePokemon ReferencePokemon;
+    private BattleManager ReferenceManager;
+
+    public void Process(BattleManager InManager)
+    {
+        if(!ShouldProcess(InManager)) return;
+        InManager.AddAnimationEvent(this);
+        InManager.SetWaitForSwitchAfterSkillUse(!ReferencePokemon.GetIsEnemy());
+    }
+    public SwitchAfterSkillUseEvent(BattleManager InManager, BattlePokemon InPokemon)
+    {
+        ReferenceManager = InManager;
+        ReferencePokemon = InPokemon;
+    }
+
+    public bool ShouldProcess(BattleManager InBattleManager)
+    {
+        if(InBattleManager.GetBattleEnd() == true) return false;
+        if(ReferencePokemon.IsDead() == true) return false;
+        return true;
+    }
+
+    public EventType GetEventType()
+    {
+        return EventType.SwitchAfterSkillUse;
+    }
+
+    public BattlePokemon GetReferencePokemon()
+    {
+        return ReferencePokemon;
+    }
+}
+
 public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
 {
     private BattlePokemon EnemyDefeatedPokemon;

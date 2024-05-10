@@ -13,6 +13,9 @@ public class InitPokemonComponets : MonoBehaviour
     private Animator Anim;
     public Transform CenterPosition;
     public Transform TouchHitPosition;
+    public bool Levitate = false;
+    public float yOffset = 0.5f; // 调整的Y轴偏移量
+
     public bool MegaUpgrade;
     // Start is called before the first frame update
     void Start()
@@ -25,6 +28,10 @@ public class InitPokemonComponets : MonoBehaviour
         if(BattleWaitSpeed == 0)
             BattleWaitSpeed = 1;
         Anim.speed = BattleWaitSpeed;
+        if (Levitate)
+        {
+            rb.useGravity = false;  
+        }
     }
     void OnEnable()
     {
@@ -54,7 +61,7 @@ public class InitPokemonComponets : MonoBehaviour
         {
             combinedBounds.Encapsulate(renderers[i].bounds);
         }
-
+        
         // 设置BoxCollider的大小和中心点
         // boxCollider.center = combinedBounds.center - transform.position;
         boxCollider.size = combinedBounds.size;
@@ -62,9 +69,22 @@ public class InitPokemonComponets : MonoBehaviour
         BoundsSize = combinedBounds.size;
     }
 
-    // Update is called once per frame
+    // Update is called once per frame    
     void Update()
     {
-        
+        if (Levitate)
+        {
+            // 如果距离地面高度大于停止高度，则继续下落
+            if (this.gameObject.transform.position.y > yOffset)
+            {
+                // 按照指定速度向下移动
+                rb.velocity = Vector3.down * 1.0f;
+            }
+            else
+            {
+                // 下落到指定高度后停止下落
+                rb.velocity = Vector3.zero;
+            }
+        }
     }
 }

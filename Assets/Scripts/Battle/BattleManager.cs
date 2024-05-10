@@ -36,6 +36,9 @@ public class BattleManager : MonoBehaviour
     private bool PlayingAnimation;
     private int CurPlayingAnimationEvent;
     private bool WaitForPlayerSwitchPokemonWhenDefeated;
+    private bool WaitForPlayerSwitchPokemonAfterSkillUse;
+    private bool WaitForEnemySwitchPokemonAfterSkillUse;
+    private int EndAnimEventIndex;
     private bool BattleEnd = false;
 
     private BattleFiledState FiledState;
@@ -120,6 +123,20 @@ public class BattleManager : MonoBehaviour
                             UpdateUI(true);
                             BattleUIManager.EnableCommandUI();
                         }
+                    }
+                    else if(WaitForPlayerSwitchPokemonAfterSkillUse)
+                    {
+                        UpdateUI(true);
+                        BattleUIManager.EnableCommandUI();
+                    }
+                    else if(WaitForEnemySwitchPokemonAfterSkillUse)
+                    {
+                        UpdateUI(false);
+                        EnemyAI NewEnemyAI = new EnemyAI(null, this, EnemyTrainer);
+                        BattlePokemon EnemyNext = NewEnemyAI.GetNextPokemon(BattlePokemonList[1]);
+                        EventsList.Add(new SwitchEvent(this, BattlePokemonList[1], EnemyNext));
+                        WaitForEnemySwitchPokemonAfterSkillUse = false;
+                        ProcessEvents(true);
                     }
                     else
                     {
@@ -320,6 +337,7 @@ public class BattleManager : MonoBehaviour
     public void ProcessEvents(bool NewTurn)
     {
         List<Event> TurnEvents = new List<Event>();
+        EndAnimEventIndex = 0;
         while(EventsList.Count > 0)
         {
             EventsList.Sort(new EventComparer());
@@ -327,8 +345,16 @@ public class BattleManager : MonoBehaviour
             {
                 EventsList[0].Process(this);
             }
+            EndAnimEventIndex++;
+            bool WaitForSwitchAfterUseSKill = (WaitForEnemySwitchPokemonAfterSkillUse || WaitForPlayerSwitchPokemonAfterSkillUse);
             TurnEvents.Add(EventsList[0]);
             EventsList.RemoveAt(0);
+            if(WaitForSwitchAfterUseSKill)
+            {
+                PlayingAnimation = true;
+                CurPlayingAnimationEvent = -1;
+                return;
+            }
         }
         EventsList.Clear();
         if(NewTurn)
@@ -440,7 +466,17 @@ public class BattleManager : MonoBehaviour
         BeforeBattleUI.SetPlayerPokemonTrainer(PlayerTrainer);
     }
 
-    public void Test()
+    public void SetPlayerTrainer(PokemonTrainer InTrainer)
+    {
+        PlayerTrainer = InTrainer;
+    }   
+
+    public void SetEnemyTrainer(PokemonTrainer InTrainer)
+    {
+        EnemyTrainer = InTrainer;
+    }
+
+    public void BeginBattle(int FirstPokemonIndex)
     {
         GameObject NaniObj = GameObject.Find("Naninovel<Runtime>");
         if(NaniObj)
@@ -448,7 +484,7 @@ public class BattleManager : MonoBehaviour
             NaniObj.SetActive(false);
         }
         this.GetComponent<BattleInitializer>().InitBattleResources(PlayerTrainer, EnemyTrainer);
-        BattlePokemonList[0] = PlayerTrainer.BattlePokemons[0];
+        BattlePokemonList[0] = PlayerTrainer.BattlePokemons[FirstPokemonIndex];
         BattlePokemonList[1] = EnemyTrainer.BattlePokemons[0];
         UpdateUI(false);
         BeginSingleBattle(BattlePokemonList[0], BattlePokemonList[1]);
@@ -587,6 +623,19 @@ public class BattleManager : MonoBehaviour
             DefeatedPokemonList.Clear();
             WaitForPlayerSwitchPokemonWhenDefeated = false;
             ProcessEvents(false);
+        }
+        else if(WaitForPlayerSwitchPokemonAfterSkillUse)
+        {
+            EventsList.Add(new SwitchEvent(this, BattlePokemonList[0], InPokemon));
+            WaitForPlayerSwitchPokemonAfterSkillUse = false;
+            if(WaitForEnemySwitchPokemonAfterSkillUse)
+            {
+                EnemyAI NewEnemyAI = new EnemyAI(null, this, EnemyTrainer);
+                BattlePokemon EnemyNext = NewEnemyAI.GetNextPokemon(BattlePokemonList[1]);
+                EventsList.Add(new SwitchEvent(this, BattlePokemonList[1], EnemyNext));
+                WaitForEnemySwitchPokemonAfterSkillUse = false;
+            }
+            ProcessEvents(true);
         }
         else
         {
@@ -817,5 +866,17 @@ public class BattleManager : MonoBehaviour
     public void TestAVG()
     {
         Debug.Log("Test.");
+    }
+
+    public void SetWaitForSwitchAfterSkillUse(bool IsPlayer)
+    {
+        if(IsPlayer == false)
+        {
+            WaitForEnemySwitchPokemonAfterSkillUse = true;
+        }
+        else
+        {
+            WaitForPlayerSwitchPokemonAfterSkillUse = true;
+        }
     }
 }
