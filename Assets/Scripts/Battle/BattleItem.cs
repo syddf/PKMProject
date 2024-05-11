@@ -76,17 +76,22 @@ public class BattleItem
     {
         return ReferenceBaseItem.CanKnockOff;
     }
+
+    public bool IsConsumedState()
+    {
+        return Consumed && ReferencePokemon.GetLostItem();  
+    }
 }
 
 public class BattleItemComparer : IComparer<BattleItem>
 {
     public int Compare(BattleItem x, BattleItem y)
     {
-        if(x.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal) < y.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal))
+        if(x.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager) < y.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager))
         {
             return 1;
         }
-        else if(x.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal) > y.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal))
+        else if(x.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager) > y.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager))
         {
             return -1;
         }

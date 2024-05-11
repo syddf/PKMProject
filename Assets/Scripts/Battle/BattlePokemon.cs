@@ -166,6 +166,25 @@ public class BattlePokemon : MonoBehaviour
     }
 
     public string GetEnName() => ReferenceBasePokemon.GetName();
+
+    public string GetMaxStat()
+    {
+        int Atk = (int)(PokemonStats.Atk * StatLevelFactor[PokemonStats.AtkChangeLevel + 6]);
+        int Def = (int)(PokemonStats.Def * StatLevelFactor[PokemonStats.DefChangeLevel + 6]);
+        int SAtk = (int)(PokemonStats.SAtk * StatLevelFactor[PokemonStats.SAtkChangeLevel + 6]);
+        int SDef = (int)(PokemonStats.SDef * StatLevelFactor[PokemonStats.SDefChangeLevel + 6]);
+        int Speed = (int)(PokemonStats.Speed * StatLevelFactor[PokemonStats.SpeedChangeLevel + 6]);
+
+        if(Atk >= Def && Atk >= SAtk && Atk >= SDef && Atk >= Speed)
+            return "Atk";
+        if(Def > Atk && Def >= SAtk && Def >= SDef && Def >= Speed)
+            return "Def";
+        if(SAtk > Atk && SAtk > Def && SAtk >= SDef && SAtk >= Speed)
+            return "SAtk";
+        if(SDef > Atk && SDef > Def && SDef > SAtk && SDef >= Speed)
+            return "SDef";
+        return "Speed";
+    }
     
     private int AdjustChangeLevel(ECaclStatsMode Mode, int SourceChangeLevel)
     {
@@ -184,48 +203,93 @@ public class BattlePokemon : MonoBehaviour
     { 
         int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.AtkChangeLevel);
         double ItemFactor = 1.0;
+        double AbilityFactor = 1.0;
         if(HasItem("讲究头带"))
         {
             ItemFactor = 1.5;
+        }
+        if(HasItem("驱劲能量") && GetMaxStat() == "Atk" && Item.IsConsumedState())
+        {
+            ItemFactor = 1.3;
         }        
-        return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[ChangeLevel + 6] * ItemFactor);
+        if(HasAbility("活力", InManager, null, this))
+        {
+            AbilityFactor *= 1.5;
+        }
+        if(GetMaxStat() == "Atk" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        {
+            AbilityFactor *= 1.3;
+        }  
+        return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor);
     }
     public int GetDef(ECaclStatsMode Mode, BattleManager InManager)
     {
         int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.DefChangeLevel);
         double WeatherFactor = 1.0;
+        double AbilityFactor = 1.0;
+        double ItemFactor = 1.0;
+        if(HasItem("驱劲能量") && GetMaxStat() == "Def" && Item.IsConsumedState())
+        {
+            ItemFactor = 1.3;
+        }
         if(InManager.GetWeatherType() == EWeather.Snow && HasType(EType.Ice))
         {
             WeatherFactor = 1.5;
         }
-        return (int)Math.Floor((double)PokemonStats.Def * StatLevelFactor[ChangeLevel + 6] * WeatherFactor);
+        if(GetMaxStat() == "Def" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        {
+            AbilityFactor *= 1.3;
+        }        
+        return (int)Math.Floor((double)PokemonStats.Def * StatLevelFactor[ChangeLevel + 6] * WeatherFactor * AbilityFactor * ItemFactor);
     }
     public int GetSAtk(ECaclStatsMode Mode, BattleManager InManager)
     {
         int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SAtkChangeLevel);
         double ItemFactor = 1.0;
+        double AbilityFactor = 1.0;
         if(HasItem("讲究眼镜"))
         {
             ItemFactor = 1.5;
+        }
+        if(HasItem("驱劲能量") && GetMaxStat() == "SAtk" && Item.IsConsumedState())
+        {
+            ItemFactor = 1.3;
+        }
+        if(InManager.GetWeatherType() == EWeather.SunLight && HasAbility("太阳之力", InManager, null, this))
+        {
+            AbilityFactor *= 1.5;
+        }
+        if(GetMaxStat() == "SAtk" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        {
+            AbilityFactor *= 1.3;
         }  
-        return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[ChangeLevel + 6] * ItemFactor);
+        return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor);
     }
     public int GetSDef(ECaclStatsMode Mode, BattleManager InManager)
     {
         int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SDefChangeLevel);
         double ItemFactor = 1.0;
+        double AbilityFactor = 1.0;
         if(HasItem("突击背心"))
         {
             ItemFactor = 1.5;
+        }
+        if(HasItem("驱劲能量") && GetMaxStat() == "SDef" && Item.IsConsumedState())
+        {
+            ItemFactor = 1.3;
         }
         double WeatherFactor = 1.0;
         if(InManager.GetWeatherType() == EWeather.Sand && HasType(EType.Rock))
         {
             WeatherFactor = 1.5;
         }
-        return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6] * ItemFactor * WeatherFactor);
+        if(GetMaxStat() == "SDef" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        {
+            AbilityFactor *= 1.3;
+        }  
+        return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6] * ItemFactor * WeatherFactor * AbilityFactor);
     }    
-    public int GetSpeed(ECaclStatsMode Mode)
+    public int GetSpeed(ECaclStatsMode Mode, BattleManager InManager)
     {
         int ChangeLevel = AdjustChangeLevel(Mode, PokemonStats.SpeedChangeLevel);
         double ParalysisFactor = 1.0;
@@ -234,11 +298,24 @@ public class BattlePokemon : MonoBehaviour
             ParalysisFactor = 0.5;
         }
         double ItemFactor = 1.0;
+        double AbilityFactor = 1.0;
         if(HasItem("讲究围巾"))
         {
             ItemFactor = 1.5;
+        }
+        if(HasItem("驱劲能量") && GetMaxStat() == "Speed" && Item.IsConsumedState())
+        {
+            ItemFactor = 1.5;
+        }
+        if(GetMaxStat() == "Speed" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        {
+            AbilityFactor *= 1.5;
+        }
+        if(HasAbility("轻装", null, null, this) && GetLostItem())
+        {
+            AbilityFactor *= 2.0;
         }         
-        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor * ItemFactor);
+        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor * ItemFactor * AbilityFactor);
     }
     public int GetAtkChangeLevel() => PokemonStats.AtkChangeLevel;
     public int GetDefChangeLevel() => PokemonStats.DefChangeLevel;
@@ -489,8 +566,34 @@ public class BattlePokemon : MonoBehaviour
         return -1;
     }
 
-    public bool HasAbility(string AbilityName)
+    private static readonly HashSet<string> SpecialAbilities = new HashSet<string>
     {
+        "战斗盔甲", "恒净之躯", "湿气", "引火", "怪力钳", "精神力", "锐利目光", "飘浮", "神奇鳞片",
+        "沙隐", "硬壳盔甲", "鳞粉", "隔音", "黏着", "结实", "吸盘", "厚脂肪", "蓄电", "储水",
+        "白色烟雾", "神奇守护", "避雷针", "免疫", "迟钝", "干劲", "不眠", "柔软", "我行我素",
+        "熔岩铠甲", "水幕", "干燥皮肤", "过滤", "耐热", "叶子防守", "电气引擎", "单纯", "雪隐",
+        "坚硬岩石", "蹒跚", "纯朴", "引水", "花之礼", "健壮胸肌", "唱反调", "友情防守", "重金属",
+        "轻金属", "魔法镜", "多重鳞片", "食草", "心灵感应", "奇迹皮肤", "防弹", "毛皮大衣",
+        "防尘", "芳香幕", "甜幕", "花幕", "草之毛皮", "鲜艳之躯", "画皮", "女王的威严",
+        "毛茸茸", "水泡", "镜甲", "庞克摇滚", "冰鳞粉", "结冻头", "粉彩护幕", "热交换",
+        "洁净之盐", "焦香之躯", "乘风", "看门犬", "黄金之躯", "尾甲", "食土", "发光",
+        "心眼", "太晶甲壳"
+    };
+
+    public static bool IsSpecialAbility(string AbilityName)
+    {
+        return SpecialAbilities.Contains(AbilityName);
+    }
+
+    public bool HasAbility(string AbilityName, BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        if(IsSpecialAbility(AbilityName) && SourcePokemon != null)
+        {
+            if(SourcePokemon.GetAbility().GetAbilityName() == "破格")
+            {
+                return false;
+            }
+        }
         return Ability && Ability.GetAbilityName() == AbilityName;
     }
 
@@ -725,9 +828,9 @@ public class BattlePokemon : MonoBehaviour
     {
         LostItem = true;
     } 
-    public void GetLostItem()
+    public bool GetLostItem()
     {
-        LostItem = true;
+        return LostItem;
     } 
 
     public bool CanMega()

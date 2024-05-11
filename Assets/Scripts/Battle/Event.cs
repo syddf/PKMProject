@@ -329,11 +329,11 @@ public class EventComparer : IComparer<Event>
             {
                 SwitchEvent CastX = (SwitchEvent)x;
                 SwitchEvent CastY = (SwitchEvent)y;
-                if(CastX.GetOutPokemon().GetSpeed(ECaclStatsMode.Normal) < CastY.GetOutPokemon().GetSpeed(ECaclStatsMode.Normal))
+                if(CastX.GetOutPokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager) < CastY.GetOutPokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager))
                 {
                     return 1;
                 }
-                else if(CastX.GetOutPokemon().GetSpeed(ECaclStatsMode.Normal) >  CastY.GetOutPokemon().GetSpeed(ECaclStatsMode.Normal))
+                else if(CastX.GetOutPokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager) >  CastY.GetOutPokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager))
                 {
                     return -1;
                 }
@@ -363,11 +363,11 @@ public class EventComparer : IComparer<Event>
                 }
                 else
                 {
-                    if(CastX.GetSourcePokemon().GetSpeed(ECaclStatsMode.Normal) < CastY.GetSourcePokemon().GetSpeed(ECaclStatsMode.Normal))
+                    if(CastX.GetSourcePokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager) < CastY.GetSourcePokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager))
                     {
                         return 1;
                     }
-                    else if(CastX.GetSourcePokemon().GetSpeed(ECaclStatsMode.Normal) >  CastY.GetSourcePokemon().GetSpeed(ECaclStatsMode.Normal))
+                    else if(CastX.GetSourcePokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager) >  CastY.GetSourcePokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager))
                     {
                         return -1;
                     }

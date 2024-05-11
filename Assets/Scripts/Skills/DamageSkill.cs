@@ -128,7 +128,7 @@ public class DamageSkill : BaseSkill
         {
             IgnorDebuff = true;
         }
-        if(TargetPokemon.HasAbility("纯朴"))
+        if(TargetPokemon.HasAbility("纯朴", InManager, SourcePokemon, TargetPokemon))
         {
             IgnorBuf = true;
             IgnorDebuff = true;
@@ -146,7 +146,7 @@ public class DamageSkill : BaseSkill
         {
             IgnorBuf = true;
         }
-        if(SourcePokemon.HasAbility("纯朴"))
+        if(SourcePokemon.HasAbility("纯朴", InManager, SourcePokemon, TargetPokemon))
         {
             IgnorBuf = true;
             IgnorDebuff = true;
@@ -185,6 +185,10 @@ public class DamageSkill : BaseSkill
 
     public virtual double GetSameTypePowerFactor(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
+        if(SourcePokemon.HasAbility("适应力", InManager, SourcePokemon, TargetPokemon))
+        {
+            return 2.0;
+        }
         return 1.5;
     }
 
@@ -239,7 +243,7 @@ public class DamageAndSelfDamageSkill : DamageSkill
     protected override int GetSkillPower(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         double Result = Power;
-        if(SourcePokemon.HasAbility("舍身"))
+        if(SourcePokemon.HasAbility("舍身", InManager, SourcePokemon, TargetPokemon))
         {
             Result = (int)Math.Floor(Result * 1.2);
         }
@@ -248,7 +252,7 @@ public class DamageAndSelfDamageSkill : DamageSkill
 
     public override void AfterDamageEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, int Damage)
     {
-        if(SourcePokemon.HasAbility("坚硬脑袋") || SourcePokemon.HasAbility("魔法防守"))
+        if(SourcePokemon.HasAbility("坚硬脑袋", InManager, SourcePokemon, TargetPokemon) || SourcePokemon.HasAbility("魔法防守", InManager, SourcePokemon, TargetPokemon))
         {
             return;
         }

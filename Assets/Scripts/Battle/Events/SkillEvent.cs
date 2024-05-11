@@ -308,7 +308,7 @@ public class SkillEvent : EventAnimationPlayer, Event
     }
     public bool JudgeAccuracy(BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        int SkillAccuracy = Skill.GetSkillAccuracy();
+        int SkillAccuracy = Skill.GetSkillAccuracy(GetReferenceManager(), SourcePokemon, TargetPokemon);
         int AttackAccuracyLevel = Skill.GetAttackAccuracyChangeLevel(ReferenceBattleManager, SourcePokemon, TargetPokemon);
         int EvasionRateLevel = Skill.GetTargetEvasionChangeLevel(ReferenceBattleManager, SourcePokemon, TargetPokemon);
         int F = AttackAccuracyLevel - EvasionRateLevel;
@@ -487,8 +487,11 @@ public class SkillEvent : EventAnimationPlayer, Event
 
     public void MakeCurrentTargetNoEffect(string Reason)
     {
-        SkillMetasHistory[CurrentMetaIndex][CurrentPokemonInMetaIndex].NoEffect = true;
-        SkillMetasHistory[CurrentMetaIndex][CurrentPokemonInMetaIndex].NoEffectReason = Reason;
+        if(SkillMetasHistory[CurrentMetaIndex][CurrentPokemonInMetaIndex].NoEffect == false)
+        {
+            SkillMetasHistory[CurrentMetaIndex][CurrentPokemonInMetaIndex].NoEffect = true;
+            SkillMetasHistory[CurrentMetaIndex][CurrentPokemonInMetaIndex].NoEffectReason = Reason;
+        }
     }
 
     public BattlePokemon GetSourcePokemon()

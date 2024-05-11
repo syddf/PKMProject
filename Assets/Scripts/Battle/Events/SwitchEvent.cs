@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class SwitchEvent : EventAnimationPlayer, Event
 {
@@ -75,6 +76,15 @@ public class SwitchEvent : EventAnimationPlayer, Event
         Timelines.SwitchAnimation.gameObject.GetComponent<SubObjects>().SubObject1.
         GetComponent<PositionWithObject>().target = OutPokemon.GetPokemonModel().GetComponent<PokemonReceiver>().BodyTransform;        
         AddAnimation(TargetTimeline);
+
+        if(InPokemon.GetAbility().GetAbilityName() == "破格")
+        {
+            PlayableDirector MessageDirector = Timelines.MessageAnimation;
+            string Message = InPokemon.GetName() + "打破了常规！";
+            TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);
+            AddAnimation(MessageTimeline);
+        }
     }
     public override void OnAnimationFinished()
     {
@@ -289,6 +299,29 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
             TargetTimeline.SetSignalParameter("EnemyPokemonCry", "AudioSignal", "Pokemon", EnemyNewPokemon.GetEnName());
         }
         AddAnimation(TargetTimeline);
+
+        if(PlayerNewPokemon)
+        {
+            if(PlayerNewPokemon.GetAbility().GetAbilityName() == "破格")
+            {
+                PlayableDirector MessageDirector = Timelines.MessageAnimation;
+                string Message = PlayerNewPokemon.GetName() + "打破了常规！";
+                TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+                MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);
+                AddAnimation(MessageTimeline);
+            }
+        }
+        if(EnemyNewPokemon)
+        {
+            if(EnemyNewPokemon.GetAbility().GetAbilityName() == "破格")
+            {
+                PlayableDirector MessageDirector = Timelines.MessageAnimation;
+                string Message = EnemyNewPokemon.GetName() + "打破了常规！";
+                TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+                MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);
+                AddAnimation(MessageTimeline);
+            }
+        }
     }
 
     public EventType GetEventType()
@@ -364,6 +397,29 @@ public class SingleBattleGameStartEvent : EventAnimationPlayer, Event
         TargetTimeline.SetSignalParameter("PlayerPokemonCry", "AudioSignal", "Pokemon", PlayerPokemon.GetEnName());
         TargetTimeline.SetSignalParameter("EnemyPokemonCry", "AudioSignal", "Pokemon", EnemyPokemon.GetEnName());
         AddAnimation(TargetTimeline);
+
+        if(PlayerPokemon)
+        {
+            if(PlayerPokemon.GetAbility().GetAbilityName() == "破格")
+            {
+                PlayableDirector MessageDirector = Timelines.MessageAnimation;
+                string Message = PlayerPokemon.GetName() + "打破了常规！";
+                TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+                MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);
+                AddAnimation(MessageTimeline);
+            }
+        }
+        if(EnemyPokemon)
+        {
+            if(EnemyPokemon.GetAbility().GetAbilityName() == "破格")
+            {
+                PlayableDirector MessageDirector = Timelines.MessageAnimation;
+                string Message = EnemyPokemon.GetName() + "打破了常规！";
+                TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+                MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);
+                AddAnimation(MessageTimeline);
+            }
+        }
     }
 
     public EventType GetEventType()
