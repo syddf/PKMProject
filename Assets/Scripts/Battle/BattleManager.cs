@@ -47,10 +47,12 @@ public class BattleManager : MonoBehaviour
     private List<List<BattleFieldStatus>> BattleFiledStatusLists;
     public BaseSkill StruggleSkill;
     public BattleMenuUI BeforeBattleUI;
+    public static BattleManager StaticManager;
 
     // Start is called before the first frame update
     void Start()
     {
+        StaticManager = this;
         EventsList = new List<Event>();
         CurrentTimePoint = ETimePoint.None;
         DefeatedPokemonList = new List<BattlePokemon>();
@@ -272,6 +274,17 @@ public class BattleManager : MonoBehaviour
         AbilitiesToTrigger.Sort(new AbilityComparer());
         foreach(var AbilityIter in AbilitiesToTrigger)
         {
+            if(BattlePokemon.IsSpecialAbility(AbilityIter.GetAbilityName()))
+            {
+                if(SourceEvent.GetEventType() == EventType.UseSkill)
+                {
+                    SkillEvent CastedEvent = (SkillEvent)SourceEvent;
+                    if(CastedEvent.GetSourcePokemon().GetAbility().GetAbilityName() == "破格")
+                    {
+                        continue;
+                    }
+                }
+            }
             AbilityIter.SetIsProcessing(true);
             string name = AbilityIter.GetAbilityName();
             List<Event> EventsToProcess = AbilityIter.Trigger(this, SourceEvent);

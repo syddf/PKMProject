@@ -93,11 +93,11 @@ public class AbilityComparer : IComparer<BaseAbility>
 {
     public int Compare(BaseAbility x, BaseAbility y)
     {
-        if(x.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal) < y.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal))
+        if(x.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager) < y.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager))
         {
             return 1;
         }
-        else if(x.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal) > y.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal))
+        else if(x.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager) > y.GetReferencePokemon().GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager))
         {
             return -1;
         }

@@ -85,7 +85,7 @@ public class BaseSkill : MonoBehaviour
 
     public ECaclStatsMode GetAttackAccuracyChangeLevelMode(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        if(TargetPokemon.HasAbility("纯朴"))
+        if(TargetPokemon.HasAbility("纯朴", InManager, SourcePokemon, TargetPokemon))
         {
             return ECaclStatsMode.IgnoreBuf;
         }
@@ -94,7 +94,7 @@ public class BaseSkill : MonoBehaviour
 
     public ECaclStatsMode GetTargetEvasionChangeLevelMode(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        if(TargetPokemon.HasAbility("纯朴"))
+        if(TargetPokemon.HasAbility("纯朴", InManager, SourcePokemon, TargetPokemon))
         {
             return ECaclStatsMode.IgnoreDebuf;
         }
@@ -147,15 +147,15 @@ public class BaseSkill : MonoBehaviour
     }
     public EType GetSkillType(BattlePokemon InPokemon)
     {
-        if(InPokemon.HasAbility("妖精皮肤") && SkillType == EType.Normal)
+        if(InPokemon.HasAbility("妖精皮肤", null, null, InPokemon) && SkillType == EType.Normal)
         {
             return EType.Fairy;
         }
-        if(InPokemon.HasAbility("冰冻皮肤") && SkillType == EType.Normal)
+        if(InPokemon.HasAbility("冰冻皮肤", null, null, InPokemon) && SkillType == EType.Normal)
         {
             return EType.Ice;
         }
-        if(InPokemon.HasAbility("湿润之声") && BattleSkillMetaInfo.IsSoundSkill(SkillName))
+        if(InPokemon.HasAbility("湿润之声", null, null, InPokemon) && BattleSkillMetaInfo.IsSoundSkill(SkillName))
         {
             return EType.Water;
         }

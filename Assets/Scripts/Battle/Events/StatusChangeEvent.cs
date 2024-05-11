@@ -12,22 +12,35 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
     private bool Forbidden = false;
     private string ForbiddenReason = "";
     private BattlePokemonStat CloneInPokemon;
-    public SetPokemonStatusChangeEvent(BattlePokemon InSourcePokemon, BattleManager InBattleManager, EStatusChange InStatusChangeType, int InStatusChangeTurn, bool InTurnIsLimited)
+    private BattlePokemon SourcePokemon;
+    public SetPokemonStatusChangeEvent(BattlePokemon InReferencePokemon, BattlePokemon InSourcePokemon, BattleManager InBattleManager, EStatusChange InStatusChangeType, int InStatusChangeTurn, bool InTurnIsLimited)
     {
         ReferenceBattleManager = InBattleManager;
-        ReferencePokemon = InSourcePokemon;   
+        ReferencePokemon = InReferencePokemon;   
         StatusChangeType = InStatusChangeType;
         StatusChangeTurn= InStatusChangeTurn;
         TurnIsLimited = InTurnIsLimited;
+        SourcePokemon = InSourcePokemon;
+    }
+
+    public static bool IsStatusChangeEffective(BattleManager InBattleManager, BattlePokemon ReferencePokemon, BattlePokemon SourcePokemon, EStatusChange StatusChangeType)
+    {
+        if(ReferencePokemon.HasStatusChange(StatusChangeType)) return false;
+        if(ReferencePokemon.HasAbility("精神力", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Flinch) return false;
+        if(ReferencePokemon.HasType(EType.Fire) && StatusChangeType == EStatusChange.Burn) return false;
+        if(ReferencePokemon.HasType(EType.Ice) && StatusChangeType == EStatusChange.Frostbite) return false;
+        if(ReferencePokemon.HasType(EType.Electric) && StatusChangeType == EStatusChange.Paralysis) return false;
+        if(InBattleManager.GetWeatherType() == EWeather.SunLight && StatusChangeType == EStatusChange.Frostbite) return false;
+        return true;
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)
     {
         if(InBattleManager.GetBattleEnd() == true) return false;
-        if(ReferencePokemon.HasType(EType.Fire) && StatusChangeType == EStatusChange.Burn) return false;
-        if(ReferencePokemon.HasType(EType.Ice) && StatusChangeType == EStatusChange.Frostbite) return false;
-        if(ReferencePokemon.HasType(EType.Electric) && StatusChangeType == EStatusChange.Paralysis) return false;
-        if(InBattleManager.GetWeatherType() == EWeather.SunLight && StatusChangeType == EStatusChange.Frostbite) return false;
+        if(IsStatusChangeEffective(InBattleManager, ReferencePokemon, SourcePokemon, StatusChangeType) == false)
+        {
+            return false;
+        }
         if(ReferencePokemon.IsDead()) return false;
         return true;
     }

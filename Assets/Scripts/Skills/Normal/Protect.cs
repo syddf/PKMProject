@@ -7,7 +7,7 @@ public class Protect : StatusSkill
 {
     public override void ProcessStatusSkillEffect(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        SetPokemonStatusChangeEvent setStatChangeEvent = new SetPokemonStatusChangeEvent(SourcePokemon, InManager, EStatusChange.Protect, 1, true);
+        SetPokemonStatusChangeEvent setStatChangeEvent = new SetPokemonStatusChangeEvent(SourcePokemon, null, InManager, EStatusChange.Protect, 1, true);
         setStatChangeEvent.Process(InManager);
     }
 
