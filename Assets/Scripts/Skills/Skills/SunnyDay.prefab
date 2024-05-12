@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1205106801051192811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1205106801051192810}
+  - component: {fileID: 1205106801051192805}
+  m_Layer: 0
+  m_Name: SunnyDay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1205106801051192810
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205106801051192811}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1205106801051192805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205106801051192811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56b28fa0480883248a24fb86c32bc5c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 0
+  PP: 5
+  Accuracy: 0
+  SkillClass: 2
+  SkillType: 9
+  SkillRange: 0
+  SkillName: "\u5927\u6674\u5929"
+  SkillDescription: "\u57285\u56DE\u5408\u5185\u8BA9\u65E5\u7167\u53D8\u5F97\u5F3A\u70C8\uFF0C\u4ECE\u800C\u63D0\u9AD8\u706B\u5C5E\u6027\u7684\u62DB\u5F0F\u5A01\u529B\u3002\u6C34\u5C5E\u6027\u7684\u62DB\u5F0F\u5A01\u529B\u5219\u964D\u4F4E\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  AlwaysHit: 0
+  SkillAnimation: {fileID: 4057288820362223631, guid: 2b807d6a28184b04cb1da20f0c502a93, type: 3}

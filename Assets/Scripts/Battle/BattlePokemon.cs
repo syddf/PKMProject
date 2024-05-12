@@ -24,7 +24,8 @@ public enum EStatusChange
     Paralysis,
     Drowsy,
     Burn,
-    Frostbite
+    Frostbite,
+    LeechSeed
 }
 
 public struct StatusChange
@@ -70,6 +71,10 @@ public struct StatusChange
         if(StatusChangeType == EStatusChange.Drowsy)
         {
             return new DrowsyStatusChange(InPokemon);
+        }
+        if(StatusChangeType == EStatusChange.LeechSeed)
+        {
+            return new LeechSeedStatusChange(InPokemon);
         }       
         return null;
     }
@@ -211,14 +216,14 @@ public class BattlePokemon : MonoBehaviour
         if(HasItem("驱劲能量") && GetMaxStat() == "Atk" && Item.IsConsumedState())
         {
             ItemFactor = 1.3;
+        }
+        else if(GetMaxStat() == "Atk" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        {
+            AbilityFactor *= 1.3;
         }        
         if(HasAbility("活力", InManager, null, this))
         {
             AbilityFactor *= 1.5;
-        }
-        if(GetMaxStat() == "Atk" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
-        {
-            AbilityFactor *= 1.3;
         }
         if(InManager.GetTerrainType() == EBattleFieldTerrain.Electric && HasAbility("科学助手", null, null, this))
         {
@@ -236,13 +241,13 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.3;
         }
+        else if(GetMaxStat() == "Def" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        {
+            AbilityFactor *= 1.3;
+        }
         if(InManager.GetWeatherType() == EWeather.Snow && HasType(EType.Ice))
         {
             WeatherFactor = 1.5;
-        }
-        if(GetMaxStat() == "Def" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
-        {
-            AbilityFactor *= 1.3;
         }        
         return (int)Math.Floor((double)PokemonStats.Def * StatLevelFactor[ChangeLevel + 6] * WeatherFactor * AbilityFactor * ItemFactor);
     }
@@ -259,13 +264,13 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.3;
         }
+        else if(GetMaxStat() == "SAtk" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        {
+            AbilityFactor *= 1.3;
+        }
         if(InManager.GetWeatherType() == EWeather.SunLight && HasAbility("太阳之力", InManager, null, this))
         {
             AbilityFactor *= 1.5;
-        }
-        if(GetMaxStat() == "SAtk" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
-        {
-            AbilityFactor *= 1.3;
         }
         if(InManager.GetTerrainType() == EBattleFieldTerrain.Electric && HasAbility("科学助手", null, null, this))
         {
@@ -286,15 +291,16 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.3;
         }
+        else if(GetMaxStat() == "SDef" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        {
+            AbilityFactor *= 1.3;
+        } 
         double WeatherFactor = 1.0;
         if(InManager.GetWeatherType() == EWeather.Sand && HasType(EType.Rock))
         {
             WeatherFactor = 1.5;
         }
-        if(GetMaxStat() == "SDef" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
-        {
-            AbilityFactor *= 1.3;
-        }  
+
         return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6] * ItemFactor * WeatherFactor * AbilityFactor);
     }    
     public int GetSpeed(ECaclStatsMode Mode, BattleManager InManager)
@@ -315,7 +321,7 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.5;
         }
-        if(GetMaxStat() == "Speed" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        else if(GetMaxStat() == "Speed" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
         {
             AbilityFactor *= 1.5;
         }
@@ -780,6 +786,7 @@ public class BattlePokemon : MonoBehaviour
     {
         LostItem = false;
         FirstSkill = null;
+        Ability.ResetState();
         if(PokemonStats.StatusChangeList == null)
         {
             return;

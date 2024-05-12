@@ -69,6 +69,11 @@ public class BattleSkill
 
     public bool JudgeCT(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
+        DamageSkill CastSkill = (DamageSkill)ReferenceBaseSkill;
+        if(CastSkill.IsConstantDamage(InManager, SourcePokemon, TargetPokemon))
+        {
+            return false;
+        }
         int CTRatio = GetCTRatio() + SourcePokemon.GetCTLevel();
         CTRatio = Math.Min(3, CTRatio);
         CTRatio = Math.Max(0, CTRatio);
@@ -91,9 +96,25 @@ public class BattleSkill
         return SourceDamage;
     }
 
+    public int ConstantDamagePhase(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT, out double EffectiveFactor)
+    {
+        DamageSkill CastSkill = (DamageSkill)ReferenceBaseSkill;
+        double TypeEffectiveFactor = CastSkill.GetTypeEffectiveFactor(InManager, SourcePokemon, TargetPokemon);
+        EffectiveFactor = TypeEffectiveFactor;
+        if(EffectiveFactor != 0)
+        {
+            EffectiveFactor = 1.0;
+        }
+        return CastSkill.GetConstantDamage(InManager, SourcePokemon, TargetPokemon);
+    }
+
     public int DamagePhase(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT, out double EffectiveFactor)
     {
         DamageSkill CastSkill = (DamageSkill)ReferenceBaseSkill;
+        if(CastSkill.IsConstantDamage(InManager, SourcePokemon, TargetPokemon))
+        {
+            return ConstantDamagePhase(InManager, SourcePokemon, TargetPokemon, CT, out EffectiveFactor);
+        }
         double Power = CastSkill.GetPower(InManager, SourcePokemon, TargetPokemon);
         double Atk = CastSkill.GetSourceAtk(InManager, SourcePokemon, TargetPokemon, CT);
         double Def = CastSkill.GetTargetDef(InManager, SourcePokemon, TargetPokemon, CT);
