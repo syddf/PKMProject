@@ -308,6 +308,10 @@ public class SkillEvent : EventAnimationPlayer, Event
     }
     public bool JudgeAccuracy(BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
+        if(Skill.GetReferenceSkill().GetAlwaysHit())
+        {
+            return true;
+        }
         int SkillAccuracy = Skill.GetSkillAccuracy(GetReferenceManager(), SourcePokemon, TargetPokemon);
         int AttackAccuracyLevel = Skill.GetAttackAccuracyChangeLevel(ReferenceBattleManager, SourcePokemon, TargetPokemon);
         int EvasionRateLevel = Skill.GetTargetEvasionChangeLevel(ReferenceBattleManager, SourcePokemon, TargetPokemon);

@@ -236,6 +236,16 @@ public class DamageSkill : BaseSkill
     {
         return this.SkillClass == ESkillClass.PhysicalMove;
     }
+
+    public virtual bool IsConstantDamage(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return false;
+    }
+
+    public virtual int GetConstantDamage(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return 0;
+    }
 }
 
 public class DamageAndSelfDamageSkill : DamageSkill

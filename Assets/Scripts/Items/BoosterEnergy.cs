@@ -11,7 +11,7 @@ public class BoosterEnergy : BaseItem
 
     public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent, BattlePokemon ReferencePokemon)
     {
-        if(TimePoint != ETimePoint.PokemonIn)
+        if(TimePoint != ETimePoint.PokemonIn && TimePoint != ETimePoint.BattleStart)
         {
             return false;
         }

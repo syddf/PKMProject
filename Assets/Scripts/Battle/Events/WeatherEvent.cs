@@ -11,6 +11,11 @@ public class WeatherChangeEvent : EventAnimationPlayer, Event
     private BattleManager ReferenceBattleManager;
     private bool bSuccessed = false;
 
+    public EWeather GetWeatherType()
+    {
+        return NewWeatherType;
+    }
+
     public string GetWeatherTypeName()
     {
         if(NewWeatherType == EWeather.SunLight) return "大晴天";
@@ -53,6 +58,7 @@ public class WeatherChangeEvent : EventAnimationPlayer, Event
     public bool ShouldProcess(BattleManager InBattleManager)
     {
         if(InBattleManager.GetBattleEnd() == true) return false;
+        if(OriginWeatherType == NewWeatherType) return false;
         return true;
     }
 

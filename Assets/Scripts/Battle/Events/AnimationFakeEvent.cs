@@ -174,6 +174,11 @@ public class StatusChangeAnimationFakeEvent : EventAnimationPlayer, Event
             MessageDirector = Timelines.DrowsyStatusAnimation;
             MessageDirector.gameObject.transform.position = ReferencePokemon.GetPokemonModel().transform.position;
         }
+        if(StatusType == EStatusChange.LeechSeed)
+        {
+            MessageDirector = Timelines.LeechSeedDamageAnimation;
+            MessageDirector.gameObject.transform.position = ReferencePokemon.GetPokemonModel().transform.position;
+        }
         TimelineAnimation StatusAnimation = new TimelineAnimation(MessageDirector);                                
         StatusAnimation.SetSignalReceiver("SourcePokemon", ReferencePokemon.GetPokemonModel());
         AddAnimation(StatusAnimation);

@@ -11,8 +11,14 @@ public class BaseAbility : MonoBehaviour
     protected string Description;
     [SerializeField]
     protected BattlePokemon ReferencePokemon;
+    protected bool HasTriggerd = false;
 
     private bool Processing = false;
+
+    public void ResetState()
+    {
+        HasTriggerd = false;
+    }
     public virtual bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
     {
         return false;

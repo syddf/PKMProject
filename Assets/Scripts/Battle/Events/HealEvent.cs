@@ -24,6 +24,7 @@ public class HealEvent : EventAnimationPlayer, Event
         if(InBattleManager.GetBattleEnd() == true) return false;
         if(ReferencePokemon.IsDead()) return false;
         if(ReferencePokemon.HasStatusChange(EStatusChange.ForbidHeal)) return false;
+        if(ReferencePokemon.GetHP() < ReferencePokemon.GetMaxHP()) return true;
         return true;
     }
 

@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6607032151946337858
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6607032151946337917}
+  - component: {fileID: 6607032151946337916}
+  m_Layer: 0
+  m_Name: LeafStorm
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6607032151946337917
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6607032151946337858}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6607032151946337916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6607032151946337858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b79c8b0350a7c846a2d5487080a6d57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 130
+  PP: 5
+  Accuracy: 90
+  SkillClass: 1
+  SkillType: 11
+  SkillRange: 1
+  SkillName: "\u98DE\u53F6\u98CE\u66B4"
+  SkillDescription: "\u7528\u5C16\u5C16\u7684\u53F6\u7247\u5411\u5BF9\u624B\u5377\u8D77\u98CE\u66B4\u3002\u4F7F\u7528\u4E4B\u540E\u56E0\u4E3A\u53CD\u4F5C\u7528\u529B\u81EA\u5DF1\u7684\u7279\u653B\u4F1A\u5927\u5E45\u964D\u4F4E\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  AlwaysHit: 0
+  SkillAnimation: {fileID: 6562450796141755669, guid: a578c9189a8feb248a36bddaac4b44d7, type: 3}

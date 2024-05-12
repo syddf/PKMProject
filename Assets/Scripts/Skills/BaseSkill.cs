@@ -73,8 +73,11 @@ public class BaseSkill : MonoBehaviour
     [SerializeField]
     protected int Priority = 0;
     [SerializeField]
+    protected bool AlwaysHit = false;
+    [SerializeField]
     public PlayableDirector SkillAnimation;
     public ESkillClass GetSkillClass() => SkillClass;
+    public bool GetAlwaysHit() => AlwaysHit;
     public int GetPower() => Power;
     public int GetPP() => PP;
     public int GetAccuracy() => Accuracy;

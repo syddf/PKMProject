@@ -32,6 +32,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         if(ReferencePokemon.HasType(EType.Ice) && StatusChangeType == EStatusChange.Frostbite) return false;
         if(ReferencePokemon.HasType(EType.Electric) && StatusChangeType == EStatusChange.Paralysis) return false;
         if(InBattleManager.GetWeatherType() == EWeather.SunLight && StatusChangeType == EStatusChange.Frostbite) return false;
+        if(ReferencePokemon.HasType(EType.Grass) && StatusChangeType == EStatusChange.LeechSeed) return false;
         return true;
     }
 
@@ -83,6 +84,10 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         if(StatusChangeType == EStatusChange.Drowsy)
         {
             return "感觉到有点困倦了！";
+        }
+        if(StatusChangeType == EStatusChange.LeechSeed)
+        {
+            return "身上缠绕了寄生种子！";
         }
         return "";
     }
