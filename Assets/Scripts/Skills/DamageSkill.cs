@@ -29,9 +29,14 @@ public class DamageSkill : BaseSkill
 
     public double ApplyTerrainPowerFactor(BattleManager InManager, BattlePokemon SourcePokemon, double SourcePower)
     {
-        if(InManager.GetTerrainType() == EBattleFieldTerrain.Grass && GetSkillType(SourcePokemon) == EType.Grass)
+        if(InManager.GetTerrainType() == EBattleFieldTerrain.Grass && GetSkillType(SourcePokemon) == EType.Grass && SourcePokemon.IsGroundPokemon())
         {
             EditorLog.DebugLog(SkillName + "因青草场地威力提高了!");
+            return (int)Math.Floor(SourcePower * 1.3);
+        }
+        if(InManager.GetTerrainType() == EBattleFieldTerrain.Electric && GetSkillType(SourcePokemon) == EType.Electric && SourcePokemon.IsGroundPokemon())
+        {
+            EditorLog.DebugLog(SkillName + "因电气场地威力提高了!");
             return (int)Math.Floor(SourcePower * 1.3);
         }
         return SourcePower;

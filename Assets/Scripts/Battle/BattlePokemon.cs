@@ -219,7 +219,11 @@ public class BattlePokemon : MonoBehaviour
         if(GetMaxStat() == "Atk" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
         {
             AbilityFactor *= 1.3;
-        }  
+        }
+        if(InManager.GetTerrainType() == EBattleFieldTerrain.Electric && HasAbility("科学助手", null, null, this))
+        {
+            AbilityFactor *= 2.0;
+        }
         return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor);
     }
     public int GetDef(ECaclStatsMode Mode, BattleManager InManager)
@@ -262,6 +266,10 @@ public class BattlePokemon : MonoBehaviour
         if(GetMaxStat() == "SAtk" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
         {
             AbilityFactor *= 1.3;
+        }
+        if(InManager.GetTerrainType() == EBattleFieldTerrain.Electric && HasAbility("科学助手", null, null, this))
+        {
+            AbilityFactor *= 2.0;
         }  
         return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor);
     }

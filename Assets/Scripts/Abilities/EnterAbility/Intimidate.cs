@@ -8,10 +8,19 @@ public class Intimidate : EnterAbilityBase
     {
         List<BattlePokemon> Enemies = InManager.GetOpppoitePokemon(ReferencePokemon);
         List<Event> NewEvents = new List<Event>();
-        foreach(var BattlePokemonIter in Enemies)
+        if(Enemies[0].HasAbility("精神力", InManager, null, Enemies[0]))
         {
-            NewEvents.Add(new StatChangeEvent(BattlePokemonIter, "Atk", -1));
+            List<string> Messages = new List<string>();
+            Messages.Add(Enemies[0].GetName() + "因为精神力不受影响！");
+
+            MessageAnimationFakeEvent FakeEvent = new MessageAnimationFakeEvent(Messages);
+            NewEvents.Add(FakeEvent);
         }
+        else
+        {
+            NewEvents.Add(new StatChangeEvent(Enemies[0], "Atk", -1));
+        }
+        
         return NewEvents;
     }
 }
