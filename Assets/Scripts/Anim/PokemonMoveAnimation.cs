@@ -56,7 +56,14 @@ public class PokemonMoveAnimation : MonoBehaviour
     public void BeginMoveForward()
     {
         Prev = this.gameObject.transform.position;
-        Origin = new Vector3(0, Prev.y, 0);
+        if(Prev.z > 0)
+        {
+            Origin = new Vector3(0, Prev.y, -1.0f);
+        }
+        else
+        {
+            Origin = new Vector3(0, Prev.y, 1.0f);
+        }
         RB.isKinematic = true; 
         Play = true;
         Return = false;
