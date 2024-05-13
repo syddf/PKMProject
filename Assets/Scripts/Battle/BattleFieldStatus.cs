@@ -172,17 +172,17 @@ public class PowerChordStatusChange : BaseBattleFieldStatusChange
         List<Event> NewEvents = new List<Event>();
         if(ChordType == 0)
         {
-            NewEvents.Add(new StatChangeEvent(TargetPokemon, "Atk", 1, "能量和弦效果"));
-            NewEvents.Add(new StatChangeEvent(TargetPokemon, "SAtk", 1, "能量和弦效果"));
+            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "Atk", 1, "能量和弦效果"));
+            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "SAtk", 1, "能量和弦效果"));
         }
         else if(ChordType == 1)
         {
-            NewEvents.Add(new StatChangeEvent(TargetPokemon, "Def", 1, "能量和弦效果"));
-            NewEvents.Add(new StatChangeEvent(TargetPokemon, "SDef", 1, "能量和弦效果"));
+            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "Def", 1, "能量和弦效果"));
+            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "SDef", 1, "能量和弦效果"));
         }
         else if(ChordType == 2)
         {
-            NewEvents.Add(new StatChangeEvent(TargetPokemon, "Speed", 1, "能量和弦效果"));
+            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "Speed", 1, "能量和弦效果"));
         }
         return NewEvents;
     }

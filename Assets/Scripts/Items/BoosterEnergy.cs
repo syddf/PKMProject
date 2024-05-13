@@ -15,7 +15,9 @@ public class BoosterEnergy : BaseItem
         {
             return false;
         }
-        if(ReferencePokemon.HasAbility("古代活性", BattleManager.StaticManager, null, ReferencePokemon) && BattleManager.StaticManager.GetWeatherType() != EWeather.SunLight)
+        if(ReferencePokemon.HasAbility("古代活性", BattleManager.StaticManager, null, ReferencePokemon) 
+        && BattleManager.StaticManager.GetWeatherType() != EWeather.SunLight
+        && ReferencePokemon.GetAbility().GetTriggered() == false)
         {
             return true;
         }

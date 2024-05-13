@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 public class DamageSkill : BaseSkill
 {
-    private static double[,] typeEffectiveness = new double[,] 
+    public static double[,] typeEffectiveness = new double[,] 
     {
          // 一般, 格斗, 飞行, 毒, 地面, 岩石, 虫, 幽灵, 钢, 火, 水, 草, 电, 超能力, 冰, 龙, 恶, 妖精
         {1, 1, 1, 1, 1, 0.5, 1, 0, 0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 一般
@@ -125,7 +125,7 @@ public class DamageSkill : BaseSkill
         return (int)Math.Floor(Result);
     }
 
-    private ECaclStatsMode GetSourceAtkCaclMode(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT)
+    protected ECaclStatsMode GetSourceAtkCaclMode(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT)
     {
         bool IgnorBuf = false;
         bool IgnorDebuff = false;
@@ -143,7 +143,7 @@ public class DamageSkill : BaseSkill
         if(IgnorBuf) return ECaclStatsMode.IgnoreBuf;
         return ECaclStatsMode.Normal;
     }
-    private ECaclStatsMode GetTargetDefCaclMode(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT)
+    protected ECaclStatsMode GetTargetDefCaclMode(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT)
     {
         bool IgnorBuf = false;
         bool IgnorDebuff = false;

@@ -106,6 +106,5 @@ public class PokemonReceiver : ParameterizedSignalReceiver
         {
             RotationAnim.EndRotation();
         }
-        
     }
 }

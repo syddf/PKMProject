@@ -6,7 +6,7 @@ public class AquaStep : DamageSkill
 {
     public override void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        StatChangeEvent statChangeEvent = new StatChangeEvent(SourcePokemon, "Speed", 1);
+        StatChangeEvent statChangeEvent = new StatChangeEvent(SourcePokemon, SourcePokemon, "Speed", 1);
         statChangeEvent.Process(InManager);
     }
 }

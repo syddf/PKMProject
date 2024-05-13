@@ -6,7 +6,7 @@ public class IcyWind : DamageSkill
 {
     public override void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        StatChangeEvent statChangeEvent = new StatChangeEvent(TargetPokemon, "Speed", -1);
+        StatChangeEvent statChangeEvent = new StatChangeEvent(TargetPokemon, SourcePokemon, "Speed", -1);
         statChangeEvent.Process(InManager);
     }
 }

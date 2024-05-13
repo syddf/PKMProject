@@ -6,6 +6,11 @@ public class Protosynthesis : BaseAbility
 {
     public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
     {
+        if(HasTriggerd)
+        {
+            return false;
+        }
+
         if(BattleManager.StaticManager.GetWeatherType() != EWeather.SunLight)
         {
             return false;
@@ -67,6 +72,7 @@ public class Protosynthesis : BaseAbility
             List<string> Message = new List<string>();
             Message.Add(ReferencePokemon.GetName() + "的" + MaxStat + "提高了!");
             NewEvents.Add(new MessageAnimationFakeEvent(Message));
+            HasTriggerd = true;
         }
         return NewEvents;
     }

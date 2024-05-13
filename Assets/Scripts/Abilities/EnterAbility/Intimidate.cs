@@ -18,7 +18,7 @@ public class Intimidate : EnterAbilityBase
         }
         else
         {
-            NewEvents.Add(new StatChangeEvent(Enemies[0], "Atk", -1));
+            NewEvents.Add(new StatChangeEvent(Enemies[0], ReferencePokemon, "Atk", -1));
         }
         
         return NewEvents;

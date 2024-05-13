@@ -15,6 +15,10 @@ public class BaseAbility : MonoBehaviour
 
     private bool Processing = false;
 
+    public bool GetTriggered()
+    {
+        return HasTriggerd;
+    }
     public void ResetState()
     {
         HasTriggerd = false;

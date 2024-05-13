@@ -6,7 +6,7 @@ public class EerieImpulse : StatusSkill
 {
     public override void ProcessStatusSkillEffect(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        StatChangeEvent NewEvent = new StatChangeEvent(TargetPokemon, "SAtk", -2);
+        StatChangeEvent NewEvent = new StatChangeEvent(TargetPokemon, SourcePokemon, "SAtk", -2);
         NewEvent.Process(InManager);
     }
 }

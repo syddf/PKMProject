@@ -25,7 +25,7 @@ public class Moxie : BaseAbility
         PokemonDefeatedEvent CastedEvent = (PokemonDefeatedEvent)SourceEvent;
         List<BattlePokemon> Enemies = InManager.GetOpppoitePokemon(ReferencePokemon);
         List<Event> NewEvents = new List<Event>();
-        NewEvents.Add(new StatChangeEvent(CastedEvent.GetSourcePokemon(), "Atk", 1));
+        NewEvents.Add(new StatChangeEvent(CastedEvent.GetSourcePokemon(), CastedEvent.GetSourcePokemon(), "Atk", 1));
         return NewEvents;
     }
 }

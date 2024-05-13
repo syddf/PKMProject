@@ -28,7 +28,7 @@ public class ThroatSpray : BaseItem
     {
         SkillEvent CastEvent = (SkillEvent)SourceEvent;
         List<Event> NewEvents = new List<Event>();
-        NewEvents.Add(new StatChangeEvent(CastEvent.GetSourcePokemon(), "SAtk", 1));
+        NewEvents.Add(new StatChangeEvent(CastEvent.GetSourcePokemon(), null, "SAtk", 1));
         return NewEvents;
     }
 }

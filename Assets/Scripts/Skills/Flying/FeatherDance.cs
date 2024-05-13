@@ -6,7 +6,7 @@ public class FeatherDance : StatusSkill
 {
     public override void ProcessStatusSkillEffect(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        StatChangeEvent NewEvent = new StatChangeEvent(TargetPokemon, "Atk", -2);
+        StatChangeEvent NewEvent = new StatChangeEvent(TargetPokemon, SourcePokemon, "Atk", -2);
         NewEvent.Process(InManager);
     }
 }
