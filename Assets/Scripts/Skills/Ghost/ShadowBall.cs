@@ -6,7 +6,7 @@ public class ShadowBall : DamageSkill
 {
     public override void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        StatChangeEvent statChangeEvent = new StatChangeEvent(TargetPokemon, "SDef", -1);
+        StatChangeEvent statChangeEvent = new StatChangeEvent(TargetPokemon, SourcePokemon, "SDef", -1);
         statChangeEvent.Process(InManager);
     }
 

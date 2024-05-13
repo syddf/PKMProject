@@ -6,7 +6,7 @@ public class LeafStorm : DamageSkill
 {
     public override void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        StatChangeEvent statChangeEvent = new StatChangeEvent(SourcePokemon, "SAtk", -2);
+        StatChangeEvent statChangeEvent = new StatChangeEvent(SourcePokemon, SourcePokemon, "SAtk", -2);
         statChangeEvent.Process(InManager);
     }
 }

@@ -6,13 +6,14 @@ using UnityEngine.Playables;
 public class StatChangeEvent : EventAnimationPlayer, Event
 {
     private BattlePokemon TargetPokemon;
+    private BattlePokemon SourcePokemon;
     private string ChangedStatName;
     private int ChangedStatLevel;
     private bool ShouldChange;
     private bool ReverseChangeLevel;
     private bool ChangedSuccessed = false;
     private string Reason = "";
-    public StatChangeEvent(BattlePokemon InTargetPokemon, string InChangedStatName, int InChangedStatLevel, string InReason = "")
+    public StatChangeEvent(BattlePokemon InTargetPokemon, BattlePokemon InSourcePokemon, string InChangedStatName, int InChangedStatLevel, string InReason = "")
     {
         TargetPokemon = InTargetPokemon;
         ChangedStatName = InChangedStatName;
@@ -127,6 +128,7 @@ public class StatChangeEvent : EventAnimationPlayer, Event
     }
 
     public BattlePokemon GetTargetPokemon() => TargetPokemon;
+    public BattlePokemon GetSourcePokemon() => SourcePokemon;
     public int GetChangeLevel()
     {
         int Factor = 1;

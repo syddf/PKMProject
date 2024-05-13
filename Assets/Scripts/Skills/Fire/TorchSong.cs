@@ -6,7 +6,7 @@ public class TorchSong : DamageSkill
 {
     public override void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        StatChangeEvent statChangeEvent = new StatChangeEvent(SourcePokemon, "SAtk", 1);
+        StatChangeEvent statChangeEvent = new StatChangeEvent(SourcePokemon, SourcePokemon, "SAtk", 1);
         statChangeEvent.Process(InManager);
     }
 }

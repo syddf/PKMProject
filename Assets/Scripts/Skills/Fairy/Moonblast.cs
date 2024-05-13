@@ -6,7 +6,7 @@ public class Moonblast : DamageSkill
 {
     public override void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        StatChangeEvent statChangeEvent = new StatChangeEvent(TargetPokemon, "SAtk", -1);
+        StatChangeEvent statChangeEvent = new StatChangeEvent(TargetPokemon, SourcePokemon, "SAtk", -1);
         statChangeEvent.Process(InManager);
     }
 

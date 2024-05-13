@@ -15,7 +15,7 @@ public class BellyDrum : StatusSkill
         DamageEvent damageEvent = new DamageEvent(SourcePokemon, Damage, "腹鼓");
         damageEvent.Process(InManager);
 
-        StatChangeEvent NewEvent = new StatChangeEvent(SourcePokemon, "Atk", 12);
+        StatChangeEvent NewEvent = new StatChangeEvent(SourcePokemon, SourcePokemon, "Atk", 12);
         NewEvent.Process(InManager);
     }
 }

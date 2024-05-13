@@ -36,6 +36,10 @@ public class EnemyAI
 
     public void AddUseSkillEvent(BaseSkill InSkill, List<Event> InEvents)
     {
+        if(ReferencePokemon.CanMega())
+        {
+            InEvents.Add(new MegaEvent(ReferenceBattleManager, ReferencePokemon));
+        }
         BattleSkill UseBattleSkill = new BattleSkill(InSkill, EMasterSkill.None, ReferencePokemon);
         if(InSkill.GetSkillRange() != ERange.None)
         {
