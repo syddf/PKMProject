@@ -12,6 +12,10 @@ public class DamageEvent : EventAnimationPlayer, Event
     {
         ReferencePokemon = TargetPokemon;
         Damage = InDamage;
+        if(Damage > TargetPokemon.GetHP())
+        {
+            Damage = TargetPokemon.GetHP();
+        }
         DamageReason = InDamageReason;
     }
 

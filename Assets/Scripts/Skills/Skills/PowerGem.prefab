@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1320866572
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1320866573}
+  - component: {fileID: 1320866574}
+  m_Layer: 0
+  m_Name: PowerGem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1320866573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320866572}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1320866574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320866572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eb6553f230e0164ca04979376ed5860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 80
+  PP: 20
+  Accuracy: 100
+  SkillClass: 1
+  SkillType: 5
+  SkillRange: 1
+  SkillName: "\u529B\u91CF\u5B9D\u77F3"
+  SkillDescription: "\u53D1\u5C04\u5982\u5B9D\u77F3\u822C\u95EA\u8000\u7684\u5149\u8292\u653B\u51FB\u5BF9\u624B\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  AlwaysHit: 0
+  SkillAnimation: {fileID: 918616277, guid: 9688f42eb9ad76c49a576db40d7ff5f9, type: 3}

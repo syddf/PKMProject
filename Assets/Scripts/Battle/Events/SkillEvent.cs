@@ -46,7 +46,11 @@ public class UseSkillMessageEvent : EventAnimationPlayer, Event
         if(SkillForbidden)
         {
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            string MessageText = SourcePokemon.GetName() + "因" + ForbiddenReason + "无法使用" + Skill.GetSkillName()+ "！";
+            string MessageText = SourcePokemon.GetName() + "因" + ForbiddenReason + "无法使用" + Skill.GetSkillName() + "！";
+            if(Skill.GetSkillName() == "混乱")
+            {
+                MessageText = SourcePokemon.GetName() + "因" + ForbiddenReason + "无法使用招式！";
+            }
             MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
             AddAnimation(MessageTimeline);
         }
@@ -54,6 +58,10 @@ public class UseSkillMessageEvent : EventAnimationPlayer, Event
         {
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
             string MessageText = SourcePokemon.GetName() + "使用了" + Skill.GetSkillName() + "！";
+            if(Skill.GetSkillName() == "混乱")
+            {
+                MessageText = SourcePokemon.GetName() + "因为混乱攻击了自己！";
+            }
             MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", MessageText);
             AddAnimation(MessageTimeline);
         }
@@ -308,7 +316,7 @@ public class SkillEvent : EventAnimationPlayer, Event
     }
     public bool JudgeAccuracy(BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        if(Skill.GetReferenceSkill().GetAlwaysHit())
+        if(Skill.GetReferenceSkill().GetAlwaysHit(GetReferenceManager(), SourcePokemon, TargetPokemon))
         {
             return true;
         }
@@ -335,6 +343,7 @@ public class SkillEvent : EventAnimationPlayer, Event
     public void Process(BattleManager InManager)
     {
         if(!ShouldProcess(InManager)) return;
+        InManager.TranslateTimePoint(ETimePoint.JudgeConfusion, this);
         ResetSkillMetas();
         InManager.TranslateTimePoint(ETimePoint.BeforeActivateSkill, this);
         UseSkillMessageEvent MessageEvent = new UseSkillMessageEvent(Skill, SourcePokemon, SkillForbidden, SkillForbiddenReason);
@@ -506,6 +515,12 @@ public class SkillEvent : EventAnimationPlayer, Event
     public BattleManager GetReferenceManager()
     {
         return ReferenceBattleManager;
+    }
+
+    public void ReplaceConfusionSkill()
+    {
+        Skill = new BattleSkill(ReferenceBattleManager.GetConfusionSkill(), EMasterSkill.None, SourcePokemon);
+        TargetPokemon[0] = SourcePokemon.GetIsEnemy() ? ETarget.E0 : ETarget.P0; 
     }
 
     public bool IsSkillForbidden()

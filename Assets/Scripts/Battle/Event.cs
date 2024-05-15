@@ -13,6 +13,7 @@ public enum ETimePoint
     PokemonOut,
     BeforeStatChange,
     AfterStatChange,
+    JudgeConfusion,
     BeforeActivateSkill,
     BeforeGetSkillCount,
     BeforeJudgeSkillIsEffective,

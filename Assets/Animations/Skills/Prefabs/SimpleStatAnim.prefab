@@ -1,0 +1,213 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6592094053568988963
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6592094053568988962}
+  m_Layer: 0
+  m_Name: SourcePokemonTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6592094053568988962
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6592094053568988963}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6592094055054618624}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6592094055054618625
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6592094055054618624}
+  - component: {fileID: 6592094055054618638}
+  - component: {fileID: 6592094055054618639}
+  m_Layer: 0
+  m_Name: SimpleStatAnim
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &6592094055054618624
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6592094055054618625}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6592094053568988962}
+  - {fileID: 6592094055344900257}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6592094055054618638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6592094055054618625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fba7b6c1acfafc947acdc597f03bad67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SourcePokemonTransform: {fileID: 6592094053568988962}
+  TargetPokemonTransform: {fileID: 6592094055344900257}
+  TargetPokemonTouchTransform: {fileID: 0}
+  SourcePokemonTouchTransform: {fileID: 0}
+  TargetPokemonFloorTransform: {fileID: 0}
+--- !u!320 &6592094055054618639
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6592094055054618625}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 8875e57845570e548ac6d22b042387b8, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 6842169288385041471, guid: ecf2f97464d56bf41bb11b549388638c, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3325292166329886469, guid: ecf2f97464d56bf41bb11b549388638c, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -4772924720409186268, guid: ecf2f97464d56bf41bb11b549388638c, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -6379761048222460861, guid: ecf2f97464d56bf41bb11b549388638c, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -4930134400547799714, guid: ecf2f97464d56bf41bb11b549388638c, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 4842514457851329139, guid: ecf2f97464d56bf41bb11b549388638c, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 468867025748049443, guid: ecf2f97464d56bf41bb11b549388638c, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3065811262494278131, guid: ecf2f97464d56bf41bb11b549388638c, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -1755058520290661602, guid: ecf2f97464d56bf41bb11b549388638c, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -6121240350201529161, guid: ecf2f97464d56bf41bb11b549388638c, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3789787096136759624, guid: ecf2f97464d56bf41bb11b549388638c, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 6842169288385041471, guid: 614f3d1719c2cde4cac116efe1e2b28d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3325292166329886469, guid: 614f3d1719c2cde4cac116efe1e2b28d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -4772924720409186268, guid: 614f3d1719c2cde4cac116efe1e2b28d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 0}
+    value: {fileID: 0}
+  - key: {fileID: 0}
+    value: {fileID: 0}
+  - key: {fileID: 0}
+    value: {fileID: 0}
+  - key: {fileID: -4930134400547799714, guid: 614f3d1719c2cde4cac116efe1e2b28d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 4842514457851329139, guid: 614f3d1719c2cde4cac116efe1e2b28d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 468867025748049443, guid: 614f3d1719c2cde4cac116efe1e2b28d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3065811262494278131, guid: 614f3d1719c2cde4cac116efe1e2b28d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 6842169288385041471, guid: 2ca8527215082c3439b1173610217051, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3325292166329886469, guid: 2ca8527215082c3439b1173610217051, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -4772924720409186268, guid: 2ca8527215082c3439b1173610217051, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -4930134400547799714, guid: 2ca8527215082c3439b1173610217051, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 4842514457851329139, guid: 2ca8527215082c3439b1173610217051, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 468867025748049443, guid: 2ca8527215082c3439b1173610217051, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3065811262494278131, guid: 2ca8527215082c3439b1173610217051, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 2092614108720129261, guid: 2ca8527215082c3439b1173610217051, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -247147254792993254, guid: 2ca8527215082c3439b1173610217051, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 1360562148848232558, guid: 2ca8527215082c3439b1173610217051, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 6842169288385041471, guid: 58a3134f62bf3d74282b7977ea1b867d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3325292166329886469, guid: 58a3134f62bf3d74282b7977ea1b867d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -4772924720409186268, guid: 58a3134f62bf3d74282b7977ea1b867d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 2092614108720129261, guid: 58a3134f62bf3d74282b7977ea1b867d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 1360562148848232558, guid: 58a3134f62bf3d74282b7977ea1b867d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -4930134400547799714, guid: 58a3134f62bf3d74282b7977ea1b867d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 3292354058116961389, guid: 58a3134f62bf3d74282b7977ea1b867d, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -6517496902215275540, guid: 8875e57845570e548ac6d22b042387b8, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 7119125328374528235, guid: 8875e57845570e548ac6d22b042387b8, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References: []
+--- !u!1 &6592094055344900258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6592094055344900257}
+  m_Layer: 0
+  m_Name: TargetPokemonTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6592094055344900257
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6592094055344900258}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6592094055054618624}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -89,6 +89,10 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         {
             return "身上缠绕了寄生种子！";
         }
+        if(StatusChangeType == EStatusChange.Confusion)
+        {
+            return "混乱了！";
+        }
         return "";
     }
 
@@ -150,6 +154,12 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
                     StatusChangeAnimationFakeEvent FakeEvent = new StatusChangeAnimationFakeEvent(ReferencePokemon, EStatusChange.Drowsy);
                     FakeEvent.Process(InManager);
                 }
+                if(StatusChangeType == EStatusChange.Confusion)
+                {
+                    StatusChangeAnimationFakeEvent FakeEvent = new StatusChangeAnimationFakeEvent(ReferencePokemon, EStatusChange.Confusion);
+                    FakeEvent.Process(InManager);
+                }
+                
             }
         }
         CloneInPokemon = ReferencePokemon.CloneBattlePokemonStats();
@@ -219,6 +229,10 @@ public class RemovePokemonStatusChangeEvent : EventAnimationPlayer, Event
         {
             return "解除了瞌睡！";
         }
+        if(StatusChangeType == EStatusChange.Confusion)
+        {
+            return "解除了混乱！";
+        }
         return "";
     }
     
@@ -235,6 +249,10 @@ public class RemovePokemonStatusChangeEvent : EventAnimationPlayer, Event
         if(Desc != "")
         {
             string Message = ReferencePokemon.GetName() + "因" + RemoveReason + Desc;
+            if(RemoveReason == "")
+            {
+                Message = ReferencePokemon.GetName() + Desc;
+            }
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
             MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);
             AddAnimation(MessageTimeline);

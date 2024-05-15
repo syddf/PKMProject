@@ -46,6 +46,7 @@ public class BattleManager : MonoBehaviour
 
     private List<List<BattleFieldStatus>> BattleFiledStatusLists;
     public BaseSkill StruggleSkill;
+    public BaseSkill ConfusionSkill;
     public BattleMenuUI BeforeBattleUI;
     public static BattleManager StaticManager;
 
@@ -823,6 +824,12 @@ public class BattleManager : MonoBehaviour
     {
         return StruggleSkill;
     }
+
+    public BaseSkill GetConfusionSkill()
+    {
+        return ConfusionSkill;
+    }
+
     public bool IsPokemonInLastTurn(BattlePokemon TargetPokemon)
     {
         if(TurnIndex == 0) return false;
