@@ -25,7 +25,8 @@ public enum EStatusChange
     Drowsy,
     Burn,
     Frostbite,
-    LeechSeed
+    LeechSeed,
+    Confusion
 }
 
 public struct StatusChange
@@ -75,6 +76,10 @@ public struct StatusChange
         if(StatusChangeType == EStatusChange.LeechSeed)
         {
             return new LeechSeedStatusChange(InPokemon);
+        }
+        if(StatusChangeType == EStatusChange.Confusion)
+        {
+            return new ConfusionStatusChange(InPokemon);
         }       
         return null;
     }

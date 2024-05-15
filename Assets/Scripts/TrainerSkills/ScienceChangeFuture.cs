@@ -30,7 +30,7 @@ public class ScienceChangeFuture : BaseTrainerSkill
             {
                 if(CastedEvent.GetSkill().GetReferenceSkill().GetSkillType(CastedEvent.GetSourcePokemon()) == EType.Electric)
                 {
-                    return true;
+                    return ReferenceManager.GetTerrainType() != EBattleFieldTerrain.Electric;
                 }
             }
         }

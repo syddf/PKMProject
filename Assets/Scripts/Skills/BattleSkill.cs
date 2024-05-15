@@ -35,7 +35,7 @@ public class BattleSkill
         {
             AbilityFactor *= 0.8;
         }
-        return (int)(ReferenceBaseSkill.GetAccuracy() * AbilityFactor);
+        return (int)(ReferenceBaseSkill.GetAccuracy(InManager, SourcePokemon, TargetPokemon) * AbilityFactor);
     }
 
     public bool IsDamageSkill()
@@ -187,7 +187,10 @@ public class BattleSkill
             {
                 WallFactor = 0.5;
             }
-            Damage = (int)Math.Floor(Damage * WallFactor);
+            if(CastSkill.GetSkillName() != "劈瓦" && CastSkill.GetSkillName() != "精神之牙")
+            {
+                Damage = (int)Math.Floor(Damage * WallFactor);                
+            }
         }
 
         int IntDamage = (int)Math.Floor(Damage);

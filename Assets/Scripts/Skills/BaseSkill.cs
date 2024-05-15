@@ -77,7 +77,7 @@ public class BaseSkill : MonoBehaviour
     [SerializeField]
     public PlayableDirector SkillAnimation;
     public ESkillClass GetSkillClass() => SkillClass;
-    public bool GetAlwaysHit() => AlwaysHit;
+    public virtual bool GetAlwaysHit(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon) => AlwaysHit;
     public int GetPower() => Power;
     public int GetPP() => PP;
     public int GetAccuracy() => Accuracy;
@@ -86,6 +86,10 @@ public class BaseSkill : MonoBehaviour
     public ERange GetSkillRange() => SkillRange;
     public PlayableDirector GetSkillAnimation() => SkillAnimation;
 
+    public virtual int GetAccuracy(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return Accuracy;
+    }
     public ECaclStatsMode GetAttackAccuracyChangeLevelMode(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         if(TargetPokemon.HasAbility("纯朴", InManager, SourcePokemon, TargetPokemon))

@@ -11,4 +11,9 @@ public class DrainPunch : DamageSkill
         HealEvent healEvent = new HealEvent(SourcePokemon, selfHeal, "吸取拳");
         healEvent.Process(InManager);   
     }
+
+    public override bool HasHealEffect(BattleManager InManager)
+    {
+        return true;
+    }
 }

@@ -97,9 +97,10 @@ public class StatChangeEvent : EventAnimationPlayer, Event
         }
         else
         {
+            string Desc = GetChangeLevel() > 0 ? "提高" : "降低";
             PlayableDirector MessageDirector = Timelines.MessageAnimation;
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "能力不能再进一步变化了！");
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "的" + GetStatName(ChangedStatName) + "不能再进一步" + Desc + "了！");
             AddAnimation(MessageTimeline);
         }
     }
