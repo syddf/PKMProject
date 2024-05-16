@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StoneEdge : DamageSkill
 {
-    public virtual int GetCTRatio()
+    public override int GetCTRatio()
     {
         return 1;
     }

@@ -64,7 +64,7 @@ public class BattleSkill
 
     public virtual int GetCTRatio()
     {
-        return 0;
+        return ReferenceBaseSkill.GetCTRatio();
     }
 
     public bool JudgeCT(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)

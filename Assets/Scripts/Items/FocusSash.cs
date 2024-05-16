@@ -19,7 +19,7 @@ public class FocusSash : BaseItem
         if(SourceEvent.GetEventType() == EventType.UseSkill && ReferencePokemon.GetHP() == ReferencePokemon.GetMaxHP())
         {
             SkillEvent CastEvent = (SkillEvent)SourceEvent;
-            return CastEvent.GetSkill().IsDamageSkill() && CastEvent.GetCurrentDamage() == ReferencePokemon.GetHP();
+            return CastEvent.GetSkill().IsDamageSkill() && CastEvent.GetCurrentProcessTargetPokemon() == ReferencePokemon && CastEvent.GetCurrentDamage() == ReferencePokemon.GetHP();
         }
 
         return false;

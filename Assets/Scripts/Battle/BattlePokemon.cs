@@ -20,6 +20,7 @@ public enum EStatusChange
     Protect,
     ForbidHeal,
     Flinch,
+    Taunt,
     Poison,
     Paralysis,
     Drowsy,
@@ -56,6 +57,10 @@ public struct StatusChange
         if(StatusChangeType == EStatusChange.Flinch)
         {
             return new FlinchStatusChange(InPokemon);
+        }
+        if(StatusChangeType == EStatusChange.Taunt)
+        {
+            return new TauntStatusChange(InPokemon);
         }
         if(StatusChangeType == EStatusChange.Paralysis)
         {
@@ -141,6 +146,8 @@ public class BattlePokemon : MonoBehaviour
 
     private bool LostItem = false;
     private BaseSkill FirstSkill = null;
+    private bool HasActivated = false;
+
 
     public BagPokemonSkillAI GetSkillAI()
     {
@@ -168,6 +175,7 @@ public class BattlePokemon : MonoBehaviour
 
     public void SwitchIn()
     {
+        HasActivated = true;
         FirstIn = false;
     }
     public bool GetFirstIn()
@@ -630,6 +638,7 @@ public class BattlePokemon : MonoBehaviour
 
         for(int Index = 0; Index < PokemonStats.StatusChangeList.Count; Index++)
         {
+            bool bSame = StatusType == PokemonStats.StatusChangeList[Index].StatusChangeType;
             if(PokemonStats.StatusChangeList[Index].StatusChangeType == StatusType ||                
                ( StatusChange.IsStatusChange(StatusType) && StatusChange.IsStatusChange(PokemonStats.StatusChangeList[Index].StatusChangeType)) )
             {
@@ -639,7 +648,7 @@ public class BattlePokemon : MonoBehaviour
                 OldStatus.StatusChangeType = StatusType;
                 OldStatus.ReferenceBaseStatusChange = StatusChange.GetBaseStatusChange(StatusType, this);
                 PokemonStats.StatusChangeList[Index] = OldStatus;
-                return true;
+                return bSame;
             }
         }
 
@@ -787,9 +796,25 @@ public class BattlePokemon : MonoBehaviour
         return RemoveStatus;
     }
 
+    public void SetActivated()
+    {
+        HasActivated = true;
+    }
+
+    public void NewTurn()
+    {
+        HasActivated = false;
+    }
+
+    public bool GetActivated()
+    {
+        return HasActivated;
+    }
+
     public void ClearStatusChange()
     {
         LostItem = false;
+        HasActivated = false;
         FirstSkill = null;
         Ability.ResetState();
         if(PokemonStats.StatusChangeList == null)

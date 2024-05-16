@@ -7,18 +7,43 @@ public class StatChangeEvent : EventAnimationPlayer, Event
 {
     private BattlePokemon TargetPokemon;
     private BattlePokemon SourcePokemon;
-    private string ChangedStatName;
-    private int ChangedStatLevel;
-    private bool ShouldChange;
+    private List<string> ChangedStatName;
+    private List<int> ChangedStatLevel;
+    private List<bool> ShouldChangeList;
     private bool ReverseChangeLevel;
-    private bool ChangedSuccessed = false;
+    private List<bool> ChangedSuccessedList;
     private string Reason = "";
-    public StatChangeEvent(BattlePokemon InTargetPokemon, BattlePokemon InSourcePokemon, string InChangedStatName, int InChangedStatLevel, string InReason = "")
+
+    public StatChangeEvent(BattlePokemon InTargetPokemon, BattlePokemon InSourcePokemon, List<string> InChangedStatName, List<int> InChangedStatLevel, string InReason = "")
     {
         TargetPokemon = InTargetPokemon;
         ChangedStatName = InChangedStatName;
         ChangedStatLevel = InChangedStatLevel;
-        ShouldChange = true;
+
+        ShouldChangeList = new List<bool>();
+        ChangedSuccessedList = new List<bool>();
+        for(int Index = 0; Index < ChangedStatName.Count; Index++)
+        {
+            ShouldChangeList.Add(true);
+            ChangedSuccessedList.Add(false);
+        }
+
+        ReverseChangeLevel = false;
+        Reason = InReason;
+    }
+
+    public StatChangeEvent(BattlePokemon InTargetPokemon, BattlePokemon InSourcePokemon, string InChangedStatName, int InChangedStatLevel, string InReason = "")
+    {
+        TargetPokemon = InTargetPokemon;
+        ChangedStatName = new List<string>();
+        ChangedStatName.Add(InChangedStatName);
+        ChangedStatLevel = new List<int>();
+        ChangedStatLevel.Add(InChangedStatLevel);
+        ShouldChangeList = new List<bool>();
+        ShouldChangeList.Add(true);
+        ChangedSuccessedList = new List<bool>();
+        ChangedSuccessedList.Add(false);
+
         ReverseChangeLevel = false;
         Reason = InReason;
     }
@@ -54,11 +79,11 @@ public class StatChangeEvent : EventAnimationPlayer, Event
         return "";
     }
 
-    public string GetMessageText()
+    public string GetMessageText(int Index)
     {
         string PokemonName = TargetPokemon.GetName();
-        string StatName = GetStatName(ChangedStatName);
-        string Description = GetChangeDescription(ChangedStatLevel);
+        string StatName = GetStatName(ChangedStatName[Index]);
+        string Description = GetChangeDescription(ChangedStatLevel[Index]);
         string ReasonString = "因" + Reason;
         if(Reason == "")
         {
@@ -70,38 +95,66 @@ public class StatChangeEvent : EventAnimationPlayer, Event
     public override void InitAnimation()
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
-        if(!ShouldChange)
+        bool ShouldChange = false;
+        bool ChangedSuccessed = false;
+        string Desc = GetChangeLevel()[0] > 0 ? "提高" : "降低";
+
+        for(int Index = 0; Index < ShouldChangeList.Count; Index++)
         {
-            PlayableDirector MessageDirector = Timelines.MessageAnimation;
-            TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            string Desc = GetChangeLevel() > 0 ? "提高" : "降低";
-            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "的" + GetStatName(ChangedStatName) + "无法" + Desc + "！");
-            AddAnimation(MessageTimeline);
-            return;
+            if(ShouldChangeList[Index] == true)
+            {
+                ShouldChange = true;
+            }
+            if(ChangedSuccessedList[Index] == true)
+            {
+                ChangedSuccessed = true;                
+            }
         }
+
+        for(int Index = 0; Index < ShouldChangeList.Count; Index++)
+        {
+            if(ShouldChangeList[Index] == false)
+            {
+                PlayableDirector MessageDirector = Timelines.MessageAnimation;
+                TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+
+                MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "的" + GetStatName(ChangedStatName[Index]) + "无法" + Desc + "！");
+                AddAnimation(MessageTimeline);
+            }
+        }
+
         if(ChangedSuccessed)
         {
             PlayableDirector AnimDirector = Timelines.DebuffAnimation;
-            if(GetChangeLevel() > 0)
+            if(GetChangeLevel()[0] > 0)
             {
                 AnimDirector = Timelines.BuffAnimation;
             }
             AnimDirector.gameObject.transform.position = TargetPokemon.GetPokemonModel().transform.position;
             TimelineAnimation TargetTimeline = new TimelineAnimation(AnimDirector);
             AddAnimation(TargetTimeline);
-
-            PlayableDirector MessageDirector = Timelines.MessageAnimation;
-            TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", GetMessageText());
-            AddAnimation(MessageTimeline);
         }
-        else
+        
+
+        for(int Index = 0; Index < ShouldChangeList.Count; Index++)
         {
-            string Desc = GetChangeLevel() > 0 ? "提高" : "降低";
-            PlayableDirector MessageDirector = Timelines.MessageAnimation;
-            TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "的" + GetStatName(ChangedStatName) + "不能再进一步" + Desc + "了！");
-            AddAnimation(MessageTimeline);
+            if(ShouldChangeList[Index])
+            {
+                if(ChangedSuccessedList[Index])
+                {
+                    PlayableDirector MessageDirector = Timelines.MessageAnimation;
+                    TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+                    MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", GetMessageText(Index));
+                    AddAnimation(MessageTimeline);
+                }
+                else
+                {
+                    PlayableDirector MessageDirector = Timelines.MessageAnimation;
+                    TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+                    MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", TargetPokemon.GetName() + "的" + GetStatName(ChangedStatName[Index]) + "不能再进一步" + Desc + "了！");
+                    AddAnimation(MessageTimeline);
+                }
+            }
         }
     }
 
@@ -109,16 +162,26 @@ public class StatChangeEvent : EventAnimationPlayer, Event
     {
         if(!ShouldProcess(InManager)) return;
         InManager.TranslateTimePoint(ETimePoint.BeforeStatChange, this);
-        if(GetChangeLevel() != 0)
+        List<int> ChangedLevelList = GetChangeLevel();
+        bool Successed = false;
+        if(GetChangeLevel()[0] != 0)
         {
             InManager.AddAnimationEvent(this);
-            if(ShouldChange)
+            for(int Index = 0; Index < ShouldChangeList.Count; Index++)
             {
-                if(TargetPokemon.ChangeStat(ChangedStatName, GetChangeLevel()))
+                if(ShouldChangeList[Index] == true)
                 {
-                    InManager.TranslateTimePoint(ETimePoint.AfterStatChange, this);
-                    ChangedSuccessed = true;
+                    if(TargetPokemon.ChangeStat(ChangedStatName[Index], ChangedLevelList[Index]))
+                    {
+                        Successed = true;
+                        ChangedSuccessedList[Index] = true;
+                    }
                 }
+            }
+
+            if(Successed)
+            {
+                InManager.TranslateTimePoint(ETimePoint.AfterStatChange, this);
             }
         }
     }
@@ -130,16 +193,31 @@ public class StatChangeEvent : EventAnimationPlayer, Event
 
     public BattlePokemon GetTargetPokemon() => TargetPokemon;
     public BattlePokemon GetSourcePokemon() => SourcePokemon;
-    public int GetChangeLevel()
+    public List<int> GetChangeLevel()
     {
         int Factor = 1;
         if(ReverseChangeLevel)
         {
             Factor = -1;
         }
-        return Factor * ChangedStatLevel;
+        List<int> Result = new List<int>();
+
+        for(int Index = 0; Index < ChangedStatLevel.Count; Index++)
+        {
+            Result.Add(Factor * ChangedStatLevel[Index]);
+        }
+        return Result;
     }
     public void SetReverseLevel() { ReverseChangeLevel = true;}
-    public string GetChangeStatName() { return ChangedStatName; }
-    public void ForbidChange() { ShouldChange = false;}
+    public List<string> GetChangeStatName() { return ChangedStatName; }
+    public void ForbidChange(string stat) 
+    { 
+        for(int Index = 0; Index < ChangedStatName.Count; Index++)
+        {
+            if(ChangedStatName[Index] == stat)
+            {
+                ShouldChangeList[Index] = false;
+            }
+        }
+    }
 }

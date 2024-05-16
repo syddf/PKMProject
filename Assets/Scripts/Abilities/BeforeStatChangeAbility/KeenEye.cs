@@ -15,8 +15,8 @@ public class KeenEye : BaseAbility
         {
             StatChangeEvent CastedEvent = (StatChangeEvent)SourceEvent;
             return CastedEvent.GetTargetPokemon() == this.ReferencePokemon &&
-            CastedEvent.GetChangeLevel() < 0 && 
-            CastedEvent.GetChangeStatName() == "Accuracyrate";
+            CastedEvent.GetChangeLevel()[0] < 0 && 
+            CastedEvent.GetChangeStatName().Contains("Accuracyrate") == true;
         }
 
         return false;
@@ -27,7 +27,7 @@ public class KeenEye : BaseAbility
         List<BattlePokemon> Enemies = InManager.GetOpppoitePokemon(ReferencePokemon);
         List<Event> NewEvents = new List<Event>();
         StatChangeEvent CastedEvent = (StatChangeEvent)SourceEvent;
-        CastedEvent.ForbidChange();
+        CastedEvent.ForbidChange("Accuracyrate");
         return NewEvents;
     }
 }

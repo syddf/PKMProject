@@ -6,9 +6,9 @@ public class CloseCombat : DamageSkill
 {
     public override void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        StatChangeEvent stat1ChangeEvent = new StatChangeEvent(SourcePokemon, SourcePokemon, "Def", -1);
-        StatChangeEvent stat2ChangeEvent = new StatChangeEvent(SourcePokemon, SourcePokemon, "SDef", -1);
+        List<string> ChangeStatList = new List<string>(){ "Def", "SDef" };
+        List<int> ChangeLevel = new List<int>(){ -1, -1 }; 
+        StatChangeEvent stat1ChangeEvent = new StatChangeEvent(SourcePokemon, SourcePokemon, ChangeStatList, ChangeLevel);
         stat1ChangeEvent.Process(InManager);
-        stat2ChangeEvent.Process(InManager);
     }
 }
