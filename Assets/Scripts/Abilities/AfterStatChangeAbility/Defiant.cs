@@ -15,7 +15,7 @@ public class Defiant : BaseAbility
         {
             StatChangeEvent CastedEvent = (StatChangeEvent)SourceEvent;
             return CastedEvent.GetTargetPokemon() == this.ReferencePokemon 
-            && CastedEvent.GetChangeLevel() < 0 
+            && CastedEvent.GetChangeLevel()[0] < 0 
             && CastedEvent.GetSourcePokemon().GetIsEnemy() != this.ReferencePokemon.GetIsEnemy();
         }
 

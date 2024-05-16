@@ -217,6 +217,12 @@ public class SkillEvent : EventAnimationPlayer, Event
                                 position.y = 0;
                                 RootScript.TargetPokemonFloorTransform.position = position;
                             }
+                            if(RootScript.SourcePokemonFloorTransform != null)
+                            {
+                                Vector3 position = SourcePokemon.GetPokemonModel().transform.position;
+                                position.y = 0;
+                                RootScript.SourcePokemonFloorTransform.position = position;
+                            }
                             AutoScaler[] Scalers = SkillRootObject.GetComponentsInChildren<AutoScaler>();
                             foreach(var Scaler in Scalers)
                             {
@@ -465,6 +471,7 @@ public class SkillEvent : EventAnimationPlayer, Event
             }
             SourcePokemon.ReducePP(Skill);
         }
+        SourcePokemon.SetActivated();
     }
 
     public int GetCurrentDamage()

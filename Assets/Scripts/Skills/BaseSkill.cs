@@ -85,7 +85,10 @@ public class BaseSkill : MonoBehaviour
     public int GetMaxCount() => MaxCount;
     public ERange GetSkillRange() => SkillRange;
     public PlayableDirector GetSkillAnimation() => SkillAnimation;
-
+    public virtual int GetCTRatio()
+    {
+        return 0;
+    }
     public virtual int GetAccuracy(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         return Accuracy;

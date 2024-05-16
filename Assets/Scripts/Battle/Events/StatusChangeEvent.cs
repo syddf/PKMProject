@@ -33,6 +33,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         if(ReferencePokemon.HasType(EType.Electric) && StatusChangeType == EStatusChange.Paralysis) return false;
         if(InBattleManager.GetWeatherType() == EWeather.SunLight && StatusChangeType == EStatusChange.Frostbite) return false;
         if(ReferencePokemon.HasType(EType.Grass) && StatusChangeType == EStatusChange.LeechSeed) return false;
+        if((ReferencePokemon.HasType(EType.Poison) || ReferencePokemon.HasType(EType.Steel) ) && StatusChangeType == EStatusChange.Poison) return false;
         return true;
     }
 
@@ -72,6 +73,10 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         if(StatusChangeType == EStatusChange.Flinch)
         {
             return "畏缩了！";
+        }
+        if(StatusChangeType == EStatusChange.Taunt)
+        {
+            return "被挑衅了！无法使用变化类招式！";
         }
         if(StatusChangeType == EStatusChange.Burn)
         {
@@ -232,6 +237,10 @@ public class RemovePokemonStatusChangeEvent : EventAnimationPlayer, Event
         if(StatusChangeType == EStatusChange.Confusion)
         {
             return "解除了混乱！";
+        }
+        if(StatusChangeType == EStatusChange.Taunt)
+        {
+            return "解除了挑衅！";
         }
         return "";
     }

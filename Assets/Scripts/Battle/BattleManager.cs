@@ -526,6 +526,8 @@ public class BattleManager : MonoBehaviour
         EventsList.Add(new SkillEvent(this, UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetPokemon));
         EnemyAI NewEnemyAI = new EnemyAI(Opposites[0], this, EnemyTrainer);
         NewEnemyAI.GenerateEnemyEvent(EventsList, this, EventsList[EventsList.Count - 1]);
+        BattlePokemonList[0].NewTurn();
+        BattlePokemonList[1].NewTurn();
         ProcessEvents(true);
     }
 
@@ -656,6 +658,8 @@ public class BattleManager : MonoBehaviour
             EventsList.Add(new SwitchEvent(this, BattlePokemonList[0], InPokemon));
             EnemyAI NewEnemyAI = new EnemyAI(BattlePokemonList[1], this, EnemyTrainer);
             NewEnemyAI.GenerateEnemyEvent(EventsList, this, EventsList[EventsList.Count - 1]);
+            BattlePokemonList[0].NewTurn();
+            BattlePokemonList[1].NewTurn();
             ProcessEvents(true);
         }
     }
