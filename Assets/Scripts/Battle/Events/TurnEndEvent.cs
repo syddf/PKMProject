@@ -28,7 +28,7 @@ public class TurnEndEvent : EventAnimationPlayer, Event
         var BattlePokemons = InManager.GetBattlePokemons();
         for(int Index = 0; Index < BattlePokemons.Count; Index++)
         {
-            if(!BattlePokemons[Index].IsDead() && BattlePokemons[Index].IsGroundPokemon())
+            if(!BattlePokemons[Index].IsDead() && BattlePokemons[Index].IsGroundPokemon(InManager))
             {
                 int HealHP = BattlePokemons[Index].GetMaxHP() / 16;
                 HealEvent healEvent = new HealEvent(BattlePokemons[Index], HealHP, "青草场地");
@@ -42,7 +42,7 @@ public class TurnEndEvent : EventAnimationPlayer, Event
         var BattlePokemons = InManager.GetBattlePokemons();
         for(int Index = 0; Index < BattlePokemons.Count; Index++)
         {
-            if(!BattlePokemons[Index].IsDead() && !(BattlePokemons[Index].HasType(EType.Ground) || BattlePokemons[Index].HasType(EType.Rock) || BattlePokemons[Index].HasType(EType.Steel)))
+            if(!BattlePokemons[Index].IsDead() && !(BattlePokemons[Index].HasType(EType.Ground, InManager, null, null) || BattlePokemons[Index].HasType(EType.Rock, InManager, null, null) || BattlePokemons[Index].HasType(EType.Steel, InManager, null, null)))
             {
                 int Damage = BattlePokemons[Index].GetMaxHP() / 16;
                 DamageEvent damageEvent = new DamageEvent(BattlePokemons[Index], Damage, "沙暴天气");

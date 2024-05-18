@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class SlackOff : StatusSkill
 {
+    public override bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, out string Reason)
+    {
+        Reason = "";
+        return SourcePokemon.GetHP() < SourcePokemon.GetMaxHP();
+    }
     public override void ProcessStatusSkillEffect(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         HealEvent healEvent = new HealEvent(SourcePokemon, SourcePokemon.GetMaxHP() / 2, "休息");

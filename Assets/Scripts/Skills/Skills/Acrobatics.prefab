@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1191862897
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1191862898}
+  - component: {fileID: 1191862899}
+  m_Layer: 0
+  m_Name: Acrobatics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1191862898
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191862897}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1191862899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191862897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c30bea7b8a50db949881f83e5a266852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 55
+  PP: 15
+  Accuracy: 100
+  SkillClass: 0
+  SkillType: 2
+  SkillRange: 1
+  SkillName: "\u6742\u6280"
+  SkillDescription: "\u8F7B\u5DE7\u5730\u653B\u51FB\u5BF9\u624B\u3002\u81EA\u5DF1\u6CA1\u6709\u643A\u5E26\u9053\u5177\u65F6\uFF0C\u4F1A\u7ED9\u4E88\u8F83\u5927\u7684\u4F24\u5BB3\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  AlwaysHit: 0
+  SkillAnimation: {fileID: 7427754355084374661, guid: 0f1e16ce73b8bba41bede5acfc8f2abf, type: 3}

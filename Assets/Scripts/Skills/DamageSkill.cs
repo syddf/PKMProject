@@ -29,12 +29,12 @@ public class DamageSkill : BaseSkill
 
     public double ApplyTerrainPowerFactor(BattleManager InManager, BattlePokemon SourcePokemon, double SourcePower)
     {
-        if(InManager.GetTerrainType() == EBattleFieldTerrain.Grass && GetSkillType(SourcePokemon) == EType.Grass && SourcePokemon.IsGroundPokemon())
+        if(InManager.GetTerrainType() == EBattleFieldTerrain.Grass && GetSkillType(SourcePokemon) == EType.Grass && SourcePokemon.IsGroundPokemon(InManager))
         {
             EditorLog.DebugLog(SkillName + "因青草场地威力提高了!");
             return (int)Math.Floor(SourcePower * 1.3);
         }
-        if(InManager.GetTerrainType() == EBattleFieldTerrain.Electric && GetSkillType(SourcePokemon) == EType.Electric && SourcePokemon.IsGroundPokemon())
+        if(InManager.GetTerrainType() == EBattleFieldTerrain.Electric && GetSkillType(SourcePokemon) == EType.Electric && SourcePokemon.IsGroundPokemon(InManager))
         {
             EditorLog.DebugLog(SkillName + "因电气场地威力提高了!");
             return (int)Math.Floor(SourcePower * 1.3);
@@ -83,7 +83,7 @@ public class DamageSkill : BaseSkill
         {
             ItemFactor *= 1.2;
         }
-        if(SourcePokemon.HasItem() && SourcePokemon.GetBattleItem().GetBaseItem().IsGem())
+        if(SourcePokemon.HasConsumedThisTurn() && SourcePokemon.GetBattleItem() != null && SourcePokemon.GetBattleItem().GetBaseItem().IsGem())
         {
             Gem CastItem = (Gem)SourcePokemon.GetBattleItem().GetBaseItem();
             if(CastItem.GemType == GetSkillType(SourcePokemon))
@@ -178,14 +178,14 @@ public class DamageSkill : BaseSkill
         {
             return false;
         }
-        bool J2 = TargetPokemon.GetType2() == EType.None;
-        return typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1()] != 0 
-        && (J2 || typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType2()] != 0);
+        bool J2 = TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == EType.None;
+        return typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon)] != 0 
+        && (J2 || typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon)] != 0);
     }
 
     public virtual bool IsSameType(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        return SourcePokemon.GetType1() == GetSkillType(SourcePokemon) || SourcePokemon.GetType2() == GetSkillType(SourcePokemon);        
+        return SourcePokemon.GetType1(InManager, SourcePokemon, TargetPokemon) == GetSkillType(SourcePokemon) || SourcePokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == GetSkillType(SourcePokemon);        
     }
 
     public virtual double GetSameTypePowerFactor(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
@@ -203,8 +203,8 @@ public class DamageSkill : BaseSkill
         {
             return 1.0;
         }
-        double Factor2 = TargetPokemon.GetType2() == EType.None ? 1.0 : typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType2()];
-        return typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1()] * Factor2;
+        double Factor2 = TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == EType.None ? 1.0 : typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon)];
+        return typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon)] * Factor2;
     }
 
     public virtual int GetSourceAtk(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT)

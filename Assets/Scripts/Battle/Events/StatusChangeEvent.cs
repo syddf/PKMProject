@@ -26,14 +26,14 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
     public static bool IsStatusChangeEffective(BattleManager InBattleManager, BattlePokemon ReferencePokemon, BattlePokemon SourcePokemon, EStatusChange StatusChangeType)
     {
         if(ReferencePokemon.HasStatusChange(StatusChangeType)) return false;
-        if(InBattleManager.GetTerrainType() == EBattleFieldTerrain.Electric && ReferencePokemon.IsGroundPokemon() && StatusChangeType == EStatusChange.Drowsy) return false;
+        if(InBattleManager.GetTerrainType() == EBattleFieldTerrain.Electric && ReferencePokemon.IsGroundPokemon(InBattleManager) && StatusChangeType == EStatusChange.Drowsy) return false;
         if(ReferencePokemon.HasAbility("精神力", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Flinch) return false;
-        if(ReferencePokemon.HasType(EType.Fire) && StatusChangeType == EStatusChange.Burn) return false;
-        if(ReferencePokemon.HasType(EType.Ice) && StatusChangeType == EStatusChange.Frostbite) return false;
-        if(ReferencePokemon.HasType(EType.Electric) && StatusChangeType == EStatusChange.Paralysis) return false;
+        if(ReferencePokemon.HasType(EType.Fire, InBattleManager, null, null) && StatusChangeType == EStatusChange.Burn) return false;
+        if(ReferencePokemon.HasType(EType.Ice, InBattleManager, null, null) && StatusChangeType == EStatusChange.Frostbite) return false;
+        if(ReferencePokemon.HasType(EType.Electric, InBattleManager, null, null) && StatusChangeType == EStatusChange.Paralysis) return false;
         if(InBattleManager.GetWeatherType() == EWeather.SunLight && StatusChangeType == EStatusChange.Frostbite) return false;
-        if(ReferencePokemon.HasType(EType.Grass) && StatusChangeType == EStatusChange.LeechSeed) return false;
-        if((ReferencePokemon.HasType(EType.Poison) || ReferencePokemon.HasType(EType.Steel) ) && StatusChangeType == EStatusChange.Poison) return false;
+        if(ReferencePokemon.HasType(EType.Grass, InBattleManager, null, null) && StatusChangeType == EStatusChange.LeechSeed) return false;
+        if((ReferencePokemon.HasType(EType.Poison, InBattleManager, null, null) || ReferencePokemon.HasType(EType.Steel, InBattleManager, null, null) ) && StatusChangeType == EStatusChange.Poison) return false;
         return true;
     }
 
@@ -115,9 +115,14 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
         PlayableDirector MessageDirector = Timelines.MessageAnimation;
         string Message = ReferencePokemon.GetName() + ForbiddenReason;
+        string SetMessage = GetSetMessageText();
         if(!Forbidden)
         {
-            Message = ReferencePokemon.GetName() + GetSetMessageText();
+            Message = ReferencePokemon.GetName() + SetMessage;
+            if(SetMessage == "")
+            {
+                return;
+            }
         }
         TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
         MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);

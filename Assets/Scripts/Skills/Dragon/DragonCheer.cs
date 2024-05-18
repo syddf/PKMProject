@@ -6,7 +6,7 @@ public class DragonCheer : StatusSkill
 {
     public override void ProcessStatusSkillEffect(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        if(SourcePokemon.GetType1() == EType.Dragon || SourcePokemon.GetType2() == EType.Dragon)
+        if(SourcePokemon.GetType1(InManager, SourcePokemon, TargetPokemon) == EType.Dragon || SourcePokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == EType.Dragon)
         {
             StatChangeEvent NewEvent = new StatChangeEvent(SourcePokemon, SourcePokemon, "CT", 2);
             NewEvent.Process(InManager);
