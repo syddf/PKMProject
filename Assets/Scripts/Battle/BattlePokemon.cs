@@ -27,7 +27,8 @@ public enum EStatusChange
     Burn,
     Frostbite,
     LeechSeed,
-    Confusion
+    Confusion,
+    Roost
 }
 
 public struct StatusChange
@@ -145,6 +146,7 @@ public class BattlePokemon : MonoBehaviour
     private static double[] StatLevelFactor = new double[13]{0.25, 0.29, 0.33, 0.40, 0.50, 0.67, 1.00, 1.50, 2.00, 2.50, 3.00, 3.50, 4.00};
 
     private bool LostItem = false;
+    private bool ConsumeThisTurn = false;
     private BaseSkill FirstSkill = null;
     private bool HasActivated = false;
 
@@ -258,7 +260,7 @@ public class BattlePokemon : MonoBehaviour
         {
             AbilityFactor *= 1.3;
         }
-        if(InManager.GetWeatherType() == EWeather.Snow && HasType(EType.Ice))
+        if(InManager.GetWeatherType() == EWeather.Snow && HasType(EType.Ice, InManager, null, null))
         {
             WeatherFactor = 1.5;
         }        
@@ -309,7 +311,7 @@ public class BattlePokemon : MonoBehaviour
             AbilityFactor *= 1.3;
         } 
         double WeatherFactor = 1.0;
-        if(InManager.GetWeatherType() == EWeather.Sand && HasType(EType.Rock))
+        if(InManager.GetWeatherType() == EWeather.Sand && HasType(EType.Rock, InManager, null, null))
         {
             WeatherFactor = 1.5;
         }
@@ -433,21 +435,42 @@ public class BattlePokemon : MonoBehaviour
         return Result;
     }
 
-    public EType GetType1() { return Type1;}
-    public EType GetType2() { return Type2;}
+    public EType GetType1(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon) 
+    { 
+        if(HasStatusChange(EStatusChange.Roost) && Type1 == EType.Flying)
+        {
+            if(Type2 == EType.None)
+            {
+                return EType.Normal;
+            }
+            else
+            {
+                return EType.None;
+            }
+        }
+        return Type1;
+    }
+    public EType GetType2(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon) 
+    {
+        if(HasStatusChange(EStatusChange.Roost) && Type2 == EType.Flying)
+        {
+            return EType.None;
+        } 
+        return Type2;
+    }
 
     [SerializeField]
     private BaseSkill[] ReferenceSkill = new BaseSkill[4];
     [SerializeField]
     private int[] SkillPP = new int[4];
 
-    public bool IsGroundPokemon()
+    public bool IsGroundPokemon(BattleManager InManager)
     {
         if(HasItem() && Item.GetItemName() == "黑色铁球")
         {
             return true;
         }
-        if(GetType1() == EType.Flying || GetType2() == EType.Flying)
+        if(GetType1(InManager, null, null) == EType.Flying || GetType2(InManager, null, null) == EType.Flying)
         {
             return false;
         }
@@ -624,9 +647,9 @@ public class BattlePokemon : MonoBehaviour
         return Ability && Ability.GetAbilityName() == AbilityName;
     }
 
-    public bool HasType(EType Type)
+    public bool HasType(EType Type, BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        return GetType1() == Type || GetType2() == Type;
+        return GetType1(InManager, SourcePokemon, TargetPokemon) == Type || GetType2(InManager, SourcePokemon, TargetPokemon) == Type;
     }
 
     public bool AddStatusChange(EStatusChange StatusType, bool HasLimitedTime, int RemainTime)
@@ -804,6 +827,12 @@ public class BattlePokemon : MonoBehaviour
     public void NewTurn()
     {
         HasActivated = false;
+        ConsumeThisTurn = false;
+    }
+
+    public bool HasConsumedThisTurn()
+    {
+        return ConsumeThisTurn;
     }
 
     public bool GetActivated()
@@ -814,6 +843,7 @@ public class BattlePokemon : MonoBehaviour
     public void ClearStatusChange()
     {
         LostItem = false;
+        ConsumeThisTurn = false;
         HasActivated = false;
         FirstSkill = null;
         Ability.ResetState();
@@ -849,6 +879,11 @@ public class BattlePokemon : MonoBehaviour
             }
         }
         return Result;
+    }
+
+    public void SetConsumeThisTurn()
+    {
+        ConsumeThisTurn = true;
     }
 
     public BattleItem GetBattleItem()

@@ -6,7 +6,7 @@ public class RisingVoltage : DamageSkill
 {
     protected override int GetSkillPower(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        if(InManager.GetTerrainType() == EBattleFieldTerrain.Electric && TargetPokemon.IsGroundPokemon())
+        if(InManager.GetTerrainType() == EBattleFieldTerrain.Electric && TargetPokemon.IsGroundPokemon(InManager))
         {
             return Power * 2;
         }

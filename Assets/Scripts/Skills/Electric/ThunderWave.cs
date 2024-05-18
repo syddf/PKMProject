@@ -15,10 +15,10 @@ public class ThunderWave : StatusSkill
         {
             return false;
         }
-        bool J2 = TargetPokemon.GetType2() == EType.None;
+        bool J2 = TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == EType.None;
         bool typeEffective = 
-        DamageSkill.typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1()] != 0 && 
-        (J2 || DamageSkill.typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType2()] != 0);
+        DamageSkill.typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon)] != 0 && 
+        (J2 || DamageSkill.typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon)] != 0);
         return SetPokemonStatusChangeEvent.IsStatusChangeEffective(InManager, TargetPokemon, SourcePokemon, EStatusChange.Paralysis) && typeEffective;
     }
     public override void ProcessStatusSkillEffect(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)

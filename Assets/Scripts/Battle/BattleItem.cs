@@ -63,7 +63,8 @@ public class BattleItem
     {
         if(IsConsumable())
             Consumed = true;
-        ReferencePokemon.SetLostItem();        
+        ReferencePokemon.SetLostItem();       
+        ReferencePokemon.SetConsumeThisTurn(); 
     }
 
     public void KnockOffItem()

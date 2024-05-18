@@ -30,8 +30,8 @@ public class PlayerInfoUI : MonoBehaviour
         LVText.text = "Lv." + InPokemon.GetLevel();
         PokemonName.text = InPokemon.GetName();
         HPText.text = InPokemon.GetHP() + "/" + InPokemon.GetMaxHP();
-        EType Type1 = InPokemon.GetType1();
-        EType Type2 = InPokemon.GetType2();
+        EType Type1 = InPokemon.GetType1(null, null, null);
+        EType Type2 = InPokemon.GetType2(null, null, null);
         if(Type1 != EType.None)
         {
             Type1Obj.SetActive(true);
