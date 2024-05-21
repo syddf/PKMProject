@@ -16,6 +16,16 @@ public class BattleUI : MonoBehaviour
     public Image EnemyTrainerImage;
     public Image InBattlePlayerTrainerImage;
     public Image InBattleEnemyTrainerImage;
+    public GameObject PlayerTrainerUIObj;
+    public GameObject EnemyTrainerUIObj;
+    public void DisableAllUI()
+    {
+        PlayerInfo1.gameObject.SetActive(false);
+        EnemyInfo1.gameObject.SetActive(false);
+        BattleCommandUI.gameObject.SetActive(false);
+        PlayerTrainerUIObj.SetActive(false);
+        EnemyTrainerUIObj.SetActive(false);
+    }
     public void SetCurrentPlayerTrainer(PokemonTrainer InTrainer)
     {
         CurrentPlayerTrainer = InTrainer;
@@ -40,6 +50,14 @@ public class BattleUI : MonoBehaviour
     public void SetEnemyStateChange(EStatusChange InType)
     {
         EnemyInfo1.UpdateStateChange(InType);
+    }
+    public void UpdatePlayerType(BattlePokemon InPokemon)
+    {
+        PlayerInfo1.UpdateType(InPokemon);
+    }
+    public void UpdateEnemyType(BattlePokemon InPokemon)
+    {
+        EnemyInfo1.UpdateType(InPokemon);
     }
     public void UpdatePlayer1UI(BattlePokemon InPokemon, PokemonTrainer InTrainer)
     {

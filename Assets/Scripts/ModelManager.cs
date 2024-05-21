@@ -14,10 +14,6 @@ public class ModelManager : MonoBehaviour
         return G_ModelManager;
     }
 
-    public void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
     public GameObject Player1Pokemon;
     public GameObject Player2Pokemon;
     public GameObject Player3Pokemon;

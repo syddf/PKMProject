@@ -12,7 +12,6 @@ public class MegaEvent : EventAnimationPlayer, Event
         ReferencePokemon = InReferencePokemon;
         ReferenceManager = InManager;
     }
-
     public BattlePokemon GetReferencePokemon()
     {
         return ReferencePokemon;
@@ -26,6 +25,14 @@ public class MegaEvent : EventAnimationPlayer, Event
     public override void OnAnimationFinished()
     {
         ReferencePokemon.GetMegaPokemonModel().GetComponent<PokemonAnimationController>().AfterMega();
+        if(ReferencePokemon.GetIsEnemy() == false)
+        {
+            ReferenceManager.UpdatePlayerType();
+        }
+        else
+        {
+            ReferenceManager.UpdateEnemyType();
+        }
     }
     public override void InitAnimation()
     {
@@ -63,7 +70,6 @@ public class MegaEvent : EventAnimationPlayer, Event
     {
         if(!ShouldProcess(InManager)) return;
         InManager.AddAnimationEvent(this);
-
         InManager.TranslateTimePoint(ETimePoint.BeforeMegaEvolution, this);
         ReferencePokemon.MegaEvolution();
         InManager.TranslateTimePoint(ETimePoint.AfterMegaEvolution, this);

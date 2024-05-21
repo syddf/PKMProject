@@ -37,7 +37,7 @@ public class BattleEndEvent : EventAnimationPlayer, Event
     {        
         if(!ShouldProcess(InManager)) return;
         InManager.AddAnimationEvent(this);
-        InManager.SetBattleEnd(true);
+        InManager.SetBattleEnd(true, Win);
     }
 
     public EventType GetEventType()

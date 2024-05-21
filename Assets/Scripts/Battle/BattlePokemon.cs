@@ -149,7 +149,12 @@ public class BattlePokemon : MonoBehaviour
     private bool ConsumeThisTurn = false;
     private BaseSkill FirstSkill = null;
     private bool HasActivated = false;
+    private PokemonTrainer ReferenceTrainer;
 
+    public PokemonTrainer GetReferenceTrainer()
+    {
+        return ReferenceTrainer;
+    }
 
     public BagPokemonSkillAI GetSkillAI()
     {
@@ -511,6 +516,7 @@ public class BattlePokemon : MonoBehaviour
     {
         ReferenceBasePokemon = InBagPokemon;
         IsEnemy = !InTrainer.IsPlayer;
+        ReferenceTrainer = InTrainer;
         Ability = InBagPokemon.GetAbility(false);
         if(Ability)
         {
@@ -775,7 +781,7 @@ public class BattlePokemon : MonoBehaviour
                 Result.Add(ReferenceSkill[SkillIndex]);
             }
 
-            if(HasItem("讲究头带") || HasItem("讲究眼睛") || HasItem("讲究围巾"))
+            if(HasItem("讲究头带") || HasItem("讲究眼镜") || HasItem("讲究围巾"))
             {
                 if(FirstSkill != null && ReferenceSkill[SkillIndex] != FirstSkill)
                 {
@@ -923,20 +929,29 @@ public class BattlePokemon : MonoBehaviour
         return Mega;
     }
 
-    public void MegaEvolution()
+    public void LoadMegaStat()
     {
-        Mega = true;
-        PokemonStats.Atk = ReferenceBasePokemon.GetAtk(Mega);
-        PokemonStats.SAtk = ReferenceBasePokemon.GetSAtk(Mega);
-        PokemonStats.Def = ReferenceBasePokemon.GetDef(Mega);
-        PokemonStats.SDef = ReferenceBasePokemon.GetSDef(Mega);
-        PokemonStats.Speed = ReferenceBasePokemon.GetSpeed(Mega);
-        Ability = ReferenceBasePokemon.GetAbility(Mega);
+        if(Mega)
+        {
+            return;
+        }
+        PokemonStats.Atk = ReferenceBasePokemon.GetAtk(true);
+        PokemonStats.SAtk = ReferenceBasePokemon.GetSAtk(true);
+        PokemonStats.Def = ReferenceBasePokemon.GetDef(true);
+        PokemonStats.SDef = ReferenceBasePokemon.GetSDef(true);
+        PokemonStats.Speed = ReferenceBasePokemon.GetSpeed(true);
+        Ability = ReferenceBasePokemon.GetAbility(true);
         if(Ability)
         {
             Ability.SetReferencePokemon(this);
         }
-        Type1 = ReferenceBasePokemon.GetType0(Mega);
-        Type2 = ReferenceBasePokemon.GetType1(Mega);
+        Type1 = ReferenceBasePokemon.GetType0(true);
+        Type2 = ReferenceBasePokemon.GetType1(true);
+    }
+
+    public void MegaEvolution()
+    {
+        LoadMegaStat();
+        Mega = true;
     }
 }

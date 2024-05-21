@@ -25,6 +25,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
 
     public static bool IsStatusChangeEffective(BattleManager InBattleManager, BattlePokemon ReferencePokemon, BattlePokemon SourcePokemon, EStatusChange StatusChangeType)
     {
+        if(ReferencePokemon.IsDead() == true) return false;
         if(ReferencePokemon.HasStatusChange(StatusChangeType)) return false;
         if(InBattleManager.GetTerrainType() == EBattleFieldTerrain.Electric && ReferencePokemon.IsGroundPokemon(InBattleManager) && StatusChangeType == EStatusChange.Drowsy) return false;
         if(ReferencePokemon.HasAbility("精神力", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Flinch) return false;

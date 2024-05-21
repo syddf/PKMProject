@@ -16,6 +16,7 @@ public class BattleMenuUI : MonoBehaviour
 
     public TextMeshProUGUI TrainerSkillDesc;
     public TextMeshProUGUI SpecialRuleDesc;
+    public TextMeshProUGUI TrainerName;
     public PokemonTrainer CurrentTrainer;
     public BagPokemon CurrentPokemon;
     public PokemonInfoUI InfoUI;
@@ -46,6 +47,9 @@ public class BattleMenuUI : MonoBehaviour
     public SavedData SavedPlayerData;
     public BattleManager ReferenceBattleManager;
     public int FirstPokemonIndex = 0;
+    public AudioController BattleBGM;
+    public int ChapterIndex;
+    public bool IsFirstBattle;
     public void OnChangeFirstPokemon(int Index)
     {
         FirstPokemonIndex = Index;
@@ -73,7 +77,9 @@ public class BattleMenuUI : MonoBehaviour
     {
         ReferenceBattleManager.SetPlayerTrainer(PlayerTrainer);
         ReferenceBattleManager.SetEnemyTrainer(CurrentTrainer);
-        ReferenceBattleManager.BeginBattle(FirstPokemonIndex);
+        ReferenceBattleManager.BeginBattle(FirstPokemonIndex, ChapterIndex, IsFirstBattle);
+        BattleBGM.firstClip = CurrentTrainer.BGMFirst;
+        BattleBGM.secondClip = CurrentTrainer.BGMLoop;
     }
     
     public void UpdatePlayerTeam()
@@ -107,6 +113,7 @@ public class BattleMenuUI : MonoBehaviour
     public void SetEnemyPokemonTrainer(PokemonTrainer InTrainer)
     {
         CurrentTrainer = InTrainer;
+        TrainerName.text = CurrentTrainer.TrainerName;
         TrainerSprite.sprite = InTrainer.TrainerSprite;
         TrainerSkillDesc.text = InTrainer.TrainerSkill.GetSkillDescription();
         TrainerSkillName.text = InTrainer.TrainerSkill.GetSkillName();

@@ -387,6 +387,10 @@ public class BagPokemon : MonoBehaviour
     }
     public BaseSkill GetBaseSkill(int Index)
     {
+        if(ReferenceSkill[Index] == null)
+        {
+            return SkillPool[Index];
+        }
         return ReferenceSkill[Index];
     }
 

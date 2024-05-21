@@ -16,6 +16,7 @@ public class StatChangeEvent : EventAnimationPlayer, Event
 
     public StatChangeEvent(BattlePokemon InTargetPokemon, BattlePokemon InSourcePokemon, List<string> InChangedStatName, List<int> InChangedStatLevel, string InReason = "")
     {
+        SourcePokemon = InSourcePokemon;
         TargetPokemon = InTargetPokemon;
         ChangedStatName = InChangedStatName;
         ChangedStatLevel = InChangedStatLevel;
@@ -218,6 +219,13 @@ public class StatChangeEvent : EventAnimationPlayer, Event
             {
                 ShouldChangeList[Index] = false;
             }
+        }
+    }
+    public void ForbidAllChange()
+    { 
+        for(int Index = 0; Index < ChangedStatName.Count; Index++)
+        {
+            ShouldChangeList[Index] = false;
         }
     }
 }

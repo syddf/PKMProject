@@ -18,6 +18,7 @@ public class BattleInitializer : MonoBehaviour
     public GameObject SkillAnimationUIReceiver;
     public GameObject SkillAnimationCameraShakeReceiver;
     public GameObject PostProcessVolumeReceiver;
+    public List<GameObject> CreatedGameObject = new List<GameObject>();
     public void InitBattleResources(PokemonTrainer PlayerTrainer, PokemonTrainer EnemyTrainer)
     {
         PlayerTrainer.IsPlayer = true;
@@ -27,12 +28,14 @@ public class BattleInitializer : MonoBehaviour
             GameObject PlayerTrainerSkillObj = Instantiate(PlayerTrainer.TrainerSkill.gameObject, new Vector3(0, 0, 0), Quaternion.identity);
             PlayerTrainer.TrainerSkill = PlayerTrainerSkillObj.GetComponent<BaseTrainerSkill>();
             PlayerTrainerSkillObj.transform.parent = TrainerSkillsRoot.transform;
+            CreatedGameObject.Add(PlayerTrainerSkillObj);
         }
         if(EnemyTrainer.TrainerSkill)
         {
             GameObject EnemyTrainerSkillObj = Instantiate(EnemyTrainer.TrainerSkill.gameObject, new Vector3(0, 0, 0), Quaternion.identity);
             EnemyTrainer.TrainerSkill = EnemyTrainerSkillObj.GetComponent<BaseTrainerSkill>();
             EnemyTrainerSkillObj.transform.parent = TrainerSkillsRoot.transform;
+            CreatedGameObject.Add(EnemyTrainerSkillObj);
         }
         PlayerTrainer.TrainerSkill.SetTrainer(PlayerTrainer);
         EnemyTrainer.TrainerSkill.SetTrainer(EnemyTrainer);
@@ -61,6 +64,7 @@ public class BattleInitializer : MonoBehaviour
         string prefabPath = "Models/" + Trainer.BagPokemons[PokemonIndex].GetName() + "/Prefabs/pkmModel";
         GameObject prefab = Resources.Load<GameObject>(prefabPath);
         GameObject instantiatedPrefab = Instantiate(prefab, new Vector3(0, 0, 0), prefab.transform.rotation);
+        CreatedGameObject.Add(instantiatedPrefab);
         instantiatedPrefab.transform.parent = NewModel.transform;
         instantiatedPrefab.transform.localPosition = Vector3.zero;
         instantiatedPrefab.transform.localRotation = prefab.transform.rotation;
@@ -93,6 +97,7 @@ public class BattleInitializer : MonoBehaviour
             prefabPath = "Models/" + Trainer.BagPokemons[PokemonIndex].GetName() + "-Mega" + "/Prefabs/pkmModel";
             GameObject megaPrefab = Resources.Load<GameObject>(prefabPath);
             GameObject instantiatedMegaPrefab = Instantiate(megaPrefab, new Vector3(0, 0, 0), megaPrefab.transform.rotation);
+            CreatedGameObject.Add(instantiatedMegaPrefab);
             instantiatedMegaPrefab.transform.parent = MegaModel.transform;
             instantiatedMegaPrefab.transform.localPosition = Vector3.zero;
             instantiatedMegaPrefab.transform.localRotation = megaPrefab.transform.rotation;
@@ -119,10 +124,12 @@ public class BattleInitializer : MonoBehaviour
         {
             GameObject prefab = Pkm.GetBaseSkill(Index).gameObject;
             GameObject instantiatedPrefab = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
+            CreatedGameObject.Add(instantiatedPrefab);
             instantiatedPrefab.transform.parent = SkillsRoot.transform;
             BaseSkill NewSkill = instantiatedPrefab.GetComponent<BaseSkill>();
             Pkm.SetBaseSkill(Index, instantiatedPrefab.GetComponent<BaseSkill>());
             GameObject instantiatedSkill = Instantiate(NewSkill.SkillAnimation.gameObject, new Vector3(0, 0, 0), NewSkill.SkillAnimation.transform.rotation);
+            CreatedGameObject.Add(instantiatedSkill);
             NewSkill.SkillAnimation = instantiatedSkill.GetComponent<PlayableDirector>();
             NewSkill.transform.parent = SkillsRoot.transform;
             TimelineAsset timeline = (TimelineAsset)NewSkill.SkillAnimation.playableAsset;
@@ -149,6 +156,7 @@ public class BattleInitializer : MonoBehaviour
         {
             GameObject prefab = Ability.gameObject;
             GameObject instantiatedPrefab = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
+            CreatedGameObject.Add(instantiatedPrefab);
             instantiatedPrefab.transform.parent = AbilitiesSkillRoot.transform;
             Pkm.SetAbility(instantiatedPrefab.GetComponent<BaseAbility>(), false);   
         }
@@ -158,6 +166,7 @@ public class BattleInitializer : MonoBehaviour
         {
             GameObject prefab = MegaAbility.gameObject;
             GameObject instantiatedPrefab = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
+            CreatedGameObject.Add(instantiatedPrefab);
             instantiatedPrefab.transform.parent = AbilitiesSkillRoot.transform;
             Pkm.SetAbility(instantiatedPrefab.GetComponent<BaseAbility>(), true);   
         }
@@ -170,9 +179,18 @@ public class BattleInitializer : MonoBehaviour
         {
             GameObject prefab = Item.gameObject;
             GameObject instantiatedPrefab = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
+            CreatedGameObject.Add(instantiatedPrefab);
             instantiatedPrefab.transform.parent = ItemsRoot.transform;
             Pkm.SetItem(instantiatedPrefab.GetComponent<BaseItem>());   
         }
+    }
+    public void ClearAllObjects()
+    {
+        foreach(var Obj in CreatedGameObject)
+        {
+            GameObject.Destroy(Obj);
+        }
+        CreatedGameObject.Clear();
     }
     public void SpawnBattlePokemon(PokemonTrainer Trainer, int PokemonIndex)
     {
@@ -184,6 +202,7 @@ public class BattleInitializer : MonoBehaviour
             GameObject MegaModel;
             GameObject ModelObject = SpawnBattlePokemonModel(Trainer, PokemonIndex, out MegaModel);
             GameObject newPokemon = new GameObject(Trainer.TrainerName + "_" + Trainer.BagPokemons[PokemonIndex].GetName());
+            CreatedGameObject.Add(newPokemon);
             newPokemon.transform.parent = BattlePokemonRoot.transform;
             BattlePokemon battlePokemon = newPokemon.AddComponent<BattlePokemon>();
             battlePokemon.SetBattlePokemonData(Trainer.BagPokemons[PokemonIndex], Trainer, ModelObject, MegaModel);

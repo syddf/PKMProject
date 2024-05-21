@@ -15,6 +15,8 @@ public class PokemonTrainer : MonoBehaviour
     public List<string> LineWhenPokemon4FirstIn = new List<string>();
     public List<string> LineWhenPokemon5FirstIn = new List<string>();
     public List<string> BattleStartLines = new List<string>();
+    public AudioClip BGMFirst;
+    public AudioClip BGMLoop;
     public bool IsPlayer;
     public BaseTrainerSkill TrainerSkill;
     public int GetRemainPokemonNum()

@@ -25,6 +25,22 @@ public class PlayerInfoUI : MonoBehaviour
     public Color NormalPokemonColor;
     public Color NoPokemonColor;
     private BattlePokemon ReferencePokemon;
+    public void UpdateType(BattlePokemon InPokemon)
+    {
+        EType Type1 = InPokemon.GetType1(null, null, null);
+        EType Type2 = InPokemon.GetType2(null, null, null);
+        if(Type1 != EType.None)
+        {
+            Type1Obj.SetActive(true);
+            Type1Obj.GetComponent<TypeUI>().SetType(Type1);
+        }
+        Type2Obj.SetActive(false);
+        if(Type2 != EType.None)
+        {
+            Type2Obj.SetActive(true);
+            Type2Obj.GetComponent<TypeUI>().SetType(Type2);
+        }
+    }
     public void UpdateUI(BattlePokemon InPokemon, PokemonTrainer InTrainer)
     {
         LVText.text = "Lv." + InPokemon.GetLevel();
