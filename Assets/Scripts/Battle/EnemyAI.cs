@@ -13,6 +13,12 @@ public class EnemyAI
     BattlePokemon ReferencePokemon;
     BattleManager ReferenceBattleManager;
     PokemonTrainer ReferenceTrainer;
+    private double GetLowLevelFactor(string SkillName)
+    {
+        if(SkillName == "近身战")
+            return 0.1;
+        return 1.0;
+    }
     public EnemyAI(BattlePokemon InPokemon, BattleManager InManager, PokemonTrainer InTrainer)
     {
         ReferencePokemon = InPokemon;
@@ -22,16 +28,29 @@ public class EnemyAI
 
     public BattlePokemon GetNextPokemon(BattlePokemon OutPokemon)
     {
+        TrainerSwitchAI SwitchAI = ReferenceTrainer.gameObject.GetComponent<TrainerSwitchAI>();
+        if(SwitchAI)
+        {
+            return SwitchAI.GetNextPokemon(OutPokemon, ReferenceBattleManager, ReferenceTrainer);
+        }
         BattlePokemon[] BattlePokemons = ReferenceTrainer.BattlePokemons;
+        System.Random rnd = new System.Random();
+        int RandNum = rnd.Next(0, 5);
+        int FailedNum = 0;
         while(true)
         {
-            System.Random rnd = new System.Random();
-            int RandNum = rnd.Next(0, 6);
             if(BattlePokemons[RandNum] != null && BattlePokemons[RandNum] != OutPokemon && BattlePokemons[RandNum].IsDead() == false)
             {
                 return BattlePokemons[RandNum];
             }
+            RandNum = (RandNum + 1) % 5;
+            FailedNum++;
+            if(FailedNum >= 5)
+            {
+                break;
+            }
         }
+        return BattlePokemons[5];
     }
 
     public void AddUseSkillEvent(BaseSkill InSkill, List<Event> InEvents)
@@ -63,11 +82,15 @@ public class EnemyAI
         {
             Factor = Factor * PokemonAI.GetSkillPriorityFactor(InSkill, InManager, ReferencePokemon);
         }
-        return Factor;
+        return Factor * GetLowLevelFactor(InSkill.GetSkillName());
     }
 
     public void GenerateEnemyEvent(List<Event> InEvents, BattleManager InManager, Event InPlayerAction)
     {
+        if(ReferencePokemon.CanMega())
+        {
+            ReferencePokemon.LoadMegaStat();
+        }
         HashSet<BaseSkill> ForbiddenSkillSet = ReferencePokemon.GetForbiddenBattleSkills(InManager);
         BaseSkill[] Skills = ReferencePokemon.GetReferenceSkill();
         List<AISkillEntry> EntryList = new List<AISkillEntry>();

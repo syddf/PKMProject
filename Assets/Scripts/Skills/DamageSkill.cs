@@ -91,6 +91,10 @@ public class DamageSkill : BaseSkill
                 ItemFactor *= 1.3;
             }
         }
+        if(TargetPokemon.HasConsumedThisTurn() && TargetPokemon.GetBattleItem() != null && TargetPokemon.GetBattleItem().GetBaseItem().IsResistBerry())
+        {
+            ItemFactor *= 0.5;
+        }
         Result = Result * ItemFactor;
 
         double WeatherFactor = 1.0;

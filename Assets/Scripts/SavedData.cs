@@ -211,6 +211,7 @@ public class EncryptedJSONDataSerializer : IDataSerializer
 public class SavedData : MonoBehaviour
 {
     public PlayerData SavedPlayerData;
+    public MapUI ReferenceMapUI;
     void OnApplicationQuit()
     {
         SaveData();
@@ -229,7 +230,6 @@ public class SavedData : MonoBehaviour
         {
             PlayerData playerData = new PlayerData();
             List<string> UseableTrainerList = new List<string>();
-            UseableTrainerList.Add("可尔妮");
             UseableTrainerList.Add("希特隆");
             playerData.BattleTrainerName = "希特隆";
             playerData.UseableTrainerList = UseableTrainerList;
@@ -244,6 +244,8 @@ public class SavedData : MonoBehaviour
             serializer.SerializeToFile(playerData, filePath);
             SavedPlayerData = playerData;
         }
+        ReferenceMapUI.UpdateUI();
+
     }
 
     public void SaveData()

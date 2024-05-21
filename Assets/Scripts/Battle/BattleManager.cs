@@ -40,6 +40,7 @@ public class BattleManager : MonoBehaviour
     private bool WaitForEnemySwitchPokemonAfterSkillUse;
     private int EndAnimEventIndex;
     private bool BattleEnd = false;
+    private bool Win = false;
 
     private BattleFiledState FiledState;
     private int TurnIndex;
@@ -49,7 +50,12 @@ public class BattleManager : MonoBehaviour
     public BaseSkill ConfusionSkill;
     public BattleMenuUI BeforeBattleUI;
     public static BattleManager StaticManager;
-
+    private int ChapterIndex;
+    private bool IsFirstBattle;
+    public ChapterUI ReferenceChapterUI;
+    public FadeUI TransitionUI;
+    public GameObject MapObj;
+    public AudioController ReferenceBGM;
     // Start is called before the first frame update
     void Start()
     {
@@ -92,11 +98,26 @@ public class BattleManager : MonoBehaviour
                 {
                     PlayingAnimation = false;
                     AnimationEventList.Clear();
-                    if(GetBattleEnd())
+                    //if(GetBattleEnd())
                     {
+                        EndBattle(true);
                         return;
                     }
-                    if(DefeatedPokemonList.Count > 0)
+                    if(WaitForPlayerSwitchPokemonAfterSkillUse)
+                    {
+                        UpdateUI(true);
+                        BattleUIManager.EnableCommandUI();
+                    }
+                    else if(WaitForEnemySwitchPokemonAfterSkillUse)
+                    {
+                        UpdateUI(false);
+                        EnemyAI NewEnemyAI = new EnemyAI(null, this, EnemyTrainer);
+                        BattlePokemon EnemyNext = NewEnemyAI.GetNextPokemon(BattlePokemonList[1]);
+                        EventsList.Add(new SwitchEvent(this, BattlePokemonList[1], EnemyNext));
+                        WaitForEnemySwitchPokemonAfterSkillUse = false;
+                        ProcessEvents(true);
+                    }
+                    else if(DefeatedPokemonList.Count > 0)
                     {
                         // Currently Only SingleBattle
                         if(DefeatedPokemonList.Count == 1 && DefeatedPokemonList[0].GetIsEnemy())
@@ -126,20 +147,6 @@ public class BattleManager : MonoBehaviour
                             UpdateUI(true);
                             BattleUIManager.EnableCommandUI();
                         }
-                    }
-                    else if(WaitForPlayerSwitchPokemonAfterSkillUse)
-                    {
-                        UpdateUI(true);
-                        BattleUIManager.EnableCommandUI();
-                    }
-                    else if(WaitForEnemySwitchPokemonAfterSkillUse)
-                    {
-                        UpdateUI(false);
-                        EnemyAI NewEnemyAI = new EnemyAI(null, this, EnemyTrainer);
-                        BattlePokemon EnemyNext = NewEnemyAI.GetNextPokemon(BattlePokemonList[1]);
-                        EventsList.Add(new SwitchEvent(this, BattlePokemonList[1], EnemyNext));
-                        WaitForEnemySwitchPokemonAfterSkillUse = false;
-                        ProcessEvents(true);
                     }
                     else
                     {
@@ -221,6 +228,15 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void UpdatePlayerType()
+    {
+        BattleUIManager.UpdatePlayerType(BattlePokemonList[0]);
+    }
+    public void UpdateEnemyType()
+    {
+        BattleUIManager.UpdateEnemyType(BattlePokemonList[1 ]);
     }
 
     public void UpdatePlayerUI()
@@ -397,6 +413,7 @@ public class BattleManager : MonoBehaviour
         EventsListHistory.Clear();
         BattleFiledStatusLists[0].Clear();
         BattleFiledStatusLists[1].Clear();
+        this.Win = false;
         FiledState.WeatherType = EWeather.None;
         FiledState.WeatherRemainTime = 0;
         FiledState.FieldTerrain = EBattleFieldTerrain.None;
@@ -490,8 +507,61 @@ public class BattleManager : MonoBehaviour
         EnemyTrainer = InTrainer;
     }
 
-    public void BeginBattle(int FirstPokemonIndex)
+    public void EndBattle(bool Win)
     {
+        GameObject SavedDataObj = GameObject.Find("SavedData");
+        if(Win)
+        {
+            EProgress CurProgress = SavedDataObj.GetComponent<SavedData>().SavedPlayerData.MainChapterProgress[ChapterIndex];
+            if(IsFirstBattle)
+            {
+                if(ChapterIndex == 0)
+                {
+                    SavedDataObj.GetComponent<SavedData>().SavedPlayerData.MainChapterProgress[ChapterIndex] = EProgress.FinishAllBattle;
+                }
+                else if(CurProgress != EProgress.FinishBattle2)
+                {
+                    SavedDataObj.GetComponent<SavedData>().SavedPlayerData.MainChapterProgress[ChapterIndex] = EProgress.FinishBattle1;
+                }
+                else
+                {
+                    SavedDataObj.GetComponent<SavedData>().SavedPlayerData.MainChapterProgress[ChapterIndex] = EProgress.FinishAllBattle;
+                }
+            }
+            else
+            {
+                if(CurProgress != EProgress.FinishBattle1)
+                {
+                    SavedDataObj.GetComponent<SavedData>().SavedPlayerData.MainChapterProgress[ChapterIndex] = EProgress.FinishBattle2;
+                }
+                else
+                {
+                    SavedDataObj.GetComponent<SavedData>().SavedPlayerData.MainChapterProgress[ChapterIndex] = EProgress.FinishAllBattle;
+                }
+            }
+            SavedDataObj.GetComponent<SavedData>().SavedPlayerData.UseableTrainerList.Add(EnemyTrainer.TrainerName);
+            SavedDataObj.GetComponent<SavedData>().SaveData();
+        }
+
+        StartCoroutine(EnableObjectAfterDelay());
+        TransitionUI.TransitionAnimation();
+        ReferenceBGM.gameObject.SetActive(false);
+    }
+
+    IEnumerator EnableObjectAfterDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        MapObj.SetActive(true);
+        ReferenceChapterUI.gameObject.SetActive(true);
+        BattleUIManager.DisableAllUI();
+        ReferenceChapterUI.OnFinishBattle();
+        this.GetComponent<BattleInitializer>().ClearAllObjects();
+    }
+
+    public void BeginBattle(int FirstPokemonIndex, int ChapterIndex, bool FirstBattle)
+    {
+        this.ChapterIndex = ChapterIndex;
+        IsFirstBattle = FirstBattle;
         GameObject NaniObj = GameObject.Find("Naninovel<Runtime>");
         if(NaniObj)
         {
@@ -677,9 +747,10 @@ public class BattleManager : MonoBehaviour
         return null;
     }
 
-    public void SetBattleEnd(bool End)
+    public void SetBattleEnd(bool End, bool Win)
     {
         BattleEnd = End;
+        this.Win = Win;
     }
 
     public bool GetBattleEnd()

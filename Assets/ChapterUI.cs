@@ -33,6 +33,14 @@ public class ChapterUI : MonoBehaviour
         yield return new WaitForSeconds(1f);
         MapObj.SetActive(false);
     }
+    public void OnFinishBattle()
+    {
+        if(PlayerData.SavedPlayerData.MainChapterProgress[CurrentChapterIndex] == EProgress.FinishAllBattle)
+        {
+            this.gameObject.SetActive(false);
+        }
+        UpdateUI();
+    }
     public void OnClickBeginStory()
     {
         GameObject NaniObj = GameObject.Find("Naninovel<Runtime>");
@@ -166,12 +174,16 @@ public class ChapterUI : MonoBehaviour
     {
         this.gameObject.SetActive(false);
         ReferenceBattleMenuUI.gameObject.SetActive(true);
+        ReferenceBattleMenuUI.ChapterIndex = CurrentChapterIndex;
+        ReferenceBattleMenuUI.IsFirstBattle = true;
         ReferenceBattleMenuUI.SetEnemyPokemonTrainer(BattleData.EnemyTrainer1);
         ReferenceBattleMenuUI.SetPlayerPokemonTrainer(BattleData.PlayerTrainer);
     }
     public void OnClickBeginBattle2()
     {
         this.gameObject.SetActive(false);
+        ReferenceBattleMenuUI.ChapterIndex = CurrentChapterIndex;
+        ReferenceBattleMenuUI.IsFirstBattle = false;
         ReferenceBattleMenuUI.gameObject.SetActive(true);
         ReferenceBattleMenuUI.SetEnemyPokemonTrainer(BattleData.EnemyTrainer2); 
         ReferenceBattleMenuUI.SetPlayerPokemonTrainer(BattleData.PlayerTrainer);       

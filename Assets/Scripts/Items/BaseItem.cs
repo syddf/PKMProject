@@ -29,7 +29,10 @@ public class BaseItem : MonoBehaviour
     {
         return false;
     }
-
+    public virtual bool IsResistBerry()
+    {
+        return false;
+    }
     public virtual bool IsMeganite()
     {
         return false;

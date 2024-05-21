@@ -20,7 +20,16 @@ public class Gem : BaseItem
         if(SourceEvent.GetEventType() == EventType.UseSkill && ReferencePokemon.IsDead() == false)
         {
             SkillEvent CastEvent = (SkillEvent)SourceEvent;
-            return CastEvent.GetSkill().IsDamageSkill() && CastEvent.GetSkill().GetReferenceSkill().GetSkillType(ReferencePokemon) == GemType && CastEvent.GetSourcePokemon() == ReferencePokemon;
+            if(CastEvent.GetSkill().GetSkillClass() == ESkillClass.StatusMove)
+            {
+                return false;
+            }
+            DamageSkill CastDamageSkill = (DamageSkill)CastEvent.GetSkill().GetReferenceSkill();
+            return CastEvent.GetSkill().IsDamageSkill() 
+            && CastEvent.GetSkill().GetReferenceSkill().GetSkillType(ReferencePokemon) == GemType 
+            && CastEvent.GetSourcePokemon() == ReferencePokemon
+            && CastEvent.GetSkill().GetSkillClass() != ESkillClass.StatusMove
+            && CastDamageSkill.GetPower(BattleManager.StaticManager, CastEvent.GetSourcePokemon(), CastEvent.GetCurrentProcessTargetPokemon()) != 0;
         }
         return false;
     }

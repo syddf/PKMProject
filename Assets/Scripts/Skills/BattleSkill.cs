@@ -31,11 +31,16 @@ public class BattleSkill
     public int GetSkillAccuracy(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         double AbilityFactor = 1.0;
+        double ItemFactor = 1.0;
         if(GetSkillClass() == ESkillClass.PhysicalMove && SourcePokemon.HasAbility("活力", InManager, SourcePokemon, TargetPokemon))
         {
             AbilityFactor *= 0.8;
         }
-        return (int)(ReferenceBaseSkill.GetAccuracy(InManager, SourcePokemon, TargetPokemon) * AbilityFactor);
+        if(SourcePokemon.HasItem("广角镜"))
+        {
+            ItemFactor *= 1.1;
+        }
+        return (int)(ReferenceBaseSkill.GetAccuracy(InManager, SourcePokemon, TargetPokemon) * AbilityFactor * ItemFactor);
     }
 
     public bool IsDamageSkill()
@@ -192,6 +197,24 @@ public class BattleSkill
                 Damage = (int)Math.Floor(Damage * WallFactor);                
             }
         }
+
+        double TrainerSkillFactor = 1.0;
+        if(TargetPokemon.GetHP() <= TargetPokemon.GetMaxHP() / 2)
+        {
+            if(TargetPokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "生命力爆发")
+            {
+                TrainerSkillFactor *= 0.8;
+            }
+        }
+        if(SourcePokemon.GetHP() <= SourcePokemon.GetMaxHP() / 2)
+        {
+            if(SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "生命力爆发")
+            {
+                TrainerSkillFactor *= 1.2;
+            }
+        }
+
+        Damage = (int)Math.Floor(Damage * TrainerSkillFactor); 
 
         int IntDamage = (int)Math.Floor(Damage);
         IntDamage = Math.Min(IntDamage, TargetPokemon.GetHP());
