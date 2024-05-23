@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public enum EBattleFieldStatus
 {
@@ -9,7 +10,12 @@ public enum EBattleFieldStatus
     ReflectStatus,
     PowerChordBlue,
     PowerChordGreen,
-    PowerChordPurple
+    PowerChordPurple,
+    StickyWeb,
+    StealthRock,
+    Spikes1,
+    Spikes2,
+    Spikes3
 }
 
 public struct BattleFieldStatus
@@ -19,17 +25,18 @@ public struct BattleFieldStatus
     public int RemainTurn;
     public BaseBattleFieldStatusChange BaseStatusChange;
     public bool IsPlayer;
-
-    public BattleFieldStatus(EBattleFieldStatus InStatusType, bool InHasLimitedTime, int InRemainTurn, bool InIsPlayer)
+    public BattlePokemon SourcePokemon;
+    public BattleFieldStatus(BattlePokemon InSourcePokemon, EBattleFieldStatus InStatusType, bool InHasLimitedTime, int InRemainTurn, bool InIsPlayer)
     {
         StatusType = InStatusType;
         HasLimitedTime = InHasLimitedTime;
         RemainTurn = InRemainTurn;
         IsPlayer = InIsPlayer;
-        BaseStatusChange = GetBaseStatusChange(StatusType, IsPlayer);
+        SourcePokemon= InSourcePokemon;
+        BaseStatusChange = GetBaseStatusChange(SourcePokemon, StatusType, IsPlayer);
     }
 
-    public static BaseBattleFieldStatusChange GetBaseStatusChange(EBattleFieldStatus StatusType, bool InIsPlayer)
+    public static BaseBattleFieldStatusChange GetBaseStatusChange(BattlePokemon SourcePokemon, EBattleFieldStatus StatusType, bool InIsPlayer)
     {
         if(StatusType == EBattleFieldStatus.PowerChordBlue)
         {
@@ -42,6 +49,26 @@ public struct BattleFieldStatus
         if(StatusType == EBattleFieldStatus.PowerChordPurple)
         {
             return new PowerChordStatusChange(2, InIsPlayer);
+        }
+        if(StatusType == EBattleFieldStatus.StickyWeb)
+        {
+            return new StickyWebStatusChange(SourcePokemon, InIsPlayer);
+        }
+        if(StatusType == EBattleFieldStatus.StealthRock)
+        {
+            return new StealthRockStatusChange(SourcePokemon, InIsPlayer);
+        }
+        if(StatusType == EBattleFieldStatus.Spikes1)
+        {
+            return new SpikesStatusChange(0, SourcePokemon, InIsPlayer);
+        }
+        if(StatusType == EBattleFieldStatus.Spikes2)
+        {
+            return new SpikesStatusChange(1, SourcePokemon, InIsPlayer);
+        }
+        if(StatusType == EBattleFieldStatus.Spikes3)
+        {
+            return new SpikesStatusChange(2, SourcePokemon, InIsPlayer);
         }
         return null;
     }
@@ -77,6 +104,29 @@ public struct BattleFieldStatus
         {
             return "场上响起了迅捷鸣奏曲！";
         }
+
+        if(InStatusType == EBattleFieldStatus.StickyWeb)
+        {
+            return "场上布满了黏黏网！";
+        }
+
+        if(InStatusType == EBattleFieldStatus.StealthRock)
+        {
+            return "场上布满了尖锐的岩石！";
+        }
+
+        if(InStatusType == EBattleFieldStatus.Spikes1)
+        {
+            return "场上布满了一层尖锐的刺！";
+        }
+        if(InStatusType == EBattleFieldStatus.Spikes2)
+        {
+            return "场上布满了两层尖锐的刺！";
+        }
+        if(InStatusType == EBattleFieldStatus.Spikes3)
+        {
+            return "场上布满了三层尖锐的刺！";
+        }
         return "";        
     }
 
@@ -99,6 +149,31 @@ public struct BattleFieldStatus
             return "能量和弦";
         }
 
+        if(InStatusType == EBattleFieldStatus.StickyWeb)
+        {
+            return "黏黏网";
+        }
+
+        
+        if(InStatusType == EBattleFieldStatus.StealthRock)
+        {
+            return "隐形岩";
+        }
+
+        if(InStatusType == EBattleFieldStatus.Spikes1)
+        {
+            return "撒菱(1)";
+        }
+
+        if(InStatusType == EBattleFieldStatus.Spikes2)
+        {
+            return "撒菱(2)";
+        }
+
+        if(InStatusType == EBattleFieldStatus.Spikes3)
+        {
+            return "撒菱(3)";
+        }
         return "";        
     }
 }
@@ -126,6 +201,164 @@ public class BaseBattleFieldStatusChange
 
     public virtual void OnRemoveAnimation()
     {
+    }
+}
+
+public class StickyWebStatusChange : BaseBattleFieldStatusChange
+{
+    private BattlePokemon SourcePokemon;    
+    private BattlePokemon TargetPokemon;
+    public StickyWebStatusChange(BattlePokemon InSourcePokemon, bool InIsPlayer) : base(InIsPlayer)
+    {
+        SourcePokemon = InSourcePokemon;
+    }
+
+    public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
+    {
+        TargetPokemon = null;
+        if(SourceEvent.GetEventType() == EventType.Switch)
+        {
+            SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
+            if(CastedEvent.GetInPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer)
+            {
+                TargetPokemon = CastedEvent.GetInPokemon();
+                return true;
+            }
+        }
+        else if(SourceEvent.GetEventType() == EventType.SwitchAfterDefeated)
+        {
+            SwitchWhenDefeatedEvent CastedEvent = (SwitchWhenDefeatedEvent)SourceEvent;
+            if(CastedEvent.GetPlayerNewPokemon() && CastedEvent.GetPlayerNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetPlayerNewPokemon().GetIsEnemy() != IsPlayer)
+            {
+                TargetPokemon = CastedEvent.GetPlayerNewPokemon();
+                return true;
+            }
+            if(CastedEvent.GetEnemyNewPokemon() && CastedEvent.GetEnemyNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetEnemyNewPokemon().GetIsEnemy() != IsPlayer)
+            {
+                TargetPokemon = CastedEvent.GetEnemyNewPokemon();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public override List<Event> Trigger(BattleManager InManager, Event SourceEvent)
+    {
+        List<Event> NewEvents = new List<Event>();
+        NewEvents.Add(new StatChangeEvent(TargetPokemon, SourcePokemon, "Speed", -1, "黏黏网的效果"));
+        return NewEvents;
+    }
+
+}
+
+public class StealthRockStatusChange : BaseBattleFieldStatusChange
+{
+    private BattlePokemon SourcePokemon;    
+    private BattlePokemon TargetPokemon;
+    public StealthRockStatusChange(BattlePokemon InSourcePokemon, bool InIsPlayer) : base(InIsPlayer)
+    {
+        SourcePokemon = InSourcePokemon;
+    }
+
+    public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
+    {
+        TargetPokemon = null;
+        if(SourceEvent.GetEventType() == EventType.Switch)
+        {
+            SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
+            if(CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer)
+            {
+                TargetPokemon = CastedEvent.GetInPokemon();
+                return true;
+            }
+        }
+        else if(SourceEvent.GetEventType() == EventType.SwitchAfterDefeated)
+        {
+            SwitchWhenDefeatedEvent CastedEvent = (SwitchWhenDefeatedEvent)SourceEvent;
+            if(CastedEvent.GetPlayerNewPokemon() && CastedEvent.GetPlayerNewPokemon().GetIsEnemy() != IsPlayer)
+            {
+                TargetPokemon = CastedEvent.GetPlayerNewPokemon();
+                return true;
+            }
+            if(CastedEvent.GetEnemyNewPokemon() && CastedEvent.GetEnemyNewPokemon().GetIsEnemy() != IsPlayer)
+            {
+                TargetPokemon = CastedEvent.GetEnemyNewPokemon();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public override List<Event> Trigger(BattleManager InManager, Event SourceEvent)
+    {
+        List<Event> NewEvents = new List<Event>();
+        int baseDamage = TargetPokemon.GetMaxHP() / 8;
+        double Factor2 = TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == EType.None ? 1.0 : DamageSkill.typeEffectiveness[(int)EType.Rock, (int)TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon)];
+        double Factor = DamageSkill.typeEffectiveness[(int)EType.Rock, (int)TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon)] * Factor2;
+
+        int selfDamage = Math.Min(TargetPokemon.GetHP(), Math.Max(1, (int)(baseDamage * Factor)));
+        DamageEvent damageEvent = new DamageEvent(TargetPokemon, selfDamage, "隐形岩");
+        NewEvents.Add(damageEvent);
+        return NewEvents;
+    }
+
+}
+public class SpikesStatusChange : BaseBattleFieldStatusChange
+{
+    private BattlePokemon SourcePokemon;    
+    private BattlePokemon TargetPokemon;
+    private int Level;
+    public SpikesStatusChange(int InLevel, BattlePokemon InSourcePokemon, bool InIsPlayer) : base(InIsPlayer)
+    {
+        SourcePokemon = InSourcePokemon;
+        Level = InLevel;
+    }
+
+    public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
+    {
+        TargetPokemon = null;
+        if(SourceEvent.GetEventType() == EventType.Switch)
+        {
+            SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
+            if(CastedEvent.GetInPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer)
+            {
+                TargetPokemon = CastedEvent.GetInPokemon();
+                return true;
+            }
+        }
+        else if(SourceEvent.GetEventType() == EventType.SwitchAfterDefeated)
+        {
+            SwitchWhenDefeatedEvent CastedEvent = (SwitchWhenDefeatedEvent)SourceEvent;
+            if(CastedEvent.GetPlayerNewPokemon() && CastedEvent.GetPlayerNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetPlayerNewPokemon().GetIsEnemy() != IsPlayer)
+            {
+                TargetPokemon = CastedEvent.GetPlayerNewPokemon();
+                return true;
+            }
+            if(CastedEvent.GetEnemyNewPokemon() && CastedEvent.GetEnemyNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetEnemyNewPokemon().GetIsEnemy() != IsPlayer)
+            {
+                TargetPokemon = CastedEvent.GetEnemyNewPokemon();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public override List<Event> Trigger(BattleManager InManager, Event SourceEvent)
+    {
+        List<Event> NewEvents = new List<Event>();
+        int baseDamage = TargetPokemon.GetMaxHP() / 8;
+        if(Level == 1)
+        {
+            baseDamage = TargetPokemon.GetMaxHP() / 6;
+        }
+        if(Level == 2)
+        {
+            baseDamage = TargetPokemon.GetMaxHP() / 4;
+        }
+        int selfDamage = Math.Min(TargetPokemon.GetHP(), Math.Max(1, baseDamage));
+        DamageEvent damageEvent = new DamageEvent(TargetPokemon, selfDamage, "撒菱");
+        NewEvents.Add(damageEvent);
+        return NewEvents;
     }
 }
 

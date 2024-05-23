@@ -11,7 +11,7 @@ public class LightScreen : StatusSkill
     }
     public override void ProcessStatusSkillEffect(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-        SetBattleFieldStatusChangeEvent NewEvent = new SetBattleFieldStatusChangeEvent(InManager, EBattleFieldStatus.LightScreenStatus, 5, true, !SourcePokemon.GetIsEnemy());
+        SetBattleFieldStatusChangeEvent NewEvent = new SetBattleFieldStatusChangeEvent(SourcePokemon, InManager, EBattleFieldStatus.LightScreenStatus, 5, true, !SourcePokemon.GetIsEnemy());
         NewEvent.Process(InManager);
     }
 }

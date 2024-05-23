@@ -197,10 +197,6 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
         PlayerDefeatedPokemon = InPlayerDefeatedPokemon;
         PlayerNewPokemon = InPlayerNewPokemon;
         ReferenceManager = InManager;
-        if(EnemyNewPokemon)
-            CloneEnemyNewPokemonStats = EnemyNewPokemon.CloneBattlePokemonStats();
-        if(PlayerNewPokemon)
-            ClonePlayerNewPokemonStats = PlayerNewPokemon.CloneBattlePokemonStats();
     }
 
     public override void OnAnimationFinished()
@@ -208,14 +204,14 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
         //ReferenceManager.UpdateUI(false);
         if(EnemyNewPokemon)
         {
-            ReferenceManager.UpdatePokemonInfo(EnemyNewPokemon, CloneEnemyNewPokemonStats);
             ReferenceManager.UpdateEnemyUI();
+            ReferenceManager.UpdatePokemonInfo(EnemyNewPokemon, CloneEnemyNewPokemonStats);
             ReferenceManager.UpdatePokemonStatusChange(EnemyNewPokemon, CloneEnemyNewPokemonStats);
         }
         if(PlayerNewPokemon)
         {
-            ReferenceManager.UpdatePokemonInfo(PlayerNewPokemon, ClonePlayerNewPokemonStats);
             ReferenceManager.UpdatePlayerUI();
+            ReferenceManager.UpdatePokemonInfo(PlayerNewPokemon, ClonePlayerNewPokemonStats);
             ReferenceManager.UpdatePokemonStatusChange(PlayerNewPokemon, ClonePlayerNewPokemonStats);
         }
     }
@@ -230,6 +226,10 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
     {
         if(!ShouldProcess(InManager)) return;
         InManager.AddAnimationEvent(this);
+        if(EnemyNewPokemon != null)
+            CloneEnemyNewPokemonStats = EnemyNewPokemon.CloneBattlePokemonStats();
+        if(PlayerNewPokemon != null)
+            ClonePlayerNewPokemonStats = PlayerNewPokemon.CloneBattlePokemonStats();
         if(PlayerNewPokemon != null)
         {
             InManager.SetNewPlayerPokemon(PlayerNewPokemon);

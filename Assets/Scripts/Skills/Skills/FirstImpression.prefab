@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1344239388
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1344239389}
+  - component: {fileID: 1344239390}
+  m_Layer: 0
+  m_Name: FirstImpression
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1344239389
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344239388}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1344239390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344239388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec3c8f7c0bc025d448c0813b6ad3e92a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 90
+  PP: 10
+  Accuracy: 100
+  SkillClass: 0
+  SkillType: 6
+  SkillRange: 1
+  SkillName: "\u8FCE\u5934\u4E00\u51FB"
+  SkillDescription: "\u5A01\u529B\u5F88\u9AD8\u7684\u62DB\u5F0F\uFF0C\u4F46\u53EA\u6709\u5728\u51FA\u573A\u6218\u6597\u65F6\uFF0C\u7ACB\u523B\u4F7F\u51FA\u624D\u80FD\u6210\u529F\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 2
+  AlwaysHit: 0
+  SkillAnimation: {fileID: 2228262227384765019, guid: 72a560ddba3b01543a2d6677de44c910, type: 3}

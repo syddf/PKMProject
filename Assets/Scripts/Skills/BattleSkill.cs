@@ -36,6 +36,10 @@ public class BattleSkill
         {
             AbilityFactor *= 0.8;
         }
+        if(SourcePokemon.HasAbility("复眼", InManager, SourcePokemon, TargetPokemon))
+        {
+            AbilityFactor *= 1.3;
+        }
         if(SourcePokemon.HasItem("广角镜"))
         {
             ItemFactor *= 1.1;
@@ -76,6 +80,10 @@ public class BattleSkill
     {
         DamageSkill CastSkill = (DamageSkill)ReferenceBaseSkill;
         if(CastSkill.IsConstantDamage(InManager, SourcePokemon, TargetPokemon))
+        {
+            return false;
+        }
+        if(TargetPokemon.HasAbility("硬壳盔甲", InManager, SourcePokemon, TargetPokemon))
         {
             return false;
         }
