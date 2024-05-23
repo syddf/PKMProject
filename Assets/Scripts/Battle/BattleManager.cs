@@ -98,9 +98,9 @@ public class BattleManager : MonoBehaviour
                 {
                     PlayingAnimation = false;
                     AnimationEventList.Clear();
-                    //if(GetBattleEnd())
+                    if(GetBattleEnd())
                     {
-                        EndBattle(true);
+                        EndBattle(Win);
                         return;
                     }
                     if(WaitForPlayerSwitchPokemonAfterSkillUse)
@@ -846,11 +846,11 @@ public class BattleManager : MonoBehaviour
         return false;
     }
 
-    public BattleFieldStatus AddBattleFieldStatus(bool Player, EBattleFieldStatus StatusType, bool HasLimitedTime, int InTime)
+    public BattleFieldStatus AddBattleFieldStatus(BattlePokemon SourcePokemon, bool Player, EBattleFieldStatus StatusType, bool HasLimitedTime, int InTime)
     {
         int Index = 0;
         if(!Player) Index = 1;
-        BattleFieldStatus NewStatus = new BattleFieldStatus(StatusType, HasLimitedTime, InTime, Player);
+        BattleFieldStatus NewStatus = new BattleFieldStatus(SourcePokemon, StatusType, HasLimitedTime, InTime, Player);
         BattleFiledStatusLists[Index].Add(NewStatus);
         return NewStatus;
     }
@@ -859,7 +859,7 @@ public class BattleManager : MonoBehaviour
     {
         int Index = 0;
         if(!Player) Index = 1;
-        BattleFieldStatus Tmp = new BattleFieldStatus(EBattleFieldStatus.None, false, 0, false);
+        BattleFieldStatus Tmp = new BattleFieldStatus(null, EBattleFieldStatus.None, false, 0, false);
         for(int StatusIndex = 0; StatusIndex < BattleFiledStatusLists[Index].Count; StatusIndex++)
         {
             if(BattleFiledStatusLists[Index][StatusIndex].StatusType == StatusType)

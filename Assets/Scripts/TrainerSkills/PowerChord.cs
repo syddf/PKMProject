@@ -53,21 +53,21 @@ public class PowerChord : BaseTrainerSkill
         {            
             RemoveOldState(EBattleFieldStatus.PowerChordGreen, InManager, NewEvents);
             RemoveOldState(EBattleFieldStatus.PowerChordPurple, InManager, NewEvents);
-            SetBattleFieldStatusChangeEvent NewEvent = new SetBattleFieldStatusChangeEvent(InManager, EBattleFieldStatus.PowerChordBlue, 2, true, ReferenceTrainer.IsPlayer);
+            SetBattleFieldStatusChangeEvent NewEvent = new SetBattleFieldStatusChangeEvent(null, InManager, EBattleFieldStatus.PowerChordBlue, 2, true, ReferenceTrainer.IsPlayer);
             NewEvents.Add(NewEvent);
         }
         if(SkillClass == ESkillClass.SpecialMove)
         {
             RemoveOldState(EBattleFieldStatus.PowerChordBlue, InManager, NewEvents);
             RemoveOldState(EBattleFieldStatus.PowerChordPurple, InManager, NewEvents);
-            SetBattleFieldStatusChangeEvent NewEvent = new SetBattleFieldStatusChangeEvent(InManager, EBattleFieldStatus.PowerChordGreen, 2, true, ReferenceTrainer.IsPlayer);
+            SetBattleFieldStatusChangeEvent NewEvent = new SetBattleFieldStatusChangeEvent(null, InManager, EBattleFieldStatus.PowerChordGreen, 2, true, ReferenceTrainer.IsPlayer);
             NewEvents.Add(NewEvent);
         }
         if(SkillClass == ESkillClass.StatusMove)
         {
             RemoveOldState(EBattleFieldStatus.PowerChordBlue, InManager, NewEvents);
             RemoveOldState(EBattleFieldStatus.PowerChordGreen, InManager, NewEvents);
-            SetBattleFieldStatusChangeEvent NewEvent = new SetBattleFieldStatusChangeEvent(InManager, EBattleFieldStatus.PowerChordPurple, 2, true, ReferenceTrainer.IsPlayer);
+            SetBattleFieldStatusChangeEvent NewEvent = new SetBattleFieldStatusChangeEvent(null, InManager, EBattleFieldStatus.PowerChordPurple, 2, true, ReferenceTrainer.IsPlayer);
             NewEvents.Add(NewEvent);
         }
         return NewEvents;

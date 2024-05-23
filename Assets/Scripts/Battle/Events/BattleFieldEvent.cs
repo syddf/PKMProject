@@ -10,13 +10,15 @@ public class SetBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
     private int StatusChangeTurn;
     private bool HasLimitedTime;
     private BattleFieldStatus ReferenceFieldStatus;
-    public SetBattleFieldStatusChangeEvent(BattleManager InBattleManager, EBattleFieldStatus InStatusChangeType, int InStatusChangeTurn, bool InHasLimitedTime, bool InIsPlayerField)
+    private BattlePokemon SourcePokemon;
+    public SetBattleFieldStatusChangeEvent(BattlePokemon InSourcePokemon, BattleManager InBattleManager, EBattleFieldStatus InStatusChangeType, int InStatusChangeTurn, bool InHasLimitedTime, bool InIsPlayerField)
     {
         ReferenceBattleManager = InBattleManager;  
         StatusChangeType = InStatusChangeType;
         IsPlayerField = InIsPlayerField;
         StatusChangeTurn = InStatusChangeTurn;
         HasLimitedTime = InHasLimitedTime;
+        SourcePokemon = InSourcePokemon;
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)
@@ -53,7 +55,7 @@ public class SetBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
     {
         if(!ShouldProcess(InManager)) return;
         InManager.TranslateTimePoint(ETimePoint.BeforeSetBattleFieldStatusChange, this);
-        ReferenceFieldStatus = InManager.AddBattleFieldStatus(IsPlayerField, StatusChangeType, HasLimitedTime, StatusChangeTurn);
+        ReferenceFieldStatus = InManager.AddBattleFieldStatus(SourcePokemon, IsPlayerField, StatusChangeType, HasLimitedTime, StatusChangeTurn);
         InManager.AddAnimationEvent(this);
         InManager.TranslateTimePoint(ETimePoint.AfterSetBattleFieldStatusChange, this);
     }
@@ -72,17 +74,20 @@ public class RemoveBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
     private string RemoveReason;
     private bool IsPlayerField;
     private BattleFieldStatus ReferenceFieldStatus;
-    public RemoveBattleFieldStatusChangeEvent(BattleManager InBattleManager, EBattleFieldStatus InStatusChangeType, string InRemoveReason, bool InIsPlayerField)
+    private bool ShowMessage;
+    public RemoveBattleFieldStatusChangeEvent(BattleManager InBattleManager, EBattleFieldStatus InStatusChangeType, string InRemoveReason, bool InIsPlayerField, bool InShowMessage = false)
     {
         ReferenceBattleManager = InBattleManager;
         StatusChangeType = InStatusChangeType;
         RemoveReason = InRemoveReason;
         IsPlayerField = InIsPlayerField;
+        ShowMessage = InShowMessage;
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)
     {
         if(InBattleManager.GetBattleEnd() == true) return false;
+        if(InBattleManager.HasBattleFieldStatus(IsPlayerField, StatusChangeType) == false) return false;
         return true;
     }
 
@@ -94,16 +99,19 @@ public class RemoveBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
         {
             ReferenceFieldStatus.BaseStatusChange.OnRemoveAnimation();
         }
-        string Message = "己方场上的";
-        if(IsPlayerField == false)
+        if(ShowMessage)
         {
-            Message = "敌方场上的";
-        }        
-        string FieldName = BattleFieldStatus.GetFieldName(StatusChangeType);
-        Message = Message + FieldName + "消失了！";
-        TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
-        MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);
-        AddAnimation(MessageTimeline);
+            string Message = "己方场上的";
+            if(IsPlayerField == false)
+            {
+                Message = "敌方场上的";
+            }        
+            string FieldName = BattleFieldStatus.GetFieldName(StatusChangeType);
+            Message = Message + FieldName + "消失了！";
+            TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
+            MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", Message);
+            AddAnimation(MessageTimeline);
+        }
     }
 
     public void Process(BattleManager InManager)
