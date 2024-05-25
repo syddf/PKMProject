@@ -23,6 +23,7 @@ public class BattleMenuUI : MonoBehaviour
     public GameObject MegaToggleObj;
     public Toggle MegaToggle;
     public PokemonTrainer PlayerTrainer;
+    public BaseSpecialRule CurrentSpecialRule;
 
     public Image PlayerPokemon0Image;
     public Image PlayerPokemon1Image;
@@ -75,6 +76,7 @@ public class BattleMenuUI : MonoBehaviour
 
     public void OnClickBeginBattle()
     {
+        ReferenceBattleManager.SetSpecialRule(CurrentSpecialRule);
         ReferenceBattleManager.SetPlayerTrainer(PlayerTrainer);
         ReferenceBattleManager.SetEnemyTrainer(CurrentTrainer);
         ReferenceBattleManager.BeginBattle(FirstPokemonIndex, ChapterIndex, IsFirstBattle);
@@ -95,7 +97,14 @@ public class BattleMenuUI : MonoBehaviour
         PlayerTrainer.BagPokemons[3].UpdateByOverrideData(SavedPlayerData, UsingTrainer.TrainerName, UsingTrainer.BagPokemons[3].GetPokemonName());
         PlayerTrainer.BagPokemons[4].UpdateByOverrideData(SavedPlayerData, UsingTrainer.TrainerName, UsingTrainer.BagPokemons[4].GetPokemonName());
         PlayerTrainer.BagPokemons[5].UpdateByOverrideData(SavedPlayerData, UsingTrainer.TrainerName, UsingTrainer.BagPokemons[5].GetPokemonName());
+        PlayerOverridePokemon1 = PlayerTrainer.BagPokemons[0];
+        PlayerOverridePokemon2 = PlayerTrainer.BagPokemons[1];
+        PlayerOverridePokemon3 = PlayerTrainer.BagPokemons[2];
+        PlayerOverridePokemon4 = PlayerTrainer.BagPokemons[3];
+        PlayerOverridePokemon5 = PlayerTrainer.BagPokemons[4];
+        PlayerOverridePokemon6 = PlayerTrainer.BagPokemons[5];
         UpdatePlayerInfo();
+        UpdateSpecialRule();
     }
 
     public void SetPokemonSprite(Image TargetImage, BagPokemon InPokemon, bool Chosen)
@@ -118,6 +127,57 @@ public class BattleMenuUI : MonoBehaviour
         TrainerSkillDesc.text = InTrainer.TrainerSkill.GetSkillDescription();
         TrainerSkillName.text = InTrainer.TrainerSkill.GetSkillName();
         ChoosePokemon(CurrentTrainer.BagPokemons[0]);
+    }
+
+    public void UpdateSpecialRule()
+    {
+        if(CurrentSpecialRule)
+        {
+            SpecialRuleDesc.text = CurrentSpecialRule.Description;
+            if(CurrentSpecialRule.Name == "特殊规则(紫罗兰)")
+            {
+                string ExtraString = "\n受影响的宝可梦：";
+                if(PlayerOverridePokemon1.GetSpeciesTotalValue(false) >= 500)
+                {
+                    ExtraString += PlayerOverridePokemon1.GetPokemonName();
+                }
+                if(PlayerOverridePokemon2.GetSpeciesTotalValue(false) >= 500)
+                {
+                    ExtraString += " ";
+                    ExtraString += PlayerOverridePokemon2.GetPokemonName();
+                }
+                if(PlayerOverridePokemon3.GetSpeciesTotalValue(false) >= 500)
+                {
+                    ExtraString += " ";
+                    ExtraString += PlayerOverridePokemon3.GetPokemonName();
+                }
+                if(PlayerOverridePokemon4.GetSpeciesTotalValue(false) >= 500)
+                {
+                    ExtraString += " ";
+                    ExtraString += PlayerOverridePokemon4.GetPokemonName();
+                }
+                if(PlayerOverridePokemon5.GetSpeciesTotalValue(false) >= 500)
+                {
+                    ExtraString += " ";
+                    ExtraString += PlayerOverridePokemon5.GetPokemonName();
+                }
+                if(PlayerOverridePokemon6.GetSpeciesTotalValue(false) >= 500)
+                {
+                    ExtraString += " ";
+                    ExtraString += PlayerOverridePokemon6.GetPokemonName();
+                }
+                SpecialRuleDesc.text = CurrentSpecialRule.Description + ExtraString;
+            }
+        }
+        else
+        {
+            SpecialRuleDesc.text = "无";
+        }        
+    }
+    public void SetSpecialRule(BaseSpecialRule InRule)
+    {
+        CurrentSpecialRule = InRule;
+        UpdateSpecialRule();
     }
     public void SetPlayerPokemonTrainer(PokemonTrainer InTrainer)
     {

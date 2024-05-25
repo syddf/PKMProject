@@ -88,11 +88,6 @@ public class BaseAbility : MonoBehaviour
         return Result;
     }
 
-    public virtual int GetAbilitySkillPriority(BaseSkill InSkill)
-    {
-        return 0;
-    }
-
     public BattlePokemon GetReferencePokemon() => ReferencePokemon;
     public void SetReferencePokemon(BattlePokemon InPokemon) { ReferencePokemon = InPokemon;}
     public void SetIsProcessing(bool IsProcessing) { Processing = IsProcessing;} 

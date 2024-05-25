@@ -8,4 +8,6 @@ public class BattleConfig : MonoBehaviour
     public PokemonTrainer EnemyTrainer1;
     public PokemonTrainer EnemyTrainer2;
     public string PlaceName;
+    public BaseSpecialRule SpecialRule1;
+    public BaseSpecialRule SpecialRule2;
 }

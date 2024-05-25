@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public enum ECaclStatsMode
@@ -344,6 +345,10 @@ public class BattlePokemon : MonoBehaviour
         else if(GetMaxStat() == "Speed" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
         {
             AbilityFactor *= 1.5;
+        }
+        if(InManager.GetWeatherType() == EWeather.SunLight && HasAbility("叶绿素", null, null, this))
+        {
+            AbilityFactor *= 2.0;
         }
         if(HasAbility("轻装", null, null, this) && GetLostItem())
         {
@@ -911,6 +916,11 @@ public class BattlePokemon : MonoBehaviour
         return Item;
     }   
 
+    public int GetSpeciesTotalValue()
+    {
+        return ReferenceBasePokemon.GetSpeciesTotalValue(IsMega());
+    }
+
     public bool HasItem(string ItemName)
     {
         if(HasItem() && Item.GetItemName() == ItemName)
@@ -922,6 +932,11 @@ public class BattlePokemon : MonoBehaviour
     public bool HasItem()
     {
         return Item.HasItem();
+    }
+
+    public BattleItem GetItem()
+    {
+        return Item;
     }
 
     public void SetLostItem()
@@ -967,5 +982,25 @@ public class BattlePokemon : MonoBehaviour
     {
         LoadMegaStat();
         Mega = true;
+    }
+
+    public Sprite GetPkmSprite()
+    {
+        int Index = ReferenceBasePokemon.GetIndexInPKDex();
+        if(Mega)
+        {
+            Index = Index + 2000;
+        }
+        return PokemonSpritesManager.PKMSprites[Index];
+    }
+
+    public PokemonNature GetNature()
+    {
+        return ReferenceBasePokemon.GetNature();
+    }
+
+    public List<StatusChange> GetAllStatusChangeInfo()
+    {
+        return PokemonStats.StatusChangeList;
     }
 }

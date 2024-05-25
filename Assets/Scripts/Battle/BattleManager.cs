@@ -56,6 +56,7 @@ public class BattleManager : MonoBehaviour
     public FadeUI TransitionUI;
     public GameObject MapObj;
     public AudioController ReferenceBGM;
+    private BaseSpecialRule CurrentSpecialRule;
     // Start is called before the first frame update
     void Start()
     {
@@ -489,12 +490,24 @@ public class BattleManager : MonoBehaviour
         if(Index == 0)
         {
             BeforeBattleUI.SetEnemyPokemonTrainer(BattleConfigObj.GetComponent<BattleConfig>().EnemyTrainer1);
+            BeforeBattleUI.SetSpecialRule(BattleConfigObj.GetComponent<BattleConfig>().SpecialRule1);
         }
         else if(Index == 1)
         {
             BeforeBattleUI.SetEnemyPokemonTrainer(BattleConfigObj.GetComponent<BattleConfig>().EnemyTrainer2);
+            BeforeBattleUI.SetSpecialRule(BattleConfigObj.GetComponent<BattleConfig>().SpecialRule2);
         }
         BeforeBattleUI.SetPlayerPokemonTrainer(PlayerTrainer);
+    }
+
+    public void SetSpecialRule(BaseSpecialRule InRule)
+    {
+        CurrentSpecialRule = InRule;
+    }
+
+    public bool HasSpecialRule(string SpecialRuleName)
+    {
+        return CurrentSpecialRule && CurrentSpecialRule.Name == SpecialRuleName;
     }
 
     public void SetPlayerTrainer(PokemonTrainer InTrainer)

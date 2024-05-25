@@ -204,7 +204,8 @@ public class BattleSkill
             {
                 WallFactor = 0.5;
             }
-            if(CastSkill.GetSkillName() != "劈瓦" && CastSkill.GetSkillName() != "精神之牙")
+            if(CastSkill.GetSkillName() != "劈瓦" && CastSkill.GetSkillName() != "精神之牙" && 
+            !SourcePokemon.HasAbility("穿透", InManager, SourcePokemon, TargetPokemon))
             {
                 Damage = (int)Math.Floor(Damage * WallFactor);                
             }
@@ -281,10 +282,14 @@ public class BattleSkill
     public int GetSkillPriority(BattleManager InManager, BattlePokemon TargetPokemon)
     {
         int Priority = ReferenceBaseSkill.GetSkillPriority(InManager, ReferencePokemon, TargetPokemon);
-        if(ReferencePokemon.GetAbility())
+        int AbilityPriority = 0;
+        if(ReferencePokemon.HasAbility("疾风之翼", InManager, ReferencePokemon, TargetPokemon) &&
+           ReferencePokemon.GetHP() == ReferencePokemon.GetMaxHP() &&
+           ReferenceBaseSkill.GetSkillType(ReferencePokemon) == EType.Flying)
         {
-            Priority = Priority + ReferencePokemon.GetAbility().GetAbilitySkillPriority(ReferenceBaseSkill);
+            AbilityPriority = 1;           
         }
+        Priority = Priority + AbilityPriority;
         return Priority;
     }
 
