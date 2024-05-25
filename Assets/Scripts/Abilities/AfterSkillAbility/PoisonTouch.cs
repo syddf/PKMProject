@@ -22,6 +22,10 @@ public class PoisonTouch : BaseAbility
                 {
                     if(SetPokemonStatusChangeEvent.IsStatusChangeEffective(CastedEvent.GetReferenceManager(), Target, null, EStatusChange.Poison))
                     {
+                        if(Target.HasAbility("鳞粉", CastedEvent.GetReferenceManager(), Source, Target) == true)
+                        {
+                            return false;
+                        }
                         System.Random rnd = new System.Random();
                         int randNumber = rnd.Next(0, 100);
                         if(randNumber < 30)

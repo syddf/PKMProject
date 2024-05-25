@@ -20,7 +20,7 @@ public class ThroatChopStatusChange : BaseStatusChange
         {
             SkillEvent CastedEvent = (SkillEvent)SourceEvent;
             BattlePokemon Source = CastedEvent.GetSourcePokemon();
-            if(Source == this.ReferencePokemon)
+            if(Source == this.ReferencePokemon && CastedEvent.IsSkillForbidden() == false)
             {
                 if(BattleSkillMetaInfo.IsSoundSkill(CastedEvent.GetSkill().GetSkillName()))
                 {

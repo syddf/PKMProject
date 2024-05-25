@@ -15,7 +15,10 @@ public enum EBattleFieldStatus
     StealthRock,
     Spikes1,
     Spikes2,
-    Spikes3
+    Spikes3,
+    Safeguard,
+    Tailwind,
+    ToxicSpikes
 }
 
 public struct BattleFieldStatus
@@ -70,6 +73,10 @@ public struct BattleFieldStatus
         {
             return new SpikesStatusChange(2, SourcePokemon, InIsPlayer);
         }
+        if(StatusType == EBattleFieldStatus.ToxicSpikes)
+        {
+            return new ToxicSpikesStatusChange(SourcePokemon, InIsPlayer);
+        }
         return null;
     }
 
@@ -119,13 +126,30 @@ public struct BattleFieldStatus
         {
             return "场上布满了一层尖锐的刺！";
         }
+
         if(InStatusType == EBattleFieldStatus.Spikes2)
         {
             return "场上布满了两层尖锐的刺！";
         }
+
         if(InStatusType == EBattleFieldStatus.Spikes3)
         {
             return "场上布满了三层尖锐的刺！";
+        }
+
+        if(InStatusType == EBattleFieldStatus.Safeguard)
+        {
+            return "受到神秘守护的保护了！";
+        }
+
+        if(InStatusType == EBattleFieldStatus.Tailwind)
+        {
+            return "场上吹起了顺风！";
+        }
+
+        if(InStatusType == EBattleFieldStatus.ToxicSpikes)
+        {
+            return "场上布满了毒菱！";
         }
         return "";        
     }
@@ -174,6 +198,21 @@ public struct BattleFieldStatus
         {
             return "撒菱(3)";
         }
+
+        if(InStatusType == EBattleFieldStatus.Safeguard)
+        {
+            return "神秘守护";
+        }
+
+        if(InStatusType == EBattleFieldStatus.Tailwind)
+        {
+            return "顺风";
+        }
+
+        if(InStatusType == EBattleFieldStatus.ToxicSpikes)
+        {
+            return "毒菱";
+        }
         return "";        
     }
 }
@@ -202,6 +241,61 @@ public class BaseBattleFieldStatusChange
     public virtual void OnRemoveAnimation()
     {
     }
+}
+
+public class ToxicSpikesStatusChange : BaseBattleFieldStatusChange
+{
+    private BattlePokemon SourcePokemon;    
+    private BattlePokemon TargetPokemon;
+    public ToxicSpikesStatusChange(BattlePokemon InSourcePokemon, bool InIsPlayer) : base(InIsPlayer)
+    {
+        SourcePokemon = InSourcePokemon;
+    }
+
+    public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
+    {
+        TargetPokemon = null;
+        if(SourceEvent.GetEventType() == EventType.Switch)
+        {
+            SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
+            if(CastedEvent.GetInPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer)
+            {
+                TargetPokemon = CastedEvent.GetInPokemon();
+                return true;
+            }
+        }
+        else if(SourceEvent.GetEventType() == EventType.SwitchAfterDefeated)
+        {
+            SwitchWhenDefeatedEvent CastedEvent = (SwitchWhenDefeatedEvent)SourceEvent;
+            if(CastedEvent.GetPlayerNewPokemon() && CastedEvent.GetPlayerNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetPlayerNewPokemon().GetIsEnemy() != IsPlayer)
+            {
+                TargetPokemon = CastedEvent.GetPlayerNewPokemon();
+                return true;
+            }
+            if(CastedEvent.GetEnemyNewPokemon() && CastedEvent.GetEnemyNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetEnemyNewPokemon().GetIsEnemy() != IsPlayer)
+            {
+                TargetPokemon = CastedEvent.GetEnemyNewPokemon();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public override List<Event> Trigger(BattleManager InManager, Event SourceEvent)
+    {
+        List<Event> NewEvents = new List<Event>();
+        SetPokemonStatusChangeEvent StatusEvent = new SetPokemonStatusChangeEvent(
+            TargetPokemon,
+            null,
+            InManager,
+            EStatusChange.Poison,
+            0, 
+            false
+        );
+        NewEvents.Add(StatusEvent);
+        return NewEvents;
+    }
+
 }
 
 public class StickyWebStatusChange : BaseBattleFieldStatusChange
@@ -250,7 +344,6 @@ public class StickyWebStatusChange : BaseBattleFieldStatusChange
     }
 
 }
-
 public class StealthRockStatusChange : BaseBattleFieldStatusChange
 {
     private BattlePokemon SourcePokemon;    

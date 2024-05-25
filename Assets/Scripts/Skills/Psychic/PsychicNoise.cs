@@ -9,4 +9,9 @@ public class PsychicNoise : DamageSkill
         SetPokemonStatusChangeEvent setStatChangeEvent = new SetPokemonStatusChangeEvent(TargetPokemon, SourcePokemon, InManager, EStatusChange.ForbidHeal, 2, true);
         setStatChangeEvent.Process(InManager);
     }
+
+    public override bool IsAfterSkillEffectToTargetPokemon()
+    {
+        return true;
+    }
 }

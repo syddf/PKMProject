@@ -138,6 +138,10 @@ public class BattleSkill
         if(CT)
         {
             double CTFactor = CastSkill.GetCTFactor(InManager, SourcePokemon, TargetPokemon);
+            if(SourcePokemon.HasAbility("狙击手", InManager, SourcePokemon, TargetPokemon))
+            {
+                CTFactor = 2.25;
+            }
             Damage = (int)Math.Floor(Damage * CTFactor);
         }
 

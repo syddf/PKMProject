@@ -28,6 +28,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         if(ReferencePokemon.IsDead() == true) return false;
         if(ReferencePokemon.HasStatusChange(StatusChangeType)) return false;
         if(InBattleManager.GetTerrainType() == EBattleFieldTerrain.Electric && ReferencePokemon.IsGroundPokemon(InBattleManager) && StatusChangeType == EStatusChange.Drowsy) return false;
+        if(InBattleManager.HasBattleFieldStatus(!ReferencePokemon.GetIsEnemy(), EBattleFieldStatus.Safeguard) && StatusChange.IsStatusChange(StatusChangeType)) return false;
         if(ReferencePokemon.HasAbility("精神力", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Flinch) return false;
         if(ReferencePokemon.HasType(EType.Fire, InBattleManager, null, null) && StatusChangeType == EStatusChange.Burn) return false;
         if(ReferencePokemon.HasType(EType.Ice, InBattleManager, null, null) && StatusChangeType == EStatusChange.Frostbite) return false;

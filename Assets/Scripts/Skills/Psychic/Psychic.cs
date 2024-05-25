@@ -15,4 +15,9 @@ public class Psychic : DamageSkill
     {
         return 10;
     }
+
+    public override bool IsAfterSkillEffectToTargetPokemon()
+    {
+        return true;
+    }
 }

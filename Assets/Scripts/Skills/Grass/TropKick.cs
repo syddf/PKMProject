@@ -11,4 +11,9 @@ public class TropKick : DamageSkill
         //SwitchAfterSkillUseEvent switchEvent = new SwitchAfterSkillUseEvent(InManager, SourcePokemon);
         //switchEvent.Process(InManager);
     }
+
+    public override bool IsAfterSkillEffectToTargetPokemon()
+    {
+        return true;
+    }
 }

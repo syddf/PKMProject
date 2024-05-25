@@ -9,4 +9,9 @@ public class MysticalFire : DamageSkill
         StatChangeEvent statChangeEvent = new StatChangeEvent(TargetPokemon, SourcePokemon, "SAtk", -1);
         statChangeEvent.Process(InManager);
     }
+
+    public override bool IsAfterSkillEffectToTargetPokemon()
+    {
+        return true;
+    }
 }

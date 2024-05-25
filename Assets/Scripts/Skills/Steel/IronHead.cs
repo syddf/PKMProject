@@ -14,4 +14,9 @@ public class IronHead : DamageSkill
     {
         return 30;
     }
+
+    public override bool IsAfterSkillEffectToTargetPokemon()
+    {
+        return true;
+    }
 }

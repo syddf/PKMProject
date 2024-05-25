@@ -14,4 +14,9 @@ public class AirSlash : DamageSkill
     {
         return 30;
     }
+
+    public override bool IsAfterSkillEffectToTargetPokemon()
+    {
+        return true;
+    }
 }

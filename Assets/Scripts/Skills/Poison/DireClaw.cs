@@ -21,4 +21,9 @@ public class DireClaw : DamageSkill
     {
         return 50;
     }
+
+    public override bool IsAfterSkillEffectToTargetPokemon()
+    {
+        return true;
+    }
 }
