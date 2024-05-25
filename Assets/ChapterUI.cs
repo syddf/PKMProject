@@ -162,12 +162,14 @@ public class ChapterUI : MonoBehaviour
         this.gameObject.SetActive(false);
         ReferencePreviewUI.gameObject.SetActive(true);
         ReferencePreviewUI.SetEnemyPokemonTrainer(BattleData.EnemyTrainer1);
+        ReferencePreviewUI.SetSpecialRule(BattleData.SpecialRule1);
     }
     public void OnClickPreview2()
     {
         this.gameObject.SetActive(false);
         ReferencePreviewUI.gameObject.SetActive(true);
         ReferencePreviewUI.SetEnemyPokemonTrainer(BattleData.EnemyTrainer2);        
+        ReferencePreviewUI.SetSpecialRule(BattleData.SpecialRule2);
     }
 
     public void OnClickBeginBattle1()
@@ -178,6 +180,7 @@ public class ChapterUI : MonoBehaviour
         ReferenceBattleMenuUI.IsFirstBattle = true;
         ReferenceBattleMenuUI.SetEnemyPokemonTrainer(BattleData.EnemyTrainer1);
         ReferenceBattleMenuUI.SetPlayerPokemonTrainer(BattleData.PlayerTrainer);
+        ReferenceBattleMenuUI.SetSpecialRule(BattleData.SpecialRule1);
     }
     public void OnClickBeginBattle2()
     {
@@ -186,6 +189,7 @@ public class ChapterUI : MonoBehaviour
         ReferenceBattleMenuUI.IsFirstBattle = false;
         ReferenceBattleMenuUI.gameObject.SetActive(true);
         ReferenceBattleMenuUI.SetEnemyPokemonTrainer(BattleData.EnemyTrainer2); 
-        ReferenceBattleMenuUI.SetPlayerPokemonTrainer(BattleData.PlayerTrainer);       
+        ReferenceBattleMenuUI.SetPlayerPokemonTrainer(BattleData.PlayerTrainer);     
+        ReferenceBattleMenuUI.SetSpecialRule(BattleData.SpecialRule2); 
     }
 }

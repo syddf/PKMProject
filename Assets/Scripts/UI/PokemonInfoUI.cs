@@ -23,6 +23,54 @@ public class PokemonInfoUI : MonoBehaviour
     public TextMeshProUGUI ItemDesc;
     public TMP_Dropdown NatureDropDown;
     public PokemonTrainer CurrentTrainer;
+    public TypeUI TypeUI1;
+    public TypeUI TypeUI2;
+    
+    public void SetBattlePokemon(BattlePokemon InPokemon)
+    {
+        int HP = InPokemon.GetHP();
+        int MaxHP = InPokemon.GetMaxHP();
+        bool Mega = InPokemon.IsMega();
+        HPText.text = HP.ToString() + "/" + MaxHP.ToString();
+        AtkText.text = InPokemon.GetAtk(ECaclStatsMode.Normal, BattleManager.StaticManager).ToString();
+        DefText.text = InPokemon.GetDef(ECaclStatsMode.Normal, BattleManager.StaticManager).ToString();
+        SAtkText.text = InPokemon.GetSAtk(ECaclStatsMode.Normal, BattleManager.StaticManager).ToString();
+        SDefText.text = InPokemon.GetSDef(ECaclStatsMode.Normal, BattleManager.StaticManager).ToString();
+        SpeedText.text = InPokemon.GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager).ToString();
+        PokemonNameText.text = InPokemon.GetName();
+        BaseAbility Ability = InPokemon.GetAbility();
+        if(Ability)
+        {
+            AbilityDesc.text = "特性：" + InPokemon.GetAbility().GetAbilityDesc();
+        }
+        else
+        {
+            AbilityDesc.text = "无";
+        }
+        PokemonSpriteImage.sprite = InPokemon.GetPkmSprite();
+
+        NatureText.text = BagPokemon.GetChineseNameWithCorrection(InPokemon.GetNature());
+        BattleItem Item = InPokemon.GetItem();
+        if(Item != null)
+        {
+            ItemText.text = Item.GetItemName();
+            ItemDesc.text = "道具：" + Item.GetItemDescription();
+        }
+        else
+        {
+            ItemText.text = "无";
+            ItemDesc.text = "无";
+        }
+
+        TypeUI1.SetType(InPokemon.GetType1(BattleManager.StaticManager, null, null));
+        TypeUI2.gameObject.SetActive(false);
+        if(InPokemon.GetType2(BattleManager.StaticManager, null, null) != EType.None)
+        {
+            TypeUI2.gameObject.SetActive(true);            
+            TypeUI2.SetType(InPokemon.GetType2(BattleManager.StaticManager, null, null));
+        }
+
+    }
     public void SetBagPokemon(BagPokemon InPokemon, bool Mega, BagPokemonOverrideData OverrideData, bool UpdateNatureDropDown = true)
     {
         CurrentBagPokemon = InPokemon;
@@ -64,6 +112,14 @@ public class PokemonInfoUI : MonoBehaviour
             ItemText.text = "无";
             ItemDesc.text = "无";
             ItemImage.sprite = null;
+        }
+
+        TypeUI1.SetType(CurrentBagPokemon.GetType0(Mega));
+        TypeUI2.gameObject.SetActive(false);
+        if(CurrentBagPokemon.GetType1(Mega) != EType.None)
+        {
+            TypeUI2.gameObject.SetActive(true);            
+            TypeUI2.SetType(CurrentBagPokemon.GetType1(Mega));
         }
 
         if(UpdateNatureDropDown && NatureDropDown)
@@ -167,6 +223,14 @@ public class PokemonInfoUI : MonoBehaviour
                 }
 
                 ReferencePokemon.DisableOverrideNature();
+
+                TypeUI1.SetType(ReferencePokemon.GetType0(Mega));
+                TypeUI2.gameObject.SetActive(false);
+                if(ReferencePokemon.GetType1(Mega) != EType.None)
+                {
+                    TypeUI2.gameObject.SetActive(true);            
+                    TypeUI2.SetType(ReferencePokemon.GetType1(Mega));
+                }
             }
         }
     }

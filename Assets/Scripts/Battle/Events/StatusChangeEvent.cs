@@ -21,6 +21,12 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         StatusChangeTurn= InStatusChangeTurn;
         TurnIsLimited = InTurnIsLimited;
         SourcePokemon = InSourcePokemon;
+
+        if(InReferencePokemon.HasAbility("早起", InBattleManager, InSourcePokemon, InReferencePokemon) && 
+            StatusChangeType == EStatusChange.Drowsy && TurnIsLimited)
+        {
+            StatusChangeTurn = StatusChangeTurn / 2;
+        }
     }
 
     public static bool IsStatusChangeEffective(BattleManager InBattleManager, BattlePokemon ReferencePokemon, BattlePokemon SourcePokemon, EStatusChange StatusChangeType)
@@ -28,7 +34,10 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         if(ReferencePokemon.IsDead() == true) return false;
         if(ReferencePokemon.HasStatusChange(StatusChangeType)) return false;
         if(InBattleManager.GetTerrainType() == EBattleFieldTerrain.Electric && ReferencePokemon.IsGroundPokemon(InBattleManager) && StatusChangeType == EStatusChange.Drowsy) return false;
-        if(InBattleManager.HasBattleFieldStatus(!ReferencePokemon.GetIsEnemy(), EBattleFieldStatus.Safeguard) && StatusChange.IsStatusChange(StatusChangeType)) return false;
+        if((InBattleManager.HasBattleFieldStatus(!ReferencePokemon.GetIsEnemy(), EBattleFieldStatus.Safeguard) &&
+        SourcePokemon.HasAbility("穿透", InBattleManager, SourcePokemon, ReferencePokemon) == false
+        ) 
+        && StatusChange.IsStatusChange(StatusChangeType)) return false;
         if(ReferencePokemon.HasAbility("精神力", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Flinch) return false;
         if(ReferencePokemon.HasType(EType.Fire, InBattleManager, null, null) && StatusChangeType == EStatusChange.Burn) return false;
         if(ReferencePokemon.HasType(EType.Ice, InBattleManager, null, null) && StatusChangeType == EStatusChange.Frostbite) return false;
@@ -50,7 +59,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         return true;
     }
 
-    public string GetSetMessageText()
+    public static string GetSetMessageText(EStatusChange StatusChangeType)
     {
         if(StatusChangeType == EStatusChange.ThroatChop)
         {
@@ -117,7 +126,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
         PlayableDirector MessageDirector = Timelines.MessageAnimation;
         string Message = ReferencePokemon.GetName() + ForbiddenReason;
-        string SetMessage = GetSetMessageText();
+        string SetMessage = GetSetMessageText(StatusChangeType);
         if(!Forbidden)
         {
             Message = ReferencePokemon.GetName() + SetMessage;

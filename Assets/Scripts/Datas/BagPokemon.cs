@@ -332,6 +332,26 @@ public class BagPokemon : MonoBehaviour
         return HP;
     }
 
+    public int GetSpeciesTotalValue(bool Mega)
+    {
+        if(Mega)
+        {
+            return SourcePokemonMegaData.Atk + 
+            SourcePokemonMegaData.Def + 
+            SourcePokemonMegaData.SAtk + 
+            SourcePokemonMegaData.Spd + 
+            SourcePokemonMegaData.HP +
+            SourcePokemonMegaData.Spe;
+        }
+
+        return SourcePokemonData.Atk + 
+        SourcePokemonData.Def + 
+        SourcePokemonData.SAtk + 
+        SourcePokemonData.Spd + 
+        SourcePokemonData.HP +
+        SourcePokemonData.Spe;        
+    }
+
     public EType GetType0(bool Mega)
     {
         if(Mega)
