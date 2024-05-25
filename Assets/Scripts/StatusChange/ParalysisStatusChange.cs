@@ -23,7 +23,7 @@ public class ParalysisStatusChange : BaseStatusChange
             BattlePokemon Source = CastedEvent.GetSourcePokemon();
             System.Random rnd = new System.Random();
             int Random = rnd.Next(0, 100);
-            if(Source == this.ReferencePokemon && Random < 25)
+            if(Source == this.ReferencePokemon && Random < 25 && CastedEvent.IsSkillForbidden() == false)
             {
                 return true;
             }

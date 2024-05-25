@@ -22,7 +22,7 @@ public class TauntStatusChange : BaseStatusChange
             BattlePokemon Source = CastedEvent.GetSourcePokemon();
             if(Source == this.ReferencePokemon)
             {
-                if(CastedEvent.GetSkill().GetSkillClass() == ESkillClass.StatusMove)
+                if(CastedEvent.GetSkill().GetSkillClass() == ESkillClass.StatusMove && CastedEvent.IsSkillForbidden() == false)
                 {
                     return true;
                 }

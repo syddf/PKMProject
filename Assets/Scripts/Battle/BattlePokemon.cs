@@ -348,8 +348,13 @@ public class BattlePokemon : MonoBehaviour
         if(HasAbility("轻装", null, null, this) && GetLostItem())
         {
             AbilityFactor *= 2.0;
+        }
+        double FieldFactor = 1.0;
+        if(InManager.HasBattleFieldStatus(!GetIsEnemy(), EBattleFieldStatus.Tailwind))
+        {
+            FieldFactor = 2.0;
         }         
-        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor * ItemFactor * AbilityFactor);
+        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor * ItemFactor * AbilityFactor * FieldFactor);
     }
     public int GetAtkChangeLevel() => PokemonStats.AtkChangeLevel;
     public int GetDefChangeLevel() => PokemonStats.DefChangeLevel;
@@ -361,9 +366,10 @@ public class BattlePokemon : MonoBehaviour
     public int GetLevel() => PokemonStats.Level;
     public int GetCTLevel() => PokemonStats.CTLevel;
     public PokemonGender GetGender() { return ReferenceBasePokemon.GetGender();}
-    public bool ChangeStat(string StatName, int Level)
+    public bool ChangeStat(string StatName, int Level, out int RealChangedVal)
     {
         int ChangeLevel = Level;
+        RealChangedVal = 0;
         bool Result = false;
         if(StatName == "Atk")
         {
@@ -372,6 +378,7 @@ public class BattlePokemon : MonoBehaviour
             {
                 Result = true;
             }
+            RealChangedVal = NewValue - PokemonStats.AtkChangeLevel;
             PokemonStats.AtkChangeLevel = NewValue;
         }
         if(StatName == "Def")
@@ -381,6 +388,7 @@ public class BattlePokemon : MonoBehaviour
             {
                 Result = true;
             }
+            RealChangedVal = NewValue - PokemonStats.DefChangeLevel;
             PokemonStats.DefChangeLevel = NewValue;
         }
         if(StatName == "SAtk")
@@ -390,6 +398,7 @@ public class BattlePokemon : MonoBehaviour
             {
                 Result = true;
             }
+            RealChangedVal = NewValue - PokemonStats.SAtkChangeLevel;
             PokemonStats.SAtkChangeLevel = NewValue;
         }
         if(StatName == "SDef")
@@ -399,7 +408,8 @@ public class BattlePokemon : MonoBehaviour
             {
                 Result = true;
             }
-            PokemonStats.SDefChangeLevel = Mathf.Min(Mathf.Max(-6, PokemonStats.SDefChangeLevel + Level), 6);
+            RealChangedVal = NewValue - PokemonStats.SDefChangeLevel;
+            PokemonStats.SDefChangeLevel = NewValue;
         }
         if(StatName == "Speed")
         {
@@ -408,7 +418,8 @@ public class BattlePokemon : MonoBehaviour
             {
                 Result = true;
             }
-            PokemonStats.SpeedChangeLevel = Mathf.Min(Mathf.Max(-6, PokemonStats.SpeedChangeLevel + Level), 6);
+            RealChangedVal = NewValue - PokemonStats.SpeedChangeLevel;
+            PokemonStats.SpeedChangeLevel = NewValue;
         }
         if(StatName == "Accuracyrate")
         {
@@ -417,7 +428,8 @@ public class BattlePokemon : MonoBehaviour
             {
                 Result = true;
             }
-            PokemonStats.AccuracyrateLevel = Mathf.Min(Mathf.Max(-3, PokemonStats.AccuracyrateLevel + Level), 3);
+            RealChangedVal = NewValue - PokemonStats.AccuracyrateLevel;
+            PokemonStats.AccuracyrateLevel = NewValue;
         }
         if(StatName == "Evasionrate")
         {
@@ -426,7 +438,8 @@ public class BattlePokemon : MonoBehaviour
             {
                 Result = true;
             }
-            PokemonStats.EvasionrateLevel = Mathf.Min(Mathf.Max(-3, PokemonStats.EvasionrateLevel + Level), 3);
+            RealChangedVal = NewValue - PokemonStats.EvasionrateLevel;
+            PokemonStats.EvasionrateLevel = NewValue;
         }
         if(StatName == "CT")
         {            
@@ -435,7 +448,8 @@ public class BattlePokemon : MonoBehaviour
             {
                 Result = true;
             }
-            PokemonStats.CTLevel = Mathf.Min(Mathf.Max(0, PokemonStats.CTLevel + Level), 3);
+            RealChangedVal = NewValue - PokemonStats.CTLevel;
+            PokemonStats.CTLevel = NewValue;
         }
         return Result;
     }

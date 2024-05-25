@@ -451,6 +451,11 @@ public class SkillEvent : EventAnimationPlayer, Event
                             InManager.TranslateTimePoint(ETimePoint.AfterTakenDamage, this);
                         }
                         int Probablity = Skill.GetAfterSkillEffectEventProbablity(InManager, SourcePokemon, CurrentProcessTargetPokemon);
+                        if(Skill.GetReferenceSkill().IsAfterSkillEffectToTargetPokemon() == true && 
+                        CurrentProcessTargetPokemon.HasAbility("鳞粉", InManager, SourcePokemon, CurrentProcessTargetPokemon))
+                        {
+                            Probablity = 0;
+                        }
                         System.Random rnd = new System.Random();
                         int Random = rnd.Next(0, 100);
                         if(Random < Probablity)

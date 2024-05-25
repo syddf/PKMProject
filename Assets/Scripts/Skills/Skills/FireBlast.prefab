@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &942023901
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 942023902}
+  - component: {fileID: 942023903}
+  m_Layer: 0
+  m_Name: FireBlast
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &942023902
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942023901}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &942023903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942023901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7e90a215eada1c4481d5d84f69173cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 110
+  PP: 5
+  Accuracy: 85
+  SkillClass: 1
+  SkillType: 9
+  SkillRange: 1
+  SkillName: "\u5927\u5B57\u7206\u708E"
+  SkillDescription: "\u7528\u5927\u5B57\u5F62\u72B6\u7684\u706B\u7130\u70E7\u5C3D\u5BF9\u624B\u3002\u6709\u65F6\u4F1A\u8BA9\u5BF9\u624B\u9677\u5165\u707C\u4F24\u72B6\u6001\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  AlwaysHit: 0
+  SkillAnimation: {fileID: 2658582537443606138, guid: a0161aad8895fe84e89ad38ea4b8c287, type: 3}

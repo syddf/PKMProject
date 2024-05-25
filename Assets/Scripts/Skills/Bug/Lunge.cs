@@ -9,5 +9,10 @@ public class Lunge : DamageSkill
         StatChangeEvent statChangeEvent = new StatChangeEvent(TargetPokemon, SourcePokemon, "Atk", -1);
         statChangeEvent.Process(InManager);
     }
+
+    public override bool IsAfterSkillEffectToTargetPokemon()
+    {
+        return true;
+    }
 }
 

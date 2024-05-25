@@ -25,6 +25,11 @@ public class Thunder : DamageSkill
         return 30;
     }
 
+    public override bool IsAfterSkillEffectToTargetPokemon()
+    {
+        return true;
+    }
+
     public override bool GetAlwaysHit(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         if(InManager.GetWeatherType() == EWeather.Rain)

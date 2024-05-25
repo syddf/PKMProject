@@ -20,7 +20,7 @@ public class ForbidHealStatusChange : BaseStatusChange
         {
             SkillEvent CastedEvent = (SkillEvent)SourceEvent;
             BattlePokemon Source = CastedEvent.GetSourcePokemon();
-            if(Source == this.ReferencePokemon)
+            if(Source == this.ReferencePokemon && CastedEvent.IsSkillForbidden() == false)
             {
                 if(CastedEvent.GetSkill().HasHealEffect(CastedEvent.GetReferenceManager()))
                 {

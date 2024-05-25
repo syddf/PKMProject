@@ -14,4 +14,9 @@ public class DarkPulse : DamageSkill
     {
         return 20;
     }
+
+    public override bool IsAfterSkillEffectToTargetPokemon()
+    {
+        return true;
+    }
 }

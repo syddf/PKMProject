@@ -14,6 +14,10 @@ public class PostProcessSignalReceiver : ParameterizedSignalReceiver
             DarkTimePauseVolume.SetActive(true);
             StopTime();
         }
+        if(VolumeState == "Dark")
+        {
+            DarkTimePauseVolume.SetActive(true);
+        }
         if(VolumeState == "Reset")
         {
             DarkTimePauseVolume.SetActive(false);

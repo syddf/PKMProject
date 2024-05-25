@@ -126,6 +126,11 @@ public class BaseSkill : MonoBehaviour
 
     }
 
+    public virtual bool IsAfterSkillEffectToTargetPokemon()
+    {
+        return false;
+    }
+
     public virtual int AfterSkillEffectEventProbablity(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         return 100;

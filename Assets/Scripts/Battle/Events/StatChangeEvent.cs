@@ -47,6 +47,7 @@ public class StatChangeEvent : EventAnimationPlayer, Event
 
         ReverseChangeLevel = false;
         Reason = InReason;
+        SourcePokemon = InSourcePokemon;
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)
@@ -172,10 +173,18 @@ public class StatChangeEvent : EventAnimationPlayer, Event
             {
                 if(ShouldChangeList[Index] == true)
                 {
-                    if(TargetPokemon.ChangeStat(ChangedStatName[Index], ChangedLevelList[Index]))
+                    int RealChangedValue = 0;
+                    if(TargetPokemon.ChangeStat(ChangedStatName[Index], ChangedLevelList[Index], out RealChangedValue))
                     {
                         Successed = true;
                         ChangedSuccessedList[Index] = true;
+
+                        int Factor = 1;
+                        if(ReverseChangeLevel)
+                        {
+                            Factor = -1;
+                        }
+                        ChangedStatLevel[Index] = Factor * RealChangedValue;
                     }
                 }
             }
