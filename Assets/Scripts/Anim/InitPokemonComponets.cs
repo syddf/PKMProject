@@ -17,6 +17,7 @@ public class InitPokemonComponets : MonoBehaviour
     public float yOffset = 0.5f; // 调整的Y轴偏移量
 
     public bool MegaUpgrade;
+    public bool SpecialBounding;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,10 +39,21 @@ public class InitPokemonComponets : MonoBehaviour
         if(MegaUpgrade)
         {
             this.transform.localPosition = new Vector3(0.0f, 0.0f, 1.48f);
+            if(SpecialBounding)
+            {
+                this.transform.localPosition = new Vector3(0.0f, 0.0f, 0.2f);
+            }
         }
         else
         {
-            this.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+            if(SpecialBounding)
+            {
+                this.transform.localPosition = new Vector3(0.0f, 0.0f, -1.48f);
+            }
+            else
+            {
+                this.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+            }
         }
     }
     void AdjustColliderBounds()
@@ -65,7 +77,18 @@ public class InitPokemonComponets : MonoBehaviour
         // 设置BoxCollider的大小和中心点
         // boxCollider.center = combinedBounds.center - transform.position;
         boxCollider.size = combinedBounds.size;
-        boxCollider.center = new Vector3(0, 0, -0.5f * boxCollider.size.z);
+        boxCollider.size = new Vector3
+        (boxCollider.size.x / this.transform.lossyScale.x, 
+        boxCollider.size.y / this.transform.lossyScale.y, 
+        boxCollider.size.z / this.transform.lossyScale.z);
+        if(SpecialBounding)
+        {
+            boxCollider.center = new Vector3(0, -1, 0);
+        }
+        else
+        {
+            boxCollider.center = new Vector3(0, 0, -0.5f * boxCollider.size.z);
+        }
         BoundsSize = combinedBounds.size;
     }
 

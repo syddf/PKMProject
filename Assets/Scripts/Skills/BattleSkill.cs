@@ -229,6 +229,17 @@ public class BattleSkill
 
         Damage = (int)Math.Floor(Damage * TrainerSkillFactor); 
 
+        double SepcialRuleFactor = 1.0;
+        if(InManager.HasSpecialRule("特殊规则(帕琦拉)") && SourcePokemon.GetIsEnemy() == false && SourcePokemon.HasStatUp())
+        {
+            SepcialRuleFactor = 0.3333333;
+        }
+        else if(InManager.HasSpecialRule("特殊规则(帕琦拉)") && TargetPokemon.GetIsEnemy() == false && TargetPokemon.HasStatUp())
+        {
+            SepcialRuleFactor = 2.0;
+        }
+        Damage = (int)Math.Floor(Damage * SepcialRuleFactor); 
+
         int IntDamage = (int)Math.Floor(Damage);
         IntDamage = Math.Min(IntDamage, TargetPokemon.GetHP());
         return Mathf.Max(1, IntDamage);

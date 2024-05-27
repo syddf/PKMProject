@@ -189,6 +189,16 @@ public class DamageSkill : BaseSkill
 
     public virtual bool IsSameType(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
+        if(SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "冰之摄影棚")
+        {
+            if(SourcePokemon.HasType(EType.Bug, InManager, SourcePokemon, TargetPokemon))
+            {
+                if(GetOriginSkillType() == EType.Bug)
+                {
+                    return true;
+                }
+            }
+        }
         return SourcePokemon.GetType1(InManager, SourcePokemon, TargetPokemon) == GetSkillType(SourcePokemon) || SourcePokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == GetSkillType(SourcePokemon);        
     }
 

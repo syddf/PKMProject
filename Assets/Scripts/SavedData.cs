@@ -231,6 +231,9 @@ public class SavedData : MonoBehaviour
             PlayerData playerData = new PlayerData();
             List<string> UseableTrainerList = new List<string>();
             UseableTrainerList.Add("希特隆");
+            UseableTrainerList.Add("可尔妮");
+            UseableTrainerList.Add("帕琦拉");
+            UseableTrainerList.Add("紫罗兰");
             playerData.BattleTrainerName = "希特隆";
             playerData.UseableTrainerList = UseableTrainerList;
 
