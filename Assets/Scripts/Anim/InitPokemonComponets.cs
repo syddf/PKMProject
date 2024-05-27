@@ -77,12 +77,13 @@ public class InitPokemonComponets : MonoBehaviour
         // 设置BoxCollider的大小和中心点
         // boxCollider.center = combinedBounds.center - transform.position;
         boxCollider.size = combinedBounds.size;
-        boxCollider.size = new Vector3
-        (boxCollider.size.x / this.transform.lossyScale.x, 
-        boxCollider.size.y / this.transform.lossyScale.y, 
-        boxCollider.size.z / this.transform.lossyScale.z);
+
         if(SpecialBounding)
         {
+            boxCollider.size = new Vector3
+            (boxCollider.size.x / this.transform.lossyScale.x, 
+            boxCollider.size.y / this.transform.lossyScale.y, 
+            boxCollider.size.z / this.transform.lossyScale.z);
             boxCollider.center = new Vector3(0, -1, 0);
         }
         else

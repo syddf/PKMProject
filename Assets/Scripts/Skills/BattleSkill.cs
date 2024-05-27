@@ -83,6 +83,10 @@ public class BattleSkill
         {
             return false;
         }
+        if(TargetPokemon.HasAbility("战斗盔甲", InManager, SourcePokemon, TargetPokemon))
+        {
+            return false;
+        }
         if(TargetPokemon.HasAbility("硬壳盔甲", InManager, SourcePokemon, TargetPokemon))
         {
             return false;

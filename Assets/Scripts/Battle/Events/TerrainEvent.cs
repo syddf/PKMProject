@@ -11,6 +11,10 @@ public class TerrainChangeEvent : EventAnimationPlayer, Event
     private BattleManager ReferenceBattleManager;
     private bool bSuccessed = false;
 
+    public EBattleFieldTerrain GetNewTerrain()
+    {
+        return NewTerrainType;
+    }
     public string GetTerrainTypeName()
     {
         if(NewTerrainType == EBattleFieldTerrain.Grass) return "青草场地";
