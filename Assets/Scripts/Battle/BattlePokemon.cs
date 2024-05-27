@@ -250,7 +250,7 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.3;
         }
-        else if(GetMaxStat() == "Atk" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        else if(GetMaxStat() == "Atk" && ((HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight) || (HasAbility("夸克充能", null, null, this) && InManager.GetTerrainType() == EBattleFieldTerrain.Electric)))
         {
             AbilityFactor *= 1.3;
         }        
@@ -282,7 +282,7 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.3;
         }
-        else if(GetMaxStat() == "Def" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        else if(GetMaxStat() == "Def" && ((HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight) || (HasAbility("夸克充能", null, null, this) && InManager.GetTerrainType() == EBattleFieldTerrain.Electric)))
         {
             AbilityFactor *= 1.3;
         }
@@ -313,7 +313,7 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.3;
         }
-        else if(GetMaxStat() == "SAtk" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        else if(GetMaxStat() == "SAtk" && ((HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight) || (HasAbility("夸克充能", null, null, this) && InManager.GetTerrainType() == EBattleFieldTerrain.Electric)))
         {
             AbilityFactor *= 1.3;
         }
@@ -348,7 +348,7 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.3;
         }
-        else if(GetMaxStat() == "SDef" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        else if(GetMaxStat() == "SDef" && ((HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight) || (HasAbility("夸克充能", null, null, this) && InManager.GetTerrainType() == EBattleFieldTerrain.Electric)))
         {
             AbilityFactor *= 1.3;
         } 
@@ -385,7 +385,7 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.5;
         }
-        else if(GetMaxStat() == "Speed" && HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight)
+        else if(GetMaxStat() == "Speed" && ((HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight) || (HasAbility("夸克充能", null, null, this) && InManager.GetTerrainType() == EBattleFieldTerrain.Electric)))
         {
             AbilityFactor *= 1.5;
         }
