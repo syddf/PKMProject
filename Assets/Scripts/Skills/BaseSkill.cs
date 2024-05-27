@@ -174,6 +174,10 @@ public class BaseSkill : MonoBehaviour
         {
             return EType.Water;
         }
+        if(InPokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "冰之摄影棚" && SkillType == EType.Bug)
+        {
+            return EType.Ice;
+        }
         return SkillType;  
     }
     public string GetSkillName() => SkillName;

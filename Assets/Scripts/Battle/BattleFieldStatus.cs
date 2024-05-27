@@ -258,7 +258,9 @@ public class ToxicSpikesStatusChange : BaseBattleFieldStatusChange
         if(SourceEvent.GetEventType() == EventType.Switch)
         {
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
-            if(CastedEvent.GetInPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer)
+            if(CastedEvent.GetInPokemon().IsGroundPokemon(BattleManager.StaticManager) && 
+            CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer &&
+            CastedEvent.GetInPokemon().HasItem("厚底靴"))
             {
                 TargetPokemon = CastedEvent.GetInPokemon();
                 return true;
@@ -267,12 +269,18 @@ public class ToxicSpikesStatusChange : BaseBattleFieldStatusChange
         else if(SourceEvent.GetEventType() == EventType.SwitchAfterDefeated)
         {
             SwitchWhenDefeatedEvent CastedEvent = (SwitchWhenDefeatedEvent)SourceEvent;
-            if(CastedEvent.GetPlayerNewPokemon() && CastedEvent.GetPlayerNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetPlayerNewPokemon().GetIsEnemy() != IsPlayer)
+            if(CastedEvent.GetPlayerNewPokemon() && 
+            CastedEvent.GetPlayerNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && 
+            CastedEvent.GetPlayerNewPokemon().GetIsEnemy() != IsPlayer && 
+            CastedEvent.GetPlayerNewPokemon().HasItem("厚底靴") == false)
             {
                 TargetPokemon = CastedEvent.GetPlayerNewPokemon();
                 return true;
             }
-            if(CastedEvent.GetEnemyNewPokemon() && CastedEvent.GetEnemyNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetEnemyNewPokemon().GetIsEnemy() != IsPlayer)
+            if(CastedEvent.GetEnemyNewPokemon() && 
+            CastedEvent.GetEnemyNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && 
+            CastedEvent.GetEnemyNewPokemon().GetIsEnemy() != IsPlayer &&
+            CastedEvent.GetEnemyNewPokemon().HasItem("厚底靴") == false)
             {
                 TargetPokemon = CastedEvent.GetEnemyNewPokemon();
                 return true;
@@ -313,7 +321,9 @@ public class StickyWebStatusChange : BaseBattleFieldStatusChange
         if(SourceEvent.GetEventType() == EventType.Switch)
         {
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
-            if(CastedEvent.GetInPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer)
+            if(CastedEvent.GetInPokemon().IsGroundPokemon(BattleManager.StaticManager) && 
+            CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer &&
+            CastedEvent.GetInPokemon().HasItem("厚底靴"))
             {
                 TargetPokemon = CastedEvent.GetInPokemon();
                 return true;
@@ -322,12 +332,18 @@ public class StickyWebStatusChange : BaseBattleFieldStatusChange
         else if(SourceEvent.GetEventType() == EventType.SwitchAfterDefeated)
         {
             SwitchWhenDefeatedEvent CastedEvent = (SwitchWhenDefeatedEvent)SourceEvent;
-            if(CastedEvent.GetPlayerNewPokemon() && CastedEvent.GetPlayerNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetPlayerNewPokemon().GetIsEnemy() != IsPlayer)
+            if(CastedEvent.GetPlayerNewPokemon() && 
+            CastedEvent.GetPlayerNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && 
+            CastedEvent.GetPlayerNewPokemon().GetIsEnemy() != IsPlayer &&
+            CastedEvent.GetPlayerNewPokemon().HasItem("厚底靴") == false)
             {
                 TargetPokemon = CastedEvent.GetPlayerNewPokemon();
                 return true;
             }
-            if(CastedEvent.GetEnemyNewPokemon() && CastedEvent.GetEnemyNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetEnemyNewPokemon().GetIsEnemy() != IsPlayer)
+            if(CastedEvent.GetEnemyNewPokemon() && 
+            CastedEvent.GetEnemyNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && 
+            CastedEvent.GetEnemyNewPokemon().GetIsEnemy() != IsPlayer && 
+            CastedEvent.GetEnemyNewPokemon().HasItem("厚底靴") == false)
             {
                 TargetPokemon = CastedEvent.GetEnemyNewPokemon();
                 return true;
@@ -359,7 +375,8 @@ public class StealthRockStatusChange : BaseBattleFieldStatusChange
         if(SourceEvent.GetEventType() == EventType.Switch)
         {
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
-            if(CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer)
+            if(CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer &&
+            CastedEvent.GetInPokemon().HasItem("厚底靴"))
             {
                 TargetPokemon = CastedEvent.GetInPokemon();
                 return true;
@@ -368,12 +385,14 @@ public class StealthRockStatusChange : BaseBattleFieldStatusChange
         else if(SourceEvent.GetEventType() == EventType.SwitchAfterDefeated)
         {
             SwitchWhenDefeatedEvent CastedEvent = (SwitchWhenDefeatedEvent)SourceEvent;
-            if(CastedEvent.GetPlayerNewPokemon() && CastedEvent.GetPlayerNewPokemon().GetIsEnemy() != IsPlayer)
+            if(CastedEvent.GetPlayerNewPokemon() && CastedEvent.GetPlayerNewPokemon().GetIsEnemy() != IsPlayer
+            && CastedEvent.GetPlayerNewPokemon().HasItem("厚底靴") == false)
             {
                 TargetPokemon = CastedEvent.GetPlayerNewPokemon();
                 return true;
             }
-            if(CastedEvent.GetEnemyNewPokemon() && CastedEvent.GetEnemyNewPokemon().GetIsEnemy() != IsPlayer)
+            if(CastedEvent.GetEnemyNewPokemon() && CastedEvent.GetEnemyNewPokemon().GetIsEnemy() != IsPlayer
+            && CastedEvent.GetEnemyNewPokemon().HasItem("厚底靴") == false)
             {
                 TargetPokemon = CastedEvent.GetEnemyNewPokemon();
                 return true;
@@ -413,7 +432,9 @@ public class SpikesStatusChange : BaseBattleFieldStatusChange
         if(SourceEvent.GetEventType() == EventType.Switch)
         {
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
-            if(CastedEvent.GetInPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer)
+            if(CastedEvent.GetInPokemon().IsGroundPokemon(BattleManager.StaticManager) && 
+            CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer &&
+            CastedEvent.GetInPokemon().HasItem("厚底靴"))
             {
                 TargetPokemon = CastedEvent.GetInPokemon();
                 return true;
@@ -422,12 +443,18 @@ public class SpikesStatusChange : BaseBattleFieldStatusChange
         else if(SourceEvent.GetEventType() == EventType.SwitchAfterDefeated)
         {
             SwitchWhenDefeatedEvent CastedEvent = (SwitchWhenDefeatedEvent)SourceEvent;
-            if(CastedEvent.GetPlayerNewPokemon() && CastedEvent.GetPlayerNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetPlayerNewPokemon().GetIsEnemy() != IsPlayer)
+            if(CastedEvent.GetPlayerNewPokemon() && 
+            CastedEvent.GetPlayerNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && 
+            CastedEvent.GetPlayerNewPokemon().GetIsEnemy() != IsPlayer &&
+            CastedEvent.GetPlayerNewPokemon().HasItem("厚底靴") == false)
             {
                 TargetPokemon = CastedEvent.GetPlayerNewPokemon();
                 return true;
             }
-            if(CastedEvent.GetEnemyNewPokemon() && CastedEvent.GetEnemyNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && CastedEvent.GetEnemyNewPokemon().GetIsEnemy() != IsPlayer)
+            if(CastedEvent.GetEnemyNewPokemon() && 
+            CastedEvent.GetEnemyNewPokemon().IsGroundPokemon(BattleManager.StaticManager) && 
+            CastedEvent.GetEnemyNewPokemon().GetIsEnemy() != IsPlayer &&
+            CastedEvent.GetEnemyNewPokemon().HasItem("厚底靴") == false)
             {
                 TargetPokemon = CastedEvent.GetEnemyNewPokemon();
                 return true;

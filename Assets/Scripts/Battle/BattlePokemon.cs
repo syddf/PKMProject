@@ -193,6 +193,18 @@ public class BattlePokemon : MonoBehaviour
 
     public string GetEnName() => ReferenceBasePokemon.GetName();
 
+    public bool HasStatUp()
+    {
+        return PokemonStats.AtkChangeLevel > 0 ||
+        PokemonStats.SAtkChangeLevel > 0 ||
+        PokemonStats.DefChangeLevel > 0 ||
+        PokemonStats.SDefChangeLevel > 0 ||
+        PokemonStats.SpeedChangeLevel > 0 ||
+        PokemonStats.EvasionrateLevel > 0 ||
+        PokemonStats.CTLevel > 0 ||
+        PokemonStats.AccuracyrateLevel > 0;
+    }
+
     public string GetMaxStat()
     {
         int Atk = (int)(PokemonStats.Atk * StatLevelFactor[PokemonStats.AtkChangeLevel + 6]);
@@ -250,7 +262,15 @@ public class BattlePokemon : MonoBehaviour
         {
             AbilityFactor *= 2.0;
         }
-        return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor);
+        double SpecialRuleFactor = 1.0;
+        if(InManager.HasSpecialRule("特殊规则(紫罗兰)") && IsEnemy == false)
+        {
+            if(GetSpeciesTotalValue() >= 500)
+            {
+                SpecialRuleFactor = 0.5;
+            }
+        }
+        return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor * SpecialRuleFactor);
     }
     public int GetDef(ECaclStatsMode Mode, BattleManager InManager)
     {
@@ -269,8 +289,16 @@ public class BattlePokemon : MonoBehaviour
         if(InManager.GetWeatherType() == EWeather.Snow && HasType(EType.Ice, InManager, null, null))
         {
             WeatherFactor = 1.5;
+        }
+        double SpecialRuleFactor = 1.0;
+        if(InManager.HasSpecialRule("特殊规则(紫罗兰)") && IsEnemy == false)
+        {
+            if(GetSpeciesTotalValue() >= 500)
+            {
+                SpecialRuleFactor = 0.5;
+            }
         }        
-        return (int)Math.Floor((double)PokemonStats.Def * StatLevelFactor[ChangeLevel + 6] * WeatherFactor * AbilityFactor * ItemFactor);
+        return (int)Math.Floor((double)PokemonStats.Def * StatLevelFactor[ChangeLevel + 6] * WeatherFactor * AbilityFactor * ItemFactor * SpecialRuleFactor);
     }
     public int GetSAtk(ECaclStatsMode Mode, BattleManager InManager)
     {
@@ -296,8 +324,16 @@ public class BattlePokemon : MonoBehaviour
         if(InManager.GetTerrainType() == EBattleFieldTerrain.Electric && HasAbility("科学助手", null, null, this))
         {
             AbilityFactor *= 2.0;
+        }
+        double SpecialRuleFactor = 1.0;
+        if(InManager.HasSpecialRule("特殊规则(紫罗兰)") && IsEnemy == false)
+        {
+            if(GetSpeciesTotalValue() >= 500)
+            {
+                SpecialRuleFactor = 0.5;
+            }
         }  
-        return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor);
+        return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor * SpecialRuleFactor);
     }
     public int GetSDef(ECaclStatsMode Mode, BattleManager InManager)
     {
@@ -321,8 +357,15 @@ public class BattlePokemon : MonoBehaviour
         {
             WeatherFactor = 1.5;
         }
-
-        return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6] * ItemFactor * WeatherFactor * AbilityFactor);
+        double SpecialRuleFactor = 1.0;
+        if(InManager.HasSpecialRule("特殊规则(紫罗兰)") && IsEnemy == false)
+        {
+            if(GetSpeciesTotalValue() >= 500)
+            {
+                SpecialRuleFactor = 0.5;
+            }
+        }
+        return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6] * ItemFactor * WeatherFactor * AbilityFactor * SpecialRuleFactor);
     }    
     public int GetSpeed(ECaclStatsMode Mode, BattleManager InManager)
     {
@@ -358,8 +401,16 @@ public class BattlePokemon : MonoBehaviour
         if(InManager.HasBattleFieldStatus(!GetIsEnemy(), EBattleFieldStatus.Tailwind))
         {
             FieldFactor = 2.0;
+        }
+        double SpecialRuleFactor = 1.0;
+        if(InManager.HasSpecialRule("特殊规则(紫罗兰)"))
+        {
+            if(GetSpeciesTotalValue() >= 500 && IsEnemy == false)
+            {
+                SpecialRuleFactor = 0.5;
+            }
         }         
-        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor * ItemFactor * AbilityFactor * FieldFactor);
+        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor * ItemFactor * AbilityFactor * FieldFactor * SpecialRuleFactor);
     }
     public int GetAtkChangeLevel() => PokemonStats.AtkChangeLevel;
     public int GetDefChangeLevel() => PokemonStats.DefChangeLevel;
