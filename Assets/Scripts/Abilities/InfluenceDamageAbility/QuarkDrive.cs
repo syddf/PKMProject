@@ -11,7 +11,7 @@ public class QuarkDrive : BaseAbility
             return false;
         }
 
-        if(BattleManager.StaticManager.GetTerrainType() == EBattleFieldTerrain.Electric)
+        if(BattleManager.StaticManager.GetTerrainType() != EBattleFieldTerrain.Electric)
         {
             return false;
         }
