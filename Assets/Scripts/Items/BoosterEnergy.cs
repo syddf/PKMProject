@@ -22,7 +22,7 @@ public class BoosterEnergy : BaseItem
             return true;
         }
         if(ReferencePokemon.HasAbility("夸克充能", BattleManager.StaticManager, null, ReferencePokemon) 
-        && BattleManager.StaticManager.GetTerrainType() == EBattleFieldTerrain.Electric
+        && BattleManager.StaticManager.GetTerrainType() != EBattleFieldTerrain.Electric
         && ReferencePokemon.GetAbility().GetTriggered() == false)
         {
             return true;
