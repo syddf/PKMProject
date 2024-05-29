@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro; 
-public class SkillButton : MonoBehaviour
+using UnityEngine.EventSystems;
+public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public BattleManager g_BattleManager;
     public BaseSkill ReferenceSkill;
@@ -19,6 +20,25 @@ public class SkillButton : MonoBehaviour
     private bool Forbidden;
     public Color NormalColor;
     public Color ForbiddenColor;
+    public Toggle MegaToggle;
+    public SkillDescUI ReferenceDescUI;
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        ReferenceDescUI.SetSkill(ReferenceSkill);
+        if (eventData.pointerEnter.gameObject == this.gameObject)
+        {
+            ReferenceDescUI.gameObject.SetActive(true);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (eventData.pointerEnter.gameObject == this.gameObject)
+        {
+            ReferenceDescUI.gameObject.SetActive(false);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -79,7 +99,7 @@ public class SkillButton : MonoBehaviour
         if(!this.Forbidden)
         {
             Audio.Play();
-            g_BattleManager.OnUseSkill(ReferenceSkill, ReferencePokemon);
+            g_BattleManager.OnUseSkill(ReferenceSkill, ReferencePokemon, MegaToggle.isOn);
         }
     }
 }

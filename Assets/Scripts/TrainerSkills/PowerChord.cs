@@ -15,7 +15,7 @@ public class PowerChord : BaseTrainerSkill
         {
             SkillEvent CastedEvent = (SkillEvent)SourceEvent;
             BattleManager ReferenceManager = CastedEvent.GetReferenceManager();
-            if(CastedEvent.GetSourcePokemon().GetIsEnemy() != ReferenceTrainer.IsPlayer)
+            if(CastedEvent.GetSourcePokemon() != null && CastedEvent.GetSourcePokemon().GetIsEnemy() != ReferenceTrainer.IsPlayer)
             {
                 ESkillClass SkillClass = CastedEvent.GetSkill().GetSkillClass();
                 if(SkillClass == ESkillClass.PhysicalMove && !ReferenceManager.HasBattleFieldStatus(ReferenceTrainer.IsPlayer, EBattleFieldStatus.PowerChordBlue))

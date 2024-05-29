@@ -26,7 +26,7 @@ public class ScienceChangeFuture : BaseTrainerSkill
         {
             SkillEvent CastedEvent = (SkillEvent)SourceEvent;
             BattleManager ReferenceManager = CastedEvent.GetReferenceManager();
-            if(CastedEvent.GetSourcePokemon().GetIsEnemy() != ReferenceTrainer.IsPlayer)
+            if(CastedEvent.GetSourcePokemon() != null && CastedEvent.GetSourcePokemon().GetIsEnemy() != ReferenceTrainer.IsPlayer)
             {
                 if(CastedEvent.GetSkill().GetReferenceSkill().GetSkillType(CastedEvent.GetSourcePokemon()) == EType.Electric)
                 {

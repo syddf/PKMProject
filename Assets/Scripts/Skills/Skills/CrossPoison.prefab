@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &273067997
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 273067998}
+  - component: {fileID: 273067999}
+  m_Layer: 0
+  m_Name: CrossPoison
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &273067998
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273067997}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &273067999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273067997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca5f8d08baf6feb439d1177c8680aaa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 70
+  PP: 20
+  Accuracy: 100
+  SkillClass: 0
+  SkillType: 3
+  SkillRange: 1
+  SkillName: "\u5341\u5B57\u6BD2\u5203"
+  SkillDescription: "\u7528\u6BD2\u5203\u5288\u5F00\u5BF9\u624B\u3002\u6709\u65F6\u4F1A\u8BA9\u5BF9\u624B\u9677\u5165\u4E2D\u6BD2\u72B6\u6001\uFF0C\u4E5F\u5BB9\u6613\u51FB\u4E2D\u8981\u5BB3\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  AlwaysHit: 0
+  SkillAnimation: {fileID: 1062139206704522384, guid: 2897f370783c22f4f9b193d52f20ce61, type: 3}

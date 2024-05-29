@@ -59,6 +59,12 @@ public class TurnEndEvent : EventAnimationPlayer, Event
             resetTerrain.Process(InManager);
         }
 
+        if(InManager.ReduceTrickRoomTurn())
+        {
+            TrickRoomChangeEvent resetTrickRoom = new TrickRoomChangeEvent(null, InManager, false, 0);
+            resetTrickRoom.Process(InManager);
+        }
+
         var BattlePokemons = InManager.GetBattlePokemons();
         for(int Index = 0; Index < BattlePokemons.Count; Index++)
         {

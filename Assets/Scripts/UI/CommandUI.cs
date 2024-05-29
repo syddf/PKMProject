@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class CommandUI : MonoBehaviour
 {
     public GameObject SkillGroupRootObj;
@@ -19,12 +19,23 @@ public class CommandUI : MonoBehaviour
     public GameObject SwitchButton;
     public GameObject SkillButton;
     public GameObject StruggleButton;
+    public GameObject State1Button;
+    public GameObject State2Button;
+    public GameObject State3Button;
+    public GameObject MegaButton;
+    public Toggle MegaToggle;
     private bool Play = false;
+    public SkillDescUI ReferenceDescUI;
+    public BattlePokemonInfoUI ReferenceBattlePokemonInfoUI;
     public void GenerateNewSkillGroup(BattlePokemon InPokemon)
     {   
+        State1Button.SetActive(true);
+        State2Button.SetActive(true);
+        State3Button.SetActive(true);
         SwitchGroupRootObj.SetActive(false);
         SkillGroupRootObj.SetActive(true);
         ReferencePokemon = InPokemon;
+        MegaButton.SetActive(ReferencePokemon.CanMega());
         foreach (Transform child in SkillGroupRootObj.transform)
         {
             if(child.gameObject != SwitchButton)
@@ -33,11 +44,14 @@ public class CommandUI : MonoBehaviour
         StruggleButton.SetActive(false);
         BaseSkill[] PokemonSkills = InPokemon.GetReferenceSkill();
         HashSet<BaseSkill> ForbiddenSkills = InPokemon.GetForbiddenBattleSkills(BattleManager);
+        MegaToggle.isOn = false;
         if(ForbiddenSkills.Count == 4)
         {
             StruggleButton.SetActive(true);
             StruggleButton.GetComponent<SkillButton>().g_BattleManager = BattleManager;
             StruggleButton.GetComponent<SkillButton>().ReferencePokemon = InPokemon;
+            StruggleButton.GetComponent<SkillButton>().MegaToggle = MegaToggle;
+            StruggleButton.GetComponent<SkillButton>().ReferenceDescUI = ReferenceDescUI;
         }
         for(int Index = 0; Index < 4; Index ++)
         {
@@ -45,6 +59,8 @@ public class CommandUI : MonoBehaviour
             {
                 GameObject NewButton = Instantiate(SkillButtonPrefab, new Vector3(0, 0, 0), Quaternion.identity, SkillGroupRootObj.transform);
                 NewButton.GetComponent<SkillButton>().Init(BattleManager, PokemonSkills[Index], InPokemon, ForbiddenSkills.Contains(PokemonSkills[Index]));
+                NewButton.GetComponent<SkillButton>().MegaToggle = MegaToggle;
+                NewButton.GetComponent<SkillButton>().ReferenceDescUI = ReferenceDescUI;
                 NewButton.transform.SetSiblingIndex(Index);
             }
         }
@@ -90,6 +106,10 @@ public class CommandUI : MonoBehaviour
         GenerateNewSwitchGroup(ReferenceTrainer);
         In();
         SkillButton.SetActive(true);
+        State1Button.SetActive(false);
+        State2Button.SetActive(false);
+        State3Button.SetActive(false);
+        MegaButton.SetActive(false);
     }
 
     public void SkillMode()
@@ -97,6 +117,11 @@ public class CommandUI : MonoBehaviour
         ReferenceTrainer = BattleManager.GetPlayerTrainer();
         GenerateNewSkillGroup(ReferencePokemon);
         In();
+        State1Button.SetActive(true);
+        State2Button.SetActive(true);
+        State3Button.SetActive(true);
+        MegaToggle.isOn = false;
+        MegaButton.SetActive(ReferencePokemon.CanMega());
     }
 
     public void GenerateNewSwitchGroup(PokemonTrainer InTrainer)
@@ -124,6 +149,12 @@ public class CommandUI : MonoBehaviour
         SubScript.SubObject4.GetComponent<SwitchButton>().UpdateSprite(Pokemons[3], BattleManager);
         SubScript.SubObject5.GetComponent<SwitchButton>().UpdateSprite(Pokemons[4], BattleManager);
         SubScript.SubObject6.GetComponent<SwitchButton>().UpdateSprite(Pokemons[5], BattleManager);
+        SubScript.SubObject1.GetComponent<SwitchButton>().ReferenceUI = ReferenceBattlePokemonInfoUI;
+        SubScript.SubObject2.GetComponent<SwitchButton>().ReferenceUI = ReferenceBattlePokemonInfoUI;
+        SubScript.SubObject3.GetComponent<SwitchButton>().ReferenceUI = ReferenceBattlePokemonInfoUI;
+        SubScript.SubObject4.GetComponent<SwitchButton>().ReferenceUI = ReferenceBattlePokemonInfoUI;
+        SubScript.SubObject5.GetComponent<SwitchButton>().ReferenceUI = ReferenceBattlePokemonInfoUI;
+        SubScript.SubObject6.GetComponent<SwitchButton>().ReferenceUI = ReferenceBattlePokemonInfoUI;
         SkillButton.SetActive(false);
     }
 }

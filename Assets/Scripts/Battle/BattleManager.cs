@@ -42,10 +42,10 @@ public class BattleManager : MonoBehaviour
     private bool BattleEnd = false;
     private bool Win = false;
 
-    private BattleFiledState FiledState;
+    private BattleFieldState FieldState;
     private int TurnIndex;
 
-    private List<List<BattleFieldStatus>> BattleFiledStatusLists;
+    private List<List<BattleFieldStatus>> BattleFieldStatusLists;
     public BaseSkill StruggleSkill;
     public BaseSkill ConfusionSkill;
     public BattleMenuUI BeforeBattleUI;
@@ -66,9 +66,9 @@ public class BattleManager : MonoBehaviour
         DefeatedPokemonList = new List<BattlePokemon>();
         PlayingAnimation = false;
         EventsListHistory = new List<List<Event>>();
-        BattleFiledStatusLists = new List<List<BattleFieldStatus>>();
-        BattleFiledStatusLists.Add(new List<BattleFieldStatus>());
-        BattleFiledStatusLists.Add(new List<BattleFieldStatus>());
+        BattleFieldStatusLists = new List<List<BattleFieldStatus>>();
+        BattleFieldStatusLists.Add(new List<BattleFieldStatus>());
+        BattleFieldStatusLists.Add(new List<BattleFieldStatus>());
     }
 
     void Update()
@@ -412,13 +412,15 @@ public class BattleManager : MonoBehaviour
         EventsList.Add(new SingleBattleGameStartEvent(PlayerPokemon, EnemyPokemon));
         TurnIndex = 0;
         EventsListHistory.Clear();
-        BattleFiledStatusLists[0].Clear();
-        BattleFiledStatusLists[1].Clear();
+        BattleFieldStatusLists[0].Clear();
+        BattleFieldStatusLists[1].Clear();
         this.Win = false;
-        FiledState.WeatherType = EWeather.None;
-        FiledState.WeatherRemainTime = 0;
-        FiledState.FieldTerrain = EBattleFieldTerrain.None;
-        FiledState.TerrainRemainTime = 0;
+        FieldState.WeatherType = EWeather.None;
+        FieldState.WeatherRemainTime = 0;
+        FieldState.FieldTerrain = EBattleFieldTerrain.None;
+        FieldState.TerrainRemainTime = 0;
+        FieldState.IsTrickRoomActive = false;
+        FieldState.TrickRoomRemainTime = 0;
     }
 
     public List<BaseAbility> QueryAbilitiesWhenTimeChange(Event SourceEvent)
@@ -455,7 +457,7 @@ public class BattleManager : MonoBehaviour
     public List<BattleFieldStatus> QueryBattleFieldStatusWhenTimeChange(Event SourceEvent)
     {
         List<BattleFieldStatus> Result = new List<BattleFieldStatus>();
-        foreach(var StatusList  in BattleFiledStatusLists)
+        foreach(var StatusList  in BattleFieldStatusLists)
         {
             foreach(var Status in StatusList)
             {
@@ -588,7 +590,7 @@ public class BattleManager : MonoBehaviour
         ProcessEvents(false);
     }
 
-    public void OnUseSkill(BaseSkill InSkill, BattlePokemon InReferencePokemon)
+    public void OnUseSkill(BaseSkill InSkill, BattlePokemon InReferencePokemon, bool Mega)
     {
         // Currently Only Single Battle.
         BattleSkill UseBattleSkill = new BattleSkill(InSkill, EMasterSkill.None, InReferencePokemon);
@@ -602,7 +604,7 @@ public class BattleManager : MonoBehaviour
         {
             TargetPokemon.Add(ETarget.None);
         }
-        if(InReferencePokemon.CanMega())
+        if(InReferencePokemon.CanMega() && Mega)
         {
             EventsList.Add(new MegaEvent(this, InReferencePokemon));
         }
@@ -773,27 +775,38 @@ public class BattleManager : MonoBehaviour
 
     public void SetTerrain(EBattleFieldTerrain TerrainType, int TurnNum)
     {
-        FiledState.FieldTerrain = TerrainType;
-        FiledState.TerrainRemainTime = TurnNum;
+        FieldState.FieldTerrain = TerrainType;
+        FieldState.TerrainRemainTime = TurnNum;
     }
 
     public EBattleFieldTerrain GetTerrainType()
     {
-        return FiledState.FieldTerrain;
+        return FieldState.FieldTerrain;
     }
 
     public int GetTerrainRemainTurn()
     {
-        return FiledState.TerrainRemainTime;
+        return FieldState.TerrainRemainTime;
     }
-    public bool ReduceTerrainTurn()
+
+    public bool ReduceTrickRoomTurn()
     {
-        if(FiledState.FieldTerrain == EBattleFieldTerrain.None)
+        if(FieldState.IsTrickRoomActive == false)
         {
             return false;
         }
-        FiledState.TerrainRemainTime = FiledState.TerrainRemainTime - 1;
-        return FiledState.TerrainRemainTime == 0;
+
+        FieldState.TrickRoomRemainTime = FieldState.TrickRoomRemainTime - 1;
+        return FieldState.TrickRoomRemainTime == 0;
+    }
+    public bool ReduceTerrainTurn()
+    {
+        if(FieldState.FieldTerrain == EBattleFieldTerrain.None)
+        {
+            return false;
+        }
+        FieldState.TerrainRemainTime = FieldState.TerrainRemainTime - 1;
+        return FieldState.TerrainRemainTime == 0;
     }
 
 
@@ -849,7 +862,7 @@ public class BattleManager : MonoBehaviour
     {
         int Index = 0;
         if(!Player) Index = 1;
-        foreach(var BattleFieldStatus in BattleFiledStatusLists[Index])
+        foreach(var BattleFieldStatus in BattleFieldStatusLists[Index])
         {
             if(BattleFieldStatus.StatusType == StatusType)
             {
@@ -864,7 +877,7 @@ public class BattleManager : MonoBehaviour
         int Index = 0;
         if(!Player) Index = 1;
         BattleFieldStatus NewStatus = new BattleFieldStatus(SourcePokemon, StatusType, HasLimitedTime, InTime, Player);
-        BattleFiledStatusLists[Index].Add(NewStatus);
+        BattleFieldStatusLists[Index].Add(NewStatus);
         return NewStatus;
     }
 
@@ -873,16 +886,23 @@ public class BattleManager : MonoBehaviour
         int Index = 0;
         if(!Player) Index = 1;
         BattleFieldStatus Tmp = new BattleFieldStatus(null, EBattleFieldStatus.None, false, 0, false);
-        for(int StatusIndex = 0; StatusIndex < BattleFiledStatusLists[Index].Count; StatusIndex++)
+        for(int StatusIndex = 0; StatusIndex < BattleFieldStatusLists[Index].Count; StatusIndex++)
         {
-            if(BattleFiledStatusLists[Index][StatusIndex].StatusType == StatusType)
+            if(BattleFieldStatusLists[Index][StatusIndex].StatusType == StatusType)
             {
-                Tmp = BattleFiledStatusLists[Index][StatusIndex];
-                BattleFiledStatusLists[Index].RemoveAt(StatusIndex);
+                Tmp = BattleFieldStatusLists[Index][StatusIndex];
+                BattleFieldStatusLists[Index].RemoveAt(StatusIndex);
                 return Tmp;
             }
         }
         return Tmp;
+    }
+
+    public List<BattleFieldStatus> GetBattleFieldStatusList(bool IsPlayer)
+    {
+        int Index = 0;
+        if(!IsPlayer) Index = 1;
+        return BattleFieldStatusLists[Index];
     }
 
     public List<EBattleFieldStatus> ReduceBattleFieldTime(bool Player)
@@ -890,17 +910,17 @@ public class BattleManager : MonoBehaviour
         List<EBattleFieldStatus> RemoveStatus = new List<EBattleFieldStatus>();
         int Index = 0;
         if(!Player) Index = 1;
-        for(int StatusIndex = 0; StatusIndex < BattleFiledStatusLists[Index].Count; StatusIndex++)
+        for(int StatusIndex = 0; StatusIndex < BattleFieldStatusLists[Index].Count; StatusIndex++)
         {
-            if(BattleFiledStatusLists[Index][StatusIndex].HasLimitedTime)
+            if(BattleFieldStatusLists[Index][StatusIndex].HasLimitedTime)
             {
-                BattleFieldStatus OldStatus = BattleFiledStatusLists[Index][StatusIndex];
+                BattleFieldStatus OldStatus = BattleFieldStatusLists[Index][StatusIndex];
                 OldStatus.RemainTurn = OldStatus.RemainTurn - 1;
-                BattleFiledStatusLists[Index][StatusIndex] = OldStatus;
+                BattleFieldStatusLists[Index][StatusIndex] = OldStatus;
 
-                if(BattleFiledStatusLists[Index][StatusIndex].RemainTurn == 0)
+                if(BattleFieldStatusLists[Index][StatusIndex].RemainTurn == 0)
                 {
-                    RemoveStatus.Add(BattleFiledStatusLists[Index][StatusIndex].StatusType);
+                    RemoveStatus.Add(BattleFieldStatusLists[Index][StatusIndex].StatusType);
                 }
             }
         }
@@ -947,28 +967,49 @@ public class BattleManager : MonoBehaviour
 
     public void SetWeather(EWeather WeatherType, int TurnNum)
     {
-        FiledState.WeatherType = WeatherType;
-        FiledState.WeatherRemainTime = TurnNum;
+        FieldState.WeatherType = WeatherType;
+        FieldState.WeatherRemainTime = TurnNum;
     }
 
 
     public EWeather GetWeatherType()
     {
-        return FiledState.WeatherType;
+        return FieldState.WeatherType;
     }
 
     public int GetWeatherRemainTurn()
     {
-        return FiledState.WeatherRemainTime;
+        return FieldState.WeatherRemainTime;
     }
     public bool ReduceWeatherTurn()
     {
-        if(FiledState.WeatherType == EWeather.None)
+        if(FieldState.WeatherType == EWeather.None)
         {
             return false;
         }
-        FiledState.WeatherRemainTime = FiledState.WeatherRemainTime - 1;
-        return FiledState.WeatherRemainTime == 0;
+        FieldState.WeatherRemainTime = FieldState.WeatherRemainTime - 1;
+        return FieldState.WeatherRemainTime == 0;
+    }
+
+    public int GetTrickRoomRemainTurn()
+    {
+        return FieldState.TrickRoomRemainTime;
+    }
+
+    public bool GetIsTrickRoomActive()
+    {
+        return FieldState.IsTrickRoomActive;
+    }
+
+    public void BeginTrickRoom(int Turn)
+    {
+        FieldState.IsTrickRoomActive = true;
+        FieldState.TrickRoomRemainTime = Turn;
+    }
+
+    public void EndTrickRoom()
+    {
+        FieldState.IsTrickRoomActive = false;
     }
 
     public void TestAVG()
