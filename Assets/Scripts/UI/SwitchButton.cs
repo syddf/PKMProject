@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class SwitchButton : MonoBehaviour
+using UnityEngine.EventSystems;
+public class SwitchButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public BattleManager g_BattleManager;
     public int PKMIndexInTrainerTeam;
     public Image PokemonSprite;
     public Image ItemSprite;
     public BattlePokemon ReferencePokemon;
+    public BattlePokemonInfoUI ReferenceUI;
     public void UpdateSprite(BattlePokemon InPokemon, BattleManager InManager)
     {
         g_BattleManager = InManager;
@@ -50,4 +51,22 @@ public class SwitchButton : MonoBehaviour
             g_BattleManager.OnPlayerSwitchNewPokemon(ReferencePokemon);
         }
     }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        ReferenceUI.SetBattlePokemon(ReferencePokemon);
+        if (eventData.pointerEnter.gameObject == this.gameObject)
+        {
+            ReferenceUI.gameObject.SetActive(true);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (eventData.pointerEnter.gameObject == this.gameObject)
+        {
+            ReferenceUI.gameObject.SetActive(false);
+        }
+    }
+
 }

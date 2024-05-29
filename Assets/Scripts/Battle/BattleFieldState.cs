@@ -22,11 +22,14 @@ public enum EWeather
 }
 
 
-public struct BattleFiledState
+public struct BattleFieldState
 {
     public EBattleFieldTerrain FieldTerrain;
     public int TerrainRemainTime;
 
     public EWeather WeatherType;
     public int WeatherRemainTime;
+
+    public bool IsTrickRoomActive;
+    public int TrickRoomRemainTime;
 }

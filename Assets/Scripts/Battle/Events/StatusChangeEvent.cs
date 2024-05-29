@@ -35,6 +35,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         if(ReferencePokemon.HasStatusChange(StatusChangeType)) return false;
         if(InBattleManager.GetTerrainType() == EBattleFieldTerrain.Electric && ReferencePokemon.IsGroundPokemon(InBattleManager) && StatusChangeType == EStatusChange.Drowsy) return false;
         if((InBattleManager.HasBattleFieldStatus(!ReferencePokemon.GetIsEnemy(), EBattleFieldStatus.Safeguard) &&
+        SourcePokemon != null &&
         SourcePokemon.HasAbility("穿透", InBattleManager, SourcePokemon, ReferencePokemon) == false
         ) 
         && StatusChange.IsStatusChange(StatusChangeType)) return false;
@@ -257,6 +258,10 @@ public class RemovePokemonStatusChangeEvent : EventAnimationPlayer, Event
         if(StatusChangeType == EStatusChange.Taunt)
         {
             return "解除了挑衅！";
+        }
+        if(StatusChangeType == EStatusChange.LeechSeed)
+        {
+            return "解除了寄生种子！";
         }
         return "";
     }

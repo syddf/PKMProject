@@ -51,6 +51,7 @@ public class BattleMenuUI : MonoBehaviour
     public AudioController BattleBGM;
     public int ChapterIndex;
     public bool IsFirstBattle;
+    public SetTrainerSkillInfo ReferenceTrainerSkillUI;
     public void OnChangeFirstPokemon(int Index)
     {
         FirstPokemonIndex = Index;
@@ -90,7 +91,7 @@ public class BattleMenuUI : MonoBehaviour
         PlayerTrainer.TrainerName = UsingTrainer.TrainerName;
         PlayerTrainer.TrainerSprite = UsingTrainer.TrainerSprite;
         PlayerTrainer.TrainerSkill = UsingTrainer.TrainerSkill;
-
+        ReferenceTrainerSkillUI.SetBattleTrainer(UsingTrainer);
         PlayerTrainer.BagPokemons[0].UpdateByOverrideData(SavedPlayerData, UsingTrainer.TrainerName, UsingTrainer.BagPokemons[0].GetPokemonName());
         PlayerTrainer.BagPokemons[1].UpdateByOverrideData(SavedPlayerData, UsingTrainer.TrainerName, UsingTrainer.BagPokemons[1].GetPokemonName());
         PlayerTrainer.BagPokemons[2].UpdateByOverrideData(SavedPlayerData, UsingTrainer.TrainerName, UsingTrainer.BagPokemons[2].GetPokemonName());

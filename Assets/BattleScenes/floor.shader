@@ -4,6 +4,7 @@ Shader "Custom/ToonGroundExam"
 	{
 		_Color ("Color", Color) = (1,1,1,1)
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
+        _NoiseTex ("Noise (RGB)", 2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
 
@@ -20,6 +21,7 @@ Shader "Custom/ToonGroundExam"
         _FloorH ("Floor H", Range(0,1)) = 0.0
         _FloorS ("Floor S", Range(0,1)) = 0.0
         _FloorV ("Floor V", Range(0,1)) = 0.0
+        _UseNoise ("Use Noise", Range(0,1)) = 0.0
 	}
 		SubShader
 		{
@@ -58,6 +60,7 @@ Shader "Custom/ToonGroundExam"
 			};
  
         sampler2D _MainTex;
+        sampler2D _NoiseTex;
         sampler2D _PokeBallTex;
             half _GlowLevel;
             half _GlowAttenuation;
@@ -69,6 +72,7 @@ Shader "Custom/ToonGroundExam"
             half _FloorH;
             half _FloorS;
             half _FloorV;
+            half _UseNoise;
 
             half _Glossiness;
         half _Metallic;
@@ -100,6 +104,8 @@ Shader "Custom/ToonGroundExam"
             {
                 const half lit_tile_threshold = _LitTileThreshold;
                 const half unlit_tile_level = _UnlitTileLevel;
+
+                
                 // hue
                 tile_hsv.x = _FloorH;
                 tile_hsv.y = _FloorS;
@@ -121,8 +127,17 @@ Shader "Custom/ToonGroundExam"
 				return o;
 			}
 
+
+
 			float4 frag(v2f i) : SV_Target
 			{
+                float2 originUV = i.uv;
+                if(_UseNoise != 0.0f)
+                {
+                    half4 noiseCol = tex2D (_NoiseTex, i.uv + _Time.y * 0.02f);
+                    i.uv = i.uv + float2(noiseCol.x, noiseCol.y) * 0.03f;    
+                }
+
 				float4 SHADOW_COORDS = TransformWorldToShadowCoord(i.worldPos);
  
 				Light mainLight = GetMainLight(SHADOW_COORDS);

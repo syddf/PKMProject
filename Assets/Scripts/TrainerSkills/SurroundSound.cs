@@ -30,7 +30,7 @@ public class SurroundSound : BaseTrainerSkill
         {
             SkillEvent CastedEvent = (SkillEvent)SourceEvent;
             BattleManager ReferenceManager = CastedEvent.GetReferenceManager();
-            if(CastedEvent.GetSourcePokemon().GetIsEnemy() != ReferenceTrainer.IsPlayer)
+            if(CastedEvent.GetSourcePokemon() != null && CastedEvent.GetSourcePokemon().GetIsEnemy() != ReferenceTrainer.IsPlayer)
             {
                 if(BattleSkillMetaInfo.IsSoundSkill(CastedEvent.GetSkill().GetSkillName()))
                 {

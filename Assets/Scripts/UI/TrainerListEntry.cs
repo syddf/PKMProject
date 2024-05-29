@@ -11,6 +11,7 @@ public class TrainerListEntry : MonoBehaviour
     public GameObject ReferenceTrainerObject;
     private string TrainerName;
     public GameObject TagObj;
+    public SetTrainerSkillInfo ReferenceUI;
     public void UpdateTag(string BattleTrainerName)
     {
         TagObj.SetActive(TrainerName == BattleTrainerName);
@@ -20,6 +21,7 @@ public class TrainerListEntry : MonoBehaviour
     {
         TrainerName = InTrainerName;
         ReferenceTrainerObject = GameObject.Find("SingleBattle/AllTrainers/" + TrainerName);
+        ReferenceUI.SetBattleTrainer(ReferenceTrainerObject.GetComponent<PokemonTrainer>());
     }
     public void Reset()
     {

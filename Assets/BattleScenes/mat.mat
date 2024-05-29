@@ -64,6 +64,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 04a40b50e9e63ed43af8af28f2ba4f86, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -140,6 +144,7 @@ Material:
     - _TileRadius: 0.495
     - _UVSec: 0
     - _UnlitTileLevel: 0.15
+    - _UseNoise: 0
     - _ZWrite: 1
     - _Zoom: 14
     m_Colors:

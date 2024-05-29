@@ -233,12 +233,19 @@ public class SkillEvent : EventAnimationPlayer, Event
                             {
                                 TimelineAnimation SkillAnimation = new TimelineAnimation(Skill.GetSkillAnimation());
                                 SkillAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Damage", SkillMeta.Damage.ToString());
-                                
+                                GameObject Cameras = GameObject.Find("Cameras");
+                                GameObject EnemyCamera = Cameras.GetComponent<SubObjects>().SubObject1;
+                                GameObject PlayerCamera = Cameras.GetComponent<SubObjects>().SubObject2;
+                                if(SourcePokemon.GetIsEnemy())
+                                {
+                                    SkillAnimation.SetTrackObject("SourceCamera", EnemyCamera);
+                                }
+                                else
+                                {
+                                    SkillAnimation.SetTrackObject("SourceCamera", PlayerCamera);
+                                }
                                 if(SkillMetas[0].ReferencePokemon)
                                 {
-                                    GameObject Cameras = GameObject.Find("Cameras");
-                                    GameObject EnemyCamera = Cameras.GetComponent<SubObjects>().SubObject1;
-                                    GameObject PlayerCamera = Cameras.GetComponent<SubObjects>().SubObject2;
                                     if(SkillMetas[0].ReferencePokemon.GetIsEnemy())
                                     {
                                         SkillAnimation.SetTrackObject("TargetCamera", EnemyCamera);

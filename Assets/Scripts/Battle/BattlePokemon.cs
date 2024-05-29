@@ -409,8 +409,13 @@ public class BattlePokemon : MonoBehaviour
             {
                 SpecialRuleFactor = 0.5;
             }
+        }
+        int TrickRoomFactor = 1;
+        if(InManager.GetIsTrickRoomActive())
+        {
+            TrickRoomFactor = -1;
         }         
-        return (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor * ItemFactor * AbilityFactor * FieldFactor * SpecialRuleFactor);
+        return TrickRoomFactor * (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor * ItemFactor * AbilityFactor * FieldFactor * SpecialRuleFactor);
     }
     public int GetAtkChangeLevel() => PokemonStats.AtkChangeLevel;
     public int GetDefChangeLevel() => PokemonStats.DefChangeLevel;

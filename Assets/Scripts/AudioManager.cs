@@ -97,10 +97,16 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void PlayTrickRoomAudio()
+    {
+        TrickRoomAudio.Play();
+    }
+
 
     public AudioSource SuperEffectiveDamage;
     public AudioSource NormalEffectiveDamage;
     public AudioSource NotEffectiveDamage;
     public AudioSource Cry1Source;
     public AudioSource Cry2Source;
+    public AudioSource TrickRoomAudio;
 }
