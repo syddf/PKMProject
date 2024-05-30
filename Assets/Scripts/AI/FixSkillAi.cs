@@ -5,7 +5,7 @@ using UnityEngine;
 public class FixSkillAi : BagPokemonSkillAI
 {
     public int FixSkillIndex;
-    public override double GetSkillPriorityFactor(BaseSkill InSkill, BattleManager InManager, BattlePokemon ReferencePokemon)
+    public override double GetSkillPriorityFactor(BaseSkill InSkill, BattleManager InManager, BattlePokemon ReferencePokemon, Event InPlayerAction)
     {
         if(ReferencePokemon.GetBattleSkillIndex(InSkill) == FixSkillIndex)
         {

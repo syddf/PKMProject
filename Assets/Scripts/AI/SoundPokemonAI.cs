@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SoundPokemonAI : BagPokemonSkillAI
 {
-    public override double GetSkillPriorityFactor(BaseSkill InSkill, BattleManager InManager, BattlePokemon ReferencePokemon)
+    public override double GetSkillPriorityFactor(BaseSkill InSkill, BattleManager InManager, BattlePokemon ReferencePokemon, Event InPlayerAction)
     {
         if(BattleSkillMetaInfo.IsSoundSkill(InSkill.GetSkillName()))
         {

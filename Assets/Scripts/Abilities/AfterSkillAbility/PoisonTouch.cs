@@ -16,7 +16,7 @@ public class PoisonTouch : BaseAbility
             SkillEvent CastedEvent = (SkillEvent)SourceEvent;
             BattlePokemon Target = CastedEvent.GetCurrentProcessTargetPokemon();
             BattlePokemon Source = CastedEvent.GetSourcePokemon();
-            if(Source == this.ReferencePokemon)
+            if(Source == this.ReferencePokemon && Target)
             {
                 if(BattleSkillMetaInfo.IsTouchingSkill(CastedEvent.GetSkill().GetSkillName()))
                 {

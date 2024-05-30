@@ -246,7 +246,7 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.5;
         }
-        if(HasItem("驱劲能量") && GetMaxStat() == "Atk" && Item.IsConsumedState())
+        if(ItemIs("驱劲能量") && GetMaxStat() == "Atk" && Item.IsConsumedState())
         {
             ItemFactor = 1.3;
         }
@@ -270,6 +270,13 @@ public class BattlePokemon : MonoBehaviour
                 SpecialRuleFactor = 0.5;
             }
         }
+        if(InManager.HasSpecialRule("特殊规则(查克洛)") && IsEnemy == false)
+        {
+            if(IsGroundPokemon(InManager))
+            {
+                SpecialRuleFactor = 0.5;
+            }
+        }
         return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor * SpecialRuleFactor);
     }
     public int GetDef(ECaclStatsMode Mode, BattleManager InManager)
@@ -278,7 +285,7 @@ public class BattlePokemon : MonoBehaviour
         double WeatherFactor = 1.0;
         double AbilityFactor = 1.0;
         double ItemFactor = 1.0;
-        if(HasItem("驱劲能量") && GetMaxStat() == "Def" && Item.IsConsumedState())
+        if(ItemIs("驱劲能量") && GetMaxStat() == "Def" && Item.IsConsumedState())
         {
             ItemFactor = 1.3;
         }
@@ -297,7 +304,14 @@ public class BattlePokemon : MonoBehaviour
             {
                 SpecialRuleFactor = 0.5;
             }
-        }        
+        }  
+        if(InManager.HasSpecialRule("特殊规则(查克洛)") && IsEnemy == false)
+        {
+            if(IsGroundPokemon(InManager))
+            {
+                SpecialRuleFactor = 0.5;
+            }
+        }      
         return (int)Math.Floor((double)PokemonStats.Def * StatLevelFactor[ChangeLevel + 6] * WeatherFactor * AbilityFactor * ItemFactor * SpecialRuleFactor);
     }
     public int GetSAtk(ECaclStatsMode Mode, BattleManager InManager)
@@ -309,7 +323,7 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.5;
         }
-        if(HasItem("驱劲能量") && GetMaxStat() == "SAtk" && Item.IsConsumedState())
+        if(ItemIs("驱劲能量") && GetMaxStat() == "SAtk" && Item.IsConsumedState())
         {
             ItemFactor = 1.3;
         }
@@ -332,6 +346,13 @@ public class BattlePokemon : MonoBehaviour
             {
                 SpecialRuleFactor = 0.5;
             }
+        }
+        if(InManager.HasSpecialRule("特殊规则(查克洛)") && IsEnemy == false)
+        {
+            if(IsGroundPokemon(InManager))
+            {
+                SpecialRuleFactor = 0.5;
+            }
         }  
         return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor * SpecialRuleFactor);
     }
@@ -344,7 +365,7 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.5;
         }
-        if(HasItem("驱劲能量") && GetMaxStat() == "SDef" && Item.IsConsumedState())
+        if(ItemIs("驱劲能量") && GetMaxStat() == "SDef" && Item.IsConsumedState())
         {
             ItemFactor = 1.3;
         }
@@ -365,6 +386,13 @@ public class BattlePokemon : MonoBehaviour
                 SpecialRuleFactor = 0.5;
             }
         }
+        if(InManager.HasSpecialRule("特殊规则(查克洛)") && IsEnemy == false)
+        {
+            if(IsGroundPokemon(InManager))
+            {
+                SpecialRuleFactor = 0.5;
+            }
+        }
         return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6] * ItemFactor * WeatherFactor * AbilityFactor * SpecialRuleFactor);
     }    
     public int GetSpeed(ECaclStatsMode Mode, BattleManager InManager)
@@ -381,7 +409,7 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.5;
         }
-        if(HasItem("驱劲能量") && GetMaxStat() == "Speed" && Item.IsConsumedState())
+        if(ItemIs("驱劲能量") && GetMaxStat() == "Speed" && Item.IsConsumedState())
         {
             ItemFactor = 1.5;
         }
@@ -390,6 +418,10 @@ public class BattlePokemon : MonoBehaviour
             AbilityFactor *= 1.5;
         }
         if(InManager.GetWeatherType() == EWeather.SunLight && HasAbility("叶绿素", null, null, this))
+        {
+            AbilityFactor *= 2.0;
+        }
+        if(InManager.GetWeatherType() == EWeather.Rain && HasAbility("悠游自如", null, null, this))
         {
             AbilityFactor *= 2.0;
         }
@@ -406,6 +438,13 @@ public class BattlePokemon : MonoBehaviour
         if(InManager.HasSpecialRule("特殊规则(紫罗兰)"))
         {
             if(GetSpeciesTotalValue() >= 500 && IsEnemy == false)
+            {
+                SpecialRuleFactor = 0.5;
+            }
+        }
+        if(InManager.HasSpecialRule("特殊规则(查克洛)") && IsEnemy == false)
+        {
+            if(IsGroundPokemon(InManager))
             {
                 SpecialRuleFactor = 0.5;
             }
@@ -587,12 +626,13 @@ public class BattlePokemon : MonoBehaviour
         return PokemonStats.Dead;
     }
 
-    public void SetBattlePokemonData(BagPokemon InBagPokemon, PokemonTrainer InTrainer, GameObject ModelObject, GameObject MegaModelObject)
+    public void SetBattlePokemonData(BagPokemon InBagPokemon, PokemonTrainer InTrainer, GameObject ModelObject, GameObject MegaModelObject, int LevelChangedValue)
     {
         ReferenceBasePokemon = InBagPokemon;
         IsEnemy = !InTrainer.IsPlayer;
         ReferenceTrainer = InTrainer;
         Ability = InBagPokemon.GetAbility(false);
+        ReferenceBasePokemon.SetLevelChangedValue(LevelChangedValue);
         if(Ability)
         {
             Ability.SetReferencePokemon(this);
@@ -612,7 +652,7 @@ public class BattlePokemon : MonoBehaviour
         PokemonStats.MaxHP = ReferenceBasePokemon.GetMaxHP();
         PokemonStats.Speed = ReferenceBasePokemon.GetSpeed(false);
         PokemonStats.Level = ReferenceBasePokemon.GetLevel();
-        PokemonStats.HP = ReferenceBasePokemon.GetHP();
+        PokemonStats.HP = ReferenceBasePokemon.GetMaxHP();
         
         Type1 = ReferenceBasePokemon.GetType0(false);
         Type2 = ReferenceBasePokemon.GetType1(false);
@@ -928,6 +968,14 @@ public class BattlePokemon : MonoBehaviour
         HasActivated = false;
         FirstSkill = null;
         Ability.ResetState();
+        PokemonStats.AtkChangeLevel = 0;
+        PokemonStats.DefChangeLevel = 0;
+        PokemonStats.SAtkChangeLevel = 0;
+        PokemonStats.SDefChangeLevel = 0;
+        PokemonStats.SpeedChangeLevel = 0;
+        PokemonStats.EvasionrateLevel = 0;
+        PokemonStats.AccuracyrateLevel = 0;
+        PokemonStats.CTLevel = 0;
         if(PokemonStats.StatusChangeList == null)
         {
             return;
@@ -975,6 +1023,11 @@ public class BattlePokemon : MonoBehaviour
     public int GetSpeciesTotalValue()
     {
         return ReferenceBasePokemon.GetSpeciesTotalValue(IsMega());
+    }
+
+    public bool ItemIs(string ItemName)
+    {
+        return Item != null && Item.GetItemName() == ItemName;
     }
 
     public bool HasItem(string ItemName)

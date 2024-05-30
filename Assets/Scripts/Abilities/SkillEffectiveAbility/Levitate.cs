@@ -15,7 +15,7 @@ public class Levitate : BaseAbility
         {
             SkillEvent CastedEvent = (SkillEvent)SourceEvent;
             BattlePokemon Target = CastedEvent.GetCurrentProcessTargetPokemon();
-            if(Target == this.ReferencePokemon)
+            if(Target && Target == this.ReferencePokemon)
             {
                 if(CastedEvent.GetSkill().GetReferenceSkill().GetSkillType(CastedEvent.GetSourcePokemon()) == EType.Ground)
                 {

@@ -74,15 +74,31 @@ public class EnemyAI
         }
     }
 
-    public double GetSkillPriorityFactor(BaseSkill InSkill, BattleManager InManager, BattlePokemon ReferencePokemon)
+    public double GetSkillPriorityFactor(BaseSkill InSkill, BattleManager InManager, BattlePokemon ReferencePokemon, Event InPlayerAction)
     {
         double Factor = 1.0;
         BagPokemonSkillAI PokemonAI = ReferencePokemon.GetSkillAI();
         if(PokemonAI)
         {
-            Factor = Factor * PokemonAI.GetSkillPriorityFactor(InSkill, InManager, ReferencePokemon);
+            Factor = Factor * PokemonAI.GetSkillPriorityFactor(InSkill, InManager, ReferencePokemon, InPlayerAction);
         }
         return Factor * GetLowLevelFactor(InSkill.GetSkillName());
+    }
+
+    private bool IsPlayerDangerous(Event InPlayerAction, BattleManager InManager)
+    {
+        SkillEvent CastEvent = (SkillEvent)InPlayerAction;
+        if(CastEvent.GetSkill().IsDamageSkill())
+        {
+            BattleSkill ReferenceSkill = CastEvent.GetSkill();
+            double Factor;
+            int Damage = ReferenceSkill.DamagePhase(InManager, CastEvent.GetSourcePokemon(), ReferencePokemon, false, out Factor);
+            if(Damage >= (ReferencePokemon.GetHP() * 0.8))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void GenerateEnemyEvent(List<Event> InEvents, BattleManager InManager, Event InPlayerAction)
@@ -139,7 +155,8 @@ public class EnemyAI
                 ESkillClass skillClass = Entry.ReferenceSkill.GetSkillClass();
                 if(skillClass == ESkillClass.StatusMove)
                 {
-
+                    Entry.Priority = (int)(Entry.Priority * GetSkillPriorityFactor(Entry.ReferenceSkill, InManager, ReferencePokemon, InPlayerAction));
+                    EntryList[Index] = Entry;
                 }
                 else
                 {
@@ -148,18 +165,28 @@ public class EnemyAI
                     int Damage = UseBattleSkill.DamagePhase(InManager, ReferencePokemon, TargetPokemon, false, out Factor);
                     if(Damage >= TargetPokemon.GetHP())
                     {
-                        KillSkillIndex.Add(Index);
-                        Entry.Priority = (int)(999 * GetSkillPriorityFactor(Entry.ReferenceSkill, InManager, ReferencePokemon));
+                        List<ETarget> TargetList = new List<ETarget>();
+                        TargetList.Add(ETarget.P0);
+                        SkillEvent NewSkillEvent = new SkillEvent(ReferenceBattleManager, UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetList);
+                        List<Event> TmpEvents = new List<Event>();
+                        TmpEvents.Add(InPlayerAction);
+                        TmpEvents.Add(NewSkillEvent);
+                        TmpEvents.Sort(new EventComparer());
+                        if(InPlayerAction.GetEventType() == EventType.Switch || IsPlayerDangerous(InPlayerAction, InManager) == false || TmpEvents[0] == NewSkillEvent)
+                        {
+                            KillSkillIndex.Add(Index);
+                        }
+                        Entry.Priority = (int)(999 * GetSkillPriorityFactor(Entry.ReferenceSkill, InManager, ReferencePokemon, InPlayerAction));
                     }
                     else if(Damage >= (TargetPokemon.GetMaxHP() / 2))
                     {
                         double Ratio = (double)Damage / TargetPokemon.GetMaxHP();
-                        Entry.Priority = (int)(Mathf.Lerp(100.0f, 500.0f, (float)Ratio) * GetSkillPriorityFactor(Entry.ReferenceSkill, InManager, ReferencePokemon));
+                        Entry.Priority = (int)(Mathf.Lerp(100.0f, 500.0f, (float)Ratio) * GetSkillPriorityFactor(Entry.ReferenceSkill, InManager, ReferencePokemon, InPlayerAction));
                     }
                     else
                     {
                         double Ratio = (double)Damage / (TargetPokemon.GetMaxHP() / 2);
-                        Entry.Priority = (int)(Mathf.Lerp(10.0f, 100.0f, (float)Ratio) * GetSkillPriorityFactor(Entry.ReferenceSkill, InManager, ReferencePokemon));
+                        Entry.Priority = (int)(Mathf.Lerp(10.0f, 100.0f, (float)Ratio) * GetSkillPriorityFactor(Entry.ReferenceSkill, InManager, ReferencePokemon, InPlayerAction));
                     }
                     EntryList[Index] = Entry;
                 }
