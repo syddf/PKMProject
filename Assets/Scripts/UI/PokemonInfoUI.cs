@@ -41,10 +41,12 @@ public class PokemonInfoUI : MonoBehaviour
         BaseAbility Ability = InPokemon.GetAbility();
         if(Ability)
         {
+            AbilityText.text = InPokemon.GetAbility().GetAbilityName();
             AbilityDesc.text = "特性：" + InPokemon.GetAbility().GetAbilityDesc();
         }
         else
         {
+            AbilityText.text = "无";
             AbilityDesc.text = "无";
         }
         PokemonSpriteImage.sprite = InPokemon.GetPkmSprite();

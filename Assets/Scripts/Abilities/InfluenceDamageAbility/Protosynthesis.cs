@@ -16,7 +16,7 @@ public class Protosynthesis : BaseAbility
             return false;
         }
         
-        if(ReferencePokemon.HasItem("驱劲能量") && ReferencePokemon.GetBattleItem().IsConsumedState())
+        if(ReferencePokemon.ItemIs("驱劲能量") && ReferencePokemon.GetBattleItem().IsConsumedState())
         {
             return false;
         }

@@ -17,6 +17,14 @@ public class AudioController : MonoBehaviour
         PlayFirstClip();
     }
 
+    public void OnEnable()
+    {
+        if(audioSource && firstClip)
+        {
+            PlayFirstClip();
+        }
+    }
+
     void PlayFirstClip()
     {
         // 设置第一段音频并播放

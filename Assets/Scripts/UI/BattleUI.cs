@@ -18,6 +18,9 @@ public class BattleUI : MonoBehaviour
     public Image InBattleEnemyTrainerImage;
     public GameObject PlayerTrainerUIObj;
     public GameObject EnemyTrainerUIObj;
+    public GameObject Desc1Obj;
+    public GameObject Desc2Obj;
+    public GameObject Desc3Obj;
     public void DisableAllUI()
     {
         PlayerInfo1.gameObject.SetActive(false);
@@ -25,6 +28,9 @@ public class BattleUI : MonoBehaviour
         BattleCommandUI.gameObject.SetActive(false);
         PlayerTrainerUIObj.SetActive(false);
         EnemyTrainerUIObj.SetActive(false);
+        Desc1Obj.SetActive(false);
+        Desc2Obj.SetActive(false);
+        Desc3Obj.SetActive(false);
     }
     public void SetCurrentPlayerTrainer(PokemonTrainer InTrainer)
     {
@@ -90,5 +96,8 @@ public class BattleUI : MonoBehaviour
     public void DisableCommandUI()
     {
         BattleCommandUI.Out();
+        Desc1Obj.SetActive(false);
+        Desc2Obj.SetActive(false);
+        Desc3Obj.SetActive(false);
     }
 }

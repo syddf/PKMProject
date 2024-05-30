@@ -83,6 +83,10 @@ public class DamageSkill : BaseSkill
         {
             ItemFactor *= 1.2;
         }
+        if(SourcePokemon.HasItem("硬石头") && GetSkillType(SourcePokemon) == EType.Rock)
+        {
+            ItemFactor *= 1.2;
+        }
         if(SourcePokemon.HasConsumedThisTurn() && SourcePokemon.GetBattleItem() != null && SourcePokemon.GetBattleItem().GetBaseItem().IsGem())
         {
             Gem CastItem = (Gem)SourcePokemon.GetBattleItem().GetBaseItem();

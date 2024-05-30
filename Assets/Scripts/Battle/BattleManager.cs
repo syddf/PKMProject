@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Net.WebSockets;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public enum ETarget
 {
@@ -409,6 +410,38 @@ public class BattleManager : MonoBehaviour
 
     public void BeginSingleBattle(BattlePokemon PlayerPokemon, BattlePokemon EnemyPokemon)
     {
+        BattleEnd = false;
+        TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        PlayableDirector MessageDirector = Timelines.SwitchTerrainAnimation;
+        if(MessageDirector.gameObject.GetComponent<SubObjects>().SubObject1)
+            MessageDirector.gameObject.GetComponent<SubObjects>().SubObject1.SetActive(false);
+        if(MessageDirector.gameObject.GetComponent<SubObjects>().SubObject2)
+            MessageDirector.gameObject.GetComponent<SubObjects>().SubObject2.SetActive(false);
+        if(MessageDirector.gameObject.GetComponent<SubObjects>().SubObject3)
+            MessageDirector.gameObject.GetComponent<SubObjects>().SubObject3.SetActive(false);
+        if(MessageDirector.gameObject.GetComponent<SubObjects>().SubObject4)
+            MessageDirector.gameObject.GetComponent<SubObjects>().SubObject4.SetActive(false);
+
+        GameObject FloorObj = GameObject.Find("Floor");
+        MeshRenderer meshRenderer = FloorObj.GetComponent<MeshRenderer>();
+        Material SelfMaterial = meshRenderer.material;
+        SelfMaterial.SetFloat("_UseNoise", 0.0f);
+
+        GameObject WeatherRoot = GameObject.Find("Weather");
+        WeatherRoot.GetComponent<SubObjects>().SubObject1.SetActive(false);
+        WeatherRoot.GetComponent<SubObjects>().SubObject2.SetActive(false);
+        WeatherRoot.GetComponent<SubObjects>().SubObject3.SetActive(false);
+        WeatherRoot.GetComponent<SubObjects>().SubObject4.SetActive(false);
+
+        DefeatedPokemonList.Clear();
+        WaitForPlayerSwitchPokemonWhenDefeated = false;
+        WaitForEnemySwitchPokemonAfterSkillUse = false;
+        WaitForPlayerSwitchPokemonAfterSkillUse = false;
+        CurPlayingAnimationEvent = 0;
+        PlayingAnimation = false;
+        CurrentTimePoint = ETimePoint.None;
+
+        EventsList.Clear();
         EventsList.Add(new SingleBattleGameStartEvent(PlayerPokemon, EnemyPokemon));
         TurnIndex = 0;
         EventsListHistory.Clear();
@@ -610,6 +643,10 @@ public class BattleManager : MonoBehaviour
         }
         EventsList.Add(new SkillEvent(this, UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetPokemon));
         EnemyAI NewEnemyAI = new EnemyAI(Opposites[0], this, EnemyTrainer);
+        if(Mega)
+        {
+            InReferencePokemon.LoadMegaStat();
+        }
         NewEnemyAI.GenerateEnemyEvent(EventsList, this, EventsList[EventsList.Count - 1]);
         BattlePokemonList[0].NewTurn();
         BattlePokemonList[1].NewTurn();

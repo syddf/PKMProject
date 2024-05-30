@@ -222,7 +222,12 @@ public class BagPokemon : MonoBehaviour
     private BaseSkill[] SkillPool = new BaseSkill[8];
     private bool UseOverrideNatureForUI;
     private PokemonNature OverrideNatureForUI;
+    private int LevelChangedValue;
 
+    public void SetLevelChangedValue(int InValue)
+    {
+        LevelChangedValue = InValue;
+    }
     public BaseSkill GetSkillPoolSkill(int Index)
     {
         return SkillPool[Index];
@@ -253,13 +258,13 @@ public class BagPokemon : MonoBehaviour
         if(Index == 0)
         {
             double A = SpeciesStrength * 2 + IVs[0] + (double)BasePoints[0] / 4;
-            double fA = A * (double)Level / 100 + 10 + Level;
+            double fA = A * (double)(Level + LevelChangedValue) / 100 + 10 + (Level + LevelChangedValue);
             return (int)Math.Floor(fA);
         }
         else
         {
             double A = SpeciesStrength * 2 + IVs[Index] + (double)BasePoints[Index] / 4;
-            double Top = (double)Math.Floor(((double)A * (double)Level / 100.0f + 5.0f));            
+            double Top = (double)Math.Floor(((double)A * (double)(Level + LevelChangedValue) / 100.0f + 5.0f));            
             double fA = Top * NatureFactor[(int)Nature, Index - 1]; 
             if(UseOverrideNatureForUI)
             {
@@ -275,7 +280,7 @@ public class BagPokemon : MonoBehaviour
     }
     public int GetLevel()
     {
-        return Level;
+        return Level + LevelChangedValue;
     }
 
     public int GetAtk(bool Mega)
@@ -513,7 +518,7 @@ public class BagPokemon : MonoBehaviour
         SourcePokemonMegaData = ReferencePkm.SourcePokemonMegaData;
         PkmDataCollections = ReferencePkm.PkmDataCollections;
         Name = ReferencePkm.Name;
-        Level = ReferencePkm.Level;
+        Level = ReferencePkm.Level + LevelChangedValue;
         HP = ReferencePkm.HP;
         Nature = OverrideNature;
 
