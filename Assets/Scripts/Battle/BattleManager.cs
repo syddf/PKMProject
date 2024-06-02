@@ -39,6 +39,7 @@ public class BattleManager : MonoBehaviour
     private bool WaitForPlayerSwitchPokemonWhenDefeated;
     private bool WaitForPlayerSwitchPokemonAfterSkillUse;
     private bool WaitForEnemySwitchPokemonAfterSkillUse;
+    private bool NextSwitchIsBatonPass;
     private int EndAnimEventIndex;
     private bool BattleEnd = false;
     private bool Win = false;
@@ -115,7 +116,7 @@ public class BattleManager : MonoBehaviour
                         UpdateUI(false);
                         EnemyAI NewEnemyAI = new EnemyAI(null, this, EnemyTrainer);
                         BattlePokemon EnemyNext = NewEnemyAI.GetNextPokemon(BattlePokemonList[1]);
-                        EventsList.Add(new SwitchEvent(this, BattlePokemonList[1], EnemyNext));
+                        EventsList.Add(new SwitchEvent(this, BattlePokemonList[1], EnemyNext, NextSwitchIsBatonPass));
                         WaitForEnemySwitchPokemonAfterSkillUse = false;
                         ProcessEvents(true);
                     }
@@ -282,7 +283,7 @@ public class BattleManager : MonoBehaviour
 
     public void AddSwitchEvent(BattlePokemon OutPokemon, BattlePokemon InPokemon)
     {
-        EventsList.Add(new SwitchEvent(this, OutPokemon, InPokemon));
+        EventsList.Add(new SwitchEvent(this, OutPokemon, InPokemon, false));
     }
 
     public void TranslateTimePoint(ETimePoint NewTime, Event SourceEvent)
@@ -437,6 +438,7 @@ public class BattleManager : MonoBehaviour
         WaitForPlayerSwitchPokemonWhenDefeated = false;
         WaitForEnemySwitchPokemonAfterSkillUse = false;
         WaitForPlayerSwitchPokemonAfterSkillUse = false;
+        NextSwitchIsBatonPass = false;
         CurPlayingAnimationEvent = 0;
         PlayingAnimation = false;
         CurrentTimePoint = ETimePoint.None;
@@ -764,20 +766,20 @@ public class BattleManager : MonoBehaviour
         }
         else if(WaitForPlayerSwitchPokemonAfterSkillUse)
         {
-            EventsList.Add(new SwitchEvent(this, BattlePokemonList[0], InPokemon));
+            EventsList.Add(new SwitchEvent(this, BattlePokemonList[0], InPokemon, NextSwitchIsBatonPass));
             WaitForPlayerSwitchPokemonAfterSkillUse = false;
             if(WaitForEnemySwitchPokemonAfterSkillUse)
             {
                 EnemyAI NewEnemyAI = new EnemyAI(null, this, EnemyTrainer);
                 BattlePokemon EnemyNext = NewEnemyAI.GetNextPokemon(BattlePokemonList[1]);
-                EventsList.Add(new SwitchEvent(this, BattlePokemonList[1], EnemyNext));
+                EventsList.Add(new SwitchEvent(this, BattlePokemonList[1], EnemyNext, NextSwitchIsBatonPass ));
                 WaitForEnemySwitchPokemonAfterSkillUse = false;
             }
             ProcessEvents(true);
         }
         else
         {
-            EventsList.Add(new SwitchEvent(this, BattlePokemonList[0], InPokemon));
+            EventsList.Add(new SwitchEvent(this, BattlePokemonList[0], InPokemon, false));
             EnemyAI NewEnemyAI = new EnemyAI(BattlePokemonList[1], this, EnemyTrainer);
             NewEnemyAI.GenerateEnemyEvent(EventsList, this, EventsList[EventsList.Count - 1]);
             BattlePokemonList[0].NewTurn();
@@ -975,6 +977,11 @@ public class BattleManager : MonoBehaviour
         return ConfusionSkill;
     }
 
+    public void ResetBatonPass()
+    {
+        NextSwitchIsBatonPass = false;
+    }
+
     public bool IsPokemonInLastTurn(BattlePokemon TargetPokemon)
     {
         if(TurnIndex == 0) return false;
@@ -1054,7 +1061,7 @@ public class BattleManager : MonoBehaviour
         Debug.Log("Test.");
     }
 
-    public void SetWaitForSwitchAfterSkillUse(bool IsPlayer)
+    public void SetWaitForSwitchAfterSkillUse(bool IsPlayer, bool IsBatonPass)
     {
         if(IsPlayer == false)
         {
@@ -1064,5 +1071,6 @@ public class BattleManager : MonoBehaviour
         {
             WaitForPlayerSwitchPokemonAfterSkillUse = true;
         }
+        NextSwitchIsBatonPass = IsBatonPass;
     }
 }

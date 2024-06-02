@@ -27,7 +27,7 @@ public class DamageSkill : BaseSkill
         {1, 2, 1, 0.5, 1, 1, 1, 1, 0.5, 0.5, 1, 1, 1, 1, 1, 2, 2, 1} // 妖精
     };
 
-    public double ApplyTerrainPowerFactor(BattleManager InManager, BattlePokemon SourcePokemon, double SourcePower)
+    public double ApplyTerrainPowerFactor(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, double SourcePower)
     {
         if(InManager.GetTerrainType() == EBattleFieldTerrain.Grass && GetSkillType(SourcePokemon) == EType.Grass && SourcePokemon.IsGroundPokemon(InManager))
         {
@@ -39,6 +39,11 @@ public class DamageSkill : BaseSkill
             EditorLog.DebugLog(SkillName + "因电气场地威力提高了!");
             return (int)Math.Floor(SourcePower * 1.3);
         }
+        if(InManager.GetTerrainType() == EBattleFieldTerrain.Misty && GetSkillType(SourcePokemon) == EType.Dragon && TargetPokemon.IsGroundPokemon(InManager))
+        {
+            EditorLog.DebugLog(SkillName + "因薄雾场地威力降低了!");
+            return (int)Math.Floor(SourcePower * 0.5);
+        }
         return SourcePower;
     }
     protected virtual int GetSkillPower(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
@@ -48,7 +53,7 @@ public class DamageSkill : BaseSkill
     public int GetPower(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         double Result = GetSkillPower(InManager, SourcePokemon, TargetPokemon);
-        Result = ApplyTerrainPowerFactor(InManager, SourcePokemon, Result);
+        Result = ApplyTerrainPowerFactor(InManager, SourcePokemon, TargetPokemon, Result);
         if(SourcePokemon.GetAbility())
         {
             Result = SourcePokemon.GetAbility().ChangeSkillPower(InManager, this, SourcePokemon, TargetPokemon, Result);

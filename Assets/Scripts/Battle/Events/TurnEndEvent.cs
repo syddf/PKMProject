@@ -59,6 +59,12 @@ public class TurnEndEvent : EventAnimationPlayer, Event
             resetTerrain.Process(InManager);
         }
 
+        if(InManager.ReduceWeatherTurn())
+        {
+            WeatherChangeEvent resetWeather = new WeatherChangeEvent(null, InManager, EWeather.None);
+            resetWeather.Process(InManager);
+        }
+
         if(InManager.ReduceTrickRoomTurn())
         {
             TrickRoomChangeEvent resetTrickRoom = new TrickRoomChangeEvent(null, InManager, false, 0);

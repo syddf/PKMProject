@@ -7,7 +7,7 @@ public class RapidSpin : DamageSkill
     private void ClearAllFieldStatus(BattlePokemon ReferencePokemon, BattleManager InManager)
     {
         List<EBattleFieldStatus> StatusToClear = new List<EBattleFieldStatus>()
-        { EBattleFieldStatus.LightScreenStatus, EBattleFieldStatus.ReflectStatus, EBattleFieldStatus.StickyWeb, EBattleFieldStatus.StealthRock, 
+        { EBattleFieldStatus.LightScreenStatus, EBattleFieldStatus.ReflectStatus, EBattleFieldStatus.AuroraVeilStatus, EBattleFieldStatus.StickyWeb, EBattleFieldStatus.StealthRock, 
          EBattleFieldStatus.Spikes1, EBattleFieldStatus.Spikes2, EBattleFieldStatus.Spikes3};
         foreach(var Status in StatusToClear)
         {

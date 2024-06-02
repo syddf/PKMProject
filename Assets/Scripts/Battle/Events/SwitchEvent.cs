@@ -10,13 +10,14 @@ public class SwitchEvent : EventAnimationPlayer, Event
     private BattlePokemon InPokemon;
     private BattleManager ReferenceManager;
     private BattlePokemonStat CloneInPokemon;
-
+    private bool IsBatonPass;
     private int HP;
-    public SwitchEvent(BattleManager InManager, BattlePokemon InOutPokemon, BattlePokemon InInPokemon)
+    public SwitchEvent(BattleManager InManager, BattlePokemon InOutPokemon, BattlePokemon InInPokemon, bool InIsBatonPass)
     {
         OutPokemon = InOutPokemon;
         InPokemon = InInPokemon;
         ReferenceManager = InManager;
+        IsBatonPass = InIsBatonPass;
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)
@@ -114,6 +115,11 @@ public class SwitchEvent : EventAnimationPlayer, Event
         {
             InManager.SetNewEnemyPokemon(InPokemon);
         }
+        if(IsBatonPass)
+        {
+            InPokemon.CopyStatusChangeForBatonPass(OutPokemon);
+            InManager.ResetBatonPass();
+        }
         OutPokemon.ClearStatusChange();
         CloneInPokemon = InPokemon.CloneBattlePokemonStats();
         InManager.TranslateTimePoint(ETimePoint.PokemonIn, this);
@@ -150,17 +156,19 @@ public class SwitchAfterSkillUseEvent : EventAnimationPlayer, Event
 {
     private BattlePokemon ReferencePokemon;
     private BattleManager ReferenceManager;
+    private bool IsBatonPass;
 
     public void Process(BattleManager InManager)
     {
         if(!ShouldProcess(InManager)) return;
         InManager.AddAnimationEvent(this);
-        InManager.SetWaitForSwitchAfterSkillUse(!ReferencePokemon.GetIsEnemy());
+        InManager.SetWaitForSwitchAfterSkillUse(!ReferencePokemon.GetIsEnemy(), IsBatonPass);
     }
-    public SwitchAfterSkillUseEvent(BattleManager InManager, BattlePokemon InPokemon)
+    public SwitchAfterSkillUseEvent(BattleManager InManager, BattlePokemon InPokemon, bool InIsBatonPass = false)
     {
         ReferenceManager = InManager;
         ReferencePokemon = InPokemon;
+        IsBatonPass = InIsBatonPass;
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)

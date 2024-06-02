@@ -8,6 +8,7 @@ public enum EBattleFieldStatus
     None,
     LightScreenStatus,
     ReflectStatus,
+    AuroraVeilStatus,
     PowerChordBlue,
     PowerChordGreen,
     PowerChordPurple,
@@ -97,6 +98,11 @@ public struct BattleFieldStatus
             return "受到的特殊伤害降低了！";
         }
 
+        if(InStatusType == EBattleFieldStatus.AuroraVeilStatus)
+        {
+            return "受到的物理伤害和特殊伤害降低了！";
+        }
+
         if(InStatusType == EBattleFieldStatus.PowerChordBlue)
         {
             return "场上响起了英勇赞美诗！";
@@ -164,6 +170,11 @@ public struct BattleFieldStatus
         if(InStatusType == EBattleFieldStatus.LightScreenStatus)
         {
             return "光墙";
+        }
+
+        if(InStatusType == EBattleFieldStatus.AuroraVeilStatus)
+        {
+            return "极光幕";
         }
 
         if(InStatusType == EBattleFieldStatus.PowerChordBlue ||

@@ -208,6 +208,10 @@ public class BattleSkill
             {
                 WallFactor = 0.5;
             }
+            if(InManager.HasBattleFieldStatus(IsPlayer, EBattleFieldStatus.AuroraVeilStatus))
+            {
+                WallFactor = 0.5;
+            }
             if(CastSkill.GetSkillName() != "劈瓦" && CastSkill.GetSkillName() != "精神之牙" && 
             !SourcePokemon.HasAbility("穿透", InManager, SourcePokemon, TargetPokemon))
             {
