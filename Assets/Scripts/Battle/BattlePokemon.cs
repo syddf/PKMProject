@@ -99,6 +99,11 @@ public struct StatusChange
         InStatusChangeType == EStatusChange.Burn ||
         InStatusChangeType == EStatusChange.Frostbite;    
     }
+
+    public static bool ShouldStatusChangeCopyWhenBatonPass(EStatusChange InStatusChangeType)
+    {
+        return InStatusChangeType == EStatusChange.LeechSeed || InStatusChangeType == EStatusChange.ForbidHeal;
+    }
 }
 
 public struct BattlePokemonStat
@@ -961,6 +966,28 @@ public class BattlePokemon : MonoBehaviour
         return HasActivated;
     }
 
+    public void CopyStatusChangeForBatonPass(BattlePokemon InPokemon)
+    {
+        PokemonStats.AtkChangeLevel = InPokemon.PokemonStats.AtkChangeLevel;
+        PokemonStats.DefChangeLevel = InPokemon.PokemonStats.DefChangeLevel;
+        PokemonStats.SAtkChangeLevel = InPokemon.PokemonStats.SAtkChangeLevel;
+        PokemonStats.SDefChangeLevel = InPokemon.PokemonStats.SDefChangeLevel;
+        PokemonStats.SpeedChangeLevel = InPokemon.PokemonStats.SpeedChangeLevel;
+        PokemonStats.EvasionrateLevel = InPokemon.PokemonStats.EvasionrateLevel;
+        PokemonStats.AccuracyrateLevel = InPokemon.PokemonStats.AccuracyrateLevel;
+        PokemonStats.CTLevel = InPokemon.PokemonStats.CTLevel;
+
+        if(InPokemon.PokemonStats.StatusChangeList != null)
+        {
+            for(int Index = InPokemon.PokemonStats.StatusChangeList.Count - 1; Index >= 0; Index--)
+            {
+                if(StatusChange.ShouldStatusChangeCopyWhenBatonPass(InPokemon.PokemonStats.StatusChangeList[Index].StatusChangeType))
+                {
+                    AddStatusChange(InPokemon.PokemonStats.StatusChangeList[Index].StatusChangeType, InPokemon.PokemonStats.StatusChangeList[Index].HasLimitedTime, InPokemon.PokemonStats.StatusChangeList[Index].RemainTime);
+                }
+            }
+        }
+    }
     public void ClearStatusChange()
     {
         LostItem = false;

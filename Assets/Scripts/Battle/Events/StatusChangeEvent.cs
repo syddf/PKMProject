@@ -33,6 +33,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
     {
         if(ReferencePokemon.IsDead() == true) return false;
         if(ReferencePokemon.HasStatusChange(StatusChangeType)) return false;
+        if(InBattleManager.GetTerrainType() == EBattleFieldTerrain.Misty && ReferencePokemon.IsGroundPokemon(InBattleManager)) return false;
         if(InBattleManager.GetTerrainType() == EBattleFieldTerrain.Electric && ReferencePokemon.IsGroundPokemon(InBattleManager) && StatusChangeType == EStatusChange.Drowsy) return false;
         if((InBattleManager.HasBattleFieldStatus(!ReferencePokemon.GetIsEnemy(), EBattleFieldStatus.Safeguard) &&
         SourcePokemon != null &&

@@ -16,5 +16,10 @@ public class PsychicFangs : DamageSkill
             RemoveBattleFieldStatusChangeEvent NewEvent = new RemoveBattleFieldStatusChangeEvent(InManager, EBattleFieldStatus.ReflectStatus, "", !TargetPokemon.GetIsEnemy());
             NewEvent.Process(InManager);
         }
+        if(InManager.HasBattleFieldStatus(!TargetPokemon.GetIsEnemy(), EBattleFieldStatus.AuroraVeilStatus))
+        {
+            RemoveBattleFieldStatusChangeEvent NewEvent = new RemoveBattleFieldStatusChangeEvent(InManager, EBattleFieldStatus.AuroraVeilStatus, "", !TargetPokemon.GetIsEnemy());
+            NewEvent.Process(InManager);
+        }
     }
 }
