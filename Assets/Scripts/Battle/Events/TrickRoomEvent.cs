@@ -16,6 +16,11 @@ public class TrickRoomChangeEvent : EventAnimationPlayer, Event
         SourcePokemon = InSourcePokemon;   
         IsBegin = InIsBegin;
         Turn = InTurn;
+
+        if(InBattleManager.HasSpecialRule("特殊规则(玛绣)"))
+        {
+            Turn = 999;
+        }
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)

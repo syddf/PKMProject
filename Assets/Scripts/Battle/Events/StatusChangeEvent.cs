@@ -40,6 +40,8 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         SourcePokemon.HasAbility("穿透", InBattleManager, SourcePokemon, ReferencePokemon) == false
         ) 
         && StatusChange.IsStatusChange(StatusChangeType)) return false;
+        
+        if(ReferencePokemon.HasAbility("不眠", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Drowsy) return false;        
         if(ReferencePokemon.HasAbility("精神力", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Flinch) return false;
         if(ReferencePokemon.HasType(EType.Fire, InBattleManager, null, null) && StatusChangeType == EStatusChange.Burn) return false;
         if(ReferencePokemon.HasType(EType.Ice, InBattleManager, null, null) && StatusChangeType == EStatusChange.Frostbite) return false;
@@ -201,7 +203,10 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
     {
         return ReferencePokemon;
     }
-
+    public BattlePokemon GetSourcePokemon()
+    {
+        return SourcePokemon;
+    }
 }
 
 public class RemovePokemonStatusChangeEvent : EventAnimationPlayer, Event

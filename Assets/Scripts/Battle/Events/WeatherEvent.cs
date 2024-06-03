@@ -107,7 +107,24 @@ public class WeatherChangeEvent : EventAnimationPlayer, Event
         }
         else
         {
-            InManager.SetWeather(NewWeatherType, 5);
+            int Turn = 5;
+            if(SourcePokemon != null && SourcePokemon.HasItem("冰冷岩石") && NewWeatherType == EWeather.Snow)
+            {
+                Turn = 8;
+            }
+            if(SourcePokemon != null && SourcePokemon.HasItem("沙沙岩石") && NewWeatherType == EWeather.Sand)
+            {
+                Turn = 8;
+            }
+            if(SourcePokemon != null && SourcePokemon.HasItem("炽热岩石") && NewWeatherType == EWeather.SunLight)
+            {
+                Turn = 8;
+            }
+            if(SourcePokemon != null && SourcePokemon.HasItem("潮湿岩石") && NewWeatherType == EWeather.Rain)
+            {
+                Turn = 8;
+            }
+            InManager.SetWeather(NewWeatherType, Turn);
             bSuccessed = true;
         }
         InManager.AddAnimationEvent(this);

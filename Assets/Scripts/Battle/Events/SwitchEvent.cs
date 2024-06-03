@@ -390,6 +390,8 @@ public class SingleBattleGameStartEvent : EventAnimationPlayer, Event
 
         PlayerPokemon.SwitchIn();
         EnemyPokemon.SwitchIn();
+
+        InManager.TranslateTimePoint(ETimePoint.FinishBattleStart, this);
     }
 
     public override void InitAnimation()

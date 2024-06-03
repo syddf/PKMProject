@@ -36,7 +36,12 @@ public class PokemonInfoUI : MonoBehaviour
         DefText.text = InPokemon.GetDef(ECaclStatsMode.Normal, BattleManager.StaticManager).ToString();
         SAtkText.text = InPokemon.GetSAtk(ECaclStatsMode.Normal, BattleManager.StaticManager).ToString();
         SDefText.text = InPokemon.GetSDef(ECaclStatsMode.Normal, BattleManager.StaticManager).ToString();
-        SpeedText.text = InPokemon.GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager).ToString();
+        int Speed = InPokemon.GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager);
+        if(Speed < 0)
+        {
+            Speed = -Speed;
+        }
+        SpeedText.text = Speed.ToString();
         PokemonNameText.text = InPokemon.GetName();
         BaseAbility Ability = InPokemon.GetAbility();
         if(Ability)

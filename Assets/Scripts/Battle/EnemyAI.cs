@@ -167,7 +167,7 @@ public class EnemyAI
                     {
                         List<ETarget> TargetList = new List<ETarget>();
                         TargetList.Add(ETarget.P0);
-                        SkillEvent NewSkillEvent = new SkillEvent(ReferenceBattleManager, UseBattleSkill, UseBattleSkill.GetReferencePokemon(), TargetList);
+                        SkillEvent NewSkillEvent = new SkillEvent(ReferenceBattleManager, UseBattleSkill, ReferencePokemon, TargetList);
                         List<Event> TmpEvents = new List<Event>();
                         TmpEvents.Add(InPlayerAction);
                         TmpEvents.Add(NewSkillEvent);

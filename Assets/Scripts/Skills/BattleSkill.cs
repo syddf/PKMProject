@@ -164,7 +164,7 @@ public class BattleSkill
 
         if(CastSkill.IsPhysicalMove(InManager, SourcePokemon, TargetPokemon))
         {
-            if(SourcePokemon.HasStatusChange(EStatusChange.Burn))
+            if(SourcePokemon.HasStatusChange(EStatusChange.Burn) && SourcePokemon.HasAbility("毅力", InManager, SourcePokemon, TargetPokemon) == false)
             {
                 double BurnFactor = 0.5;
                 Damage = (int)Math.Floor(Damage * BurnFactor);
@@ -246,6 +246,10 @@ public class BattleSkill
         {
             SepcialRuleFactor = 2.0;
         }
+        else if(InManager.HasSpecialRule("特殊规则(玛绣)") && TargetPokemon.GetIsEnemy() == false && Math.Abs(TargetPokemon.GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager)) > Math.Abs(SourcePokemon.GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager)) )
+        {
+            SepcialRuleFactor = 1.3;
+        }
         Damage = (int)Math.Floor(Damage * SepcialRuleFactor); 
 
         int IntDamage = (int)Math.Floor(Damage);
@@ -280,6 +284,13 @@ public class BattleSkill
     }
     public bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, ref string Reason)
     {
+        if(SourcePokemon.HasAbility("恶作剧之心", InManager, SourcePokemon, TargetPokemon) && 
+        TargetPokemon.HasType(EType.Dark, InManager, SourcePokemon, TargetPokemon) &&
+        GetSkillClass() == ESkillClass.StatusMove)
+        {
+            Reason = "受恶作剧之心影响的变化招式对恶属性宝可梦无效！";
+            return false;
+        }
         return ReferenceBaseSkill.JudgeIsEffective(InManager, SourcePokemon, TargetPokemon, out Reason);
     }
 
@@ -307,6 +318,10 @@ public class BattleSkill
            ReferenceBaseSkill.GetSkillType(ReferencePokemon) == EType.Flying)
         {
             AbilityPriority = 1;           
+        }
+        if(ReferencePokemon.HasAbility("恶作剧之心", InManager, ReferencePokemon, TargetPokemon) && ReferenceBaseSkill.GetSkillClass() == ESkillClass.StatusMove)
+        {
+            AbilityPriority = 1;
         }
         Priority = Priority + AbilityPriority;
         return Priority;

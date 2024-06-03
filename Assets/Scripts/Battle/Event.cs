@@ -8,6 +8,8 @@ public enum ETimePoint
 {
     None,
     BattleStart,
+
+    FinishBattleStart,
     PokemonIn,
     UseSkill,
     PokemonOut,
@@ -79,6 +81,7 @@ public enum EventType
     RemovePokemonStatusChange,
     RemoveBattleFieldStatusChange,
     KnockOffItem,
+    OverrideType,
     Fake
 }
 

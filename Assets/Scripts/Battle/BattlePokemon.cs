@@ -156,6 +156,12 @@ public class BattlePokemon : MonoBehaviour
     private BaseSkill FirstSkill = null;
     private bool HasActivated = false;
     private PokemonTrainer ReferenceTrainer;
+    private EType OverrideType;
+
+    public bool HasOnlyType(EType InType, BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        return GetType1(InManager, SourcePokemon, TargetPokemon) == InType && GetType2(InManager, SourcePokemon, TargetPokemon) == EType.None;
+    }
 
     public PokemonTrainer GetReferenceTrainer()
     {
@@ -260,6 +266,10 @@ public class BattlePokemon : MonoBehaviour
             AbilityFactor *= 1.3;
         }        
         if(HasAbility("活力", InManager, null, this))
+        {
+            AbilityFactor *= 1.5;
+        }
+        if(HasAbility("毅力", InManager, null, this) && PokemonStats.StatusChangeList != null && PokemonStats.StatusChangeList.Count > 0)
         {
             AbilityFactor *= 1.5;
         }
@@ -454,12 +464,19 @@ public class BattlePokemon : MonoBehaviour
                 SpecialRuleFactor = 0.5;
             }
         }
+        
+        double TrainerSkillFactor = 1.0;
+        if(ReferenceTrainer.TrainerSkill.GetSkillName() == "诡异空间战术")
+        {
+            TrainerSkillFactor = 0.5;
+        }
+
         int TrickRoomFactor = 1;
         if(InManager.GetIsTrickRoomActive())
         {
             TrickRoomFactor = -1;
         }         
-        return TrickRoomFactor * (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor * ItemFactor * AbilityFactor * FieldFactor * SpecialRuleFactor);
+        return TrickRoomFactor * (int)Math.Floor((double)PokemonStats.Speed * StatLevelFactor[ChangeLevel + 6] * ParalysisFactor * ItemFactor * AbilityFactor * FieldFactor * SpecialRuleFactor * TrainerSkillFactor);
     }
     public int GetAtkChangeLevel() => PokemonStats.AtkChangeLevel;
     public int GetDefChangeLevel() => PokemonStats.DefChangeLevel;
@@ -560,10 +577,17 @@ public class BattlePokemon : MonoBehaviour
     }
 
     public EType GetType1(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon) 
-    { 
-        if(HasStatusChange(EStatusChange.Roost) && Type1 == EType.Flying)
+    {
+        EType TmpType1 = Type1;
+        EType TmpType2 = Type2;
+        if(OverrideType != EType.None)
         {
-            if(Type2 == EType.None)
+            TmpType1 = OverrideType;
+            TmpType2 = EType.None;
+        }
+        if(HasStatusChange(EStatusChange.Roost) && TmpType1 == EType.Flying)
+        {
+            if(TmpType2 == EType.None)
             {
                 return EType.Normal;
             }
@@ -572,15 +596,22 @@ public class BattlePokemon : MonoBehaviour
                 return EType.None;
             }
         }
-        return Type1;
+        return TmpType1;
     }
     public EType GetType2(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon) 
     {
-        if(HasStatusChange(EStatusChange.Roost) && Type2 == EType.Flying)
+        EType TmpType1 = Type1;
+        EType TmpType2 = Type2;
+        if(OverrideType != EType.None)
+        {
+            TmpType1 = OverrideType;
+            TmpType2 = EType.None;
+        }
+        if(HasStatusChange(EStatusChange.Roost) && TmpType2 == EType.Flying)
         {
             return EType.None;
         } 
-        return Type2;
+        return TmpType2;
     }
 
     [SerializeField]
@@ -649,6 +680,7 @@ public class BattlePokemon : MonoBehaviour
 
     private void LoadBasePokemonStats()
     {
+        OverrideType = EType.None;
         Name = ReferenceBasePokemon.GetPokemonName();
         PokemonStats.Atk = ReferenceBasePokemon.GetAtk(false);
         PokemonStats.SAtk = ReferenceBasePokemon.GetSAtk(false);
@@ -674,6 +706,11 @@ public class BattlePokemon : MonoBehaviour
         }
 
         Item = new BattleItem(ReferenceBasePokemon.GetItem(), this);
+    }
+
+    public void SetOverrideType(EType InType)
+    {
+        OverrideType = InType;
     }
 
     public void ReducePP(BattleSkill InSkill)
@@ -990,6 +1027,7 @@ public class BattlePokemon : MonoBehaviour
     }
     public void ClearStatusChange()
     {
+        OverrideType = EType.None;
         LostItem = false;
         ConsumeThisTurn = false;
         HasActivated = false;
