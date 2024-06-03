@@ -286,6 +286,20 @@ public class BattleManager : MonoBehaviour
         EventsList.Add(new SwitchEvent(this, OutPokemon, InPokemon, false));
     }
 
+    public bool HasTrainerSkill(string SkillName)
+    {
+        if(PlayerTrainer.TrainerSkill && PlayerTrainer.TrainerSkill.GetSkillName() == SkillName)
+        {
+            return true;
+        }
+
+        if(EnemyTrainer.TrainerSkill && EnemyTrainer.TrainerSkill.GetSkillName() == SkillName)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public void TranslateTimePoint(ETimePoint NewTime, Event SourceEvent)
     {
         CurrentTimePoint = NewTime;

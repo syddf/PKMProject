@@ -28,6 +28,7 @@ public class ChapterUI : MonoBehaviour
     public BattleMenuUI ReferencePreviewUI;
     public BattleMenuUI ReferenceBattleMenuUI;
     public FadeUI TransitionUI;
+    private GameObject CacheNaniObj = null;
     IEnumerator DisableObjectAfterDelay()
     {
         yield return new WaitForSeconds(1f);
@@ -43,8 +44,16 @@ public class ChapterUI : MonoBehaviour
     }
     public void OnClickBeginStory()
     {
-        GameObject NaniObj = GameObject.Find("Naninovel<Runtime>");
-        NaniObj.SetActive(true);
+        if(CacheNaniObj == null)
+        {
+            GameObject NaniObj = GameObject.Find("Naninovel<Runtime>");
+            NaniObj.SetActive(true);
+            CacheNaniObj = NaniObj;
+        }
+        else
+        {
+            CacheNaniObj.SetActive(true);
+        }
         BattleData.gameObject.GetComponent<PlayScript>().Play();
         StartCoroutine(DisableObjectAfterDelay());
         TransitionUI.TransitionAnimation();

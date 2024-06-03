@@ -91,6 +91,7 @@ public class BattleUI : MonoBehaviour
 
     public void EnableCommandUI()
     {
+        BattleCommandUI.gameObject.SetActive(true);
         BattleCommandUI.In();
     }
     public void DisableCommandUI()

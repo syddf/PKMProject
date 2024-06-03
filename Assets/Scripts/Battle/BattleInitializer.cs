@@ -272,6 +272,27 @@ public class BattleInitializer : MonoBehaviour
                     }
                 }
             }
+            if(BattleManager.StaticManager.HasSpecialRule("特殊规则(卡露妮)") && Trainer == CurrentEnemyTrainer)
+            {
+                bool[] HasTypeArray = new bool[19]{false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false, false};
+                foreach(var bagPokemon in CurrentPlayerTrainer.BagPokemons)
+                {
+                    HasTypeArray[(int)bagPokemon.GetType0(false) + 1] = true;
+                    HasTypeArray[(int)bagPokemon.GetType1(false) + 1] = true;
+                }
+                foreach(var bagPokemon in CurrentEnemyTrainer.BagPokemons)
+                {
+                    HasTypeArray[(int)bagPokemon.GetType0(false) + 1] = true;
+                    HasTypeArray[(int)bagPokemon.GetType1(false) + 1] = true;
+                }
+                for(int Index = 1; Index <= 18; Index++)
+                {
+                    if(HasTypeArray[Index] == true)
+                    {
+                        LevelChangedValue++;
+                    }
+                }
+            }
             battlePokemon.SetBattlePokemonData(Trainer.BagPokemons[PokemonIndex], Trainer, ModelObject, MegaModel, LevelChangedValue);
             Trainer.BattlePokemons[PokemonIndex] = battlePokemon;
             ModelObject.SetActive(false);
