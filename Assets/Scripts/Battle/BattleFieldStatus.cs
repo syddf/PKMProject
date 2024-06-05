@@ -19,7 +19,9 @@ public enum EBattleFieldStatus
     Spikes3,
     Safeguard,
     Tailwind,
-    ToxicSpikes
+    ToxicSpikes,
+    FutureAttack,
+    Wish
 }
 
 public struct BattleFieldStatus
@@ -78,6 +80,15 @@ public struct BattleFieldStatus
         {
             return new ToxicSpikesStatusChange(SourcePokemon, InIsPlayer);
         }
+        if(StatusType == EBattleFieldStatus.FutureAttack)
+        {
+            return new FutureAttackStatusChange(SourcePokemon, InIsPlayer);
+        }
+        if(StatusType == EBattleFieldStatus.Wish)
+        {
+            return new WishStatusChange(SourcePokemon, InIsPlayer);
+        }
+
         return null;
     }
 
@@ -157,6 +168,16 @@ public struct BattleFieldStatus
         {
             return "场上布满了毒菱！";
         }
+
+        if(InStatusType == EBattleFieldStatus.FutureAttack)
+        {
+            return "场上感知到了来自未来的攻击！";
+        }
+
+        if(InStatusType == EBattleFieldStatus.Wish)
+        {
+            return "场上被赐予了祝福！";
+        }
         return "";        
     }
 
@@ -223,6 +244,16 @@ public struct BattleFieldStatus
         if(InStatusType == EBattleFieldStatus.ToxicSpikes)
         {
             return "毒菱";
+        }
+
+        if(InStatusType == EBattleFieldStatus.FutureAttack)
+        {
+            return "未来攻击";
+        }
+
+        if(InStatusType == EBattleFieldStatus.Wish)
+        {
+            return "祈愿";
         }
         return "";        
     }
@@ -491,6 +522,111 @@ public class SpikesStatusChange : BaseBattleFieldStatusChange
         NewEvents.Add(damageEvent);
         return NewEvents;
     }
+}
+
+public class FutureAttackStatusChange : BaseBattleFieldStatusChange
+{
+    private BattlePokemon SourcePokemon;
+    public FutureAttackStatusChange(BattlePokemon InSourcePokemon, bool InIsPlayer) : base(InIsPlayer)
+    {
+        SourcePokemon = InSourcePokemon;
+    }
+
+    public BattlePokemon GetSourcePokemon()
+    {
+        return SourcePokemon;
+    }
+
+    public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
+    {
+        if(SourceEvent.GetEventType() == EventType.RemoveBattleFieldStatusChange && TimePoint == ETimePoint.BeforeRemoveBattleFieldStatusChange)
+        {
+            RemoveBattleFieldStatusChangeEvent CastedEvent = (RemoveBattleFieldStatusChangeEvent)SourceEvent;
+            if(CastedEvent.GetReferenceFieldStatus().BaseStatusChange == this)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public override List<Event> Trigger(BattleManager InManager, Event SourceEvent)
+    {
+        List<Event> NewEvents = new List<Event>();
+        DamageSkill CastSkill = (DamageSkill)InManager.GetFutureAttackSkill();
+        BattleSkill UseBattleSkill = new BattleSkill(InManager.GetFutureAttackSkill(), EMasterSkill.None, SourcePokemon);
+        if(InManager.IsPokemonInField(SourcePokemon))
+        {
+            List<ETarget> TargetList = new List<ETarget>();
+            if(IsPlayer)
+            {   
+                TargetList.Add(ETarget.P0);                
+            }
+            else
+            {
+                TargetList.Add(ETarget.E0);                
+            }
+            SkillEvent NewSkillEvent = new SkillEvent(InManager, UseBattleSkill, SourcePokemon, TargetList);
+            NewEvents.Add(NewSkillEvent);
+        }
+        else
+        {
+            int Damage = 1;
+            BattlePokemon TargetPokemon = InManager.GetBattlePokemons()[0];
+            if(IsPlayer == false)
+            {
+                TargetPokemon = InManager.GetBattlePokemons()[1];
+            }
+            double Factor;            
+            Damage = UseBattleSkill.DamagePhase(InManager, SourcePokemon, TargetPokemon, false, out Factor);
+            DamageEvent damageEvent = new DamageEvent(TargetPokemon, Damage, "未来攻击", Factor);
+            NewEvents.Add(damageEvent);
+        }
+        return NewEvents;
+    }
+
+}
+public class WishStatusChange : BaseBattleFieldStatusChange
+{
+    private BattlePokemon SourcePokemon;
+    public WishStatusChange(BattlePokemon InSourcePokemon, bool InIsPlayer) : base(InIsPlayer)
+    {
+        SourcePokemon = InSourcePokemon;
+    }
+
+    public BattlePokemon GetSourcePokemon()
+    {
+        return SourcePokemon;
+    }
+
+    public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
+    {
+        if(SourceEvent.GetEventType() == EventType.RemoveBattleFieldStatusChange && TimePoint == ETimePoint.BeforeRemoveBattleFieldStatusChange)
+        {
+            RemoveBattleFieldStatusChangeEvent CastedEvent = (RemoveBattleFieldStatusChangeEvent)SourceEvent;
+            if(CastedEvent.GetReferenceFieldStatus().BaseStatusChange == this)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public override List<Event> Trigger(BattleManager InManager, Event SourceEvent)
+    {
+        List<Event> NewEvents = new List<Event>();
+        BattlePokemon TargetPokemon = InManager.GetBattlePokemons()[0];
+        if(IsPlayer == false)
+        {
+            TargetPokemon = InManager.GetBattlePokemons()[1];
+        }
+        HealEvent healEvent = new HealEvent(TargetPokemon, SourcePokemon.GetMaxHP() / 2, "祈愿");
+        NewEvents.Add(healEvent);
+        return NewEvents;
+    }
+
 }
 
 public class PowerChordStatusChange : BaseBattleFieldStatusChange

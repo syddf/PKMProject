@@ -58,6 +58,10 @@ public class UseSkillMessageEvent : EventAnimationPlayer, Event
         {
             TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
             string MessageText = SourcePokemon.GetName() + "使用了" + Skill.GetSkillName() + "！";
+            if(Skill.GetSkillName() == "预知未来攻击")
+            {
+                MessageText = SourcePokemon.GetName() + "的未来攻击触发了！";
+            }
             if(Skill.GetSkillName() == "混乱")
             {
                 MessageText = SourcePokemon.GetName() + "因为混乱攻击了自己！";
@@ -187,7 +191,14 @@ public class SkillEvent : EventAnimationPlayer, Event
                             else
                             {
                                 TimelineAnimation NoEffectMessage = new TimelineAnimation(MessageDirector);
-                                NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "但是失败了！");
+                                if(SkillMeta.NoEffectReason != null && SkillMeta.NoEffectReason != "")
+                                {
+                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", SkillMeta.NoEffectReason);
+                                }
+                                else
+                                {
+                                    NoEffectMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "但是失败了！");
+                                }
                                 AddAnimation(NoEffectMessage);
                             }
                         }
@@ -382,19 +393,22 @@ public class SkillEvent : EventAnimationPlayer, Event
                     CurrentProcessTargetPokemon = SkillMetas[TargetIndex].ReferencePokemon;
                     CurrentPokemonInMetaIndex = TargetIndex;
                     InManager.TranslateTimePoint(ETimePoint.BeforeJudgeSkillIsEffective, this);
-                    if(SkillMetas[TargetIndex].ReferencePokemon && SkillMetas[TargetIndex].ReferencePokemon.IsDead())
+                    if(SkillMetas[TargetIndex].NoEffect == false)
                     {
-                        SkillMetas[TargetIndex].NoEffect = true;
-                    }
-                    string NoEffectReason = "";
-                    bool Effective = Skill.JudgeIsEffective(InManager, SourcePokemon, CurrentProcessTargetPokemon, ref NoEffectReason);
-                    if(NoEffectReason != "")
-                    {
-                        SkillMetas[TargetIndex].NoEffectReason = NoEffectReason;
-                    }
-                    if(!Effective)
-                    {
-                        SkillMetas[TargetIndex].NoEffect = true;
+                        if(SkillMetas[TargetIndex].ReferencePokemon && SkillMetas[TargetIndex].ReferencePokemon.IsDead())
+                        {
+                            SkillMetas[TargetIndex].NoEffect = true;
+                        }
+                        string NoEffectReason = "";
+                        bool Effective = Skill.JudgeIsEffective(InManager, SourcePokemon, CurrentProcessTargetPokemon, ref NoEffectReason);
+                        if(NoEffectReason != "")
+                        {
+                            SkillMetas[TargetIndex].NoEffectReason = NoEffectReason;
+                        }
+                        if(!Effective)
+                        {
+                            SkillMetas[TargetIndex].NoEffect = true;
+                        }
                     }
                 }
 

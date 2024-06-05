@@ -43,6 +43,7 @@ public class TimelineAnimationManager : MonoBehaviour
     public PlayableDirector InBattleAnimation;
     public PlayableDirector MegaAnimation;
     public PlayableDirector WeatherDamageAnimation;
+    public PlayableDirector FutureAttackAnimation;
     public PlayableDirector LeechSeedDamageAnimation;
     public PlayableDirector ConfusionAnimation;
 }

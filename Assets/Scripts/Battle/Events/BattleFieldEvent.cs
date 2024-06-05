@@ -82,6 +82,7 @@ public class RemoveBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
         RemoveReason = InRemoveReason;
         IsPlayerField = InIsPlayerField;
         ShowMessage = InShowMessage;
+        ReferenceFieldStatus = InBattleManager.FindBattleFieldStatus(IsPlayerField, StatusChangeType);
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)
@@ -117,8 +118,15 @@ public class RemoveBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
     public void Process(BattleManager InManager)
     {
         if(!ShouldProcess(InManager)) return;
+        InManager.TranslateTimePoint(ETimePoint.BeforeRemoveBattleFieldStatusChange, this);
         ReferenceFieldStatus = InManager.RemoveBattleFieldStatus(IsPlayerField, StatusChangeType);
         InManager.AddAnimationEvent(this);
+        InManager.TranslateTimePoint(ETimePoint.AfterRemoveBattleFieldStatusChange, this);
+    }
+    
+    public BattleFieldStatus GetReferenceFieldStatus()
+    {
+        return ReferenceFieldStatus;
     }
 
     public EventType GetEventType()

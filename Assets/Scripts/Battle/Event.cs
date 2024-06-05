@@ -41,6 +41,8 @@ public enum ETimePoint
     AfterSetPokemonStatusChange,
     BeforeSetBattleFieldStatusChange,
     AfterSetBattleFieldStatusChange,
+    BeforeRemoveBattleFieldStatusChange,
+    AfterRemoveBattleFieldStatusChange,
     BeforeMegaEvolution,
     AfterMegaEvolution
 }

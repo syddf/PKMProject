@@ -236,6 +236,8 @@ public class SavedData : MonoBehaviour
             UseableTrainerList.Add("紫罗兰");
             UseableTrainerList.Add("查克洛");
             UseableTrainerList.Add("大吾");
+            UseableTrainerList.Add("玛绣");
+            UseableTrainerList.Add("卡露妮");
             playerData.BattleTrainerName = "希特隆";
             playerData.UseableTrainerList = UseableTrainerList;
 
@@ -245,7 +247,7 @@ public class SavedData : MonoBehaviour
             {
                 playerData.MainChapterProgress.Add(EProgress.New);
             }
-            playerData.MainChapterProgress[0] = EProgress.FinishAllBattle;
+            playerData.MainChapterProgress[0] = EProgress.FinishStory;
             IDataSerializer serializer = new EncryptedJSONDataSerializer();
             serializer.SerializeToFile(playerData, filePath);
             SavedPlayerData = playerData;
