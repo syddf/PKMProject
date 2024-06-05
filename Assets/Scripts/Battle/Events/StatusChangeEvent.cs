@@ -43,6 +43,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         
         if(ReferencePokemon.HasAbility("不眠", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Drowsy) return false;        
         if(ReferencePokemon.HasAbility("精神力", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Flinch) return false;
+        if(ReferencePokemon.GetActivated() == true && StatusChangeType == EStatusChange.Flinch) return false;
         if(ReferencePokemon.HasType(EType.Fire, InBattleManager, null, null) && StatusChangeType == EStatusChange.Burn) return false;
         if(ReferencePokemon.HasType(EType.Ice, InBattleManager, null, null) && StatusChangeType == EStatusChange.Frostbite) return false;
         if(ReferencePokemon.HasType(EType.Electric, InBattleManager, null, null) && StatusChangeType == EStatusChange.Paralysis) return false;

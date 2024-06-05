@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1361821534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1361821535}
+  - component: {fileID: 1361821536}
+  m_Layer: 0
+  m_Name: Scald
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1361821535
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361821534}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1361821536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361821534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c54a6d9bc3185244a93bcb78eca7882, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 80
+  PP: 15
+  Accuracy: 100
+  SkillClass: 1
+  SkillType: 10
+  SkillRange: 1
+  SkillName: "\u70ED\u6C34"
+  SkillDescription: "\u5411\u5BF9\u624B\u55B7\u5C04\u716E\u5F97\u7FFB\u6EDA\u7684\u5F00\u6C34\u8FDB\u884C\u653B\u51FB\u3002\u6709\u65F6\u4F1A\u8BA9\u5BF9\u624B\u9677\u5165\u707C\u4F24\u72B6\u6001\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  AlwaysHit: 0
+  SkillAnimation: {fileID: 2168161335535583700, guid: 73251d21112e8084ebed22f61355a928, type: 3}

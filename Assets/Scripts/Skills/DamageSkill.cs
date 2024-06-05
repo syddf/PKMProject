@@ -227,7 +227,16 @@ public class DamageSkill : BaseSkill
             return 1.0;
         }
         double Factor2 = TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == EType.None ? 1.0 : typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon)];
-        return typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon)] * Factor2;
+        double Factor1 = typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon)];
+        if(GetSkillName() == "冷冻干燥" && TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == EType.Water)
+        {
+            Factor2 = 2.0;   
+        }
+        else if(GetSkillName() == "冷冻干燥" && TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon) == EType.Water)
+        {
+            Factor1 = 2.0;
+        }
+        return Factor1 * Factor2;
     }
 
     public virtual int GetSourceAtk(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, bool CT)

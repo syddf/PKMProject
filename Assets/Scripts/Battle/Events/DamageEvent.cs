@@ -8,7 +8,8 @@ public class DamageEvent : EventAnimationPlayer, Event
     private BattlePokemon ReferencePokemon;
     private int Damage;
     private string DamageReason;
-    public DamageEvent(BattlePokemon TargetPokemon, int InDamage, string InDamageReason)
+    private double EffectiveFactor;
+    public DamageEvent(BattlePokemon TargetPokemon, int InDamage, string InDamageReason, double InEffectiveFactor = 1.0)
     {
         ReferencePokemon = TargetPokemon;
         Damage = InDamage;
@@ -17,6 +18,7 @@ public class DamageEvent : EventAnimationPlayer, Event
             Damage = TargetPokemon.GetHP();
         }
         DamageReason = InDamageReason;
+        EffectiveFactor = InEffectiveFactor;
     }
 
     public bool ShouldProcess(BattleManager InBattleManager)
@@ -40,18 +42,69 @@ public class DamageEvent : EventAnimationPlayer, Event
             WeatherDamageMessage.SetSignalReceiver("TargetPokemon", ReferencePokemon.GetPokemonModel());
             AddAnimation(WeatherDamageMessage);
         }
-        TimelineAnimation DamageAnimation = new TimelineAnimation(Timelines.DamageAnimation);
-        DamageAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Damage", Damage.ToString());
+        if(DamageReason == "未来攻击")
+        {
+            PlayableDirector AnimDirector = Timelines.FutureAttackAnimation;
+            TimelineAnimation FutureAttackMessage = new TimelineAnimation(AnimDirector);
+            FutureAttackMessage.SetSignalReceiver("TargetPokemon", ReferencePokemon.GetPokemonModel());
+            AddAnimation(FutureAttackMessage);
+        
+        
+            FutureAttackMessage.SetSignalParameter("BattleUI", "DamageSignal", "Damage", Damage.ToString());
 
-        if(ReferencePokemon.GetIsEnemy())
+            if(ReferencePokemon.GetIsEnemy())
+            {
+                FutureAttackMessage.SetSignalParameter("BattleUI", "DamageSignal", "Target", "Enemy1");
+            }                  
+            else
+            {
+                FutureAttackMessage.SetSignalParameter("BattleUI", "DamageSignal", "Target", "Player1");
+            }
+            if(EffectiveFactor == 0.5 || EffectiveFactor == 0.25)
+            {
+                PlayableDirector LocalMessageDirector = Timelines.MessageAnimation;
+                FutureAttackMessage.SetSignalParameter("BattleUI", "DamageSignal", "Effective", "Not");
+                TimelineAnimation EffectiveMessage = new TimelineAnimation(LocalMessageDirector);
+                EffectiveMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这不是很有效！");
+                AddAnimation(EffectiveMessage);
+            }
+            else if(EffectiveFactor == 1.0)
+            {
+                FutureAttackMessage.SetSignalParameter("BattleUI", "DamageSignal", "Effective", "Normal");
+            }
+            else
+            {         
+                PlayableDirector LocalMessageDirector = Timelines.MessageAnimation;
+                FutureAttackMessage.SetSignalParameter("BattleUI", "DamageSignal", "Effective", "Super");
+                TimelineAnimation EffectiveMessage = new TimelineAnimation(LocalMessageDirector);
+                EffectiveMessage.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", "这非常有效！");
+                AddAnimation(EffectiveMessage);                            
+            }
+
+            Vector3 position = ReferencePokemon.GetPokemonModel().transform.position;
+            GameObject SkillRootObject = AnimDirector.gameObject;
+            SkillAnimationRoot RootScript = SkillRootObject.GetComponent<SkillAnimationRoot>();
+            if(ReferencePokemon && RootScript.TargetPokemonTransform != null)
+            {
+                RootScript.TargetPokemonTransform.position = ReferencePokemon.GetPokemonModel().GetComponent<PokemonReceiver>().BodyTransform.transform.position;
+            }
+        }
+
+        if(DamageReason != "未来攻击")
         {
-            DamageAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Target", "Enemy1");
-        }                  
-        else
-        {
-            DamageAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Target", "Player1");
-        }    
-        AddAnimation(DamageAnimation);      
+            TimelineAnimation DamageAnimation = new TimelineAnimation(Timelines.DamageAnimation);
+            DamageAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Damage", Damage.ToString());
+
+            if(ReferencePokemon.GetIsEnemy())
+            {
+                DamageAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Target", "Enemy1");
+            }                  
+            else
+            {
+                DamageAnimation.SetSignalParameter("BattleUI", "DamageSignal", "Target", "Player1");
+            }    
+            AddAnimation(DamageAnimation);      
+        }
         PlayableDirector MessageDirector = Timelines.MessageAnimation;
         TimelineAnimation MessageTimeline = new TimelineAnimation(MessageDirector);
         MessageTimeline.SetSignalParameter("SignalObject", "MessageSignal", "MessageText", ReferencePokemon.GetName() + "因为" + DamageReason + "受到了伤害！");

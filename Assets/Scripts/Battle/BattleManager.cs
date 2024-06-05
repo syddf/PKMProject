@@ -50,6 +50,7 @@ public class BattleManager : MonoBehaviour
     private List<List<BattleFieldStatus>> BattleFieldStatusLists;
     public BaseSkill StruggleSkill;
     public BaseSkill ConfusionSkill;
+    public BaseSkill FutureSightAttackInFieldSkill;
     public BattleMenuUI BeforeBattleUI;
     public static BattleManager StaticManager;
     private int ChapterIndex;
@@ -933,7 +934,21 @@ public class BattleManager : MonoBehaviour
         BattleFieldStatusLists[Index].Add(NewStatus);
         return NewStatus;
     }
-
+    public BattleFieldStatus FindBattleFieldStatus(bool Player, EBattleFieldStatus StatusType)
+    {
+        int Index = 0;
+        if(!Player) Index = 1;
+        BattleFieldStatus Tmp = new BattleFieldStatus(null, EBattleFieldStatus.None, false, 0, false);
+        for(int StatusIndex = 0; StatusIndex < BattleFieldStatusLists[Index].Count; StatusIndex++)
+        {
+            if(BattleFieldStatusLists[Index][StatusIndex].StatusType == StatusType)
+            {
+                Tmp = BattleFieldStatusLists[Index][StatusIndex];
+                return Tmp;
+            }
+        }
+        return Tmp;
+    }
     public BattleFieldStatus RemoveBattleFieldStatus(bool Player, EBattleFieldStatus StatusType)
     {
         int Index = 0;
@@ -989,6 +1004,11 @@ public class BattleManager : MonoBehaviour
     public BaseSkill GetConfusionSkill()
     {
         return ConfusionSkill;
+    }
+
+    public BaseSkill GetFutureAttackSkill()
+    {
+        return FutureSightAttackInFieldSkill;
     }
 
     public void ResetBatonPass()

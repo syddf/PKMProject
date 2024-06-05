@@ -212,7 +212,6 @@ public class BattlePokemon : MonoBehaviour
         PokemonStats.SDefChangeLevel > 0 ||
         PokemonStats.SpeedChangeLevel > 0 ||
         PokemonStats.EvasionrateLevel > 0 ||
-        PokemonStats.CTLevel > 0 ||
         PokemonStats.AccuracyrateLevel > 0;
     }
 
@@ -368,7 +367,11 @@ public class BattlePokemon : MonoBehaviour
             {
                 SpecialRuleFactor = 0.5;
             }
-        }  
+        }
+        if(InManager.IsPokemonInField(this) == false)
+        {
+            ItemFactor = 1.0;
+        }
         return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor * SpecialRuleFactor);
     }
     public int GetSDef(ECaclStatsMode Mode, BattleManager InManager)
@@ -1024,6 +1027,16 @@ public class BattlePokemon : MonoBehaviour
                 }
             }
         }
+    }
+    public void ResetStatChange()
+    {
+        PokemonStats.AtkChangeLevel = 0;
+        PokemonStats.DefChangeLevel = 0;
+        PokemonStats.SAtkChangeLevel = 0;
+        PokemonStats.SDefChangeLevel = 0;
+        PokemonStats.SpeedChangeLevel = 0;
+        PokemonStats.EvasionrateLevel = 0;
+        PokemonStats.AccuracyrateLevel = 0;
     }
     public void ClearStatusChange()
     {
