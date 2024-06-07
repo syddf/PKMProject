@@ -155,6 +155,7 @@ public class BattlePokemon : MonoBehaviour
     private bool ConsumeThisTurn = false;
     private BaseSkill FirstSkill = null;
     private bool HasActivated = false;
+    private bool HasActivatedSinceSwitchIn = false;
     private PokemonTrainer ReferenceTrainer;
     private EType OverrideType;
 
@@ -196,6 +197,7 @@ public class BattlePokemon : MonoBehaviour
     {
         HasActivated = true;
         FirstIn = false;
+        HasActivatedSinceSwitchIn = false;
     }
     public bool GetFirstIn()
     {
@@ -988,6 +990,12 @@ public class BattlePokemon : MonoBehaviour
     public void SetActivated()
     {
         HasActivated = true;
+        HasActivatedSinceSwitchIn = true;
+    }
+
+    public bool GetActivatedSinceSwitchIn()
+    {
+        return HasActivatedSinceSwitchIn;
     }
 
     public void NewTurn()
@@ -1040,6 +1048,10 @@ public class BattlePokemon : MonoBehaviour
     }
     public void ClearStatusChange()
     {
+        if(HasAbility("再生力", null, null, null) && IsDead() == false)
+        {
+            PokemonStats.HP = Math.Min(PokemonStats.HP + PokemonStats.MaxHP / 3, PokemonStats.MaxHP);
+        }
         OverrideType = EType.None;
         LostItem = false;
         ConsumeThisTurn = false;

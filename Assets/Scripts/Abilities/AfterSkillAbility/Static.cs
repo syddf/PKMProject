@@ -19,7 +19,7 @@ public class Static : BaseAbility
             {
                 if(BattleSkillMetaInfo.IsTouchingSkill(CastedEvent.GetSkill().GetSkillName()))
                 {
-                    if(SetPokemonStatusChangeEvent.IsStatusChangeEffective(CastedEvent.GetReferenceManager(), CastedEvent.GetSourcePokemon(), null, EStatusChange.Paralysis))
+                    if(SetPokemonStatusChangeEvent.IsStatusChangeEffective(CastedEvent.GetReferenceManager(), CastedEvent.GetSourcePokemon(), ReferencePokemon, EStatusChange.Paralysis))
                     {
                         System.Random rnd = new System.Random();
                         int randNumber = rnd.Next(0, 100);
@@ -41,7 +41,7 @@ public class Static : BaseAbility
         SkillEvent CastedEvent = (SkillEvent)SourceEvent;
         SetPokemonStatusChangeEvent StatusEvent = new SetPokemonStatusChangeEvent(
             CastedEvent.GetSourcePokemon(),
-            null,
+            ReferencePokemon,
             InManager,
             EStatusChange.Paralysis,
             0, 

@@ -359,7 +359,10 @@ public class SkillEvent : EventAnimationPlayer, Event
         float fF = Table[F + 6];
         float C = GetSourceItemAccuracy(SourcePokemon) * GetTargetItemEvasion(TargetPokemon);
         float G = GetOtherAccuracy(TargetPokemon);
-
+        if(TargetPokemon.HasAbility("雪隐", GetReferenceManager(), SourcePokemon, TargetPokemon) && GetReferenceManager().GetWeatherType() == EWeather.Snow)
+        {
+            G = G * 0.8f;
+        }
         float A = SkillAccuracy;
         A = A * fF * C * G;
         int iA = Mathf.RoundToInt(A);
@@ -480,6 +483,10 @@ public class SkillEvent : EventAnimationPlayer, Event
                         CurrentProcessTargetPokemon.HasAbility("鳞粉", InManager, SourcePokemon, CurrentProcessTargetPokemon))
                         {
                             Probablity = 0;
+                        }
+                        if(SourcePokemon.HasAbility("天恩", InManager, SourcePokemon, CurrentProcessTargetPokemon))
+                        {
+                            Probablity = Probablity * 2;
                         }
                         System.Random rnd = new System.Random();
                         int Random = rnd.Next(0, 100);

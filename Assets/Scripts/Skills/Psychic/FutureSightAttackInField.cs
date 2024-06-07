@@ -8,4 +8,13 @@ public class FutureSightAttackInField : DamageSkill
     {
         return false;
     }
+
+    protected override int GetSkillPower(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
+    {
+        if(SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "预言家")
+        {
+            return Power / 2;
+        }
+        return Power;
+    }
 }

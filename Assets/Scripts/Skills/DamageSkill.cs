@@ -191,9 +191,36 @@ public class DamageSkill : BaseSkill
         {
             return false;
         }
+        int T1 = (int)TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon);
+        int T2 = (int)TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon);
+        bool J1 = typeEffectiveness[(int)GetSkillType(SourcePokemon), T1] != 0;
         bool J2 = TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == EType.None;
-        return typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon)] != 0 
-        && (J2 || typeEffectiveness[(int)GetSkillType(SourcePokemon), (int)TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon)] != 0);
+        bool J3 = true;
+        if(J1 == true && TargetPokemon.HasAbility("飘浮", InManager, SourcePokemon, TargetPokemon) && GetSkillType(SourcePokemon) == EType.Ground)
+        {
+            J1 = false;
+        }
+        if(J1 == true && TargetPokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "攀岩大师" && GetSkillType(SourcePokemon) == EType.Ground)
+        {
+            J1 = false;
+        }        
+        if(J1 == false && 
+        SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "预言家" && 
+        GetSkillType(SourcePokemon) == EType.Psychic && T1 == (int)EType.Dark)
+        {  
+            J1 = true;
+        }
+        if(J2 == false)
+        {
+            J3 = typeEffectiveness[(int)GetSkillType(SourcePokemon), T2] != 0;
+            if(J3 == false &&
+            SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "预言家" && 
+            GetSkillType(SourcePokemon) == EType.Psychic && T2 == (int)EType.Dark)
+            {
+                J3 = true;
+            }        
+        }
+        return J1 && J3;
     }
 
     public virtual bool IsSameType(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
@@ -235,6 +262,14 @@ public class DamageSkill : BaseSkill
         else if(GetSkillName() == "冷冻干燥" && TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon) == EType.Water)
         {
             Factor1 = 2.0;
+        }
+        if(GetSkillType(SourcePokemon) == EType.Psychic && TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == EType.Dark)
+        {
+            Factor2 = 1.0;   
+        }
+        else if(GetSkillType(SourcePokemon) == EType.Psychic && TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon) == EType.Dark)
+        {
+            Factor1 = 1.0;
         }
         return Factor1 * Factor2;
     }

@@ -24,6 +24,7 @@ public class SetBattleFieldStatusChangeEvent : EventAnimationPlayer, Event
     public bool ShouldProcess(BattleManager InBattleManager)
     {
         if(InBattleManager.GetBattleEnd() == true) return false;
+        if(InBattleManager.HasBattleFieldStatus(IsPlayerField, StatusChangeType)) return false;
         return true;
     }
 

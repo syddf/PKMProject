@@ -44,9 +44,12 @@ public class TurnEndEvent : EventAnimationPlayer, Event
         {
             if(!BattlePokemons[Index].IsDead() && !(BattlePokemons[Index].HasType(EType.Ground, InManager, null, null) || BattlePokemons[Index].HasType(EType.Rock, InManager, null, null) || BattlePokemons[Index].HasType(EType.Steel, InManager, null, null)))
             {
-                int Damage = BattlePokemons[Index].GetMaxHP() / 16;
-                DamageEvent damageEvent = new DamageEvent(BattlePokemons[Index], Damage, "沙暴天气");
-                damageEvent.Process(InManager);
+                if(BattlePokemons[Index].HasAbility("沙之力", null, null, null) == false)
+                {
+                    int Damage = BattlePokemons[Index].GetMaxHP() / 16;
+                    DamageEvent damageEvent = new DamageEvent(BattlePokemons[Index], Damage, "沙暴天气");
+                    damageEvent.Process(InManager);
+                }
             }
         }
     }
@@ -90,13 +93,26 @@ public class TurnEndEvent : EventAnimationPlayer, Event
         List<EBattleFieldStatus> EnemyRemoveStatusList = ReferenceBattleManager.ReduceBattleFieldTime(false);
         foreach(var PlayerRemoveStatus in PlayerRemoveStatusList)
         {
-            RemoveBattleFieldStatusChangeEvent RemoveStatusEvent = new RemoveBattleFieldStatusChangeEvent(InManager, PlayerRemoveStatus, "持续时间结束", true);
+            RemoveBattleFieldStatusChangeEvent RemoveStatusEvent = new RemoveBattleFieldStatusChangeEvent(InManager, PlayerRemoveStatus, "持续时间结束", true, true);
             RemoveStatusEvent.Process(InManager);
         }
         foreach(var EnemyRemoveStatus in EnemyRemoveStatusList)
         {
-            RemoveBattleFieldStatusChangeEvent RemoveStatusEvent = new RemoveBattleFieldStatusChangeEvent(InManager, EnemyRemoveStatus, "持续时间结束", false);
+            RemoveBattleFieldStatusChangeEvent RemoveStatusEvent = new RemoveBattleFieldStatusChangeEvent(InManager, EnemyRemoveStatus, "持续时间结束", false, true);
             RemoveStatusEvent.Process(InManager);
+        }
+
+        if(InManager.HasSpecialRule("特殊规则(葛吉花)") && (InManager.GetCurrentTurnIndex() % 2) == 1)
+        {
+            List<BattleFieldStatus> EnemyStatusList = new List<BattleFieldStatus>(InManager.GetBattleFieldStatusList(false));
+            if(EnemyStatusList != null)
+            {
+                foreach(var EnemyRemoveStatus in EnemyStatusList)
+                {
+                    RemoveBattleFieldStatusChangeEvent RemoveStatusEvent = new RemoveBattleFieldStatusChangeEvent(InManager, EnemyRemoveStatus.StatusType, "特殊规则", false, true);
+                    RemoveStatusEvent.Process(InManager);
+                }
+            }
         }
     }
 

@@ -218,8 +218,7 @@ public class BagPokemon : MonoBehaviour
     private int SpecieIndex;
     [SerializeField]
     private bool CanMega;
-    [SerializeField]
-    private BaseSkill[] SkillPool = new BaseSkill[8];
+    public BaseSkill[] SkillPool = new BaseSkill[8];
     private bool UseOverrideNatureForUI;
     private PokemonNature OverrideNatureForUI;
     private int LevelChangedValue;

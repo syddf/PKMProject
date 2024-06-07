@@ -17,6 +17,13 @@ public class EnemyAI
     {
         if(SkillName == "近身战")
             return 0.1;
+        if(ReferencePokemon.GetHP() >= (ReferencePokemon.GetMaxHP() / 2))
+        {
+            if(SkillName == "自我再生" || SkillName == "偷懒" || SkillName == "睡觉")
+            {
+                return 0.1;
+            }
+        }
         return 1.0;
     }
     public EnemyAI(BattlePokemon InPokemon, BattleManager InManager, PokemonTrainer InTrainer)
