@@ -20,7 +20,7 @@ public class PoisonTouch : BaseAbility
             {
                 if(BattleSkillMetaInfo.IsTouchingSkill(CastedEvent.GetSkill().GetSkillName()))
                 {
-                    if(SetPokemonStatusChangeEvent.IsStatusChangeEffective(CastedEvent.GetReferenceManager(), Target, null, EStatusChange.Poison))
+                    if(SetPokemonStatusChangeEvent.IsStatusChangeEffective(CastedEvent.GetReferenceManager(), Target, ReferencePokemon, EStatusChange.Poison))
                     {
                         if(Target.HasAbility("鳞粉", CastedEvent.GetReferenceManager(), Source, Target) == true)
                         {
@@ -46,7 +46,7 @@ public class PoisonTouch : BaseAbility
         SkillEvent CastedEvent = (SkillEvent)SourceEvent;
         SetPokemonStatusChangeEvent StatusEvent = new SetPokemonStatusChangeEvent(
             CastedEvent.GetCurrentProcessTargetPokemon(),
-            null,
+            ReferencePokemon,
             InManager,
             EStatusChange.Poison,
             0, 

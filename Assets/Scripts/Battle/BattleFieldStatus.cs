@@ -21,6 +21,7 @@ public enum EBattleFieldStatus
     Tailwind,
     ToxicSpikes,
     FutureAttack,
+    FutureAttackEnhanced,
     Wish
 }
 
@@ -83,6 +84,10 @@ public struct BattleFieldStatus
         if(StatusType == EBattleFieldStatus.FutureAttack)
         {
             return new FutureAttackStatusChange(SourcePokemon, InIsPlayer);
+        }
+        if(StatusType == EBattleFieldStatus.FutureAttackEnhanced)
+        {
+            return new FutureAttackEnhancedStatusChange(SourcePokemon, InIsPlayer);
         }
         if(StatusType == EBattleFieldStatus.Wish)
         {
@@ -169,7 +174,7 @@ public struct BattleFieldStatus
             return "场上布满了毒菱！";
         }
 
-        if(InStatusType == EBattleFieldStatus.FutureAttack)
+        if(InStatusType == EBattleFieldStatus.FutureAttack || InStatusType == EBattleFieldStatus.FutureAttackEnhanced)
         {
             return "场上感知到了来自未来的攻击！";
         }
@@ -246,7 +251,7 @@ public struct BattleFieldStatus
             return "毒菱";
         }
 
-        if(InStatusType == EBattleFieldStatus.FutureAttack)
+        if(InStatusType == EBattleFieldStatus.FutureAttack || InStatusType == EBattleFieldStatus.FutureAttackEnhanced)
         {
             return "未来攻击";
         }
@@ -302,7 +307,7 @@ public class ToxicSpikesStatusChange : BaseBattleFieldStatusChange
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
             if(CastedEvent.GetInPokemon().IsGroundPokemon(BattleManager.StaticManager) && 
             CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer &&
-            CastedEvent.GetInPokemon().HasItem("厚底靴"))
+            CastedEvent.GetInPokemon().HasItem("厚底靴") == false)
             {
                 TargetPokemon = CastedEvent.GetInPokemon();
                 return true;
@@ -365,7 +370,7 @@ public class StickyWebStatusChange : BaseBattleFieldStatusChange
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
             if(CastedEvent.GetInPokemon().IsGroundPokemon(BattleManager.StaticManager) && 
             CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer &&
-            CastedEvent.GetInPokemon().HasItem("厚底靴"))
+            CastedEvent.GetInPokemon().HasItem("厚底靴") == false)
             {
                 TargetPokemon = CastedEvent.GetInPokemon();
                 return true;
@@ -418,7 +423,7 @@ public class StealthRockStatusChange : BaseBattleFieldStatusChange
         {
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
             if(CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer &&
-            CastedEvent.GetInPokemon().HasItem("厚底靴"))
+            CastedEvent.GetInPokemon().HasItem("厚底靴") == false)
             {
                 TargetPokemon = CastedEvent.GetInPokemon();
                 return true;
@@ -476,7 +481,7 @@ public class SpikesStatusChange : BaseBattleFieldStatusChange
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
             if(CastedEvent.GetInPokemon().IsGroundPokemon(BattleManager.StaticManager) && 
             CastedEvent.GetInPokemon().GetIsEnemy() != IsPlayer &&
-            CastedEvent.GetInPokemon().HasItem("厚底靴"))
+            CastedEvent.GetInPokemon().HasItem("厚底靴") == false)
             {
                 TargetPokemon = CastedEvent.GetInPokemon();
                 return true;
@@ -524,6 +529,68 @@ public class SpikesStatusChange : BaseBattleFieldStatusChange
     }
 }
 
+public class FutureAttackEnhancedStatusChange : BaseBattleFieldStatusChange
+{
+    private BattlePokemon SourcePokemon;
+    public FutureAttackEnhancedStatusChange(BattlePokemon InSourcePokemon, bool InIsPlayer) : base(InIsPlayer)
+    {
+        SourcePokemon = InSourcePokemon;
+    }
+
+    public BattlePokemon GetSourcePokemon()
+    {
+        return SourcePokemon;
+    }
+
+    public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
+    {
+        if(SourceEvent.GetEventType() == EventType.TurnEnd && TimePoint == ETimePoint.TurnEnd)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public override List<Event> Trigger(BattleManager InManager, Event SourceEvent)
+    {
+        List<Event> NewEvents = new List<Event>();
+        DamageSkill CastSkill = (DamageSkill)InManager.GetFutureAttackSkill();
+        BattleSkill UseBattleSkill = new BattleSkill(InManager.GetFutureAttackSkill(), EMasterSkill.None, SourcePokemon);
+        if(InManager.IsPokemonInField(SourcePokemon))
+        {
+            List<ETarget> TargetList = new List<ETarget>();
+            if(IsPlayer)
+            {   
+                TargetList.Add(ETarget.P0);                
+            }
+            else
+            {
+                TargetList.Add(ETarget.E0);                
+            }
+            SkillEvent NewSkillEvent = new SkillEvent(InManager, UseBattleSkill, SourcePokemon, TargetList);
+            NewEvents.Add(NewSkillEvent);
+        }
+        else
+        {
+            int Damage = 1;
+            BattlePokemon TargetPokemon = InManager.GetBattlePokemons()[0];
+            if(IsPlayer == false)
+            {
+                TargetPokemon = InManager.GetBattlePokemons()[1];
+            }
+            double Factor;            
+            Damage = UseBattleSkill.DamagePhase(InManager, SourcePokemon, TargetPokemon, false, out Factor);
+            if(Factor != 0.0)
+            {
+                DamageEvent damageEvent = new DamageEvent(TargetPokemon, Damage, "未来攻击", Factor);
+                NewEvents.Add(damageEvent);
+            }
+        }
+        return NewEvents;
+    }
+
+}
 public class FutureAttackStatusChange : BaseBattleFieldStatusChange
 {
     private BattlePokemon SourcePokemon;
@@ -580,8 +647,11 @@ public class FutureAttackStatusChange : BaseBattleFieldStatusChange
             }
             double Factor;            
             Damage = UseBattleSkill.DamagePhase(InManager, SourcePokemon, TargetPokemon, false, out Factor);
-            DamageEvent damageEvent = new DamageEvent(TargetPokemon, Damage, "未来攻击", Factor);
-            NewEvents.Add(damageEvent);
+            if(Factor == 0.0)
+            {
+                DamageEvent damageEvent = new DamageEvent(TargetPokemon, Damage, "未来攻击", Factor);
+                NewEvents.Add(damageEvent);
+            }
         }
         return NewEvents;
     }

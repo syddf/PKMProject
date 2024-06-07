@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.Playables;
+using System.Runtime.CompilerServices;
 
 public class BattleSkill
 {
@@ -43,6 +44,14 @@ public class BattleSkill
         if(SourcePokemon.HasItem("广角镜"))
         {
             ItemFactor *= 1.1;
+        }
+        if(TargetPokemon.HasItem("光粉"))
+        {
+            ItemFactor *= 0.9;
+        }
+        if(TargetPokemon.HasAbility("奇迹皮肤", InManager, SourcePokemon, TargetPokemon) && GetSkillClass() == ESkillClass.StatusMove)
+        {
+            AbilityFactor *= 0.5;
         }
         return (int)(ReferenceBaseSkill.GetAccuracy(InManager, SourcePokemon, TargetPokemon) * AbilityFactor * ItemFactor);
     }
@@ -250,6 +259,14 @@ public class BattleSkill
         {
             SepcialRuleFactor = 1.3;
         }
+        else if(InManager.HasSpecialRule("特殊规则(葛吉花)") && InManager.GetBattleFieldStatusList(!TargetPokemon.GetIsEnemy()).Count == 0)
+        {
+            SepcialRuleFactor = 0.2;
+        }
+        else if(InManager.HasSpecialRule("特殊规则(竹兰)") && CastSkill.GetSkillPriority(InManager, SourcePokemon, TargetPokemon) < 1 && SourcePokemon.GetIsEnemy() == false)
+        {
+            SepcialRuleFactor = 0.5;
+        }
         Damage = (int)Math.Floor(Damage * SepcialRuleFactor); 
 
         int IntDamage = (int)Math.Floor(Damage);
@@ -285,6 +302,7 @@ public class BattleSkill
     public bool JudgeIsEffective(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon, ref string Reason)
     {
         if(SourcePokemon.HasAbility("恶作剧之心", InManager, SourcePokemon, TargetPokemon) && 
+        TargetPokemon != null &&
         TargetPokemon.HasType(EType.Dark, InManager, SourcePokemon, TargetPokemon) &&
         GetSkillClass() == ESkillClass.StatusMove)
         {
@@ -309,7 +327,7 @@ public class BattleSkill
          return ReferenceBaseSkill.GetTargetEvasionChangeLevel(InManager, SourcePokemon, TargetPokemon);
     }
 
-    public int GetSkillPriority(BattleManager InManager, BattlePokemon TargetPokemon)
+    public int GetSkillPriority(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         int Priority = ReferenceBaseSkill.GetSkillPriority(InManager, ReferencePokemon, TargetPokemon);
         int AbilityPriority = 0;
@@ -323,7 +341,12 @@ public class BattleSkill
         {
             AbilityPriority = 1;
         }
-        Priority = Priority + AbilityPriority;
+        int TrainerSkillPriority = 0;
+        if(InManager.GetOppositeTrainer(SourcePokemon).TrainerSkill.GetSkillName() == "女王的霸气" && SourcePokemon.GetActivatedSinceSwitchIn() == false)
+        {
+            TrainerSkillPriority = -1;
+        }
+        Priority = Priority + AbilityPriority + TrainerSkillPriority;
         return Priority;
     }
 

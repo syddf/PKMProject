@@ -360,13 +360,15 @@ public class EventComparer : IComparer<Event>
                 SkillEvent CastY = (SkillEvent)y;
                 BattleSkill SkillX = CastX.GetSkill();
                 BattleSkill SkillY = CastY.GetSkill();
+                BattlePokemon SourceX = CastX.GetSourcePokemon();
+                BattlePokemon SourceY = CastY.GetSourcePokemon();
                 BattlePokemon TargetX = CastX.GetReferenceManager().GetTargetPokemon(CastX.GetTargetPokemon()[0]);
                 BattlePokemon TargetY = CastY.GetReferenceManager().GetTargetPokemon(CastY.GetTargetPokemon()[0]);
-                if(SkillX.GetSkillPriority(CastX.GetReferenceManager(), TargetX) < SkillY.GetSkillPriority(CastX.GetReferenceManager(), TargetY))
+                if(SkillX.GetSkillPriority(CastX.GetReferenceManager(), SourceX, TargetX) < SkillY.GetSkillPriority(CastX.GetReferenceManager(), SourceY, TargetY))
                 {
                     return 1;
                 }
-                else if(SkillX.GetSkillPriority(CastX.GetReferenceManager(), TargetX) > SkillY.GetSkillPriority(CastX.GetReferenceManager(), TargetY))
+                else if(SkillX.GetSkillPriority(CastX.GetReferenceManager(), SourceX, TargetX) > SkillY.GetSkillPriority(CastX.GetReferenceManager(), SourceY, TargetY))
                 {
                     return -1;
                 }

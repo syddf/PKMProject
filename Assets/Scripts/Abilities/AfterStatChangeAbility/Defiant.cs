@@ -14,8 +14,17 @@ public class Defiant : BaseAbility
         if(SourceEvent.GetEventType() == EventType.StatChange)
         {
             StatChangeEvent CastedEvent = (StatChangeEvent)SourceEvent;
+            List<int> ChangedLevel = CastedEvent.GetChangeLevel();
+            int Count = 0;
+            for(int Index = 0; Index < ChangedLevel.Count; Index++)
+            {
+                if(ChangedLevel[Index] < 0)
+                {
+                    Count++;
+                }
+            }
             return CastedEvent.GetTargetPokemon() == this.ReferencePokemon 
-            && CastedEvent.GetChangeLevel()[0] < 0 
+            && Count > 0
             && CastedEvent.GetSourcePokemon().GetIsEnemy() != this.ReferencePokemon.GetIsEnemy();
         }
 
@@ -24,8 +33,18 @@ public class Defiant : BaseAbility
 
     public override List<Event> Trigger(BattleManager InManager, Event SourceEvent)
     {
+        StatChangeEvent CastedEvent = (StatChangeEvent)SourceEvent;
+        List<int> ChangedLevel = CastedEvent.GetChangeLevel();
+        int Count = 0;
+        for(int Index = 0; Index < ChangedLevel.Count; Index++)
+        {
+            if(ChangedLevel[Index] < 0)
+            {
+                Count++;
+            }
+        }
         List<Event> NewEvents = new List<Event>();
-        NewEvents.Add(new StatChangeEvent(this.ReferencePokemon, this.ReferencePokemon, "Atk", 2));
+        NewEvents.Add(new StatChangeEvent(this.ReferencePokemon, this.ReferencePokemon, "Atk", Count * 2));
         return NewEvents;
     }
 }

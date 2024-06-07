@@ -460,7 +460,7 @@ public class BattleManager : MonoBehaviour
 
         EventsList.Clear();
         EventsList.Add(new SingleBattleGameStartEvent(PlayerPokemon, EnemyPokemon));
-        TurnIndex = 0;
+        TurnIndex = 1;
         EventsListHistory.Clear();
         BattleFieldStatusLists[0].Clear();
         BattleFieldStatusLists[1].Clear();
@@ -471,6 +471,15 @@ public class BattleManager : MonoBehaviour
         FieldState.TerrainRemainTime = 0;
         FieldState.IsTrickRoomActive = false;
         FieldState.TrickRoomRemainTime = 0;
+    }
+
+    public PokemonTrainer GetOppositeTrainer(BattlePokemon InPokemon)
+    {
+        if(BattlePokemonList[0] == InPokemon)
+        {
+            return EnemyTrainer;
+        }
+        return PlayerTrainer;
     }
 
     public List<BaseAbility> QueryAbilitiesWhenTimeChange(Event SourceEvent)
@@ -892,6 +901,10 @@ public class BattleManager : MonoBehaviour
 
     public bool IsPokemonInField(BattlePokemon InPokemon)
     {
+        if(InPokemon.IsDead())
+        {
+            return false;
+        }
         return BattlePokemonList[0] == InPokemon || BattlePokemonList[1] == InPokemon;
     }
 
