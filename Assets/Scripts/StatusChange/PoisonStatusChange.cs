@@ -17,7 +17,8 @@ public class PoisonStatusChange : BaseStatusChange
             return false;
         }
         TurnEndEvent CastedEvent = (TurnEndEvent)SourceEvent;
-        if(CastedEvent.GetReferenceManager().IsPokemonInField(ReferencePokemon) && ReferencePokemon.IsDead() == false)
+        if(CastedEvent.GetReferenceManager().IsPokemonInField(ReferencePokemon) && ReferencePokemon.IsDead() == false 
+        && ReferencePokemon.HasAbility("毒疗", null, null, null) == false)
         {
             return true;
         }

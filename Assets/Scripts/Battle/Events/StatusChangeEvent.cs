@@ -41,6 +41,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         ) 
         && StatusChange.IsStatusChange(StatusChangeType)) return false;
         
+        if(ReferencePokemon.HasAbility("隔音", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.PerishSong) return false;                
         if(ReferencePokemon.HasAbility("不眠", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Drowsy) return false;        
         if(ReferencePokemon.HasAbility("精神力", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Flinch) return false;
         if(ReferencePokemon.GetActivated() == true && StatusChangeType == EStatusChange.Flinch) return false;
@@ -114,6 +115,11 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         {
             return "混乱了！";
         }
+        if(StatusChangeType == EStatusChange.PerishSong)
+        {
+            return "听到了终焉的歌声！";
+        }
+
         return "";
     }
 

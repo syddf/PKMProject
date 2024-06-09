@@ -29,7 +29,8 @@ public enum EStatusChange
     Frostbite,
     LeechSeed,
     Confusion,
-    Roost
+    Roost,
+    PerishSong
 }
 
 public struct StatusChange
@@ -87,7 +88,11 @@ public struct StatusChange
         if(StatusChangeType == EStatusChange.Confusion)
         {
             return new ConfusionStatusChange(InPokemon);
-        }       
+        } 
+        if(StatusChangeType == EStatusChange.PerishSong)
+        {
+            return new PerishSongStatusChange(InPokemon);
+        }      
         return null;
     }
 
@@ -102,7 +107,7 @@ public struct StatusChange
 
     public static bool ShouldStatusChangeCopyWhenBatonPass(EStatusChange InStatusChangeType)
     {
-        return InStatusChangeType == EStatusChange.LeechSeed || InStatusChangeType == EStatusChange.ForbidHeal;
+        return InStatusChangeType == EStatusChange.PerishSong || InStatusChangeType == EStatusChange.LeechSeed || InStatusChangeType == EStatusChange.ForbidHeal;
     }
 }
 
@@ -158,7 +163,15 @@ public class BattlePokemon : MonoBehaviour
     private bool HasActivatedSinceSwitchIn = false;
     private PokemonTrainer ReferenceTrainer;
     private EType OverrideType;
+    private bool GlaiveRushState = false;
 
+    public bool HasSkill(string SkillName)
+    {
+        return ReferenceSkill[0].GetSkillName() == SkillName ||
+        ReferenceSkill[1].GetSkillName() == SkillName ||
+        ReferenceSkill[2].GetSkillName() == SkillName ||
+        ReferenceSkill[3].GetSkillName() == SkillName;
+    }
     public bool HasOnlyType(EType InType, BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
         return GetType1(InManager, SourcePokemon, TargetPokemon) == InType && GetType2(InManager, SourcePokemon, TargetPokemon) == EType.None;
@@ -278,6 +291,10 @@ public class BattlePokemon : MonoBehaviour
         {
             AbilityFactor *= 2.0;
         }
+        if(HasAbility("软弱", InManager, null, this) && GetHP() <= (GetMaxHP() / 2))
+        {
+            AbilityFactor *= 0.5;
+        }
         double SpecialRuleFactor = 1.0;
         if(InManager.HasSpecialRule("特殊规则(紫罗兰)") && IsEnemy == false)
         {
@@ -355,6 +372,10 @@ public class BattlePokemon : MonoBehaviour
         {
             AbilityFactor *= 2.0;
         }
+        if(HasAbility("软弱", InManager, null, this) && GetHP() <= (GetMaxHP() / 2))
+        {
+            AbilityFactor *= 0.5;
+        }
         double SpecialRuleFactor = 1.0;
         if(InManager.HasSpecialRule("特殊规则(紫罗兰)") && IsEnemy == false)
         {
@@ -413,7 +434,12 @@ public class BattlePokemon : MonoBehaviour
                 SpecialRuleFactor = 0.5;
             }
         }
-        return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6] * ItemFactor * WeatherFactor * AbilityFactor * SpecialRuleFactor);
+        double TrainerSkillFactor = 1.0;
+        if(ReferenceTrainer.TrainerSkill.GetSkillName() == "坚韧之冰")
+        {
+            TrainerSkillFactor = 1.5;
+        }
+        return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6] * ItemFactor * WeatherFactor * AbilityFactor * SpecialRuleFactor * TrainerSkillFactor);
     }    
     public int GetSpeed(ECaclStatsMode Mode, BattleManager InManager)
     {
@@ -438,6 +464,10 @@ public class BattlePokemon : MonoBehaviour
             AbilityFactor *= 1.5;
         }
         if(InManager.GetWeatherType() == EWeather.SunLight && HasAbility("叶绿素", null, null, this))
+        {
+            AbilityFactor *= 2.0;
+        }
+        if(InManager.GetWeatherType() == EWeather.Sand && HasAbility("拨沙", null, null, this))
         {
             AbilityFactor *= 2.0;
         }
@@ -986,6 +1016,19 @@ public class BattlePokemon : MonoBehaviour
 
         return RemoveStatus;
     }
+    public void RemoveGlaiveRushState()
+    {
+        GlaiveRushState = false;
+    }
+    public void SetGlaiveRushState()
+    {
+        GlaiveRushState = true;
+    }
+
+    public bool GetGlaiveRushState()
+    {
+        return GlaiveRushState;
+    }
 
     public void SetActivated()
     {
@@ -1052,6 +1095,7 @@ public class BattlePokemon : MonoBehaviour
         {
             PokemonStats.HP = Math.Min(PokemonStats.HP + PokemonStats.MaxHP / 3, PokemonStats.MaxHP);
         }
+        GlaiveRushState = false;
         OverrideType = EType.None;
         LostItem = false;
         ConsumeThisTurn = false;

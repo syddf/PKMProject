@@ -269,6 +269,11 @@ public class BattleSkill
         }
         Damage = (int)Math.Floor(Damage * SepcialRuleFactor); 
 
+        if(TargetPokemon.GetGlaiveRushState())
+        {
+            Damage = Damage * 2;
+        }
+
         int IntDamage = (int)Math.Floor(Damage);
         IntDamage = Math.Min(IntDamage, TargetPokemon.GetHP());
         return Mathf.Max(1, IntDamage);

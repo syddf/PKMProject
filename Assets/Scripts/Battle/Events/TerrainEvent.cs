@@ -102,9 +102,9 @@ public class TerrainChangeEvent : EventAnimationPlayer, Event
 
     public void Process(BattleManager InManager)
     {
+        OriginTerrainType = InManager.GetTerrainType();
         if(!ShouldProcess(InManager)) return;
         InManager.TranslateTimePoint(ETimePoint.BeforeChangeTerrain, this);
-        OriginTerrainType = InManager.GetTerrainType();
         if(InManager.GetTerrainType() == NewTerrainType)
         {
             bSuccessed = false;

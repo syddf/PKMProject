@@ -12,7 +12,7 @@ public class FakeOut : DamageSkill
             return false;
         }
         Reason = "使用击掌奇袭失败了！击掌奇袭只能在登场回合使用！";
-        return InManager.GetCurrentTurnIndex() == 0 || InManager.IsPokemonInLastTurn(SourcePokemon);
+        return InManager.GetCurrentTurnIndex() == 1 || InManager.IsPokemonInLastTurn(SourcePokemon);
     }
     public override void AfterSkillEffectEvent(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {

@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &823454772
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 823454773}
+  - component: {fileID: 823454774}
+  m_Layer: 0
+  m_Name: GlaiveRush
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &823454773
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 823454772}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &823454774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 823454772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca50f493fcccfb2438b0bfc6625b06b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 120
+  PP: 5
+  Accuracy: 100
+  SkillClass: 0
+  SkillType: 15
+  SkillRange: 1
+  SkillName: "\u5DE8\u5251\u7A81\u51FB"
+  SkillDescription: "\u6709\u52C7\u65E0\u8C0B\u7684\u820D\u8EAB\u7A81\u51FB\u3002\u4F7F\u51FA\u62DB\u5F0F\u540E\uFF0C\u5BF9\u624B\u7684\u653B\u51FB\u5FC5\u5B9A\u4F1A\u547D\u4E2D\uFF0C\u4E14\u4F24\u5BB3\u4F1A\u53D8\u62102\u500D\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  AlwaysHit: 0
+  SkillAnimation: {fileID: 682101239973408834, guid: e1e250946d5f6574abeae7307383624e, type: 3}
