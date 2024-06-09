@@ -10,6 +10,7 @@ public class WeatherChangeEvent : EventAnimationPlayer, Event
     private BattlePokemon SourcePokemon;
     private BattleManager ReferenceBattleManager;
     private bool bSuccessed = false;
+    public static bool ForbidChangeWeather = false;
 
     public EWeather GetWeatherType()
     {
@@ -98,10 +99,10 @@ public class WeatherChangeEvent : EventAnimationPlayer, Event
 
     public void Process(BattleManager InManager)
     {
+        OriginWeatherType = InManager.GetWeatherType();
         if(!ShouldProcess(InManager)) return;
         InManager.TranslateTimePoint(ETimePoint.BeforeChangeWeather, this);
-        OriginWeatherType = InManager.GetWeatherType();
-        if(InManager.GetWeatherType() == NewWeatherType)
+        if(InManager.GetWeatherType() == NewWeatherType || ForbidChangeWeather)
         {
             bSuccessed = false;
         }
@@ -123,6 +124,16 @@ public class WeatherChangeEvent : EventAnimationPlayer, Event
             if(SourcePokemon != null && SourcePokemon.HasItem("潮湿岩石") && NewWeatherType == EWeather.Rain)
             {
                 Turn = 8;
+            }
+            if(NewWeatherType == EWeather.Snow && InManager.HasSpecialRule("特殊规则(得抚)"))
+            {
+                Turn = 999;
+                ForbidChangeWeather = true;
+            }
+            if(NewWeatherType == EWeather.Sand && InManager.HasSpecialRule("特殊规则(南厦)"))
+            {
+                Turn = 999;
+                ForbidChangeWeather = true;
             }
             InManager.SetWeather(NewWeatherType, Turn);
             bSuccessed = true;

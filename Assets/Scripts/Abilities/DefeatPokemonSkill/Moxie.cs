@@ -14,7 +14,7 @@ public class Moxie : BaseAbility
         if(SourceEvent.GetEventType() == EventType.PokemonDefeated)
         {
             PokemonDefeatedEvent CastedEvent = (PokemonDefeatedEvent)SourceEvent;
-            return CastedEvent.GetSourcePokemon() == this.ReferencePokemon;
+            return CastedEvent.GetSourcePokemon() != null && CastedEvent.GetSourcePokemon() == this.ReferencePokemon;
         }
 
         return false;

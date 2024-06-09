@@ -457,7 +457,7 @@ public class BattleManager : MonoBehaviour
         CurPlayingAnimationEvent = 0;
         PlayingAnimation = false;
         CurrentTimePoint = ETimePoint.None;
-
+        WeatherChangeEvent.ForbidChangeWeather = false;
         EventsList.Clear();
         EventsList.Add(new SingleBattleGameStartEvent(PlayerPokemon, EnemyPokemon));
         TurnIndex = 1;
@@ -1029,10 +1029,34 @@ public class BattleManager : MonoBehaviour
         NextSwitchIsBatonPass = false;
     }
 
+    public int GetTeammatesDeadCount(BattlePokemon InPokemon)
+    {
+        int Count = 0;
+        PokemonTrainer ReferenceTrainer = PlayerTrainer;
+        if(InPokemon.GetIsEnemy())
+        {
+            ReferenceTrainer = EnemyTrainer;
+        }
+
+        for(int Index = 0; Index < 6; Index++)
+        {
+            if(ReferenceTrainer.BattlePokemons[Index].IsDead() == true)
+            {
+                Count += 1;
+            }
+        }
+        return Count;
+    }
+
+    public bool CanSwitch()
+    {
+        return true;
+    }
+
     public bool IsPokemonInLastTurn(BattlePokemon TargetPokemon)
     {
-        if(TurnIndex == 0) return false;
-        List<Event> LastTurnEvents = EventsListHistory[TurnIndex - 1];
+        if(TurnIndex <= 1) return false;
+        List<Event> LastTurnEvents = EventsListHistory[TurnIndex - 2];
         foreach(var EventIter in LastTurnEvents)
         {
             if(EventIter.GetEventType() == EventType.Switch)

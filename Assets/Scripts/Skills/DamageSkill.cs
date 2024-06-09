@@ -210,12 +210,24 @@ public class DamageSkill : BaseSkill
         {  
             J1 = true;
         }
+        if(J1 == false && 
+        SourcePokemon.HasItem("咒术之符") && 
+        GetSkillType(SourcePokemon) == EType.Ghost && T1 == (int)EType.Normal)
+        {  
+            J1 = true;
+        }
         if(J2 == false)
         {
             J3 = typeEffectiveness[(int)GetSkillType(SourcePokemon), T2] != 0;
             if(J3 == false &&
             SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "预言家" && 
             GetSkillType(SourcePokemon) == EType.Psychic && T2 == (int)EType.Dark)
+            {
+                J3 = true;
+            }
+            if(J3 == false &&
+            SourcePokemon.HasItem("咒术之符") && 
+            GetSkillType(SourcePokemon) == EType.Ghost && T2 == (int)EType.Normal)
             {
                 J3 = true;
             }        
@@ -263,13 +275,34 @@ public class DamageSkill : BaseSkill
         {
             Factor1 = 2.0;
         }
-        if(GetSkillType(SourcePokemon) == EType.Psychic && TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == EType.Dark)
+        if(GetSkillType(SourcePokemon) == EType.Psychic && TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == EType.Dark && SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "预言家")
         {
             Factor2 = 1.0;   
         }
-        else if(GetSkillType(SourcePokemon) == EType.Psychic && TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon) == EType.Dark)
+        else if(GetSkillType(SourcePokemon) == EType.Psychic && TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon) == EType.Dark && SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "预言家")
         {
             Factor1 = 1.0;
+        }
+
+        if(GetSkillType(SourcePokemon) == EType.Ghost && TargetPokemon.GetType2(InManager, SourcePokemon, TargetPokemon) == EType.Normal && SourcePokemon.HasItem("咒术之符"))
+        {
+            Factor2 = 1.0;   
+        }
+        else if(GetSkillType(SourcePokemon) == EType.Ghost && TargetPokemon.GetType1(InManager, SourcePokemon, TargetPokemon) == EType.Normal && SourcePokemon.HasItem("咒术之符"))
+        {
+            Factor1 = 1.0;
+        }
+
+        double Result = Factor1 * Factor2;
+        if(InManager.HasSpecialRule("特殊规则(得抚)"))
+        {
+            if(TargetPokemon.GetIsEnemy() == true && TargetPokemon.HasType(EType.Ice, InManager, SourcePokemon, TargetPokemon))
+            {
+                if(Result > 1.0)
+                {
+                    return 1.0;
+                }
+            }
         }
         return Factor1 * Factor2;
     }

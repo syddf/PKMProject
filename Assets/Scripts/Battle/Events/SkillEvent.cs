@@ -344,6 +344,10 @@ public class SkillEvent : EventAnimationPlayer, Event
         {
             return true;
         }
+        if(TargetPokemon.GetGlaiveRushState())
+        {
+            return true;
+        }
         if(GetReferenceManager().HasSpecialRule("特殊规则(帕琦拉)"))
         {
             return true;    
@@ -504,6 +508,10 @@ public class SkillEvent : EventAnimationPlayer, Event
             }
             if(SkillHasEffect)
             {
+                if(Skill.GetSkillName() != "巨剑突击")
+                {
+                    SourcePokemon.RemoveGlaiveRushState();
+                }
                 InManager.TranslateTimePoint(ETimePoint.AfterActivateSkill, this);
             }
             SourcePokemon.ReducePP(Skill);

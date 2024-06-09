@@ -48,7 +48,15 @@ public class EnemyAI
         {
             if(BattlePokemons[RandNum] != null && BattlePokemons[RandNum] != OutPokemon && BattlePokemons[RandNum].IsDead() == false)
             {
-                return BattlePokemons[RandNum];
+                bool Delay = false;
+                if(ReferenceBattleManager.GetEnemyTrainer().GetRemainPokemonNum() > 2 && BattlePokemons[RandNum].HasSkill("扫墓"))
+                {
+                    Delay = true;
+                }
+                if(Delay == false)
+                {
+                    return BattlePokemons[RandNum];
+                }
             }
             RandNum = (RandNum + 1) % 5;
             FailedNum++;
@@ -113,6 +121,17 @@ public class EnemyAI
         if(ReferencePokemon.CanMega())
         {
             ReferencePokemon.LoadMegaStat();
+        }
+        if(InManager.GetEnemyTrainer().GetRemainPokemonNum() > 2)
+        {
+            if(ReferencePokemon.HasStatusChange(EStatusChange.PerishSong) &&
+                ReferencePokemon.GetStatusChangeRemainTime(EStatusChange.PerishSong) == 1 && 
+                InManager.CanSwitch())
+            {
+                BattlePokemon EnemyNext = GetNextPokemon(ReferencePokemon);
+                InEvents.Add(new SwitchEvent(ReferenceBattleManager, ReferencePokemon, EnemyNext, false));
+                return;
+            }
         }
         HashSet<BaseSkill> ForbiddenSkillSet = ReferencePokemon.GetForbiddenBattleSkills(InManager);
         BaseSkill[] Skills = ReferencePokemon.GetReferenceSkill();
