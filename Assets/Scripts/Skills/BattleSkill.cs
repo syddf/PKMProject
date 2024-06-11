@@ -314,6 +314,15 @@ public class BattleSkill
             Reason = "受恶作剧之心影响的变化招式对恶属性宝可梦无效！";
             return false;
         }
+
+        if(GetSkillPriority(InManager, SourcePokemon, TargetPokemon) > 0 && 
+        TargetPokemon != null && 
+        TargetPokemon.IsGroundPokemon(InManager) &&
+        InManager.GetTerrainType() == EBattleFieldTerrain.Psychic)
+        {
+            Reason = "精神场地下先制招式对地面上的宝可梦无效！";
+            return false;
+        }
         return ReferenceBaseSkill.JudgeIsEffective(InManager, SourcePokemon, TargetPokemon, out Reason);
     }
 
