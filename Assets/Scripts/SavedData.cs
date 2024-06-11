@@ -249,7 +249,7 @@ public class SavedData : MonoBehaviour
             {
                 playerData.MainChapterProgress.Add(EProgress.New);
             }
-            playerData.MainChapterProgress[0] = EProgress.FinishAllBattle;
+            playerData.MainChapterProgress[0] = EProgress.FinishStory;
             IDataSerializer serializer = new EncryptedJSONDataSerializer();
             serializer.SerializeToFile(playerData, filePath);
             SavedPlayerData = playerData;

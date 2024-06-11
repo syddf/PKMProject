@@ -44,6 +44,11 @@ public class DamageSkill : BaseSkill
             EditorLog.DebugLog(SkillName + "因薄雾场地威力降低了!");
             return (int)Math.Floor(SourcePower * 0.5);
         }
+        if(InManager.GetTerrainType() == EBattleFieldTerrain.Psychic && GetSkillType(SourcePokemon) == EType.Psychic && SourcePokemon.IsGroundPokemon(InManager))
+        {
+            EditorLog.DebugLog(SkillName + "因精神场地威力提高了!");
+            return (int)Math.Floor(SourcePower * 1.3);
+        }
         return SourcePower;
     }
     protected virtual int GetSkillPower(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
