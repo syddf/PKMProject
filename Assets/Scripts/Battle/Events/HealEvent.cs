@@ -71,6 +71,7 @@ public class HealEvent : EventAnimationPlayer, Event
         if(!ShouldProcess(InManager)) return;
         InManager.TranslateTimePoint(ETimePoint.BeforeHeal, this);
         RealHealHP = ReferencePokemon.HealHP(HealHP);
+        InManager.RecordHealEvent(ReferencePokemon, RealHealHP);
         InManager.AddAnimationEvent(this);
         InManager.TranslateTimePoint(ETimePoint.AfterHeal, this);
     }

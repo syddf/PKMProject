@@ -114,6 +114,12 @@ public class TurnEndEvent : EventAnimationPlayer, Event
                 }
             }
         }
+
+        if(InManager.HasSpecialRule("特殊规则(福爷)"))
+        {
+            BattlePokemons[0].ResetStatChange();
+            BattlePokemons[1].ResetStatChange();
+        }
     }
 
     public void Process(BattleManager InManager)

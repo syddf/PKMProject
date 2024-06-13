@@ -20,7 +20,7 @@ public class TerrainChangeEvent : EventAnimationPlayer, Event
         if(NewTerrainType == EBattleFieldTerrain.Grass) return "青草场地";
         if(NewTerrainType == EBattleFieldTerrain.Misty) return "薄雾场地";
         if(NewTerrainType == EBattleFieldTerrain.Electric) return "电气场地";
-        if(NewTerrainType == EBattleFieldTerrain.Psychic) return "超能场地";
+        if(NewTerrainType == EBattleFieldTerrain.Psychic) return "精神场地";
         return "";
     }
 
@@ -111,7 +111,14 @@ public class TerrainChangeEvent : EventAnimationPlayer, Event
         }
         else
         {
-            InManager.SetTerrain(NewTerrainType, 5);
+            if(SourcePokemon != null && SourcePokemon.HasItem("大地膜"))
+            {
+                InManager.SetTerrain(NewTerrainType, 8);
+            }
+            else
+            {
+                InManager.SetTerrain(NewTerrainType, 5);
+            }
             bSuccessed = true;
         }
         InManager.AddAnimationEvent(this);

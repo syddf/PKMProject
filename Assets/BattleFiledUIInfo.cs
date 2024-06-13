@@ -14,7 +14,7 @@ public class BattleFiledUIInfo : MonoBehaviour
     public TextMeshProUGUI TurnText;
     public TextMeshProUGUI PlayerFieldDescText;
     public TextMeshProUGUI EnemyFieldDescText;
-
+    public TextMeshProUGUI SpecialRuleDescText;
     public void UpdateUI()
     {
         BattleManager StaticManager = BattleManager.StaticManager;
@@ -31,7 +31,7 @@ public class BattleFiledUIInfo : MonoBehaviour
             if(terrainType == EBattleFieldTerrain.Grass) TerrainText.text = "青草场地";
             if(terrainType == EBattleFieldTerrain.Misty) TerrainText.text = "薄雾场地";
             if(terrainType == EBattleFieldTerrain.Electric) TerrainText.text = "电气场地";
-            if(terrainType == EBattleFieldTerrain.Psychic) TerrainText.text = "超能场地";
+            if(terrainType == EBattleFieldTerrain.Psychic) TerrainText.text = "精神场地";
             TerrainTurnText.text = StaticManager.GetTerrainRemainTurn().ToString() + "回合";
         }
 
@@ -89,5 +89,18 @@ public class BattleFiledUIInfo : MonoBehaviour
             }
         }
         EnemyFieldDescText.text = EnemyText;
+
+        BaseSpecialRule SpecialRule = BattleManager.StaticManager.GetSpecialRule();
+        string DescText = SpecialRule.Description;
+        if(SpecialRule.Name == "特殊规则(福爷)")
+        {
+            DescText += "(对手已回复：";
+            DescText += BattleManager.StaticManager.GetHealedValue(false).ToString();
+            DescText += "、玩家已回复：";
+            DescText += BattleManager.StaticManager.GetHealedValue(true).ToString();
+            DescText += ")";
+        }
+
+        SpecialRuleDescText.text = DescText;
     }
 }
