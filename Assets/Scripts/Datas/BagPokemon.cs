@@ -507,7 +507,7 @@ public class BagPokemon : MonoBehaviour
                             break;
                         }
                     }
-                    OverrideItem = Trainer.BagPokemons[ItemOverrideIndex].Item;
+                    OverrideItem = TargetTrainer.BagPokemons[ItemOverrideIndex].Item;
                     
                 }
             }

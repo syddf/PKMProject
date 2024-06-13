@@ -60,6 +60,8 @@ public class BattleManager : MonoBehaviour
     public GameObject MapObj;
     public AudioController ReferenceBGM;
     private BaseSpecialRule CurrentSpecialRule;
+    private int PlayerHealedValue;
+    private int EnemyHealedValue;
     // Start is called before the first frame update
     void Start()
     {
@@ -270,9 +272,13 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void AddDefeatedPokemon(BattlePokemon InPokemon)
+    public void AddDefeatedPokemon(BattlePokemon InPokemon, BattlePokemon SourcePokemon)
     {
         DefeatedPokemonList.Add(InPokemon);
+        if(SourcePokemon)
+        {
+            SourcePokemon.RecordBeatPokemon();
+        }
     }
     
     public void AddSkillEvent(BattleSkill InSkill, BattlePokemon SourcePokemon, ETarget TargetPokemon)
@@ -471,6 +477,9 @@ public class BattleManager : MonoBehaviour
         FieldState.TerrainRemainTime = 0;
         FieldState.IsTrickRoomActive = false;
         FieldState.TrickRoomRemainTime = 0;
+
+        PlayerHealedValue = 0;
+        EnemyHealedValue = 0;
     }
 
     public PokemonTrainer GetOppositeTrainer(BattlePokemon InPokemon)
@@ -559,6 +568,11 @@ public class BattleManager : MonoBehaviour
             BeforeBattleUI.SetSpecialRule(BattleConfigObj.GetComponent<BattleConfig>().SpecialRule2);
         }
         BeforeBattleUI.SetPlayerPokemonTrainer(PlayerTrainer);
+    }
+
+    public BaseSpecialRule GetSpecialRule()
+    {
+        return CurrentSpecialRule;
     }
 
     public void SetSpecialRule(BaseSpecialRule InRule)
@@ -1125,6 +1139,27 @@ public class BattleManager : MonoBehaviour
     public void EndTrickRoom()
     {
         FieldState.IsTrickRoomActive = false;
+    }
+
+    public void RecordHealEvent(BattlePokemon HealedPokemon, int HealedValue)
+    {
+        if(HealedPokemon.GetIsEnemy())
+        {
+            EnemyHealedValue += HealedValue;
+        }
+        else
+        {
+            PlayerHealedValue += HealedValue;
+        }
+    }
+
+    public int GetHealedValue(bool IsPlayer)
+    {
+        if(IsPlayer)
+        {
+            return PlayerHealedValue;
+        }
+        return EnemyHealedValue;
     }
 
     public void TestAVG()

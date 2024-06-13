@@ -164,6 +164,8 @@ public class BattlePokemon : MonoBehaviour
     private PokemonTrainer ReferenceTrainer;
     private EType OverrideType;
     private bool GlaiveRushState = false;
+    private int TurnInField = 0;
+    private int BeatPokemonCount = 0;
 
     public bool HasSkill(string SkillName)
     {
@@ -329,6 +331,10 @@ public class BattlePokemon : MonoBehaviour
         if(InManager.GetWeatherType() == EWeather.Snow && HasType(EType.Ice, InManager, null, null))
         {
             WeatherFactor = 1.5;
+        }
+        if(HasAbility("草之毛皮", null, null, this) && InManager.GetTerrainType() == EBattleFieldTerrain.Grass)
+        {
+            AbilityFactor *= 1.5;
         }
         double SpecialRuleFactor = 1.0;
         if(InManager.HasSpecialRule("特殊规则(紫罗兰)") && IsEnemy == false)
@@ -684,6 +690,12 @@ public class BattlePokemon : MonoBehaviour
         return PokemonStats.Dead;
     }
 
+    public void Revive(int HP)
+    {
+        PokemonStats.HP = HP;
+        PokemonStats.Dead = false;
+    }
+
     public int HealHP(int HealHPVal)
     {
         HealHPVal = Math.Max(1, HealHPVal);
@@ -988,6 +1000,16 @@ public class BattlePokemon : MonoBehaviour
                     Result.Add(ReferenceSkill[SkillIndex]);
                 }
             }
+
+            if(InManager.HasSpecialRule("特殊规则(天桐)") && IsEnemy == false)
+            {
+                if(ReferenceSkill[SkillIndex].GetSkillType(this) != EType.Fire &&
+                   ReferenceSkill[SkillIndex].GetSkillType(this) != EType.Water &&
+                   ReferenceSkill[SkillIndex].GetSkillType(this) != EType.Grass)
+                {
+                    Result.Add(ReferenceSkill[SkillIndex]);
+                }
+            }
         }
         return Result;   
     }
@@ -1045,6 +1067,7 @@ public class BattlePokemon : MonoBehaviour
     {
         HasActivated = false;
         ConsumeThisTurn = false;
+        TurnInField++;
     }
 
     public bool HasConsumedThisTurn()
@@ -1089,6 +1112,21 @@ public class BattlePokemon : MonoBehaviour
         PokemonStats.EvasionrateLevel = 0;
         PokemonStats.AccuracyrateLevel = 0;
     }
+    public int GetTurnInField()
+    {
+        return TurnInField;
+    }
+
+    public void RecordBeatPokemon()
+    {
+        BeatPokemonCount += 1;
+    }
+
+    public int GetBeatPokemonCount()
+    {
+        return BeatPokemonCount;
+    }
+    
     public void ClearStatusChange()
     {
         if(HasAbility("再生力", null, null, null) && IsDead() == false)
@@ -1101,6 +1139,7 @@ public class BattlePokemon : MonoBehaviour
         ConsumeThisTurn = false;
         HasActivated = false;
         FirstSkill = null;
+        TurnInField = 0;
         Ability.ResetState();
         PokemonStats.AtkChangeLevel = 0;
         PokemonStats.DefChangeLevel = 0;

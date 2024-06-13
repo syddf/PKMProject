@@ -316,8 +316,8 @@ public class PokemonEditMainMenu : MonoBehaviour
     public void UpdatePokemonInfoUI(bool UpdateNatureDropDown = true)
     {
         BagPokemonOverrideData OverrideData = GetOverrideData();
-        PkmInfoUI.SetBagPokemon(CurrentPokemon, MegaToggle.isOn && CurrentPokemon.GetCanMega(), OverrideData, UpdateNatureDropDown);
         PkmInfoUI.CurrentTrainer = CurrentTrainer;
+        PkmInfoUI.SetBagPokemon(CurrentPokemon, MegaToggle.isOn && CurrentPokemon.GetCanMega(), OverrideData, UpdateNatureDropDown);
 
         int Skill0Index = 0;
         int Skill1Index = 1;

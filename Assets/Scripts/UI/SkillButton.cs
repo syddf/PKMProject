@@ -22,7 +22,7 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public Color ForbiddenColor;
     public Toggle MegaToggle;
     public SkillDescUI ReferenceDescUI;
-
+    public bool IsStruggle;
     public void OnPointerEnter(PointerEventData eventData)
     {
         ReferenceDescUI.SetSkill(ReferenceSkill);
@@ -46,6 +46,10 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         UIButton = this.GetComponent<Button>();
         Audio = this.GetComponent<AudioSource>();
         Forbidden = false;
+        if(IsStruggle)
+        {
+            this.GetComponent<Button>().onClick.AddListener(() => ButtonClicked());
+        }
     }
 
     public void Init(BattleManager InManager, BaseSkill InReferenceSkill, BattlePokemon InReferencePokemon, bool InForbidden)

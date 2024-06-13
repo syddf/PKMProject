@@ -51,7 +51,7 @@ public class PokemonDefeatedEvent : EventAnimationPlayer, Event
         if(!ShouldProcess(InManager)) return;
         InManager.TranslateTimePoint(ETimePoint.BeforePokemonDefeated, this);
         InManager.AddAnimationEvent(this);
-        InManager.AddDefeatedPokemon(TargetPokemon);
+        InManager.AddDefeatedPokemon(TargetPokemon, SourcePokemon);
         if(InManager.BattleEndIfPokemonDefeated(TargetPokemon))
         {
             bool Win = TargetPokemon.GetIsEnemy();
