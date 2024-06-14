@@ -17,7 +17,7 @@ public class Protect : StatusSkill
         int FailedNumber = 1;
         int CurrentTurn = InManager.GetCurrentTurnIndex();
 
-        while(CurrentTurn > 0)
+        while(CurrentTurn > 1)
         {
             List<BattleSkill> UsedSkill = InManager.GetPokemonSkillInTurnEffective(SourcePokemon, CurrentTurn - 1);
             bool Found = false;

@@ -514,6 +514,11 @@ public class SkillEvent : EventAnimationPlayer, Event
                 }
                 InManager.TranslateTimePoint(ETimePoint.AfterActivateSkill, this);
             }
+            if(Skill.GetSkillName() == "大爆炸")
+            {
+                DamageEvent damageEvent = new DamageEvent(SourcePokemon, SourcePokemon.GetMaxHP(), "大爆炸");
+                damageEvent.Process(InManager);   
+            }
             SourcePokemon.ReducePP(Skill);
         }
         SourcePokemon.SetActivated();

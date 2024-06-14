@@ -119,7 +119,10 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         {
             return "听到了终焉的歌声！";
         }
-
+        if(StatusChangeType == EStatusChange.DestinyBond)
+        {
+            return "准备与对手同归于尽了！";
+        }
         return "";
     }
 
@@ -158,7 +161,7 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         bool SameAsOrigin = false;
         if(!Forbidden)
         {
-            SameAsOrigin = ReferencePokemon.AddStatusChange(StatusChangeType, TurnIsLimited, StatusChangeTurn);
+            SameAsOrigin = ReferencePokemon.AddStatusChange(StatusChangeType, TurnIsLimited, StatusChangeTurn, SourcePokemon);
             if(!SameAsOrigin)
             {
                 if(StatusChangeType == EStatusChange.Frostbite)
