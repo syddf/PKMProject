@@ -91,16 +91,23 @@ public class BattleFiledUIInfo : MonoBehaviour
         EnemyFieldDescText.text = EnemyText;
 
         BaseSpecialRule SpecialRule = BattleManager.StaticManager.GetSpecialRule();
-        string DescText = SpecialRule.Description;
-        if(SpecialRule.Name == "特殊规则(福爷)")
+        if(SpecialRule != null)
         {
-            DescText += "(对手已回复：";
-            DescText += BattleManager.StaticManager.GetHealedValue(false).ToString();
-            DescText += "、玩家已回复：";
-            DescText += BattleManager.StaticManager.GetHealedValue(true).ToString();
-            DescText += ")";
-        }
+            string DescText = SpecialRule.Description;
+            if(SpecialRule.Name == "特殊规则(福爷)")
+            {
+                DescText += "(对手已回复：";
+                DescText += BattleManager.StaticManager.GetHealedValue(false).ToString();
+                DescText += "、玩家已回复：";
+                DescText += BattleManager.StaticManager.GetHealedValue(true).ToString();
+                DescText += ")";
+            }
 
-        SpecialRuleDescText.text = DescText;
+            SpecialRuleDescText.text = DescText;
+        }
+        else
+        {
+            SpecialRuleDescText.text = "";
+        }
     }
 }

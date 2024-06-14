@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2032569243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2032569244}
+  - component: {fileID: 2032569245}
+  m_Layer: 0
+  m_Name: PowerTrip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2032569244
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2032569243}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2032569245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2032569243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50f14a625feee34478d80e4133f5dd50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 20
+  PP: 10
+  Accuracy: 100
+  SkillClass: 0
+  SkillType: 16
+  SkillRange: 1
+  SkillName: "\u56A3\u5F20"
+  SkillDescription: "\u8000\u6B66\u626C\u5A01\u5730\u653B\u51FB\u5BF9\u624B\uFF0C\u81EA\u5DF1\u7684\u80FD\u529B\u63D0\u9AD8\u5F97\u8D8A\u591A\uFF0C\u5A01\u529B\u5C31\u8D8A\u5927\u3002"
+  MinCount: 1
+  MaxCount: 1
+  Priority: 0
+  AlwaysHit: 0
+  SkillAnimation: {fileID: 4365404481680115114, guid: 1c6d12071ddba8046a452b1d61785d0d, type: 3}

@@ -899,7 +899,7 @@ public class BattleManager : MonoBehaviour
     public List<BattleSkill> GetPokemonSkillInTurnEffective(BattlePokemon InPokemon, int TurnIndex)
     {
         List<BattleSkill> Result = new List<BattleSkill>();
-        foreach(var EventIter in EventsListHistory[TurnIndex])
+        foreach(var EventIter in EventsListHistory[TurnIndex - 1])
         {
             if(EventIter.GetEventType() == EventType.UseSkill)
             {

@@ -30,7 +30,8 @@ public enum EStatusChange
     LeechSeed,
     Confusion,
     Roost,
-    PerishSong
+    PerishSong,
+    DestinyBond
 }
 
 public struct StatusChange
@@ -39,7 +40,7 @@ public struct StatusChange
     public bool HasLimitedTime;
     public int RemainTime;
     public BaseStatusChange ReferenceBaseStatusChange;
-    public static BaseStatusChange GetBaseStatusChange(EStatusChange StatusChangeType, BattlePokemon InPokemon)
+    public static BaseStatusChange GetBaseStatusChange(EStatusChange StatusChangeType, BattlePokemon InPokemon, BattlePokemon SourcePokemon)
     {
         if(StatusChangeType == EStatusChange.ThroatChop)
         {
@@ -92,6 +93,10 @@ public struct StatusChange
         if(StatusChangeType == EStatusChange.PerishSong)
         {
             return new PerishSongStatusChange(InPokemon);
+        }      
+        if(StatusChangeType == EStatusChange.DestinyBond)
+        {
+            return new DestinyBondStatusChange(InPokemon);
         }      
         return null;
     }
@@ -862,7 +867,7 @@ public class BattlePokemon : MonoBehaviour
         return GetType1(InManager, SourcePokemon, TargetPokemon) == Type || GetType2(InManager, SourcePokemon, TargetPokemon) == Type;
     }
 
-    public bool AddStatusChange(EStatusChange StatusType, bool HasLimitedTime, int RemainTime)
+    public bool AddStatusChange(EStatusChange StatusType, bool HasLimitedTime, int RemainTime, BattlePokemon SourcePokemon)
     {
         if(PokemonStats.StatusChangeList == null)
         {
@@ -879,7 +884,7 @@ public class BattlePokemon : MonoBehaviour
                 OldStatus.HasLimitedTime = HasLimitedTime;
                 OldStatus.RemainTime = Math.Max(OldStatus.RemainTime, RemainTime);
                 OldStatus.StatusChangeType = StatusType;
-                OldStatus.ReferenceBaseStatusChange = StatusChange.GetBaseStatusChange(StatusType, this);
+                OldStatus.ReferenceBaseStatusChange = StatusChange.GetBaseStatusChange(StatusType, this, SourcePokemon);
                 PokemonStats.StatusChangeList[Index] = OldStatus;
                 return bSame;
             }
@@ -889,7 +894,7 @@ public class BattlePokemon : MonoBehaviour
         NewStatus.HasLimitedTime = HasLimitedTime;
         NewStatus.RemainTime = RemainTime;
         NewStatus.StatusChangeType = StatusType;
-        NewStatus.ReferenceBaseStatusChange = StatusChange.GetBaseStatusChange(StatusType, this);
+        NewStatus.ReferenceBaseStatusChange = StatusChange.GetBaseStatusChange(StatusType, this, SourcePokemon);
         PokemonStats.StatusChangeList.Add(NewStatus);
         return false;
     }
@@ -1097,7 +1102,7 @@ public class BattlePokemon : MonoBehaviour
             {
                 if(StatusChange.ShouldStatusChangeCopyWhenBatonPass(InPokemon.PokemonStats.StatusChangeList[Index].StatusChangeType))
                 {
-                    AddStatusChange(InPokemon.PokemonStats.StatusChangeList[Index].StatusChangeType, InPokemon.PokemonStats.StatusChangeList[Index].HasLimitedTime, InPokemon.PokemonStats.StatusChangeList[Index].RemainTime);
+                    AddStatusChange(InPokemon.PokemonStats.StatusChangeList[Index].StatusChangeType, InPokemon.PokemonStats.StatusChangeList[Index].HasLimitedTime, InPokemon.PokemonStats.StatusChangeList[Index].RemainTime, null);
                 }
             }
         }
