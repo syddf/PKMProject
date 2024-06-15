@@ -7,6 +7,7 @@ public class AudioController : MonoBehaviour
     public AudioSource secondSource;
 
     private AudioSource audioSource;
+    public float delaySeconds;
     void Start()
     {
         // 获取AudioSource组件
@@ -32,7 +33,7 @@ public class AudioController : MonoBehaviour
         audioSource.Play();
 
         // 等待第一段音频播放完成后，开始播放第二段音频
-        Invoke("PlaySecondClip", firstClip.length);
+        Invoke("PlaySecondClip", firstClip.length + delaySeconds);
     }
 
     void PlaySecondClip()

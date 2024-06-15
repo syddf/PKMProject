@@ -64,6 +64,11 @@ public class PokemonDefeatedEvent : EventAnimationPlayer, Event
         }      
     }
 
+    public BattleSkill GetReferenceSkill()
+    {
+        return SourceSkill;
+    }
+
     public EventType GetEventType()
     {
         return EventType.PokemonDefeated;

@@ -100,7 +100,26 @@ public class BattleSkill
         {
             return false;
         }
-        int CTRatio = GetCTRatio() + SourcePokemon.GetCTLevel();
+        int AbilityFactor = 0;
+        int TrainerSkillFactor = 0;
+        int ItemFactor = 0;
+
+        if(SourcePokemon.HasAbility("超幸运", InManager, SourcePokemon, TargetPokemon))
+        {
+            AbilityFactor = 1;
+        }
+
+        if(SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "信念之力")
+        {
+            TrainerSkillFactor = 1;
+        }
+
+        if(SourcePokemon.HasItem("焦点镜"))
+        {
+            ItemFactor = 1;
+        }
+
+        int CTRatio = GetCTRatio() + SourcePokemon.GetCTLevel() + AbilityFactor + TrainerSkillFactor + ItemFactor;
         CTRatio = Math.Min(3, CTRatio);
         CTRatio = Math.Max(0, CTRatio);
         int[] CTNumber = new int[4]{24, 8, 2, 1};
@@ -244,6 +263,16 @@ public class BattleSkill
             }
         }
 
+        if(SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "温柔之力")
+        {
+            TrainerSkillFactor *= 0.5;
+        }
+
+        if(TargetPokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "温柔之力")
+        {
+            TrainerSkillFactor *= 0.5;
+        }
+
         Damage = (int)Math.Floor(Damage * TrainerSkillFactor); 
 
         double SepcialRuleFactor = 1.0;
@@ -264,6 +293,22 @@ public class BattleSkill
             SepcialRuleFactor = 0.2;
         }
         else if(InManager.HasSpecialRule("特殊规则(竹兰)") && CastSkill.GetSkillPriority(InManager, SourcePokemon, TargetPokemon) < 1 && SourcePokemon.GetIsEnemy() == false)
+        {
+            SepcialRuleFactor = 0.5;
+        }
+        else if(InManager.HasSpecialRule("特殊规则(布拉塔诺)") && SourcePokemon.GetIsEnemy() == false)
+        {
+            SepcialRuleFactor = 0.5;
+        }
+        else if(InManager.HasSpecialRule("特殊规则(布拉塔诺)") && SourcePokemon.GetIsEnemy() == true)
+        {
+            SepcialRuleFactor = 2.0;
+        }
+        else if(InManager.HasSpecialRule("特殊规则(艾岚)") && SourcePokemon.GetIsEnemy() == true && CT)
+        {
+            SepcialRuleFactor = 2.0;
+        }
+        else if(InManager.HasSpecialRule("特殊规则(艾岚)") && SourcePokemon.GetIsEnemy() == false && CT == false)
         {
             SepcialRuleFactor = 0.5;
         }

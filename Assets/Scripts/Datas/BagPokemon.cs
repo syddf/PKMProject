@@ -446,7 +446,14 @@ public class BagPokemon : MonoBehaviour
         SourcePokemonData = PkmDataCollections.GetPokemonData(Name);
         if(CanMega)
         {
-            SourcePokemonMegaData = PkmDataCollections.GetPokemonData(Name + "-Mega");
+            if(Name == "Charizard")
+            {
+                SourcePokemonMegaData = PkmDataCollections.GetPokemonData(Name + "-Mega-X");
+            }
+            else
+            {
+                SourcePokemonMegaData = PkmDataCollections.GetPokemonData(Name + "-Mega");
+            }
         }
         HP = GetMaxHP();
         /*

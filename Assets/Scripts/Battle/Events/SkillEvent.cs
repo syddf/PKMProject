@@ -383,6 +383,7 @@ public class SkillEvent : EventAnimationPlayer, Event
         InManager.TranslateTimePoint(ETimePoint.BeforeActivateSkill, this);
         UseSkillMessageEvent MessageEvent = new UseSkillMessageEvent(Skill, SourcePokemon, SkillForbidden, SkillForbiddenReason);
         MessageEvent.Process(InManager);
+        bool HasPressureEffect = false;
         if(!SkillForbidden)
         {
             EditorLog.DebugLog(SourcePokemon.GetName() + " Use Skill：" + Skill.GetSkillName());
@@ -445,6 +446,10 @@ public class SkillEvent : EventAnimationPlayer, Event
                     for(int TargetIndex = 0; TargetIndex < SkillMetas.Count; TargetIndex++)
                     {
                         CurrentProcessTargetPokemon = SkillMetas[TargetIndex].ReferencePokemon;
+                        if(CurrentProcessTargetPokemon != null && CurrentProcessTargetPokemon.HasAbility("压迫感", ReferenceBattleManager, SourcePokemon, CurrentProcessTargetPokemon))
+                        {
+                            HasPressureEffect = true;
+                        }
                         InManager.TranslateTimePoint(ETimePoint.BeforeSkillEffect, this);
                         if(!SkillMetas[TargetIndex].NoEffect)
                         {
@@ -519,7 +524,8 @@ public class SkillEvent : EventAnimationPlayer, Event
                 DamageEvent damageEvent = new DamageEvent(SourcePokemon, SourcePokemon.GetMaxHP(), "大爆炸");
                 damageEvent.Process(InManager);   
             }
-            SourcePokemon.ReducePP(Skill);
+            
+            SourcePokemon.ReducePP(Skill, HasPressureEffect);
         }
         SourcePokemon.SetActivated();
     }
