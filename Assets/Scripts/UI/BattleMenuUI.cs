@@ -83,6 +83,7 @@ public class BattleMenuUI : MonoBehaviour
         ReferenceBattleManager.BeginBattle(FirstPokemonIndex, ChapterIndex, IsFirstBattle);
         BattleBGM.firstClip = CurrentTrainer.BGMFirst;
         BattleBGM.secondClip = CurrentTrainer.BGMLoop;
+        BattleBGM.delaySeconds = CurrentTrainer.BGMDelaySeconds;
     }
     
     public void UpdatePlayerTeam()

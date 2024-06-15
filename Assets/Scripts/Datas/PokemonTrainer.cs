@@ -17,6 +17,7 @@ public class PokemonTrainer : MonoBehaviour
     public List<string> BattleStartLines = new List<string>();
     public AudioClip BGMFirst;
     public AudioClip BGMLoop;
+    public float BGMDelaySeconds;
     public bool IsPlayer;
     public BaseTrainerSkill TrainerSkill;
     public int GetRemainPokemonNum()

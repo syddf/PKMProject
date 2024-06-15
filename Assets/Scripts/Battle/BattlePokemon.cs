@@ -765,13 +765,17 @@ public class BattlePokemon : MonoBehaviour
         OverrideType = InType;
     }
 
-    public void ReducePP(BattleSkill InSkill)
+    public void ReducePP(BattleSkill InSkill, bool HasPressureEffect)
     {
         for(int Index = 0; Index < 4; Index++)
         {
             if(ReferenceSkill[Index] != null && ReferenceSkill[Index].GetSkillName() == InSkill.GetSkillName())
             {
                 SkillPP[Index] = SkillPP[Index] - 1;
+                if(HasPressureEffect && SkillPP[Index] > 0)
+                {
+                    SkillPP[Index] = SkillPP[Index] - 1;
+                }
             }
         }
     }
@@ -1160,7 +1164,8 @@ public class BattlePokemon : MonoBehaviour
         }
         for(int Index = PokemonStats.StatusChangeList.Count - 1; Index >= 0; Index--)
         {
-            if(!StatusChange.IsStatusChange(PokemonStats.StatusChangeList[Index].StatusChangeType))
+            if(!StatusChange.IsStatusChange(PokemonStats.StatusChangeList[Index].StatusChangeType) ||
+            HasAbility("自然回复", null, null, null))
             {
                 PokemonStats.StatusChangeList.RemoveAt(Index);
             }
