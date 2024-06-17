@@ -122,6 +122,7 @@ public class EnemyAI
         {
             ReferencePokemon.LoadMegaStat();
         }
+        bool HasChoiceItem = ReferencePokemon.HasItem("讲究围巾") || ReferencePokemon.HasItem("讲究眼镜") || ReferencePokemon.HasItem("讲究头带");
         if(InManager.GetEnemyTrainer().GetRemainPokemonNum() > 2)
         {
             if(ReferencePokemon.HasStatusChange(EStatusChange.PerishSong) &&
@@ -151,8 +152,17 @@ public class EnemyAI
 
         if(ForbiddenSkillSet.Count == 4)
         {
-            AddUseSkillEvent(InManager.GetStruggleSkill(), InEvents);
-            return;
+            if(InManager.CanSwitch() && InManager.GetEnemyTrainer().GetRemainPokemonNum() > 2)
+            {
+                BattlePokemon EnemyNext = GetNextPokemon(ReferencePokemon);
+                InEvents.Add(new SwitchEvent(ReferenceBattleManager, ReferencePokemon, EnemyNext, false));   
+                return;
+            }
+            else
+            {
+                AddUseSkillEvent(InManager.GetStruggleSkill(), InEvents);
+                return;
+            }
         }
 
         for(int Index = 0; Index < 4; Index++)
@@ -253,6 +263,13 @@ public class EnemyAI
                     SkillPriorityLargeThanZero.Add(Entry);
                     TotalValue += Entry.Priority;
                 }
+            }
+
+            if(HasChoiceItem && TotalValue <= 70 && InManager.CanSwitch() && InManager.GetEnemyTrainer().GetRemainPokemonNum() > 2)
+            {
+                BattlePokemon EnemyNext = GetNextPokemon(ReferencePokemon);
+                InEvents.Add(new SwitchEvent(ReferenceBattleManager, ReferencePokemon, EnemyNext, false));   
+                return; 
             }
 
             if(TotalValue > 0)

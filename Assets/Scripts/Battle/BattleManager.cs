@@ -62,6 +62,7 @@ public class BattleManager : MonoBehaviour
     private BaseSpecialRule CurrentSpecialRule;
     private int PlayerHealedValue;
     private int EnemyHealedValue;
+    private int WeatherChangedCounter;
     // Start is called before the first frame update
     void Start()
     {
@@ -480,6 +481,7 @@ public class BattleManager : MonoBehaviour
 
         PlayerHealedValue = 0;
         EnemyHealedValue = 0;
+        WeatherChangedCounter = 0;
     }
 
     public PokemonTrainer GetOppositeTrainer(BattlePokemon InPokemon)
@@ -1162,6 +1164,16 @@ public class BattleManager : MonoBehaviour
         return EnemyHealedValue;
     }
 
+    public void RecordChangeWeather()
+    {
+        WeatherChangedCounter += 1;
+    }
+
+    public int GetWeatherChangCounter()
+    {
+        return WeatherChangedCounter;
+    }
+    
     public void TestAVG()
     {
         Debug.Log("Test.");

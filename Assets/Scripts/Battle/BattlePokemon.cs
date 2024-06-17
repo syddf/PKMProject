@@ -920,6 +920,15 @@ public class BattlePokemon : MonoBehaviour
         }
     }
 
+    public bool HasStatusChangeDrosyBurnPoisonFrostbiteParalysis()
+    {
+        return HasStatusChange(EStatusChange.Burn) || 
+        HasStatusChange(EStatusChange.Frostbite) || 
+        HasStatusChange(EStatusChange.Paralysis) || 
+        HasStatusChange(EStatusChange.Poison) || 
+        HasStatusChange(EStatusChange.Drowsy);
+    }
+
     public bool HasStatusChange(EStatusChange StatusType)
     {
         if(PokemonStats.StatusChangeList == null)

@@ -102,7 +102,15 @@ public class BattleFiledUIInfo : MonoBehaviour
                 DescText += BattleManager.StaticManager.GetHealedValue(true).ToString();
                 DescText += ")";
             }
-
+            if(SpecialRule.Name == "特殊规则(奇巴纳)")
+            {
+                int Target = 7;
+                DescText += "(已达成次数：";
+                DescText += BattleManager.StaticManager.GetWeatherChangCounter().ToString();
+                DescText += "/";
+                DescText += Target.ToString();
+                DescText += ")";
+            }
             SpecialRuleDescText.text = DescText;
         }
         else

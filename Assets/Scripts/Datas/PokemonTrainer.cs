@@ -20,6 +20,16 @@ public class PokemonTrainer : MonoBehaviour
     public float BGMDelaySeconds;
     public bool IsPlayer;
     public BaseTrainerSkill TrainerSkill;
+    public int GetPokemonIndex(BattlePokemon InPokemon)
+    {
+        if(BattlePokemons[0] == InPokemon) return 0;
+        if(BattlePokemons[1] == InPokemon) return 1;
+        if(BattlePokemons[2] == InPokemon) return 2;
+        if(BattlePokemons[3] == InPokemon) return 3;
+        if(BattlePokemons[4] == InPokemon) return 4;
+        if(BattlePokemons[5] == InPokemon) return 5;
+        return -1;
+    }
     public int GetRemainPokemonNum()
     {
         int Result = 0;

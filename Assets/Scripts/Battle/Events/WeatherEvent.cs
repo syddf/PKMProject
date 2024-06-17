@@ -136,10 +136,26 @@ public class WeatherChangeEvent : EventAnimationPlayer, Event
                 ForbidChangeWeather = true;
             }
             InManager.SetWeather(NewWeatherType, Turn);
+            if(NewWeatherType != EWeather.None)
+            {
+                InManager.RecordChangeWeather();
+            }
             bSuccessed = true;
         }
         InManager.AddAnimationEvent(this);
         InManager.TranslateTimePoint(ETimePoint.AfterChangeWeather, this);
+        if(bSuccessed && NewWeatherType != EWeather.None)
+        {
+            if(InManager.HasSpecialRule("特殊规则(奇巴纳)"))
+            {
+                BattlePokemon TargetPokemon = InManager.GetBattlePokemons()[0];
+                if(TargetPokemon.IsDead() == false)
+                {
+                    DamageEvent damageEvent = new DamageEvent(TargetPokemon, TargetPokemon.GetMaxHP() / 2, "特殊规则(奇巴纳)");
+                    damageEvent.Process(InManager);
+                }
+            }
+        }
     }
 
     public EventType GetEventType()

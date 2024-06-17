@@ -240,6 +240,7 @@ public class SavedData : MonoBehaviour
             UseableTrainerList.Add("卡露妮");
             UseableTrainerList.Add("得抚");
             UseableTrainerList.Add("南厦");
+            UseableTrainerList.Add("朵拉塞娜");
             playerData.BattleTrainerName = "希特隆";
             playerData.UseableTrainerList = UseableTrainerList;
 
