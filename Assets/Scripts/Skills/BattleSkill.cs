@@ -312,6 +312,14 @@ public class BattleSkill
         {
             SepcialRuleFactor = 0.5;
         }
+        else if(InManager.HasSpecialRule("特殊规则(朵拉塞娜)") && SourcePokemon.GetIsEnemy() == false && SourcePokemon.HasStatusChangeDrosyBurnPoisonFrostbiteParalysis() == false)
+        {
+            SepcialRuleFactor = 0.5;
+        }
+        else if(InManager.HasSpecialRule("特殊规则(朵拉塞娜)") && TargetPokemon.GetIsEnemy() == false && TargetPokemon.HasStatusChangeDrosyBurnPoisonFrostbiteParalysis() == true)
+        {
+            SepcialRuleFactor = 2.0;   
+        }
         Damage = (int)Math.Floor(Damage * SepcialRuleFactor); 
 
         if(TargetPokemon.GetGlaiveRushState())

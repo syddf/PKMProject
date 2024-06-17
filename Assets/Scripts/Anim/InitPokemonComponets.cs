@@ -71,7 +71,10 @@ public class InitPokemonComponets : MonoBehaviour
         // 合并所有Renderer的包围盒范围
         for (int i = 1; i < renderers.Length; i++)
         {
-            combinedBounds.Encapsulate(renderers[i].bounds);
+            //if(renderers[i].gameObject.active == true)
+            {
+                combinedBounds.Encapsulate(renderers[i].bounds);
+            }
         }
         
         // 设置BoxCollider的大小和中心点

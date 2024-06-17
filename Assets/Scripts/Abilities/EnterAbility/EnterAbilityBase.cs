@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class EnterAbilityBase : BaseAbility
 {
+    public virtual bool ExtraCondition(ETimePoint TimePoint, Event SourceEvent)
+    {
+        return true;
+    }
     public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
     {
+        if(!ExtraCondition(TimePoint, SourceEvent))
+        {
+            return false;
+        }
+        
         if(TimePoint != ETimePoint.PokemonIn && TimePoint != ETimePoint.BattleStart && TimePoint != ETimePoint.AfterMegaEvolution)
         {
             return false;

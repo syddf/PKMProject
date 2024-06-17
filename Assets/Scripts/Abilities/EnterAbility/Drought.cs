@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Drought : EnterAbilityBase
 {
+    public override bool ExtraCondition(ETimePoint TimePoint, Event SourceEvent)
+    {
+        return BattleManager.StaticManager.GetWeatherType() != EWeather.SunLight;
+    }
     public override List<Event> Trigger(BattleManager InManager, Event SourceEvent)
     {
         List<Event> NewEvents = new List<Event>();

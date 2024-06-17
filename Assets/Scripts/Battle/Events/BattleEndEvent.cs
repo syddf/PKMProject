@@ -81,6 +81,16 @@ public class BattleEndEvent : EventAnimationPlayer, Event
                     SpecialReason = PkmName + "未击败至少一只宝可梦！对战失败！";
                 }
             }
+
+            if(InManager.HasSpecialRule("特殊规则(奇巴纳)"))
+            {
+                int Counter = InManager.GetWeatherChangCounter();
+                if(Counter < 7)
+                {
+                    Win = false;
+                    SpecialReason = "天气切换次数未达到7次！对战失败！";
+                }
+            }
         }
         InManager.SetBattleEnd(true, Win);
     }
