@@ -272,6 +272,20 @@ public class BattleSkill
         {
             TrainerSkillFactor *= 0.5;
         }
+        
+        if(SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "勤勉学习" || 
+        TargetPokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "勤勉学习")
+        {
+            int MaxPP = CastSkill.GetPP();
+            int PP = SourcePokemon.GetSkillPP(CastSkill);
+            int Count = MaxPP - PP;
+            if(Count > 6)
+            {
+                Count = 6;
+            }
+            double Ratio = 1.0 - Count * 0.05;
+            TrainerSkillFactor *= Ratio;
+        }
 
         Damage = (int)Math.Floor(Damage * TrainerSkillFactor); 
 

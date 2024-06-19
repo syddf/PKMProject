@@ -352,6 +352,11 @@ public class SkillEvent : EventAnimationPlayer, Event
         {
             return true;    
         }
+        if(SourcePokemon.HasAbility("无防守", null, SourcePokemon, TargetPokemon) == true ||
+        TargetPokemon.HasAbility("无防守", null, SourcePokemon, TargetPokemon) == true)
+        {
+            return true;
+        }
         int SkillAccuracy = Skill.GetSkillAccuracy(GetReferenceManager(), SourcePokemon, TargetPokemon);
         int AttackAccuracyLevel = Skill.GetAttackAccuracyChangeLevel(ReferenceBattleManager, SourcePokemon, TargetPokemon);
         int EvasionRateLevel = Skill.GetTargetEvasionChangeLevel(ReferenceBattleManager, SourcePokemon, TargetPokemon);

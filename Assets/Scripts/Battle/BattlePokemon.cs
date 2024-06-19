@@ -317,6 +317,11 @@ public class BattlePokemon : MonoBehaviour
                 SpecialRuleFactor = 0.5;
             }
         }
+        if(InManager.HasSpecialRule("特殊规则(桄榔)") && IsEnemy == true)
+        {
+            int NotFinishedBattleCount = InManager.GetPlayerNotFinishedBattle();
+            SpecialRuleFactor = 1.0 + 0.05 * NotFinishedBattleCount;
+        }
         return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor * SpecialRuleFactor);
     }
     public int GetDef(ECaclStatsMode Mode, BattleManager InManager)
@@ -355,7 +360,12 @@ public class BattlePokemon : MonoBehaviour
             {
                 SpecialRuleFactor = 0.5;
             }
-        }      
+        }   
+        if(InManager.HasSpecialRule("特殊规则(桄榔)") && IsEnemy == true)
+        {
+            int NotFinishedBattleCount = InManager.GetPlayerNotFinishedBattle();
+            SpecialRuleFactor = 1.0 + 0.05 * NotFinishedBattleCount;
+        }   
         return (int)Math.Floor((double)PokemonStats.Def * StatLevelFactor[ChangeLevel + 6] * WeatherFactor * AbilityFactor * ItemFactor * SpecialRuleFactor);
     }
     public int GetSAtk(ECaclStatsMode Mode, BattleManager InManager)
@@ -406,6 +416,11 @@ public class BattlePokemon : MonoBehaviour
         {
             ItemFactor = 1.0;
         }
+        if(InManager.HasSpecialRule("特殊规则(桄榔)") && IsEnemy == true)
+        {
+            int NotFinishedBattleCount = InManager.GetPlayerNotFinishedBattle();
+            SpecialRuleFactor = 1.0 + 0.05 * NotFinishedBattleCount;
+        }
         return (int)Math.Floor((double)PokemonStats.SAtk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor * SpecialRuleFactor);
     }
     public int GetSDef(ECaclStatsMode Mode, BattleManager InManager)
@@ -444,6 +459,11 @@ public class BattlePokemon : MonoBehaviour
             {
                 SpecialRuleFactor = 0.5;
             }
+        }
+        if(InManager.HasSpecialRule("特殊规则(桄榔)") && IsEnemy == true)
+        {
+            int NotFinishedBattleCount = InManager.GetPlayerNotFinishedBattle();
+            SpecialRuleFactor = 1.0 + 0.05 * NotFinishedBattleCount;
         }
         double TrainerSkillFactor = 1.0;
         if(ReferenceTrainer.TrainerSkill.GetSkillName() == "坚韧之冰")
@@ -509,6 +529,11 @@ public class BattlePokemon : MonoBehaviour
             {
                 SpecialRuleFactor = 0.5;
             }
+        }
+        if(InManager.HasSpecialRule("特殊规则(桄榔)") && IsEnemy == true)
+        {
+            int NotFinishedBattleCount = InManager.GetPlayerNotFinishedBattle();
+            SpecialRuleFactor = 1.0 + 0.05 * NotFinishedBattleCount;
         }
         
         double TrainerSkillFactor = 1.0;
@@ -739,9 +764,14 @@ public class BattlePokemon : MonoBehaviour
         PokemonStats.Def = ReferenceBasePokemon.GetDef(false);
         PokemonStats.SDef = ReferenceBasePokemon.GetSDef(false);
         PokemonStats.MaxHP = ReferenceBasePokemon.GetMaxHP();
+        if(ReferenceTrainer.TrainerSkill.GetSkillName() == "对战塔大君")
+        {
+            int FinishedBattleCount = BattleManager.StaticManager.GetPlayerFinishedBattle();
+            PokemonStats.MaxHP = PokemonStats.MaxHP + 5 * FinishedBattleCount;
+        }
         PokemonStats.Speed = ReferenceBasePokemon.GetSpeed(false);
         PokemonStats.Level = ReferenceBasePokemon.GetLevel();
-        PokemonStats.HP = ReferenceBasePokemon.GetMaxHP();
+        PokemonStats.HP = PokemonStats.MaxHP;
         
         Type1 = ReferenceBasePokemon.GetType0(false);
         Type2 = ReferenceBasePokemon.GetType1(false);
@@ -771,7 +801,10 @@ public class BattlePokemon : MonoBehaviour
         {
             if(ReferenceSkill[Index] != null && ReferenceSkill[Index].GetSkillName() == InSkill.GetSkillName())
             {
-                SkillPP[Index] = SkillPP[Index] - 1;
+                if(ReferenceTrainer.TrainerSkill.GetSkillName() != "勤勉学习" && SkillPP[Index] > 0)
+                {
+                    SkillPP[Index] = SkillPP[Index] - 1;
+                }
                 if(HasPressureEffect && SkillPP[Index] > 0)
                 {
                     SkillPP[Index] = SkillPP[Index] - 1;

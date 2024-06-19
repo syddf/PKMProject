@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3020291819047334628
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3020291819047334631}
+  - component: {fileID: 3020291819047334630}
+  m_Layer: 0
+  m_Name: FlameOrb
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3020291819047334631
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3020291819047334628}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3020291819047334630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3020291819047334628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19676bacb8f58664e9abd2d2d5527435, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemName: "\u706B\u7130\u5B9D\u73E0"
+  Description: "\u643A\u5E26\u8BE5\u9053\u5177\u7684\u5B9D\u53EF\u68A6\u5728\u6BCF\u4E2A\u56DE\u5408\u7ED3\u675F\u65F6\uFF0C\u5982\u679C\u6CA1\u6709\u5904\u4E8E\u5F02\u5E38\u72B6\u6001\uFF0C\u5219\u8FDB\u5165\u707C\u4F24\u72B6\u6001\u3002"
+  CanKnockOff: 1

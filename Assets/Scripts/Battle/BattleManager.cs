@@ -596,6 +596,47 @@ public class BattleManager : MonoBehaviour
     {
         EnemyTrainer = InTrainer;
     }
+    public int GetPlayerFinishedBattle()
+    {
+        int Result = 0;
+        GameObject SavedDataObj = GameObject.Find("SavedData");
+        var PlayerData = SavedDataObj.GetComponent<SavedData>().SavedPlayerData;
+        for(int Index = 1; Index <= 9; Index++)
+        {
+            if(PlayerData.MainChapterProgress[Index] == EProgress.FinishBattle1 || PlayerData.MainChapterProgress[Index] == EProgress.FinishBattle2)
+            {
+                Result += 1;
+            }
+            else if(PlayerData.MainChapterProgress[Index] == EProgress.FinishAllBattle)
+            {
+                Result += 2;
+            }
+        }
+        return Result + 1;
+    }
+
+    public int GetPlayerNotFinishedBattle()
+    {
+        int Result = 0;
+        GameObject SavedDataObj = GameObject.Find("SavedData");
+        var PlayerData = SavedDataObj.GetComponent<SavedData>().SavedPlayerData;
+        for(int Index = 1; Index <= 9; Index++)
+        {
+            if(PlayerData.MainChapterProgress[Index] == EProgress.FinishBattle1 || PlayerData.MainChapterProgress[Index] == EProgress.FinishBattle2)
+            {
+                Result += 1;
+            }
+            else if(PlayerData.MainChapterProgress[Index] == EProgress.FinishAllBattle)
+            {
+                continue;
+            }
+            else
+            {
+                Result += 2;
+            }
+        }
+        return Result;
+    }
 
     public void EndBattle(bool Win)
     {
