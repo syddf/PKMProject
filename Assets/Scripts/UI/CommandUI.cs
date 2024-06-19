@@ -126,6 +126,7 @@ public class CommandUI : MonoBehaviour
 
     public void GenerateNewSwitchGroup(PokemonTrainer InTrainer)
     {
+        MegaButton.SetActive(false);
         StruggleButton.SetActive(false);
         SwitchGroupRootObj.SetActive(true);
         SkillGroupRootObj.SetActive(false);

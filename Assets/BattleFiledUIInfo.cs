@@ -111,6 +111,13 @@ public class BattleFiledUIInfo : MonoBehaviour
                 DescText += Target.ToString();
                 DescText += ")";
             }
+            if(SpecialRule.Name == "特殊规则(桄榔)")
+            {
+                int NotFinishedBattleCount = BattleManager.StaticManager.GetPlayerNotFinishedBattle();
+                DescText += "(";
+                DescText += NotFinishedBattleCount.ToString();
+                DescText += ")";
+            }
             SpecialRuleDescText.text = DescText;
         }
         else

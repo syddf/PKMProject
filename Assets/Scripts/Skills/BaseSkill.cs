@@ -79,7 +79,14 @@ public class BaseSkill : MonoBehaviour
     public ESkillClass GetSkillClass() => SkillClass;
     public virtual bool GetAlwaysHit(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon) => AlwaysHit;
     public int GetPower() => Power;
-    public int GetPP() => PP;
+    public int GetPP()
+    {
+        if(BattleManager.StaticManager.HasSpecialRule("特殊规则(翔太)"))
+        {
+            return 1;
+        }
+        return PP;
+    }
     public int GetAccuracy() => Accuracy;
     public int GetMinCount() => MinCount;
     public int GetMaxCount() => MaxCount;

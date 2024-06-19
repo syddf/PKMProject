@@ -40,7 +40,13 @@ public class SetPokemonStatusChangeEvent : EventAnimationPlayer, Event
         SourcePokemon.HasAbility("穿透", InBattleManager, SourcePokemon, ReferencePokemon) == false
         ) 
         && StatusChange.IsStatusChange(StatusChangeType)) return false;
-        
+
+        if(ReferencePokemon.HasAbility("花幕", InBattleManager, SourcePokemon, ReferencePokemon) 
+        && ReferencePokemon.HasType(EType.Grass, InBattleManager, SourcePokemon, ReferencePokemon) 
+        && StatusChange.IsStatusChange(StatusChangeType)) 
+        return false;
+
+        if(ReferencePokemon.HasAbility("干劲", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Drowsy) return false;                
         if(ReferencePokemon.HasAbility("隔音", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.PerishSong) return false;                
         if(ReferencePokemon.HasAbility("不眠", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Drowsy) return false;        
         if(ReferencePokemon.HasAbility("精神力", InBattleManager, SourcePokemon, ReferencePokemon) && StatusChangeType == EStatusChange.Flinch) return false;
