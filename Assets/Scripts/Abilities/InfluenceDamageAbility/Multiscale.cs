@@ -8,7 +8,7 @@ public class Multiscale : BaseAbility
     {
         double Result = Damage;
         DamageSkill CastSkill = (DamageSkill)InSkill;
-        if(SourcePokemon.GetHP() == SourcePokemon.GetMaxHP())
+        if(TargetPokemon.GetHP() == TargetPokemon.GetMaxHP())
         {
             Result = Result * 0.5;
         }
