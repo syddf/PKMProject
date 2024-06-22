@@ -272,6 +272,11 @@ public class BattleSkill
         {
             TrainerSkillFactor *= 0.5;
         }
+
+        if(TargetPokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "骑士精神" && TargetPokemon.GetDamagedBySkillSinceSwitchIn() == false)
+        {
+            TrainerSkillFactor *= 0.7;
+        }
         
         if(SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "勤勉学习" || 
         TargetPokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "勤勉学习")

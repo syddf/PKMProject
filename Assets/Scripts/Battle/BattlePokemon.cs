@@ -166,6 +166,7 @@ public class BattlePokemon : MonoBehaviour
     private BaseSkill FirstSkill = null;
     private bool HasActivated = false;
     private bool HasActivatedSinceSwitchIn = false;
+    private bool HasDamagedBySkillSinceSwitchIn = false;
     private PokemonTrainer ReferenceTrainer;
     private EType OverrideType;
     private bool GlaiveRushState = false;
@@ -218,6 +219,7 @@ public class BattlePokemon : MonoBehaviour
         HasActivated = true;
         FirstIn = false;
         HasActivatedSinceSwitchIn = false;
+        HasDamagedBySkillSinceSwitchIn = false;
     }
     public bool GetFirstIn()
     {
@@ -1112,6 +1114,16 @@ public class BattlePokemon : MonoBehaviour
     public bool GetActivatedSinceSwitchIn()
     {
         return HasActivatedSinceSwitchIn;
+    }
+
+    public void SetDamagedBySkill()
+    {
+        HasDamagedBySkillSinceSwitchIn = true;
+    }
+
+    public bool GetDamagedBySkillSinceSwitchIn()
+    {
+        return HasDamagedBySkillSinceSwitchIn;
     }
 
     public void NewTurn()

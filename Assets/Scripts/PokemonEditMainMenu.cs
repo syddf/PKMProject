@@ -180,6 +180,12 @@ public class PokemonEditMainMenu : MonoBehaviour
     }
     public void OnClickReplacePokemon()
     {
+        if(CurrentTrainer.TrainerName == "小智" || CurrentTrainer.TrainerName == "莎莉娜")
+        {                
+            WarningUI.FadeOutUI(1.0f);
+            WarningText.text = "本场不可替换宝可梦！";
+            return;
+        }
         ReplacePokemonUI.SetActive(true);
         ReferenceTrainerReplaceUI.CurrentTrainer = CurrentTrainer;
         ReferenceTrainerReplaceUI.InitReplaceTrainerEntry();

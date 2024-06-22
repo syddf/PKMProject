@@ -89,6 +89,13 @@ public class BattleMenuUI : MonoBehaviour
     public void UpdatePlayerTeam()
     {
         PokemonTrainer UsingTrainer = GameObject.Find("SingleBattle/AllTrainers/" + SavedPlayerData.SavedPlayerData.BattleTrainerName).GetComponent<PokemonTrainer>();
+        if(ChapterIndex >= 10)
+        {
+            if(ChapterIndex == 10 || ChapterIndex == 11 || ChapterIndex == 13)
+            {
+                UsingTrainer = GameObject.Find("SingleBattle/AllTrainers/小智").GetComponent<PokemonTrainer>();
+            }
+        }
         PlayerTrainer.TrainerName = UsingTrainer.TrainerName;
         PlayerTrainer.TrainerSprite = UsingTrainer.TrainerSprite;
         PlayerTrainer.TrainerSkill = UsingTrainer.TrainerSkill;

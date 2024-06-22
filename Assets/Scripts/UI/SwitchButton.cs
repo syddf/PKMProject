@@ -11,6 +11,7 @@ public class SwitchButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public Image ItemSprite;
     public BattlePokemon ReferencePokemon;
     public BattlePokemonInfoUI ReferenceUI;
+    public BattleSkillsInfoUI ReferenceSkillUI;
     public void UpdateSprite(BattlePokemon InPokemon, BattleManager InManager)
     {
         g_BattleManager = InManager;
@@ -55,9 +56,11 @@ public class SwitchButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public void OnPointerEnter(PointerEventData eventData)
     {
         ReferenceUI.SetBattlePokemon(ReferencePokemon);
+        ReferenceSkillUI.UpdateUI(ReferencePokemon);
         if (eventData.pointerEnter.gameObject == this.gameObject)
         {
             ReferenceUI.gameObject.SetActive(true);
+            ReferenceSkillUI.gameObject.SetActive(true);
         }
     }
 
@@ -66,6 +69,7 @@ public class SwitchButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if (eventData.pointerEnter.gameObject == this.gameObject)
         {
             ReferenceUI.gameObject.SetActive(false);
+            ReferenceSkillUI.gameObject.SetActive(false);
         }
     }
 

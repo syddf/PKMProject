@@ -241,16 +241,22 @@ public class SavedData : MonoBehaviour
             UseableTrainerList.Add("得抚");
             UseableTrainerList.Add("南厦");
             UseableTrainerList.Add("朵拉塞娜");
+            UseableTrainerList.Add("志米");
             playerData.BattleTrainerName = "希特隆";
             playerData.UseableTrainerList = UseableTrainerList;
 
             playerData.OverrideData = new SerializableDictionary<string, SerializableDictionary<string, BagPokemonOverrideData>>();
             playerData.MainChapterProgress = new List<EProgress>();
-            for(int Index = 0; Index <= 9; Index++)
+            for(int Index = 0; Index <= 13; Index++)
             {
                 playerData.MainChapterProgress.Add(EProgress.New);
             }
             playerData.MainChapterProgress[0] = EProgress.FinishAllBattle;
+            playerData.MainChapterProgress[1] = EProgress.FinishAllBattle;
+            playerData.MainChapterProgress[2] = EProgress.FinishAllBattle;
+            playerData.MainChapterProgress[3] = EProgress.FinishAllBattle;
+            playerData.MainChapterProgress[4] = EProgress.FinishStory;
+            playerData.MainChapterProgress[10] = EProgress.FinishAllBattle;
             IDataSerializer serializer = new EncryptedJSONDataSerializer();
             serializer.SerializeToFile(playerData, filePath);
             SavedPlayerData = playerData;

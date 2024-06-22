@@ -25,6 +25,7 @@ public class Competitive : BaseAbility
             }
             return CastedEvent.GetTargetPokemon() == this.ReferencePokemon 
             && Count > 0
+            && CastedEvent.GetSourcePokemon() != null
             && CastedEvent.GetSourcePokemon().GetIsEnemy() != this.ReferencePokemon.GetIsEnemy();
         }
 
