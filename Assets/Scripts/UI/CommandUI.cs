@@ -27,6 +27,7 @@ public class CommandUI : MonoBehaviour
     private bool Play = false;
     public SkillDescUI ReferenceDescUI;
     public BattlePokemonInfoUI ReferenceBattlePokemonInfoUI;
+    public BattleSkillsInfoUI ReferenceSkillUI;
     public void GenerateNewSkillGroup(BattlePokemon InPokemon)
     {   
         State1Button.SetActive(true);
@@ -151,11 +152,17 @@ public class CommandUI : MonoBehaviour
         SubScript.SubObject5.GetComponent<SwitchButton>().UpdateSprite(Pokemons[4], BattleManager);
         SubScript.SubObject6.GetComponent<SwitchButton>().UpdateSprite(Pokemons[5], BattleManager);
         SubScript.SubObject1.GetComponent<SwitchButton>().ReferenceUI = ReferenceBattlePokemonInfoUI;
+        SubScript.SubObject1.GetComponent<SwitchButton>().ReferenceSkillUI = ReferenceSkillUI;
         SubScript.SubObject2.GetComponent<SwitchButton>().ReferenceUI = ReferenceBattlePokemonInfoUI;
+        SubScript.SubObject2.GetComponent<SwitchButton>().ReferenceSkillUI = ReferenceSkillUI;
         SubScript.SubObject3.GetComponent<SwitchButton>().ReferenceUI = ReferenceBattlePokemonInfoUI;
+        SubScript.SubObject3.GetComponent<SwitchButton>().ReferenceSkillUI = ReferenceSkillUI;
         SubScript.SubObject4.GetComponent<SwitchButton>().ReferenceUI = ReferenceBattlePokemonInfoUI;
+        SubScript.SubObject4.GetComponent<SwitchButton>().ReferenceSkillUI = ReferenceSkillUI;
         SubScript.SubObject5.GetComponent<SwitchButton>().ReferenceUI = ReferenceBattlePokemonInfoUI;
+        SubScript.SubObject5.GetComponent<SwitchButton>().ReferenceSkillUI = ReferenceSkillUI;
         SubScript.SubObject6.GetComponent<SwitchButton>().ReferenceUI = ReferenceBattlePokemonInfoUI;
+        SubScript.SubObject6.GetComponent<SwitchButton>().ReferenceSkillUI = ReferenceSkillUI;
         SkillButton.SetActive(false);
     }
 }

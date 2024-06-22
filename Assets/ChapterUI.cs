@@ -29,6 +29,7 @@ public class ChapterUI : MonoBehaviour
     public BattleMenuUI ReferenceBattleMenuUI;
     public FadeUI TransitionUI;
     private GameObject CacheNaniObj = null;
+    public TeamEditUI ReferenceTeamEditUI;
     IEnumerator DisableObjectAfterDelay()
     {
         yield return new WaitForSeconds(1f);
@@ -186,6 +187,7 @@ public class ChapterUI : MonoBehaviour
         this.gameObject.SetActive(false);
         ReferenceBattleMenuUI.gameObject.SetActive(true);
         ReferenceBattleMenuUI.ChapterIndex = CurrentChapterIndex;
+        ReferenceTeamEditUI.ChapterIndex = CurrentChapterIndex;
         ReferenceBattleMenuUI.IsFirstBattle = true;
         ReferenceBattleMenuUI.SetEnemyPokemonTrainer(BattleData.EnemyTrainer1);
         ReferenceBattleMenuUI.SetPlayerPokemonTrainer(BattleData.PlayerTrainer);
@@ -195,6 +197,7 @@ public class ChapterUI : MonoBehaviour
     {
         this.gameObject.SetActive(false);
         ReferenceBattleMenuUI.ChapterIndex = CurrentChapterIndex;
+        ReferenceTeamEditUI.ChapterIndex = CurrentChapterIndex;
         ReferenceBattleMenuUI.IsFirstBattle = false;
         ReferenceBattleMenuUI.gameObject.SetActive(true);
         ReferenceBattleMenuUI.SetEnemyPokemonTrainer(BattleData.EnemyTrainer2); 

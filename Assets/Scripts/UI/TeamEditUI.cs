@@ -10,7 +10,7 @@ public class TeamEditUI : MonoBehaviour
     public PokemonEditMainMenu MainMenu;
     public GameObject PokemonEditObj;
     public GameObject InfoObj;
-
+    public int ChapterIndex;
     public void UpdateTrainerTag()
     {
         foreach (Transform child in ContentsRoot.transform)
@@ -36,18 +36,35 @@ public class TeamEditUI : MonoBehaviour
         {
             GameObject.Destroy(child.gameObject);
         }
-
-        foreach(string TrainerName in SaveData.SavedPlayerData.UseableTrainerList)
+        if(ChapterIndex >= 10)
         {
-            GameObject newObject = Instantiate(TrainerEntryPrefab, ContentsRoot.transform.position, Quaternion.identity);
-            newObject.transform.SetParent(ContentsRoot.transform);
-            newObject.GetComponent<TrainerListEntry>().TeamEditWindow = this.GetComponent<TeamEditUI>();
+            if(ChapterIndex == 10 || ChapterIndex == 11 || ChapterIndex == 13)
+            {
+                GameObject newObject = Instantiate(TrainerEntryPrefab, ContentsRoot.transform.position, Quaternion.identity);
+                newObject.transform.SetParent(ContentsRoot.transform);
+                newObject.GetComponent<TrainerListEntry>().TeamEditWindow = this.GetComponent<TeamEditUI>();
 
-            string spritePath = "UI/TrainerAvator/" + TrainerName;
-            Sprite sprite = Resources.Load<Sprite>(spritePath);
-            newObject.GetComponent<TrainerListEntry>().Trainer.sprite = sprite;
-            newObject.GetComponent<TrainerListEntry>().InitEntry(TrainerName);
-            newObject.GetComponent<TrainerListEntry>().UpdateTag(SaveData.SavedPlayerData.BattleTrainerName);
+                string spritePath = "UI/TrainerAvator/小智";
+                Sprite sprite = Resources.Load<Sprite>(spritePath);
+                newObject.GetComponent<TrainerListEntry>().Trainer.sprite = sprite;
+                newObject.GetComponent<TrainerListEntry>().InitEntry("小智");
+                newObject.GetComponent<TrainerListEntry>().UpdateTag("小智");
+            }
+        }
+        else
+        {
+            foreach(string TrainerName in SaveData.SavedPlayerData.UseableTrainerList)
+            {
+                GameObject newObject = Instantiate(TrainerEntryPrefab, ContentsRoot.transform.position, Quaternion.identity);
+                newObject.transform.SetParent(ContentsRoot.transform);
+                newObject.GetComponent<TrainerListEntry>().TeamEditWindow = this.GetComponent<TeamEditUI>();
+
+                string spritePath = "UI/TrainerAvator/" + TrainerName;
+                Sprite sprite = Resources.Load<Sprite>(spritePath);
+                newObject.GetComponent<TrainerListEntry>().Trainer.sprite = sprite;
+                newObject.GetComponent<TrainerListEntry>().InitEntry(TrainerName);
+                newObject.GetComponent<TrainerListEntry>().UpdateTag(SaveData.SavedPlayerData.BattleTrainerName);
+            }
         }
     }
 }

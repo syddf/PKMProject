@@ -646,7 +646,7 @@ public class BattleManager : MonoBehaviour
             EProgress CurProgress = SavedDataObj.GetComponent<SavedData>().SavedPlayerData.MainChapterProgress[ChapterIndex];
             if(IsFirstBattle)
             {
-                if(ChapterIndex == 0)
+                if(ChapterIndex == 0 || ChapterIndex >= 10)
                 {
                     SavedDataObj.GetComponent<SavedData>().SavedPlayerData.MainChapterProgress[ChapterIndex] = EProgress.FinishAllBattle;
                 }

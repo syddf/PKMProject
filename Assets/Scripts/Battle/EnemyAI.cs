@@ -97,6 +97,7 @@ public class EnemyAI
         {
             Factor = Factor * PokemonAI.GetSkillPriorityFactor(InSkill, InManager, ReferencePokemon, InPlayerAction);
         }
+
         return Factor * GetLowLevelFactor(InSkill.GetSkillName());
     }
 
@@ -212,7 +213,22 @@ public class EnemyAI
                         {
                             KillSkillIndex.Add(Index);
                         }
-                        Entry.Priority = (int)(999 * GetSkillPriorityFactor(Entry.ReferenceSkill, InManager, ReferencePokemon, InPlayerAction));
+
+                        double Accuracy = (double)Entry.ReferenceSkill.GetAccuracy(InManager, ReferencePokemon, TargetPokemon);
+                        double HitFactor = Accuracy / 100.0;
+                        if(Entry.ReferenceSkill.GetAlwaysHit(InManager, ReferencePokemon, TargetPokemon) == true)
+                        {
+                            HitFactor = 100.0;
+                        }
+                        else if(Entry.ReferenceSkill.GetAccuracy(InManager, ReferencePokemon, TargetPokemon) == 100)
+                        {
+                            if(TargetPokemon.GetEvasionrateLevel(ECaclStatsMode.Normal) == 0 &&
+                            TargetPokemon.HasItem("光粉") == false)
+                            {
+                                HitFactor = 100.0;
+                            }
+                        }
+                        Entry.Priority = (int)(999 * GetSkillPriorityFactor(Entry.ReferenceSkill, InManager, ReferencePokemon, InPlayerAction) * HitFactor);
                     }
                     else if(Damage >= (TargetPokemon.GetMaxHP() / 2))
                     {

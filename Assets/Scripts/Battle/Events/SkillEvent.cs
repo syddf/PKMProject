@@ -483,6 +483,7 @@ public class SkillEvent : EventAnimationPlayer, Event
                             InManager.TranslateTimePoint(ETimePoint.BeforeTakenDamage, this);
                             EditorLog.DebugLog(CurrentProcessTargetPokemon.GetName()  + " Taken Damage:" + SkillMetas[TargetIndex].Damage);
                             bool Dead = CurrentProcessTargetPokemon.TakenDamage(SkillMetas[TargetIndex].Damage);
+                            CurrentProcessTargetPokemon.SetDamagedBySkill();
                             Skill.AfterDamageEvent(InManager, SourcePokemon, CurrentProcessTargetPokemon, SkillMetas[TargetIndex].Damage);
                             if(Dead)
                             {
