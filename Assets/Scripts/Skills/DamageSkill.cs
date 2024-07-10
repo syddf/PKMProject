@@ -173,6 +173,10 @@ public class DamageSkill : BaseSkill
         {
             IgnorBuf = true;
         }
+        if(GetSkillName() == "圣剑")
+        {
+            IgnorBuf = true;
+        }
         if(SourcePokemon.HasAbility("纯朴", InManager, SourcePokemon, TargetPokemon))
         {
             IgnorBuf = true;

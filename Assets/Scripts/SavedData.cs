@@ -118,6 +118,7 @@ public struct PlayerData
     public SerializableDictionary<string, SerializableDictionary<string, BagPokemonOverrideData>> OverrideData;
     public string BattleTrainerName;
     public List<EProgress> MainChapterProgress;
+    public int RemainCheatCount;
 }
 
 // 定义一个接口用于序列化和反序列化操作
@@ -257,6 +258,9 @@ public class SavedData : MonoBehaviour
             playerData.MainChapterProgress[3] = EProgress.FinishAllBattle;
             playerData.MainChapterProgress[4] = EProgress.FinishStory;
             playerData.MainChapterProgress[10] = EProgress.FinishAllBattle;
+            playerData.MainChapterProgress[11] = EProgress.FinishAllBattle;
+            playerData.MainChapterProgress[12] = EProgress.FinishAllBattle;
+            playerData.RemainCheatCount = 3;
             IDataSerializer serializer = new EncryptedJSONDataSerializer();
             serializer.SerializeToFile(playerData, filePath);
             SavedPlayerData = playerData;

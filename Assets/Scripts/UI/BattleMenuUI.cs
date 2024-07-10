@@ -52,6 +52,17 @@ public class BattleMenuUI : MonoBehaviour
     public int ChapterIndex;
     public bool IsFirstBattle;
     public SetTrainerSkillInfo ReferenceTrainerSkillUI;
+    public Image CloseImage;
+    public GameObject CheatObj;
+    public bool Cheated = false;
+    public Toggle toggleUI;
+    public TextMeshProUGUI cheatText;
+    public void SetCheat()
+    {
+        Cheated = !Cheated;
+        UpdateSpecialRule();
+    }
+
     public void OnChangeFirstPokemon(int Index)
     {
         FirstPokemonIndex = Index;
@@ -77,7 +88,14 @@ public class BattleMenuUI : MonoBehaviour
 
     public void OnClickBeginBattle()
     {
-        ReferenceBattleManager.SetSpecialRule(CurrentSpecialRule);
+        if(Cheated)
+        {
+            ReferenceBattleManager.SetSpecialRule(null);
+        }
+        else
+        {
+            ReferenceBattleManager.SetSpecialRule(CurrentSpecialRule);
+        }
         ReferenceBattleManager.SetPlayerTrainer(PlayerTrainer);
         ReferenceBattleManager.SetEnemyTrainer(CurrentTrainer);
         ReferenceBattleManager.BeginBattle(FirstPokemonIndex, ChapterIndex, IsFirstBattle);
@@ -94,6 +112,10 @@ public class BattleMenuUI : MonoBehaviour
             if(ChapterIndex == 10 || ChapterIndex == 11 || ChapterIndex == 13)
             {
                 UsingTrainer = GameObject.Find("SingleBattle/AllTrainers/小智").GetComponent<PokemonTrainer>();
+            }
+            else
+            {
+                UsingTrainer = GameObject.Find("SingleBattle/AllTrainers/莎莉娜").GetComponent<PokemonTrainer>();
             }
         }
         PlayerTrainer.TrainerName = UsingTrainer.TrainerName;
@@ -136,10 +158,29 @@ public class BattleMenuUI : MonoBehaviour
         TrainerSkillDesc.text = InTrainer.TrainerSkill.GetSkillDescription();
         TrainerSkillName.text = InTrainer.TrainerSkill.GetSkillName();
         ChoosePokemon(CurrentTrainer.BagPokemons[0]);
+
+        toggleUI.isOn = false;
+        Cheated = false;
+        if(ChapterIndex == 0 || ChapterIndex >= 10 || SavedPlayerData.SavedPlayerData.RemainCheatCount <= 0)
+        {
+            CheatObj.SetActive(false);
+        }
+        else
+        {
+            cheatText.text = "屏蔽规则(剩余" + SavedPlayerData.SavedPlayerData.RemainCheatCount.ToString() + "次)";
+            CheatObj.SetActive(true);
+        }
     }
 
     public void UpdateSpecialRule()
     {
+        if(Cheated)
+        {
+            SpecialRuleDesc.text = "规则已屏蔽，获胜后消耗1次。";
+            CloseImage.gameObject.SetActive(true);
+            return;
+        }
+        CloseImage.gameObject.SetActive(false);
         if(CurrentSpecialRule)
         {
             SpecialRuleDesc.text = CurrentSpecialRule.Description;

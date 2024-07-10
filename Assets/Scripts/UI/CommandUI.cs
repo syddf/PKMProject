@@ -23,6 +23,7 @@ public class CommandUI : MonoBehaviour
     public GameObject State2Button;
     public GameObject State3Button;
     public GameObject MegaButton;
+    public GameObject SurrenderObj;
     public Toggle MegaToggle;
     private bool Play = false;
     public SkillDescUI ReferenceDescUI;
@@ -65,6 +66,7 @@ public class CommandUI : MonoBehaviour
                 NewButton.transform.SetSiblingIndex(Index);
             }
         }
+        SwitchButton.SetActive(BattleManager.StaticManager.CanSwitch(ReferencePokemon));
     }
     public void Out()
     {
@@ -72,10 +74,12 @@ public class CommandUI : MonoBehaviour
         Timer = 1.1f;
         TargetTransform = OutPosition;
         SourceTransform = InPosition;
+        SurrenderObj.SetActive(false);     
     }
 
     public void In()
     {
+        SurrenderObj.SetActive(true);
         Play = true;
         Timer = 0;
         TargetTransform = InPosition;

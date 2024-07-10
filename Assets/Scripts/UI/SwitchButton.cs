@@ -50,6 +50,8 @@ public class SwitchButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if(ReferencePokemon && ReferencePokemon.IsDead() == false)
         {
             g_BattleManager.OnPlayerSwitchNewPokemon(ReferencePokemon);
+            ReferenceUI.gameObject.SetActive(false);
+            ReferenceSkillUI.gameObject.SetActive(false);
         }
     }
 

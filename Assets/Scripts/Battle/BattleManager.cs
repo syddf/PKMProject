@@ -445,6 +445,12 @@ public class BattleManager : MonoBehaviour
         if(MessageDirector.gameObject.GetComponent<SubObjects>().SubObject4)
             MessageDirector.gameObject.GetComponent<SubObjects>().SubObject4.SetActive(false);
 
+        GameObject AnimObj = GameObject.Find("G_Anims/PowerChordParticles");
+        SubObjects Subs = AnimObj.GetComponent<SubObjects>();
+        Subs.SubObject1.SetActive(false);
+        Subs.SubObject2.SetActive(false);
+        Subs.SubObject3.SetActive(false);
+
         GameObject FloorObj = GameObject.Find("Floor");
         MeshRenderer meshRenderer = FloorObj.GetComponent<MeshRenderer>();
         Material SelfMaterial = meshRenderer.material;
@@ -570,6 +576,7 @@ public class BattleManager : MonoBehaviour
             BeforeBattleUI.SetSpecialRule(BattleConfigObj.GetComponent<BattleConfig>().SpecialRule2);
         }
         BeforeBattleUI.SetPlayerPokemonTrainer(PlayerTrainer);
+
     }
 
     public BaseSpecialRule GetSpecialRule()
@@ -643,6 +650,10 @@ public class BattleManager : MonoBehaviour
         GameObject SavedDataObj = GameObject.Find("SavedData");
         if(Win)
         {
+            if(ChapterIndex > 0 && ChapterIndex < 10 && CurrentSpecialRule == null)
+            {
+                SavedDataObj.GetComponent<SavedData>().SavedPlayerData.RemainCheatCount = SavedDataObj.GetComponent<SavedData>().SavedPlayerData.RemainCheatCount - 1;
+            }
             EProgress CurProgress = SavedDataObj.GetComponent<SavedData>().SavedPlayerData.MainChapterProgress[ChapterIndex];
             if(IsFirstBattle)
             {
@@ -882,6 +893,13 @@ public class BattleManager : MonoBehaviour
         return null;
     }
 
+    public void Surrender()
+    {
+        BattleEnd = true;
+        this.Win = false;
+        EndBattle(false);
+    }
+
     public void SetBattleEnd(bool End, bool Win)
     {
         BattleEnd = End;
@@ -1105,9 +1123,10 @@ public class BattleManager : MonoBehaviour
         return Count;
     }
 
-    public bool CanSwitch()
+    public bool CanSwitch(BattlePokemon ReferencePokemon)
     {
-        return true;
+        List<BattlePokemon> Opposites = GetOpppoitePokemon(ReferencePokemon);
+        return Opposites[0].HasAbility("踩影", this, null, null) == false;
     }
 
     public bool IsPokemonInLastTurn(BattlePokemon TargetPokemon)

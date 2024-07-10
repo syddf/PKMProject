@@ -128,7 +128,7 @@ public class EnemyAI
         {
             if(ReferencePokemon.HasStatusChange(EStatusChange.PerishSong) &&
                 ReferencePokemon.GetStatusChangeRemainTime(EStatusChange.PerishSong) == 1 && 
-                InManager.CanSwitch())
+                InManager.CanSwitch(ReferencePokemon))
             {
                 BattlePokemon EnemyNext = GetNextPokemon(ReferencePokemon);
                 InEvents.Add(new SwitchEvent(ReferenceBattleManager, ReferencePokemon, EnemyNext, false));
@@ -153,7 +153,7 @@ public class EnemyAI
 
         if(ForbiddenSkillSet.Count == 4)
         {
-            if(InManager.CanSwitch() && InManager.GetEnemyTrainer().GetRemainPokemonNum() > 2)
+            if(InManager.CanSwitch(ReferencePokemon) && InManager.GetEnemyTrainer().GetRemainPokemonNum() > 2)
             {
                 BattlePokemon EnemyNext = GetNextPokemon(ReferencePokemon);
                 InEvents.Add(new SwitchEvent(ReferenceBattleManager, ReferencePokemon, EnemyNext, false));   
@@ -281,7 +281,7 @@ public class EnemyAI
                 }
             }
 
-            if(HasChoiceItem && TotalValue <= 70 && InManager.CanSwitch() && InManager.GetEnemyTrainer().GetRemainPokemonNum() > 2)
+            if(HasChoiceItem && TotalValue <= 70 && InManager.CanSwitch(ReferencePokemon) && InManager.GetEnemyTrainer().GetRemainPokemonNum() > 2)
             {
                 BattlePokemon EnemyNext = GetNextPokemon(ReferencePokemon);
                 InEvents.Add(new SwitchEvent(ReferenceBattleManager, ReferencePokemon, EnemyNext, false));   

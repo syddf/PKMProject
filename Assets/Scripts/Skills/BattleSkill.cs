@@ -277,6 +277,11 @@ public class BattleSkill
         {
             TrainerSkillFactor *= 0.7;
         }
+
+        if(SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "热情之风" && SourcePokemon.GetActivatedSinceSwitchIn() == false)
+        {
+            TrainerSkillFactor *= 1.3;
+        }
         
         if(SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "勤勉学习" || 
         TargetPokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "勤勉学习")
@@ -410,7 +415,11 @@ public class BattleSkill
 
     public int GetTargetEvasionChangeLevel(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)
     {
-         return ReferenceBaseSkill.GetTargetEvasionChangeLevel(InManager, SourcePokemon, TargetPokemon);
+        if(GetSkillName() == "圣剑")
+        {
+            return 0;
+        }
+        return ReferenceBaseSkill.GetTargetEvasionChangeLevel(InManager, SourcePokemon, TargetPokemon);
     }
 
     public int GetSkillPriority(BattleManager InManager, BattlePokemon SourcePokemon, BattlePokemon TargetPokemon)

@@ -50,6 +50,18 @@ public class TeamEditUI : MonoBehaviour
                 newObject.GetComponent<TrainerListEntry>().InitEntry("小智");
                 newObject.GetComponent<TrainerListEntry>().UpdateTag("小智");
             }
+            else
+            {
+                GameObject newObject = Instantiate(TrainerEntryPrefab, ContentsRoot.transform.position, Quaternion.identity);
+                newObject.transform.SetParent(ContentsRoot.transform);
+                newObject.GetComponent<TrainerListEntry>().TeamEditWindow = this.GetComponent<TeamEditUI>();
+
+                string spritePath = "UI/TrainerAvator/莎莉娜";
+                Sprite sprite = Resources.Load<Sprite>(spritePath);
+                newObject.GetComponent<TrainerListEntry>().Trainer.sprite = sprite;
+                newObject.GetComponent<TrainerListEntry>().InitEntry("莎莉娜");
+                newObject.GetComponent<TrainerListEntry>().UpdateTag("莎莉娜");
+            }
         }
         else
         {
