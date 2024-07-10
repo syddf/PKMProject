@@ -30,6 +30,7 @@ public class ChapterUI : MonoBehaviour
     public FadeUI TransitionUI;
     private GameObject CacheNaniObj = null;
     public TeamEditUI ReferenceTeamEditUI;
+    public Material FloorMaterial;
     IEnumerator DisableObjectAfterDelay()
     {
         yield return new WaitForSeconds(1f);
@@ -64,6 +65,9 @@ public class ChapterUI : MonoBehaviour
         BattleData = GameObject.Find("BattleConfig/Chapter" + ChapterIndex.ToString()).GetComponent<BattleConfig>();
         CurrentChapterIndex = ChapterIndex;
         UpdateUI();
+        RenderSettings.skybox = BattleData.SkyBoxMaterial;
+        DynamicGI.UpdateEnvironment();
+        FloorMaterial.SetFloat("_FloorH", BattleData.FloorH);
     }
     public void UpdateUI()
     {

@@ -10,4 +10,6 @@ public class BattleConfig : MonoBehaviour
     public string PlaceName;
     public BaseSpecialRule SpecialRule1;
     public BaseSpecialRule SpecialRule2;
+    public Material SkyBoxMaterial;
+    public float FloorH;
 }

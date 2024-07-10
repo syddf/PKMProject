@@ -121,17 +121,17 @@ public struct BattleFieldStatus
 
         if(InStatusType == EBattleFieldStatus.PowerChordBlue)
         {
-            return "场上响起了英勇赞美诗！";
+            return "场上出现了光环！";
         }
         
         if(InStatusType == EBattleFieldStatus.PowerChordGreen)
         {
-            return "场上响起了坚毅咏叹调！";
+            return "场上出现了光环！";
         }
 
         if(InStatusType == EBattleFieldStatus.PowerChordPurple)
         {
-            return "场上响起了迅捷鸣奏曲！";
+            return "场上出现了光环！";
         }
 
         if(InStatusType == EBattleFieldStatus.StickyWeb)
@@ -207,7 +207,7 @@ public struct BattleFieldStatus
            InStatusType == EBattleFieldStatus.PowerChordGreen ||
            InStatusType == EBattleFieldStatus.PowerChordPurple )
         {
-            return "能量和弦";
+            return "光环";
         }
 
         if(InStatusType == EBattleFieldStatus.StickyWeb)
@@ -339,15 +339,24 @@ public class ToxicSpikesStatusChange : BaseBattleFieldStatusChange
     public override List<Event> Trigger(BattleManager InManager, Event SourceEvent)
     {
         List<Event> NewEvents = new List<Event>();
-        SetPokemonStatusChangeEvent StatusEvent = new SetPokemonStatusChangeEvent(
-            TargetPokemon,
-            null,
-            InManager,
-            EStatusChange.Poison,
-            0, 
-            false
-        );
-        NewEvents.Add(StatusEvent);
+        if(TargetPokemon.HasType(EType.Poison, InManager, null, null))
+        {
+            RemoveBattleFieldStatusChangeEvent RemoveStatusEvent = 
+            new RemoveBattleFieldStatusChangeEvent(InManager, EBattleFieldStatus.ToxicSpikes, TargetPokemon.GetName() + "消耗了毒菱", !TargetPokemon.GetIsEnemy(), true);            
+            NewEvents.Add(RemoveStatusEvent);
+        }
+        else
+        {
+            SetPokemonStatusChangeEvent StatusEvent = new SetPokemonStatusChangeEvent(
+                TargetPokemon,
+                null,
+                InManager,
+                EStatusChange.Poison,
+                0, 
+                false
+            );
+            NewEvents.Add(StatusEvent);
+        }
         return NewEvents;
     }
 
@@ -742,17 +751,17 @@ public class PowerChordStatusChange : BaseBattleFieldStatusChange
         List<Event> NewEvents = new List<Event>();
         if(ChordType == 0)
         {
-            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "Atk", 1, "能量和弦效果"));
-            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "SAtk", 1, "能量和弦效果"));
+            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "Atk", 1, "光环效果"));
+            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "SAtk", 1, "光环效果"));
         }
         else if(ChordType == 1)
         {
-            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "Def", 1, "能量和弦效果"));
-            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "SDef", 1, "能量和弦效果"));
+            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "Def", 1, "光环效果"));
+            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "SDef", 1, "光环效果"));
         }
         else if(ChordType == 2)
         {
-            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "Speed", 1, "能量和弦效果"));
+            NewEvents.Add(new StatChangeEvent(TargetPokemon, null, "Speed", 1, "光环效果"));
         }
         return NewEvents;
     }
