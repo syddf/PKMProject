@@ -47,14 +47,33 @@ public class BattleEndEvent : EventAnimationPlayer, Event
         InManager.AddAnimationEvent(this);
         if(Win)
         {
+            if(InManager.HasSpecialRule("特殊规则(翔太)"))
+            {
+                int Counter = 0;
+                PokemonTrainer Player = InManager.GetPlayerTrainer();
+                foreach(var BattlePkm in Player.BattlePokemons)
+                {
+                    if(BattlePkm.IsDead() == true)
+                    {
+                        Counter++;
+                    }
+                }
+
+                if(Counter > 1)
+                {
+                    SpecialReason = "玩家陷入濒死的宝可梦超过1只！对战失败！";
+                    Win = false;
+                }
+            }
+
             if(InManager.HasSpecialRule("特殊规则(福爷)"))
             {
-                if(InManager.GetHealedValue(true) <= 300)
+                if(InManager.GetHealedValue(true) < 300)
                 {
                     SpecialReason = "玩家宝可梦的总回复量未达到要求！对战失败！";
                     Win = false;
                 }
-                else if(InManager.GetHealedValue(false) >= 300)
+                else if(InManager.GetHealedValue(false) > 300)
                 {
                     SpecialReason = "对手宝可梦的总回复量超过了要求！对战失败！";
                     Win = false;
@@ -85,10 +104,10 @@ public class BattleEndEvent : EventAnimationPlayer, Event
             if(InManager.HasSpecialRule("特殊规则(奇巴纳)"))
             {
                 int Counter = InManager.GetWeatherChangCounter();
-                if(Counter < 7)
+                if(Counter < 8)
                 {
                     Win = false;
-                    SpecialReason = "天气切换次数未达到7次！对战失败！";
+                    SpecialReason = "天气切换次数未达到8次！对战失败！";
                 }
             }
         }

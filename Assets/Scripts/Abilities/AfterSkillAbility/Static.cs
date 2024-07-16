@@ -15,7 +15,7 @@ public class Static : BaseAbility
         {
             SkillEvent CastedEvent = (SkillEvent)SourceEvent;
             BattlePokemon Target = CastedEvent.GetCurrentProcessTargetPokemon();
-            if(Target == this.ReferencePokemon)
+            if(Target == this.ReferencePokemon && Target && Target.IsDead() == false)
             {
                 if(BattleSkillMetaInfo.IsTouchingSkill(CastedEvent.GetSkill().GetSkillName()))
                 {

@@ -12,11 +12,6 @@ public class ScienceChangeFuture : BaseTrainerSkill
     }
     public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
     {
-        if(HasTriggered)
-        {
-            return false;
-        }
-        
         if(TimePoint != ETimePoint.AfterSkillEffect)
         {
             return false;

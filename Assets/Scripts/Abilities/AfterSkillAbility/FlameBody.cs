@@ -17,7 +17,7 @@ public class FlameBody : BaseAbility
             BattlePokemon Target = CastedEvent.GetCurrentProcessTargetPokemon();
             if(Target == this.ReferencePokemon)
             {
-                if(BattleSkillMetaInfo.IsTouchingSkill(CastedEvent.GetSkill().GetSkillName()))
+                if(BattleSkillMetaInfo.IsTouchingSkill(CastedEvent.GetSkill().GetSkillName()) && CastedEvent.GetSourcePokemon().IsDead() == false)
                 {
                     if(SetPokemonStatusChangeEvent.IsStatusChangeEffective(CastedEvent.GetReferenceManager(), CastedEvent.GetSourcePokemon(), null, EStatusChange.Burn))
                     {

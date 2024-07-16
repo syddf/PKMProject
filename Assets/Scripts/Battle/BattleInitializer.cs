@@ -23,6 +23,7 @@ public class BattleInitializer : MonoBehaviour
     private PokemonTrainer CurrentEnemyTrainer;
     public List<GameObject> PlayerOriginalBagPokemons = new List<GameObject>();
     public List<GameObject> EnemyOriginalBagPokemons = new List<GameObject>();
+    public GameObject EnemyOriginalTrainerSkill;
     public List<BaseItem> GemItemList = new List<BaseItem>();
     public void InitBattleResources(PokemonTrainer PlayerTrainer, PokemonTrainer EnemyTrainer)
     {
@@ -42,6 +43,7 @@ public class BattleInitializer : MonoBehaviour
         EnemyOriginalBagPokemons.Add(EnemyTrainer.BagPokemons[3].gameObject);
         EnemyOriginalBagPokemons.Add(EnemyTrainer.BagPokemons[4].gameObject);
         EnemyOriginalBagPokemons.Add(EnemyTrainer.BagPokemons[5].gameObject);
+        EnemyOriginalTrainerSkill = EnemyTrainer.TrainerSkill.gameObject;
 
         for(int Index = 0; Index < 6; Index++)
         {
@@ -110,7 +112,7 @@ public class BattleInitializer : MonoBehaviour
         NewModel.AddComponent<PokemonScaleAnimation>();
         NewModel.AddComponent<PokemonMoveAnimation>();
         NewModel.AddComponent<PokemonRotationAnimation>();
-
+        CreatedGameObject.Add(NewModel);
 
         OutMegaModel = null;
         if(Trainer.BagPokemons[PokemonIndex].GetCanMega())
@@ -146,6 +148,7 @@ public class BattleInitializer : MonoBehaviour
             MegaModel.SetActive(false);
 
             OutMegaModel = MegaModel;
+            CreatedGameObject.Add(MegaModel);
         }
         return NewModel;
     }
@@ -241,6 +244,7 @@ public class BattleInitializer : MonoBehaviour
             CurrentPlayerTrainer.BagPokemons[Index] = PlayerOriginalBagPokemons[Index].GetComponent<BagPokemon>();
             CurrentEnemyTrainer.BagPokemons[Index] = EnemyOriginalBagPokemons[Index].GetComponent<BagPokemon>();
         }
+        CurrentEnemyTrainer.TrainerSkill = EnemyOriginalTrainerSkill.GetComponent<BaseTrainerSkill>();
     }
     public void SpawnBattlePokemon(PokemonTrainer Trainer, int PokemonIndex)
     {
@@ -271,7 +275,12 @@ public class BattleInitializer : MonoBehaviour
                         LevelChangedValue++;
                     }
                 }
+                if(Trainer.BagPokemons[PokemonIndex].GetCanMega() == true)
+                {
+                    LevelChangedValue = LevelChangedValue / 2;
+                }
             }
+            
             if(BattleManager.StaticManager.HasSpecialRule("特殊规则(卡露妮)") && Trainer == CurrentEnemyTrainer)
             {
                 bool[] HasTypeArray = new bool[19]{false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false, false};

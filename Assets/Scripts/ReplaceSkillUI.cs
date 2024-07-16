@@ -87,14 +87,14 @@ public class ReplaceSkillUI : MonoBehaviour
 
     public int GetSkillIndex(BagPokemonOverrideData OverrideData, int Index)
     {
-        if(OverrideData.SkillIndex0 == Index) return 0;
-        if(OverrideData.SkillIndex1 == Index) return 1;
-        if(OverrideData.SkillIndex2 == Index) return 2;
-        if(OverrideData.SkillIndex3 == Index) return 3;
-        if(OverrideData.SkillIndex4 == Index) return 4;
-        if(OverrideData.SkillIndex5 == Index) return 5;
-        if(OverrideData.SkillIndex6 == Index) return 6;
-        if(OverrideData.SkillIndex7 == Index) return 7;
+        if(Index == 0) return OverrideData.SkillIndex0;
+        if(Index == 1) return OverrideData.SkillIndex1;
+        if(Index == 2) return OverrideData.SkillIndex2;
+        if(Index == 3) return OverrideData.SkillIndex3;
+        if(Index == 4) return OverrideData.SkillIndex4;
+        if(Index == 5) return OverrideData.SkillIndex5;
+        if(Index == 6) return OverrideData.SkillIndex6;
+        if(Index == 7) return OverrideData.SkillIndex7;
         return -1;
     }
 
@@ -145,8 +145,8 @@ public class ReplaceSkillUI : MonoBehaviour
 
         int Ind1 = GetSkillIndex(OverrideData, Replace1Index);
         int Ind2 = GetSkillIndex(OverrideData, Replace2Index);
-        SetSkillIndex(ref OverrideData, Ind1, Replace2Index);
-        SetSkillIndex(ref OverrideData, Ind2, Replace1Index);
+        SetSkillIndex(ref OverrideData, Replace2Index, Ind1);
+        SetSkillIndex(ref OverrideData, Replace1Index, Ind2);
         PlayerData.SavedPlayerData.OverrideData[CurrentTrainer.TrainerName][CurrentPokemon.GetPokemonName()] = OverrideData;
     }
 

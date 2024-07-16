@@ -29,7 +29,7 @@ public class ReplaceItemUI : MonoBehaviour
     public Image ItemDesc1Icon;
     public TextMeshProUGUI ItemDesc0Text;
     public TextMeshProUGUI ItemDesc1Text;
-
+    public PokemonEditMainMenu EditMenu;
     public void OnClickPokemon(int Index)
     {
         if(CurrentTrainer.BagPokemons[Index] != CurrentBagPokemon 
@@ -225,5 +225,7 @@ public class ReplaceItemUI : MonoBehaviour
         ItemDesc1Icon.sprite = PokemonSpritesManager.ItemSprites[Item1.ItemName];
         ItemDesc0Text.text = Item2.Description;
         ItemDesc1Text.text = Item1.Description;
+
+        EditMenu.UpdateItem();
     }
 }

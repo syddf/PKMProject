@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class EntrustingFuture : BaseTrainerSkill
 {
+    private BattlePokemon GetSource()
+    {
+        if(ReferenceTrainer.IsPlayer)
+        {
+            return BattleManager.StaticManager.GetBattlePokemons()[0];
+        }
+        return BattleManager.StaticManager.GetBattlePokemons()[1];
+
+    }
     private BattlePokemon GetTarget()
     {
         if(ReferenceTrainer.IsPlayer)

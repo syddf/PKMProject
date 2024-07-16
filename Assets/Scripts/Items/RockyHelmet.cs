@@ -15,7 +15,7 @@ public class RockyHelmet : BaseItem
         {
             SkillEvent CastedEvent = (SkillEvent)SourceEvent;
             BattlePokemon Target = CastedEvent.GetCurrentProcessTargetPokemon();
-            if(Target == ReferencePokemon)
+            if(Target == ReferencePokemon && Target && Target.IsDead() == false)
             {
                 if(BattleSkillMetaInfo.IsTouchingSkill(CastedEvent.GetSkill().GetSkillName()))
                 {

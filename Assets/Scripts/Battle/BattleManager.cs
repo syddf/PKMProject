@@ -63,6 +63,8 @@ public class BattleManager : MonoBehaviour
     private int PlayerHealedValue;
     private int EnemyHealedValue;
     private int WeatherChangedCounter;
+    public GameObject SurrenderUI;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -431,6 +433,33 @@ public class BattleManager : MonoBehaviour
         CurPlayingAnimationEvent = -1;
     }
 
+    public void DesableAllParticles()
+    {
+        GameObject WeatherRoot = GameObject.Find("Weather");
+        WeatherRoot.GetComponent<SubObjects>().SubObject1.SetActive(false);
+        WeatherRoot.GetComponent<SubObjects>().SubObject2.SetActive(false);
+        WeatherRoot.GetComponent<SubObjects>().SubObject3.SetActive(false);
+        WeatherRoot.GetComponent<SubObjects>().SubObject4.SetActive(false);
+        
+        TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
+        PlayableDirector MessageDirector = Timelines.SwitchTerrainAnimation;
+        if(MessageDirector.gameObject.GetComponent<SubObjects>().SubObject1)
+            MessageDirector.gameObject.GetComponent<SubObjects>().SubObject1.SetActive(false);
+        if(MessageDirector.gameObject.GetComponent<SubObjects>().SubObject2)
+            MessageDirector.gameObject.GetComponent<SubObjects>().SubObject2.SetActive(false);
+        if(MessageDirector.gameObject.GetComponent<SubObjects>().SubObject3)
+            MessageDirector.gameObject.GetComponent<SubObjects>().SubObject3.SetActive(false);
+        if(MessageDirector.gameObject.GetComponent<SubObjects>().SubObject4)
+            MessageDirector.gameObject.GetComponent<SubObjects>().SubObject4.SetActive(false);
+
+        GameObject AnimObj = GameObject.Find("G_Anims/PowerChordParticles");
+        SubObjects Subs = AnimObj.GetComponent<SubObjects>();
+        Subs.SubObject1.SetActive(false);
+        Subs.SubObject2.SetActive(false);
+        Subs.SubObject3.SetActive(false);
+
+    }
+
     public void BeginSingleBattle(BattlePokemon PlayerPokemon, BattlePokemon EnemyPokemon)
     {
         BattleEnd = false;
@@ -455,7 +484,8 @@ public class BattleManager : MonoBehaviour
         MeshRenderer meshRenderer = FloorObj.GetComponent<MeshRenderer>();
         Material SelfMaterial = meshRenderer.material;
         SelfMaterial.SetFloat("_UseNoise", 0.0f);
-
+        SelfMaterial.SetFloat("_FloorV", 0.5f);
+        
         GameObject WeatherRoot = GameObject.Find("Weather");
         WeatherRoot.GetComponent<SubObjects>().SubObject1.SetActive(false);
         WeatherRoot.GetComponent<SubObjects>().SubObject2.SetActive(false);
@@ -685,6 +715,8 @@ public class BattleManager : MonoBehaviour
             SavedDataObj.GetComponent<SavedData>().SaveData();
         }
 
+        DesableAllParticles();
+        SurrenderUI.SetActive(false);
         StartCoroutine(EnableObjectAfterDelay());
         TransitionUI.TransitionAnimation();
         ReferenceBGM.gameObject.SetActive(false);
@@ -699,6 +731,7 @@ public class BattleManager : MonoBehaviour
         ReferenceChapterUI.OnFinishBattle();
         this.GetComponent<BattleInitializer>().ClearAllObjects();
     }
+
 
     public void BeginBattle(int FirstPokemonIndex, int ChapterIndex, bool FirstBattle)
     {
@@ -742,6 +775,14 @@ public class BattleManager : MonoBehaviour
             InReferencePokemon.LoadMegaStat();
         }
         NewEnemyAI.GenerateEnemyEvent(EventsList, this, EventsList[EventsList.Count - 1]);
+        if(Mega)
+        {
+            InReferencePokemon.ReturnBaseStat();
+        }
+        if(Opposites[0].CanMega())
+        {
+            Opposites[0].ReturnBaseStat();
+        }
         BattlePokemonList[0].NewTurn();
         BattlePokemonList[1].NewTurn();
         ProcessEvents(true);
@@ -874,6 +915,10 @@ public class BattleManager : MonoBehaviour
             EventsList.Add(new SwitchEvent(this, BattlePokemonList[0], InPokemon, false));
             EnemyAI NewEnemyAI = new EnemyAI(BattlePokemonList[1], this, EnemyTrainer);
             NewEnemyAI.GenerateEnemyEvent(EventsList, this, EventsList[EventsList.Count - 1]);
+            if(BattlePokemonList[1].CanMega())
+            {
+                BattlePokemonList[1].ReturnBaseStat();
+            }
             BattlePokemonList[0].NewTurn();
             BattlePokemonList[1].NewTurn();
             ProcessEvents(true);

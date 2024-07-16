@@ -16,7 +16,7 @@ public class PoisonPoint  : BaseAbility
             SkillEvent CastedEvent = (SkillEvent)SourceEvent;
             BattlePokemon Target = CastedEvent.GetCurrentProcessTargetPokemon();
             BattlePokemon Source = CastedEvent.GetSourcePokemon();
-            if(Target == this.ReferencePokemon && Source)
+            if(Target == this.ReferencePokemon && Source && Target && Source.IsDead() == false)
             {
                 if(BattleSkillMetaInfo.IsTouchingSkill(CastedEvent.GetSkill().GetSkillName()))
                 {

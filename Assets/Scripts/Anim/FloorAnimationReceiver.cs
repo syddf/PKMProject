@@ -47,7 +47,7 @@ public class FloorAnimationReceiver : ParameterizedSignalReceiver
         }
         else if(Text == "Reset")
         {
-            TargetV = PrevV;
+            TargetV = 0.5f;
             PrevV = SelfMaterial.GetFloat("_FloorV");
             Play = true;
             ElapsedTime = 0.0f;

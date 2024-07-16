@@ -102,7 +102,7 @@ public class TurnEndEvent : EventAnimationPlayer, Event
             RemoveStatusEvent.Process(InManager);
         }
 
-        if(InManager.HasSpecialRule("特殊规则(葛吉花)") && (InManager.GetCurrentTurnIndex() % 2) == 1)
+        if(InManager.HasSpecialRule("特殊规则(葛吉花)") && (InManager.GetCurrentTurnIndex() % 2) == 0)
         {
             List<BattleFieldStatus> EnemyStatusList = new List<BattleFieldStatus>(InManager.GetBattleFieldStatusList(false));
             if(EnemyStatusList != null)
