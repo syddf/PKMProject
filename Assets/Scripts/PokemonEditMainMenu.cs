@@ -21,10 +21,18 @@ public class PokemonEditMainMenu : MonoBehaviour
     public Image Pokemon3Image;
     public Image Pokemon4Image;
     public Image Pokemon5Image;
+    public Image Item0Image;
+    public Image Item1Image;
+    public Image Item2Image;
+    public Image Item3Image;
+    public Image Item4Image;
+    public Image Item5Image;
     public SavedData PlayerData;
     public ReplacePokemonInfoUI ReplaceUI;
     public ReplaceItemUI ReplaceItemUI;
     public ReplaceSkillUI ReplaceSkillUI;
+
+    public GameObject TrainerUI;
 
     public GameObject MegaToggleObj;
     public Toggle MegaToggle;
@@ -55,7 +63,7 @@ public class PokemonEditMainMenu : MonoBehaviour
                 }
             }
         }
-
+        bool SameTrainer = ReplaceUI.CurrentTrainer.TrainerName == CurrentTrainer.TrainerName;
         if(PlayerData.SavedPlayerData.OverrideData.ContainsKey(CurrentTrainer.TrainerName))
         {
             if(PlayerData.SavedPlayerData.OverrideData[CurrentTrainer.TrainerName].ContainsKey(CurrentPokemon.GetPokemonName()))
@@ -65,14 +73,14 @@ public class PokemonEditMainMenu : MonoBehaviour
                 {
                     string TrainerName = OverrideData.ReplaceTrainerName;
                     string PokemonName = OverrideData.ReplacePokemonName;
-                    if(PokemonName != CurrentPokemon.GetPokemonName())
+                    if(PokemonName != CurrentPokemon.GetPokemonName() && TrainerName != CurrentTrainer.TrainerName)
                     {
                         CurrentPokemonReplaced = true;
                     }
                 }
             }
         }
-        if(ReplacedNum >= 2 && CurrentPokemonReplaced == false)
+        if(ReplacedNum >= 2 && CurrentPokemonReplaced == false && SameTrainer == false)
         {
             WarningUI.FadeOutUI(1.0f);
             WarningText.text = "同一队伍最多替换两只宝可梦！";
@@ -129,18 +137,19 @@ public class PokemonEditMainMenu : MonoBehaviour
     {
         MegaToggleObj.SetActive(InPokemon.GetCanMega());
         MegaToggle.isOn = false;
-        SetPokemonSprite(Pokemon0Image, CurrentTrainer.BagPokemons[0], InPokemon == CurrentTrainer.BagPokemons[0]);
-        SetPokemonSprite(Pokemon1Image, CurrentTrainer.BagPokemons[1], InPokemon == CurrentTrainer.BagPokemons[1]);
-        SetPokemonSprite(Pokemon2Image, CurrentTrainer.BagPokemons[2], InPokemon == CurrentTrainer.BagPokemons[2]);
-        SetPokemonSprite(Pokemon3Image, CurrentTrainer.BagPokemons[3], InPokemon == CurrentTrainer.BagPokemons[3]);
-        SetPokemonSprite(Pokemon4Image, CurrentTrainer.BagPokemons[4], InPokemon == CurrentTrainer.BagPokemons[4]);
-        SetPokemonSprite(Pokemon5Image, CurrentTrainer.BagPokemons[5], InPokemon == CurrentTrainer.BagPokemons[5]);
+        SetPokemonSprite(Pokemon0Image, Item0Image, CurrentTrainer.BagPokemons[0], InPokemon == CurrentTrainer.BagPokemons[0]);
+        SetPokemonSprite(Pokemon1Image, Item1Image, CurrentTrainer.BagPokemons[1], InPokemon == CurrentTrainer.BagPokemons[1]);
+        SetPokemonSprite(Pokemon2Image, Item2Image, CurrentTrainer.BagPokemons[2], InPokemon == CurrentTrainer.BagPokemons[2]);
+        SetPokemonSprite(Pokemon3Image, Item3Image, CurrentTrainer.BagPokemons[3], InPokemon == CurrentTrainer.BagPokemons[3]);
+        SetPokemonSprite(Pokemon4Image, Item4Image, CurrentTrainer.BagPokemons[4], InPokemon == CurrentTrainer.BagPokemons[4]);
+        SetPokemonSprite(Pokemon5Image, Item5Image, CurrentTrainer.BagPokemons[5], InPokemon == CurrentTrainer.BagPokemons[5]);
     }
 
-    public void SetPokemonSprite(Image TargetImage, BagPokemon InPokemon, bool Chosen)
+    public void SetPokemonSprite(Image TargetImage, Image ItemImage, BagPokemon InPokemon, bool Chosen)
     {
         int Index = InPokemon.GetIndexInPKDex();
         TargetImage.sprite = PokemonSpritesManager.PKMSprites[Index];
+        ItemImage.sprite = PokemonSpritesManager.ItemSprites[InPokemon.GetItem().ItemName];
         if(PlayerData.SavedPlayerData.OverrideData.ContainsKey(CurrentTrainer.TrainerName))
         {
             if(PlayerData.SavedPlayerData.OverrideData[CurrentTrainer.TrainerName].ContainsKey(InPokemon.GetPokemonName()))
@@ -150,9 +159,13 @@ public class PokemonEditMainMenu : MonoBehaviour
                 {
                     string TrainerName = OverrideData.ReplaceTrainerName;
                     string PokemonName = OverrideData.ReplacePokemonName;
+                    int OverrideItem = OverrideData.ItemIndex;
+                    ItemImage.sprite = PokemonSpritesManager.ItemSprites[CurrentTrainer.BagPokemons[OverrideItem].GetItem().ItemName];
+
                     GameObject TrainerObj = GameObject.Find("SingleBattle/AllTrainers/" + TrainerName);
                     PokemonTrainer Trainer = TrainerObj.GetComponent<PokemonTrainer>();
                     BagPokemon ReferencePokemon = null;
+                    
                     foreach(var BagPkm in Trainer.BagPokemons)
                     {
                         if(BagPkm.GetPokemonName() == PokemonName)
@@ -160,6 +173,7 @@ public class PokemonEditMainMenu : MonoBehaviour
                             ReferencePokemon = BagPkm;
                             int NewIndex = ReferencePokemon.GetIndexInPKDex();
                             TargetImage.sprite = PokemonSpritesManager.PKMSprites[NewIndex];
+                            
                             break;
                         }
                     }
@@ -167,9 +181,11 @@ public class PokemonEditMainMenu : MonoBehaviour
             }
         }
         TargetImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        ItemImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         if(Chosen == false)
         {
             TargetImage.color = new Color(1.0f, 1.0f, 1.0f, 0.2f);
+            ItemImage.color = new Color(1.0f, 1.0f, 1.0f, 0.2f);
         }
     }
     
@@ -190,6 +206,7 @@ public class PokemonEditMainMenu : MonoBehaviour
         ReferenceTrainerReplaceUI.CurrentTrainer = CurrentTrainer;
         ReferenceTrainerReplaceUI.InitReplaceTrainerEntry();
         this.gameObject.SetActive(false);
+        TrainerUI.SetActive(true);
     }
 
     public void OnClickReplace()
@@ -199,6 +216,14 @@ public class PokemonEditMainMenu : MonoBehaviour
             return;
         }
         BagPokemonOverrideData OverrideData = PlayerData.SavedPlayerData.OverrideData[CurrentTrainer.TrainerName][CurrentPokemon.GetPokemonName()];
+        int OverrideItem = -1;
+        if(PlayerData.SavedPlayerData.OverrideData.ContainsKey(CurrentTrainer.TrainerName))
+        {
+            if(PlayerData.SavedPlayerData.OverrideData[CurrentTrainer.TrainerName].ContainsKey(CurrentPokemon.GetPokemonName()))
+            {
+                OverrideItem = PlayerData.SavedPlayerData.OverrideData[CurrentTrainer.TrainerName][CurrentPokemon.GetPokemonName()].ItemIndex;
+            }
+        }
         OverrideData.Overrided = true;
         OverrideData.ReplaceTrainerName = ReplaceUI.CurrentTrainer.TrainerName;
         OverrideData.ReplacePokemonName = ReplaceUI.CurrentBagPokemon.GetPokemonName();
@@ -212,10 +237,19 @@ public class PokemonEditMainMenu : MonoBehaviour
         OverrideData.SkillIndex7 = 7;
         OverrideData.Nature = ReplaceUI.CurrentBagPokemon.GetNature();
         OverrideData.ItemIndex = GetItemIndex(CurrentTrainer, CurrentPokemon.GetItem());
+        if(OverrideItem != -1)
+        {
+            OverrideData.ItemIndex = OverrideItem;
+        }
         PlayerData.SavedPlayerData.OverrideData[CurrentTrainer.TrainerName][CurrentPokemon.GetPokemonName()] = OverrideData;
         UpdatePokemonInfoUI();
         ChoosePokemon(CurrentPokemon);
         ReplaceUI.ResetUI();
+    }
+
+    public void UpdateItem()
+    {
+        ChoosePokemon(CurrentPokemon);
     }
 
     public void OnClickNature(int Val)

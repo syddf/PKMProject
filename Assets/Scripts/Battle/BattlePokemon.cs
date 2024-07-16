@@ -214,9 +214,9 @@ public class BattlePokemon : MonoBehaviour
 
     private bool Mega = false;
 
-    public void SwitchIn()
+    public void SwitchIn(bool AfterDefeated)
     {
-        HasActivated = true;
+        HasActivated = !AfterDefeated;
         FirstIn = false;
         HasActivatedSinceSwitchIn = false;
         HasDamagedBySkillSinceSwitchIn = false;
@@ -324,6 +324,12 @@ public class BattlePokemon : MonoBehaviour
             int NotFinishedBattleCount = InManager.GetPlayerNotFinishedBattle();
             SpecialRuleFactor = 1.0 + 0.05 * NotFinishedBattleCount;
         }
+        if(InManager.HasSpecialRule("特殊规则(南厦)") && IsEnemy == true)
+        {
+            int Count = InManager.GetTeammatesDeadCount(this);
+            SpecialRuleFactor = 1.0 + 0.1 * Count;
+        }
+        
         return (int)Math.Floor((double)PokemonStats.Atk * StatLevelFactor[ChangeLevel + 6] * ItemFactor * AbilityFactor * SpecialRuleFactor);
     }
     public int GetDef(ECaclStatsMode Mode, BattleManager InManager)
@@ -367,6 +373,11 @@ public class BattlePokemon : MonoBehaviour
         {
             int NotFinishedBattleCount = InManager.GetPlayerNotFinishedBattle();
             SpecialRuleFactor = 1.0 + 0.05 * NotFinishedBattleCount;
+        }
+        if(InManager.HasSpecialRule("特殊规则(南厦)") && IsEnemy == true)
+        {
+            int Count = InManager.GetTeammatesDeadCount(this);
+            SpecialRuleFactor = 1.0 + 0.1 * Count;
         }   
         return (int)Math.Floor((double)PokemonStats.Def * StatLevelFactor[ChangeLevel + 6] * WeatherFactor * AbilityFactor * ItemFactor * SpecialRuleFactor);
     }
@@ -470,7 +481,12 @@ public class BattlePokemon : MonoBehaviour
         double TrainerSkillFactor = 1.0;
         if(ReferenceTrainer.TrainerSkill.GetSkillName() == "坚韧之冰")
         {
-            TrainerSkillFactor = 1.5;
+            TrainerSkillFactor = 1.2;
+        }
+        if(InManager.HasSpecialRule("特殊规则(南厦)") && IsEnemy == true)
+        {
+            int Count = InManager.GetTeammatesDeadCount(this);
+            SpecialRuleFactor = 1.0 + 0.1 * Count;
         }
         return (int)Math.Floor((double)PokemonStats.SDef * StatLevelFactor[ChangeLevel + 6] * ItemFactor * WeatherFactor * AbilityFactor * SpecialRuleFactor * TrainerSkillFactor);
     }    
@@ -495,6 +511,10 @@ public class BattlePokemon : MonoBehaviour
         else if(GetMaxStat() == "Speed" && ((HasAbility("古代活性", null, null, this) && InManager.GetWeatherType() == EWeather.SunLight) || (HasAbility("夸克充能", null, null, this) && InManager.GetTerrainType() == EBattleFieldTerrain.Electric)))
         {
             AbilityFactor *= 1.5;
+        }
+        if(InManager.GetTerrainType() == EBattleFieldTerrain.Electric && HasAbility("科学助手", null, null, this))
+        {
+            AbilityFactor *= 2.0;
         }
         if(InManager.GetWeatherType() == EWeather.SunLight && HasAbility("叶绿素", null, null, this))
         {
@@ -702,7 +722,7 @@ public class BattlePokemon : MonoBehaviour
         {
             return false;
         }
-        if(Ability && Ability.name == "飘浮")
+        if(Ability && Ability.GetAbilityName() == "飘浮")
         {
             return false;
         }
@@ -1322,6 +1342,22 @@ public class BattlePokemon : MonoBehaviour
         }
         Type1 = ReferenceBasePokemon.GetType0(true);
         Type2 = ReferenceBasePokemon.GetType1(true);
+    }
+
+    public void ReturnBaseStat()
+    {
+        PokemonStats.Atk = ReferenceBasePokemon.GetAtk(false);
+        PokemonStats.SAtk = ReferenceBasePokemon.GetSAtk(false);
+        PokemonStats.Def = ReferenceBasePokemon.GetDef(false);
+        PokemonStats.SDef = ReferenceBasePokemon.GetSDef(false);
+        PokemonStats.Speed = ReferenceBasePokemon.GetSpeed(false);
+        Ability = ReferenceBasePokemon.GetAbility(false);
+        if(Ability)
+        {
+            Ability.SetReferencePokemon(this);
+        }
+        Type1 = ReferenceBasePokemon.GetType0(false);
+        Type2 = ReferenceBasePokemon.GetType1(false);
     }
 
     public void MegaEvolution()

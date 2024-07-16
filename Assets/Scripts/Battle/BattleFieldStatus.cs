@@ -301,7 +301,6 @@ public class ToxicSpikesStatusChange : BaseBattleFieldStatusChange
 
     public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
     {
-        TargetPokemon = null;
         if(SourceEvent.GetEventType() == EventType.Switch)
         {
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
@@ -373,7 +372,6 @@ public class StickyWebStatusChange : BaseBattleFieldStatusChange
 
     public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
     {
-        TargetPokemon = null;
         if(SourceEvent.GetEventType() == EventType.Switch)
         {
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
@@ -427,7 +425,6 @@ public class StealthRockStatusChange : BaseBattleFieldStatusChange
 
     public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
     {
-        TargetPokemon = null;
         if(SourceEvent.GetEventType() == EventType.Switch)
         {
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
@@ -484,7 +481,6 @@ public class SpikesStatusChange : BaseBattleFieldStatusChange
 
     public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
     {
-        TargetPokemon = null;
         if(SourceEvent.GetEventType() == EventType.Switch)
         {
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;
@@ -719,7 +715,6 @@ public class PowerChordStatusChange : BaseBattleFieldStatusChange
 
     public override bool ShouldTrigger(ETimePoint TimePoint, Event SourceEvent)
     {
-        TargetPokemon = null;
         if(SourceEvent.GetEventType() == EventType.Switch)
         {
             SwitchEvent CastedEvent = (SwitchEvent)SourceEvent;

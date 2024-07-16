@@ -16,7 +16,6 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public GameObject SpecialObj;
     public GameObject StatusObj;
     public TypeUI TypeUI;
-    public AudioSource Audio;
     private bool Forbidden;
     public Color NormalColor;
     public Color ForbiddenColor;
@@ -44,7 +43,6 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     void Start()
     {
         UIButton = this.GetComponent<Button>();
-        Audio = this.GetComponent<AudioSource>();
         Forbidden = false;
         if(IsStruggle)
         {
@@ -102,7 +100,7 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if(!this.Forbidden)
         {
-            Audio.Play();
+            GameObject.Find("ButtonAudio3").GetComponent<AudioSource>().Play();
             g_BattleManager.OnUseSkill(ReferenceSkill, ReferencePokemon, MegaToggle.isOn);
         }
     }

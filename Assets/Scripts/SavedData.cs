@@ -232,35 +232,15 @@ public class SavedData : MonoBehaviour
             PlayerData playerData = new PlayerData();
             List<string> UseableTrainerList = new List<string>();
             UseableTrainerList.Add("希特隆");
-            UseableTrainerList.Add("可尔妮");
-            UseableTrainerList.Add("帕琦拉");
-            UseableTrainerList.Add("紫罗兰");
-            UseableTrainerList.Add("查克洛");
-            UseableTrainerList.Add("大吾");
-            UseableTrainerList.Add("玛绣");
-            UseableTrainerList.Add("卡露妮");
-            UseableTrainerList.Add("得抚");
-            UseableTrainerList.Add("南厦");
-            UseableTrainerList.Add("朵拉塞娜");
-            UseableTrainerList.Add("志米");
             playerData.BattleTrainerName = "希特隆";
             playerData.UseableTrainerList = UseableTrainerList;
-
             playerData.OverrideData = new SerializableDictionary<string, SerializableDictionary<string, BagPokemonOverrideData>>();
             playerData.MainChapterProgress = new List<EProgress>();
             for(int Index = 0; Index <= 13; Index++)
             {
-                playerData.MainChapterProgress.Add(EProgress.New);
+                playerData.MainChapterProgress.Add(EProgress.FinishAllBattle);
             }
-            playerData.MainChapterProgress[0] = EProgress.FinishAllBattle;
-            playerData.MainChapterProgress[1] = EProgress.FinishAllBattle;
-            playerData.MainChapterProgress[2] = EProgress.FinishAllBattle;
-            playerData.MainChapterProgress[3] = EProgress.FinishAllBattle;
-            playerData.MainChapterProgress[4] = EProgress.FinishStory;
-            playerData.MainChapterProgress[10] = EProgress.FinishAllBattle;
-            playerData.MainChapterProgress[11] = EProgress.FinishAllBattle;
-            playerData.MainChapterProgress[12] = EProgress.FinishAllBattle;
-            playerData.RemainCheatCount = 3;
+            playerData.RemainCheatCount = 10;
             IDataSerializer serializer = new EncryptedJSONDataSerializer();
             serializer.SerializeToFile(playerData, filePath);
             SavedPlayerData = playerData;

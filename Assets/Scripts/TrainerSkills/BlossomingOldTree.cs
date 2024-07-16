@@ -34,15 +34,15 @@ public class BlossomingOldTree : BaseTrainerSkill
         double Ratio = 0.1;
         BattlePokemon Target = GetTarget();
         int TurnInField = Target.GetTurnInField();
-        if(TurnInField > 6)
+        if(TurnInField > 5)
         {
-            TurnInField = 6;
+            TurnInField = 5;
         }
-        Ratio = Ratio + TurnInField * 0.05;
+        Ratio = Ratio + TurnInField * 0.02;
 
         if(InManager.GetTerrainType() == EBattleFieldTerrain.Grass)
         {
-            Ratio = 0.4;
+            Ratio = 0.2;
         }
 
         int HealHP = (int)(Target.GetMaxHP() * Ratio);

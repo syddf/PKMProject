@@ -311,10 +311,7 @@ public class DamageSkill : BaseSkill
         {
             if(TargetPokemon.GetIsEnemy() == true && TargetPokemon.HasType(EType.Ice, InManager, SourcePokemon, TargetPokemon))
             {
-                if(Result > 1.0)
-                {
-                    return 1.0;
-                }
+                return 1.0;
             }
         }
         return Factor1 * Factor2;

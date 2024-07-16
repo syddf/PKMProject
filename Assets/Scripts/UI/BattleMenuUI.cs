@@ -158,17 +158,25 @@ public class BattleMenuUI : MonoBehaviour
         TrainerSkillDesc.text = InTrainer.TrainerSkill.GetSkillDescription();
         TrainerSkillName.text = InTrainer.TrainerSkill.GetSkillName();
         ChoosePokemon(CurrentTrainer.BagPokemons[0]);
-
-        toggleUI.isOn = false;
+        if(toggleUI != null)
+        {
+            toggleUI.isOn = false;
+        }
         Cheated = false;
         if(ChapterIndex == 0 || ChapterIndex >= 10 || SavedPlayerData.SavedPlayerData.RemainCheatCount <= 0)
         {
-            CheatObj.SetActive(false);
+            if(CheatObj != null)
+            {
+                CheatObj.SetActive(false);
+            }
         }
         else
         {
-            cheatText.text = "屏蔽规则(剩余" + SavedPlayerData.SavedPlayerData.RemainCheatCount.ToString() + "次)";
-            CheatObj.SetActive(true);
+            if(CheatObj != null)
+            {
+                cheatText.text = "休闲模式(剩余" + SavedPlayerData.SavedPlayerData.RemainCheatCount.ToString() + "次)";
+                CheatObj.SetActive(true);
+            }
         }
     }
 
@@ -176,11 +184,17 @@ public class BattleMenuUI : MonoBehaviour
     {
         if(Cheated)
         {
-            SpecialRuleDesc.text = "规则已屏蔽，获胜后消耗1次。";
-            CloseImage.gameObject.SetActive(true);
+            SpecialRuleDesc.text = "休闲模式下，规则已屏蔽，获胜后消耗1次。";
+            if(CloseImage)
+            {
+                CloseImage.gameObject.SetActive(true);
+            }
             return;
         }
-        CloseImage.gameObject.SetActive(false);
+        if(CloseImage)
+        {
+            CloseImage.gameObject.SetActive(false);
+        }
         if(CurrentSpecialRule)
         {
             SpecialRuleDesc.text = CurrentSpecialRule.Description;

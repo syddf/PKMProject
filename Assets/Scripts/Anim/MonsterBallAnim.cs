@@ -24,6 +24,11 @@ public class MonsterBallAnim : MonoBehaviour
         elapsedTime = 0;
     }
 
+    void OnDisable()
+    {
+        transform.position = startPosition;
+    }
+
     void Update()
     {
         if (target != null)

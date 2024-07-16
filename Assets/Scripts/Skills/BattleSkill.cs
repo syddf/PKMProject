@@ -265,12 +265,53 @@ public class BattleSkill
 
         if(SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "温柔之力")
         {
-            TrainerSkillFactor *= 0.5;
+            TrainerSkillFactor *= 0.8;
         }
 
         if(TargetPokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "温柔之力")
         {
-            TrainerSkillFactor *= 0.5;
+            TrainerSkillFactor *= 0.8;
+        }
+
+        if(SourcePokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "寄托未来")
+        {
+            int Count = 0;
+            int Level1 = TargetPokemon.GetAccuracyrateLevel(ECaclStatsMode.Normal);
+            int Level2 = TargetPokemon.GetEvasionrateLevel(ECaclStatsMode.Normal);
+            int Level3 = TargetPokemon.GetAtkChangeLevel();
+            int Level4 = TargetPokemon.GetDefChangeLevel();
+            int Level5 = TargetPokemon.GetSAtkChangeLevel();
+            int Level6 = TargetPokemon.GetSDefChangeLevel();
+            int Level7 = TargetPokemon.GetSpeedChangeLevel();
+            if(Level1 > 0)
+            {
+                Count += 1;
+            }
+            if(Level2 > 0)
+            {
+                Count += 1;
+            }
+            if(Level3 > 0)
+            {
+                Count += 1;
+            }
+            if(Level4 > 0)
+            {
+                Count += 1;
+            }
+            if(Level5 > 0)
+            {
+                Count += 1;
+            }
+            if(Level6 > 0)
+            {
+                Count += 1;
+            }
+            if(Level7 > 0)
+            {
+                Count += 1;
+            }
+            TrainerSkillFactor = 1.0 + 0.1 * Count;
         }
 
         if(TargetPokemon.GetReferenceTrainer().TrainerSkill.GetSkillName() == "骑士精神" && TargetPokemon.GetDamagedBySkillSinceSwitchIn() == false)
@@ -300,9 +341,13 @@ public class BattleSkill
         Damage = (int)Math.Floor(Damage * TrainerSkillFactor); 
 
         double SepcialRuleFactor = 1.0;
-        if(InManager.HasSpecialRule("特殊规则(帕琦拉)") && SourcePokemon.GetIsEnemy() == false && SourcePokemon.HasStatUp())
+        if(InManager.HasSpecialRule("特殊规则(布拉塔诺)") && SourcePokemon.GetIsEnemy() == false && TypeEffectiveFactor <= 1.0)
         {
-            SepcialRuleFactor = 0.3333333;
+            SepcialRuleFactor = 0.5;
+        }
+        else if(InManager.HasSpecialRule("特殊规则(帕琦拉)") && SourcePokemon.GetIsEnemy() == false && SourcePokemon.HasStatUp() == false)
+        {
+            SepcialRuleFactor = 0.5;
         }
         else if(InManager.HasSpecialRule("特殊规则(帕琦拉)") && TargetPokemon.GetIsEnemy() == false && TargetPokemon.HasStatUp())
         {
@@ -310,7 +355,7 @@ public class BattleSkill
         }
         else if(InManager.HasSpecialRule("特殊规则(玛绣)") && TargetPokemon.GetIsEnemy() == false && Math.Abs(TargetPokemon.GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager)) > Math.Abs(SourcePokemon.GetSpeed(ECaclStatsMode.Normal, BattleManager.StaticManager)) )
         {
-            SepcialRuleFactor = 1.3;
+            SepcialRuleFactor = 2.0;
         }
         else if(InManager.HasSpecialRule("特殊规则(葛吉花)") && InManager.GetBattleFieldStatusList(!TargetPokemon.GetIsEnemy()).Count == 0)
         {
@@ -320,29 +365,17 @@ public class BattleSkill
         {
             SepcialRuleFactor = 0.5;
         }
-        else if(InManager.HasSpecialRule("特殊规则(布拉塔诺)") && SourcePokemon.GetIsEnemy() == false)
-        {
-            SepcialRuleFactor = 0.5;
-        }
-        else if(InManager.HasSpecialRule("特殊规则(布拉塔诺)") && SourcePokemon.GetIsEnemy() == true)
-        {
-            SepcialRuleFactor = 2.0;
-        }
         else if(InManager.HasSpecialRule("特殊规则(艾岚)") && SourcePokemon.GetIsEnemy() == true && CT)
         {
             SepcialRuleFactor = 2.0;
         }
         else if(InManager.HasSpecialRule("特殊规则(艾岚)") && SourcePokemon.GetIsEnemy() == false && CT == false)
         {
-            SepcialRuleFactor = 0.5;
+            SepcialRuleFactor = 0.8;
         }
         else if(InManager.HasSpecialRule("特殊规则(朵拉塞娜)") && SourcePokemon.GetIsEnemy() == false && SourcePokemon.HasStatusChangeDrosyBurnPoisonFrostbiteParalysis() == false)
         {
             SepcialRuleFactor = 0.5;
-        }
-        else if(InManager.HasSpecialRule("特殊规则(朵拉塞娜)") && TargetPokemon.GetIsEnemy() == false && TargetPokemon.HasStatusChangeDrosyBurnPoisonFrostbiteParalysis() == true)
-        {
-            SepcialRuleFactor = 2.0;   
         }
         Damage = (int)Math.Floor(Damage * SepcialRuleFactor); 
 

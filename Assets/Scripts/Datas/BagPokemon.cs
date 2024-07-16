@@ -61,7 +61,7 @@ public class BagPokemon : MonoBehaviour
                 break;
             case PokemonNature.Naughty:
                 chineseName = "顽皮";
-                correction = "攻击↑, 防御↓";
+                correction = "攻击↑, 特防↓";
                 break;
             case PokemonNature.Brave:
                 chineseName = "勇敢";

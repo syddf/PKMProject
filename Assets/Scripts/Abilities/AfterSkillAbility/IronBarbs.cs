@@ -15,7 +15,7 @@ public class IronBarbs : BaseAbility
         {
             SkillEvent CastedEvent = (SkillEvent)SourceEvent;
             BattlePokemon Target = CastedEvent.GetCurrentProcessTargetPokemon();
-            if(Target == this.ReferencePokemon)
+            if(Target == this.ReferencePokemon && CastedEvent.GetSourcePokemon().IsDead() == false)
             {
                 if(BattleSkillMetaInfo.IsTouchingSkill(CastedEvent.GetSkill().GetSkillName()))
                 {

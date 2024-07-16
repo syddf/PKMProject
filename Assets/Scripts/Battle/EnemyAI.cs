@@ -174,7 +174,9 @@ public class EnemyAI
                 SkillEntry.ReferenceSkill = Skills[Index];
                 SkillEntry.Priority = 100;
                 string Reason = "";
-                if(!Skills[Index].JudgeIsEffective(InManager, ReferencePokemon, TargetPokemon, out Reason))
+                BattleSkill UseBattleSkill = new BattleSkill(SkillEntry.ReferenceSkill, EMasterSkill.None, TargetPokemon);
+                if(!Skills[Index].JudgeIsEffective(InManager, ReferencePokemon, TargetPokemon, out Reason) ||
+                !UseBattleSkill.JudgeIsEffective(InManager, ReferencePokemon, TargetPokemon, ref Reason))
                 {
                     SkillEntry.Priority = -999;
                 }

@@ -133,7 +133,7 @@ public class SwitchEvent : EventAnimationPlayer, Event
             }
         }
 
-        InPokemon.SwitchIn();
+        InPokemon.SwitchIn(false);
     }
 
     public EventType GetEventType()
@@ -241,7 +241,7 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
         if(PlayerNewPokemon != null)
         {
             InManager.SetNewPlayerPokemon(PlayerNewPokemon);
-            PlayerNewPokemon.SwitchIn();
+            PlayerNewPokemon.SwitchIn(true);
             PlayerDefeatedPokemon.ClearStatusChange();
         }
         if(EnemyNewPokemon != null)
@@ -257,12 +257,12 @@ public class SwitchWhenDefeatedEvent : EventAnimationPlayer, Event
             {
                 ChatAnimationFakeEvent.AddChatEvent(Lines, false).Process(InManager);
             }
-            EnemyNewPokemon.SwitchIn();
+            EnemyNewPokemon.SwitchIn(true);
         }
 
         if(PlayerNewPokemon != null)
         {
-            PlayerNewPokemon.SwitchIn();
+            PlayerNewPokemon.SwitchIn(true);
         }
     }
 
@@ -388,8 +388,8 @@ public class SingleBattleGameStartEvent : EventAnimationPlayer, Event
             ChatAnimationFakeEvent.AddChatEvent(Lines, false).Process(InManager);
         }
 
-        PlayerPokemon.SwitchIn();
-        EnemyPokemon.SwitchIn();
+        PlayerPokemon.SwitchIn(true);
+        EnemyPokemon.SwitchIn(true);
 
         InManager.TranslateTimePoint(ETimePoint.FinishBattleStart, this);
     }
