@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -348,3 +349,4 @@ public class CustomAssetContextMenu : Editor
         }
     }
 }
+#endif

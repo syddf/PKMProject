@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -205,3 +206,4 @@ public class DSModelTranslator : MonoBehaviour
         return true;
     }
 }
+#endif

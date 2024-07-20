@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -120,3 +121,4 @@ public class AnimatorCreator : MonoBehaviour
         Debug.Log("Animator Controller cloned and clips replaced successfully.");
     }
 }
+#endif

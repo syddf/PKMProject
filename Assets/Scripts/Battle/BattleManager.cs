@@ -712,6 +712,29 @@ public class BattleManager : MonoBehaviour
                 }
             }
             SavedDataObj.GetComponent<SavedData>().SavedPlayerData.UseableTrainerList.Add(EnemyTrainer.TrainerName);
+
+            BattleHistory NewHistory = new BattleHistory();
+            NewHistory.Cheated = false;
+            if(ChapterIndex > 0 && ChapterIndex < 10 && CurrentSpecialRule == null)
+            {
+                NewHistory.Cheated = true;
+            }
+            NewHistory.EnemyTrainerName = EnemyTrainer.TrainerName;
+            NewHistory.PlayerTrainerName = PlayerTrainer.TrainerName;
+            NewHistory.Pkm1Index = PlayerTrainer.BattlePokemons[0].GetIndexInPKDex();
+            NewHistory.Pkm2Index = PlayerTrainer.BattlePokemons[1].GetIndexInPKDex();
+            NewHistory.Pkm3Index = PlayerTrainer.BattlePokemons[2].GetIndexInPKDex();
+            NewHistory.Pkm4Index = PlayerTrainer.BattlePokemons[3].GetIndexInPKDex();
+            NewHistory.Pkm5Index = PlayerTrainer.BattlePokemons[4].GetIndexInPKDex();
+            NewHistory.Pkm6Index = PlayerTrainer.BattlePokemons[5].GetIndexInPKDex();
+            NewHistory.Item1Name = PlayerTrainer.BattlePokemons[0].GetItemName();
+            NewHistory.Item2Name = PlayerTrainer.BattlePokemons[1].GetItemName();
+            NewHistory.Item3Name = PlayerTrainer.BattlePokemons[2].GetItemName();
+            NewHistory.Item4Name = PlayerTrainer.BattlePokemons[3].GetItemName();
+            NewHistory.Item5Name = PlayerTrainer.BattlePokemons[4].GetItemName();
+            NewHistory.Item6Name = PlayerTrainer.BattlePokemons[5].GetItemName();
+            SavedDataObj.GetComponent<SavedData>().SavedPlayerData.HistoryList.Add(NewHistory);
+
             SavedDataObj.GetComponent<SavedData>().SaveData();
         }
 
@@ -720,6 +743,8 @@ public class BattleManager : MonoBehaviour
         StartCoroutine(EnableObjectAfterDelay());
         TransitionUI.TransitionAnimation();
         ReferenceBGM.gameObject.SetActive(false);
+        bool Cheated = (ChapterIndex > 0 && ChapterIndex < 10 && CurrentSpecialRule == null);
+        BeforeBattleUI.FailedAndCheat = (Win == false && Cheated);
     }
 
     IEnumerator EnableObjectAfterDelay()

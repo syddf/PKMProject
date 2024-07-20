@@ -86,8 +86,57 @@ public class ChapterUI : MonoBehaviour
         RenderSettings.skybox = null;
         DynamicGI.UpdateEnvironment();
     }
+
+    public void ResetGame()
+    {
+        PlayerData playerData = new PlayerData();
+        List<string> UseableTrainerList = new List<string>();
+        UseableTrainerList.Add("希特隆");
+        UseableTrainerList.Add("可尔妮");
+        UseableTrainerList.Add("志米");
+        UseableTrainerList.Add("雁铠");
+        UseableTrainerList.Add("梅丽莎");
+        UseableTrainerList.Add("库库伊");
+        playerData.BattleTrainerName = "希特隆";
+        playerData.UseableTrainerList = UseableTrainerList;
+        playerData.OverrideData = new SerializableDictionary<string, SerializableDictionary<string, BagPokemonOverrideData>>();
+        playerData.MainChapterProgress = new List<EProgress>();
+        playerData.FinishAllChapter = true;
+        playerData.HistoryList = new List<BattleHistory>();
+        for(int Index = 0; Index <= 13; Index++)
+        {
+            playerData.MainChapterProgress.Add(EProgress.FinishStory);
+        }
+        playerData.MainChapterProgress[0] = EProgress.FinishAllBattle;
+        playerData.MainChapterProgress[10] = EProgress.FinishAllBattle;
+        playerData.MainChapterProgress[11] = EProgress.FinishAllBattle;
+        playerData.MainChapterProgress[12] = EProgress.FinishAllBattle;
+        playerData.MainChapterProgress[13] = EProgress.FinishAllBattle;
+        PlayerData.SavedPlayerData = playerData;
+        PlayerData.SaveData();
+    }
+
     public void UpdateUI()
     {
+        if(CurrentChapterIndex == 14)
+        {
+            Trainer1Img.gameObject.SetActive(false);
+            Trainer2Img.gameObject.SetActive(false);
+            PreviewBattle1Obj.SetActive(false);
+            PreviewBattle2Obj.SetActive(false);
+            BeginBattle1Obj.SetActive(false);
+            BeginBattle2Obj.SetActive(false);
+            ReturnObj.SetActive(true);
+            BeginStoryObj.SetActive(true);
+            FinishObj.SetActive(false);
+            if(PlayerData.SavedPlayerData.FinishAllChapter == true)
+            {
+                BeginStoryObj.SetActive(false);
+                FinishObj.SetActive(true);
+            }
+            return;
+        }
+        
         PlaceText.text = BattleData.PlaceName;
         Trainer1Img.sprite = BattleData.EnemyTrainer1.TrainerSprite;
         FinishObj.SetActive(false);
@@ -100,6 +149,7 @@ public class ChapterUI : MonoBehaviour
         {
             Trainer2Img.gameObject.SetActive(false);
         }
+
         if(PlayerData.SavedPlayerData.MainChapterProgress[CurrentChapterIndex] == EProgress.New)
         {
             if(BattleData.EnemyTrainer2)

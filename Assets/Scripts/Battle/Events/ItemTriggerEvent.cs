@@ -36,10 +36,10 @@ public class ItemTriggerEvent : EventAnimationPlayer, Event
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
         TimelineAnimation TargetTimeline = new TimelineAnimation(Timelines.ItemStateAnimation);
-        GameObject ItemObj = GameObject.Find("Canvas/SingleBattleUI/AbilityStates/EnemyItem");
+        GameObject ItemObj = GameObject.Find("Canvas1/SingleBattleUI/AbilityStates/EnemyItem");
         if(!SourceItem.GetReferencePokemon().GetIsEnemy())
         {
-            ItemObj = GameObject.Find("Canvas/SingleBattleUI/AbilityStates/PlayerItem");
+            ItemObj = GameObject.Find("Canvas1/SingleBattleUI/AbilityStates/PlayerItem");
         }
         TargetTimeline.SetTrackObject("StateObject", ItemObj);
         TargetTimeline.SetSignalReceiver("SignalObject", ItemObj);

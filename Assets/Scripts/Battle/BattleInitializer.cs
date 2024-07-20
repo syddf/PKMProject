@@ -25,6 +25,7 @@ public class BattleInitializer : MonoBehaviour
     public List<GameObject> EnemyOriginalBagPokemons = new List<GameObject>();
     public GameObject EnemyOriginalTrainerSkill;
     public List<BaseItem> GemItemList = new List<BaseItem>();
+    public BattleMenuUI MenuUI;
     public void InitBattleResources(PokemonTrainer PlayerTrainer, PokemonTrainer EnemyTrainer)
     {
         CurrentPlayerTrainer = PlayerTrainer;
@@ -211,7 +212,7 @@ public class BattleInitializer : MonoBehaviour
     {
         BagPokemon Pkm = Trainer.BagPokemons[PokemonIndex];
         BaseItem Item = Pkm.GetItem();
-        if(CurrentEnemyTrainer.TrainerName == "大吾")
+        if(CurrentEnemyTrainer.TrainerName == "大吾" && MenuUI.Cheated == false)
         {
             if(Trainer == CurrentPlayerTrainer)
             {

@@ -44,10 +44,10 @@ public class TrainerSkillTriggerEvent : EventAnimationPlayer, Event
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
         TimelineAnimation TargetTimeline = new TimelineAnimation(Timelines.TrainerSkillAnimation);
-        GameObject TrainerSkillObj = GameObject.Find("Canvas/SingleBattleUI/AbilityStates/EnemyTrainerSkill");
+        GameObject TrainerSkillObj = GameObject.Find("Canvas1/SingleBattleUI/AbilityStates/EnemyTrainerSkill");
         if(SourceSkill.GetReferenceTrainer().IsPlayer)
         {
-            TrainerSkillObj = GameObject.Find("Canvas/SingleBattleUI/AbilityStates/PlayerTrainerSkill");
+            TrainerSkillObj = GameObject.Find("Canvas1/SingleBattleUI/AbilityStates/PlayerTrainerSkill");
         }
         TargetTimeline.SetTrackObject("StateObject", TrainerSkillObj);
         TargetTimeline.SetSignalReceiver("SignalObject", TrainerSkillObj);

@@ -104,7 +104,7 @@ public class BattleFiledUIInfo : MonoBehaviour
             }
             if(SpecialRule.Name == "特殊规则(奇巴纳)")
             {
-                int Target = 7;
+                int Target = 8;
                 DescText += "(已达成次数：";
                 DescText += BattleManager.StaticManager.GetWeatherChangCounter().ToString();
                 DescText += "/";

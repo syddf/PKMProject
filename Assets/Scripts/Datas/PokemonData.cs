@@ -1,5 +1,7 @@
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -171,7 +173,7 @@ public class PokemonData : ScriptableObject
     public float MaleGenderProbability;
     public float FemaleGenderProbability;
 }
-
+#if UNITY_EDITOR
 public class CreatePokemonTool : EditorWindow
 {
     private string filePath = "Assets/Datas/PokemonDex.txt"; // 指定文本文件的路径
@@ -228,3 +230,4 @@ public class CreatePokemonTool : EditorWindow
         Debug.Log("Pokemon collection asset created at: " + assetPath);
     }
 }
+#endif
