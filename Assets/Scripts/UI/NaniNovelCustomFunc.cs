@@ -13,10 +13,19 @@ public class NaniNovelCustomFunc : Command
     public override UniTask ExecuteAsync (AsyncToken asyncToken = default)
     {
         GameObject SavedDataObj = GameObject.Find("SavedData");
-        SavedDataObj.GetComponent<SavedData>().SavedPlayerData.MainChapterProgress[int.Parse(ChapterIndex)] = EProgress.FinishStory;
-        GameObject.Find("NaniBridge").GetComponent<SubObjects>().SubObject3.GetComponent<DelayActive>().Delay();
-        GameObject.Find("NaniBridge").GetComponent<SubObjects>().SubObject4.GetComponent<ChapterUI>().UpdateUI();
-        GameObject.Find("NaniBridge").GetComponent<SubObjects>().SubObject2.GetComponent<FadeUI>().TransitionAnimation();
+        if(int.Parse(ChapterIndex) == 14)
+        {
+            SavedDataObj.GetComponent<SavedData>().SavedPlayerData.FinishAllChapter = true;
+            GameObject.Find("NaniBridge").GetComponent<SubObjects>().SubObject5.GetComponent<DelayActive>().Delay();
+            GameObject.Find("NaniBridge").GetComponent<SubObjects>().SubObject2.GetComponent<FadeUI>().TransitionAnimation();
+        }
+        else
+        {
+            SavedDataObj.GetComponent<SavedData>().SavedPlayerData.MainChapterProgress[int.Parse(ChapterIndex)] = EProgress.FinishStory;
+            GameObject.Find("NaniBridge").GetComponent<SubObjects>().SubObject3.GetComponent<DelayActive>().Delay();
+            GameObject.Find("NaniBridge").GetComponent<SubObjects>().SubObject4.GetComponent<ChapterUI>().UpdateUI();
+            GameObject.Find("NaniBridge").GetComponent<SubObjects>().SubObject2.GetComponent<FadeUI>().TransitionAnimation();
+        }
         return UniTask.CompletedTask;
     }
 }

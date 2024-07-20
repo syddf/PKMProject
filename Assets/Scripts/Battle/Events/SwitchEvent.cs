@@ -372,7 +372,7 @@ public class SingleBattleGameStartEvent : EventAnimationPlayer, Event
         InManager.TranslateTimePoint(ETimePoint.BattleStart, this);
         
         //Battle Start Animation.
-        GameObject battleStartObj = GameObject.Find("Canvas").GetComponent<SubObjects>().SubObject1;
+        GameObject battleStartObj = GameObject.Find("Canvas1").GetComponent<SubObjects>().SubObject1;
         ActiveHalfSecondAnimationEvent AnimEvent = new ActiveHalfSecondAnimationEvent(battleStartObj);
         AnimEvent.Process(InManager);
 

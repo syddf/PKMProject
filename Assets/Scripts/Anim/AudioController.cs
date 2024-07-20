@@ -12,8 +12,6 @@ public class AudioController : MonoBehaviour
     {
         // 获取AudioSource组件
         audioSource = GetComponent<AudioSource>();
-        firstClip.LoadAudioData();
-        secondClip.LoadAudioData();
         // 播放第一段音频
         PlayFirstClip();
     }
@@ -32,6 +30,8 @@ public class AudioController : MonoBehaviour
 
     void PlayFirstClip()
     {
+        firstClip.LoadAudioData();
+        secondClip.LoadAudioData();
         // 设置第一段音频并播放
         secondSource.Stop();
         audioSource.clip = firstClip;

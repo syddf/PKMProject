@@ -94,6 +94,26 @@ public class SerializableDictionary<TKey, TValue> : ISerializationCallbackReceiv
 }
 
 [System.Serializable]
+public struct BattleHistory
+{
+    public bool Cheated;
+    public string EnemyTrainerName;
+    public string PlayerTrainerName;
+    public int Pkm1Index;
+    public int Pkm2Index;
+    public int Pkm3Index;
+    public int Pkm4Index;
+    public int Pkm5Index;
+    public int Pkm6Index;
+    public string Item1Name;
+    public string Item2Name;
+    public string Item3Name;
+    public string Item4Name;
+    public string Item5Name;
+    public string Item6Name;
+}
+
+[System.Serializable]
 public struct BagPokemonOverrideData
 {
     public bool Overrided;
@@ -115,10 +135,12 @@ public struct BagPokemonOverrideData
 public struct PlayerData
 {
     public List<string> UseableTrainerList;
+    public List<BattleHistory> HistoryList;
     public SerializableDictionary<string, SerializableDictionary<string, BagPokemonOverrideData>> OverrideData;
     public string BattleTrainerName;
     public List<EProgress> MainChapterProgress;
     public int RemainCheatCount;
+    public bool FinishAllChapter;
 }
 
 // 定义一个接口用于序列化和反序列化操作
@@ -220,6 +242,10 @@ public class SavedData : MonoBehaviour
     void Start()
     {
         string filePath = Application.dataPath + "/Saved/playerData.dat";
+        if (!Directory.Exists(Application.dataPath + "/Saved"))
+        {
+            Directory.CreateDirectory(Application.dataPath + "/Saved");
+        }
         // 定义文件路径
         if (File.Exists(filePath))
         {
@@ -236,11 +262,14 @@ public class SavedData : MonoBehaviour
             playerData.UseableTrainerList = UseableTrainerList;
             playerData.OverrideData = new SerializableDictionary<string, SerializableDictionary<string, BagPokemonOverrideData>>();
             playerData.MainChapterProgress = new List<EProgress>();
+            playerData.FinishAllChapter = false;
+            playerData.HistoryList = new List<BattleHistory>();
             for(int Index = 0; Index <= 13; Index++)
             {
-                playerData.MainChapterProgress.Add(EProgress.FinishAllBattle);
+                playerData.MainChapterProgress.Add(EProgress.New);
             }
-            playerData.RemainCheatCount = 10;
+            playerData.MainChapterProgress[0] = EProgress.FinishAllBattle;
+            playerData.RemainCheatCount = 15;
             IDataSerializer serializer = new EncryptedJSONDataSerializer();
             serializer.SerializeToFile(playerData, filePath);
             SavedPlayerData = playerData;

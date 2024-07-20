@@ -12,8 +12,10 @@ public class MapUI : MonoBehaviour
     public GameObject Side2;
     public GameObject Side3;
     public GameObject Side4;
+    public GameObject Final;
     public TextMeshProUGUI MainText;
     public TextMeshProUGUI SideText;
+    public GameObject ResetButton;
     void EnableAnimatorsRecursively(GameObject obj)
     {
         Animator animator = obj.GetComponent<Animator>();
@@ -88,10 +90,17 @@ public class MapUI : MonoBehaviour
             }
         }
 
+        ResetButton.gameObject.SetActive(false);
+        if(PlayerData.SavedPlayerData.FinishAllChapter == true && FinishedBattle == 19)
+        {   
+            ResetButton.gameObject.SetActive(true);
+        }
+
         Side1.SetActive(false);
         Side2.SetActive(false);
         Side3.SetActive(false);
         Side4.SetActive(false);
+        Final.SetActive(false);
         SideText.text = "";
         if(FinishedBattle >= 4 && PlayerData.SavedPlayerData.MainChapterProgress[10] != EProgress.FinishAllBattle)
         {
@@ -110,27 +119,46 @@ public class MapUI : MonoBehaviour
             Side4.SetActive(true);
         }
 
-        if(FinishedBattle >= 1 && FinishedBattle < 4)
+        if(FinishedBattle >= 1 && FinishedBattle < 4 && PlayerData.SavedPlayerData.FinishAllChapter == false)
         {
             int RemainBattle = 4 - FinishedBattle;
             SideText.text = "再通关" + RemainBattle.ToString() + "场战斗解锁隐藏关卡1";
         }
-        if(FinishedBattle >= 4 && FinishedBattle < 7)
+        if(FinishedBattle >= 4 && FinishedBattle < 7 && PlayerData.SavedPlayerData.FinishAllChapter == false) 
         {
             int RemainBattle = 7 - FinishedBattle;
             SideText.text = "再通关" + RemainBattle.ToString() + "场战斗解锁隐藏关卡2";
         }
-        if(FinishedBattle >= 7 && FinishedBattle < 10)
+        if(FinishedBattle >= 7 && FinishedBattle < 10 && PlayerData.SavedPlayerData.FinishAllChapter == false)
         {
             int RemainBattle = 10 - FinishedBattle;
             SideText.text = "再通关" + RemainBattle.ToString() + "场战斗解锁隐藏关卡3";
         }
-        if(FinishedBattle >= 10 && FinishedBattle < 13)
+        if(FinishedBattle >= 10 && FinishedBattle < 13 && PlayerData.SavedPlayerData.FinishAllChapter == false)
         {
             int RemainBattle = 13 - FinishedBattle;
             SideText.text = "再通关" + RemainBattle.ToString() + "场战斗解锁隐藏关卡4";
         }
         MainText.text = "通关战斗：" + FinishedBattle.ToString() + "/19";
+
+        if(FinishedBattle == 19 && PlayerData.SavedPlayerData.MainChapterProgress[13] == EProgress.FinishAllBattle && PlayerData.SavedPlayerData.FinishAllChapter == false)
+        {
+            EnableAnimatorsRecursively(Final);
+            foreach(var ChapterObj in MainChapterList)
+            {
+                ChapterObj.SetActive(false);
+            }
+            Side1.SetActive(false);
+            Side2.SetActive(false);
+            Side3.SetActive(false);
+            Side4.SetActive(false);
+            Final.SetActive(true);
+
+            if(PlayerData.SavedPlayerData.FinishAllChapter == true)
+            {
+                DisableAnimatorsRecursively(Final);
+            }
+        }
     }
     public void OnEnable()
     {

@@ -57,10 +57,15 @@ public class BattleMenuUI : MonoBehaviour
     public bool Cheated = false;
     public Toggle toggleUI;
     public TextMeshProUGUI cheatText;
+    public bool FailedAndCheat = false;
     public void SetCheat()
     {
         Cheated = !Cheated;
         UpdateSpecialRule();
+        if(Cheated == false && toggleUI.isOn == false)
+        {
+            FailedAndCheat = false;
+        }
     }
 
     public void OnChangeFirstPokemon(int Index)
@@ -160,9 +165,9 @@ public class BattleMenuUI : MonoBehaviour
         ChoosePokemon(CurrentTrainer.BagPokemons[0]);
         if(toggleUI != null)
         {
-            toggleUI.isOn = false;
+            toggleUI.isOn = FailedAndCheat;
         }
-        Cheated = false;
+        Cheated = FailedAndCheat;
         if(ChapterIndex == 0 || ChapterIndex >= 10 || SavedPlayerData.SavedPlayerData.RemainCheatCount <= 0)
         {
             if(CheatObj != null)

@@ -55,7 +55,7 @@ public class PokemonEditMainMenu : MonoBehaviour
                     {
                         string TrainerName = OverrideData.ReplaceTrainerName;
                         string PokemonName = OverrideData.ReplacePokemonName;
-                        if(PokemonName != ReferencePokemon.GetPokemonName())
+                        if(PokemonName != ReferencePokemon.GetPokemonName() && TrainerName != CurrentTrainer.TrainerName)
                         {
                             ReplacedNum++;
                         }

@@ -35,10 +35,10 @@ public class AbilityTriggerEvent : EventAnimationPlayer, Event
     {
         TimelineAnimationManager Timelines = TimelineAnimationManager.GetGlobalTimelineAnimationManager();
         TimelineAnimation TargetTimeline = new TimelineAnimation(Timelines.AbilityStateAnimation);
-        GameObject AbilityObj = GameObject.Find("Canvas/SingleBattleUI/AbilityStates/EnemyAbility");
+        GameObject AbilityObj = GameObject.Find("Canvas1/SingleBattleUI/AbilityStates/EnemyAbility");
         if(!SourceAbility.GetReferencePokemon().GetIsEnemy())
         {
-            AbilityObj = GameObject.Find("Canvas/SingleBattleUI/AbilityStates/PlayerAbility");
+            AbilityObj = GameObject.Find("Canvas1/SingleBattleUI/AbilityStates/PlayerAbility");
         }
         TargetTimeline.SetTrackObject("StateObject", AbilityObj);
         TargetTimeline.SetSignalReceiver("SignalObject", AbilityObj);

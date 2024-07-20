@@ -24,7 +24,7 @@ public class AudioManager : MonoBehaviour
 
     public void Start()
     {
-        string audioFolderPath = "Assets/Resources/Audios/PokemonCries";
+        string audioFolderPath = Path.Combine(Application.dataPath, "PokemonCries");
         string[] files = Directory.GetFiles(audioFolderPath);
 
         // 初始化音频文件数组

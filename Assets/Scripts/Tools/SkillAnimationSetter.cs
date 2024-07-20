@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -51,3 +52,4 @@ public class SkillAnimationSetter : EditorWindow
         Debug.Log("Skill Animations set for all prefabs.");
     }
 }
+#endif

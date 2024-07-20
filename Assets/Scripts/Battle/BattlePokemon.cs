@@ -1295,6 +1295,11 @@ public class BattlePokemon : MonoBehaviour
         }
         return false;
     }
+
+    public string GetItemName()
+    {
+        return Item.GetItemName();
+    }
     public bool HasItem()
     {
         return Item.HasItem();
